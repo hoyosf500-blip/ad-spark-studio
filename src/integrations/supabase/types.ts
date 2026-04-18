@@ -133,6 +133,7 @@ export type Database = {
           id: string
           payload: Json
           related_image_id: string | null
+          related_scene_id: string | null
           related_video_id: string | null
           result: Json | null
           started_at: string
@@ -150,6 +151,7 @@ export type Database = {
           id?: string
           payload?: Json
           related_image_id?: string | null
+          related_scene_id?: string | null
           related_video_id?: string | null
           result?: Json | null
           started_at?: string
@@ -167,6 +169,7 @@ export type Database = {
           id?: string
           payload?: Json
           related_image_id?: string | null
+          related_scene_id?: string | null
           related_video_id?: string | null
           result?: Json | null
           started_at?: string
@@ -182,6 +185,13 @@ export type Database = {
             columns: ["related_image_id"]
             isOneToOne: false
             referencedRelation: "image_generations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "async_tasks_related_scene_id_fkey"
+            columns: ["related_scene_id"]
+            isOneToOne: false
+            referencedRelation: "variation_scenes"
             referencedColumns: ["id"]
           },
           {
@@ -753,10 +763,12 @@ export type Database = {
         Row: {
           cost_usd: number
           created_at: string
+          duration_seconds: number | null
           external_url: string | null
           id: string
           prompt: string | null
           provider: string
+          public_url: string | null
           scene_id: string | null
           size: string | null
           source_image_id: string | null
@@ -770,10 +782,12 @@ export type Database = {
         Insert: {
           cost_usd?: number
           created_at?: string
+          duration_seconds?: number | null
           external_url?: string | null
           id?: string
           prompt?: string | null
           provider?: string
+          public_url?: string | null
           scene_id?: string | null
           size?: string | null
           source_image_id?: string | null
@@ -787,10 +801,12 @@ export type Database = {
         Update: {
           cost_usd?: number
           created_at?: string
+          duration_seconds?: number | null
           external_url?: string | null
           id?: string
           prompt?: string | null
           provider?: string
+          public_url?: string | null
           scene_id?: string | null
           size?: string | null
           source_image_id?: string | null
