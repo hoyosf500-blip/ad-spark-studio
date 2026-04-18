@@ -187,7 +187,7 @@ export function VariationsPanel() {
           }).eq("id", sourceVideoId);
         }
       }
-      toast.success(`Análisis listo. Costo: $${res.costUsd.toFixed(4)}`);
+      toast.success(`Análisis listo. Costo: $${Number(res.costUsd ?? 0).toFixed(4)}`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Error en análisis");
     } finally {
@@ -766,7 +766,7 @@ function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
       }
       const json = (await res.json()) as { imageUrl: string; costUsd: number };
       setImageUrl(json.imageUrl);
-      toast.success(`Imagen lista · $${json.costUsd.toFixed(2)} USD`);
+      toast.success(`Imagen lista · $${Number(json.costUsd ?? 0).toFixed(2)} USD`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Error generando imagen");
     } finally {

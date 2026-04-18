@@ -119,7 +119,7 @@ function AdminPage() {
         <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
           <StatCard icon={Users} label="Total usuarios" value={stats.total.toString()} />
           <StatCard icon={UserCheck} label="Activos" value={stats.active.toString()} />
-          <StatCard icon={DollarSign} label="Costo total" value={`$${stats.cost.toFixed(3)}`} />
+          <StatCard icon={DollarSign} label="Costo total" value={`$${Number(stats.cost ?? 0).toFixed(3)}`} />
           <StatCard icon={Activity} label="Generaciones (mes)" value={stats.gensMonth.toString()} />
         </div>
 
