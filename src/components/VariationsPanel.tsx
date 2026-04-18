@@ -146,27 +146,68 @@ export function VariationsPanel() {
     setProductPhoto(url);
   };
 
-  // ─── analyze ──────────────────────────────────────────────────────
+  // ─── analyze (streaming SSE) ──────────────────────────────────────
   const runAnalysis = async () => {
     if (frames.length === 0) { toast.error("Sube un video primero"); return; }
-    setAnalyzing(true); setAnalysis("");
+    setAnalyzing(true); setAnalysis(""); setAnalysisCost(0);
     try {
       const ws = await ensureWorkspace();
-      const { anthropicAnalyze } = await import("@/utils/anthropic.functions");
-      const res = await anthropicAnalyze({
-        data: {
+      const session = (await supabase.auth.getSession()).data.session;
+      const token = session?.access_token;
+      if (!token) throw new Error("No auth session");
+
+      const res = await fetch("/api/anthropic-analyze", {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        body: JSON.stringify({
           frames: frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl })),
           productPhoto,
           transcription: transcription.trim() || null,
           model,
           workspaceId: ws,
-        },
+        }),
       });
-      setAnalysis(res.text);
-      setAnalysisCost(res.costUsd);
-      // Auto-suggest transcription if user didn't provide one
+      if (!res.ok || !res.body) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(`HTTP ${res.status}: ${txt.slice(0, 200) || res.statusText}`);
+      }
+
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let buf = "";
+      let full = "";
+      let cost = 0;
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        let i;
+        while ((i = buf.indexOf("\n\n")) !== -1) {
+          const chunk = buf.slice(0, i); buf = buf.slice(i + 2);
+          const dataLine = chunk.split("\n").find((l) => l.startsWith("data: "));
+          if (!dataLine) continue;
+          try {
+            const ev = JSON.parse(dataLine.slice(6).trim()) as
+              | { type: "text"; text: string }
+              | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean }
+              | { type: "error"; error: string };
+            if (ev.type === "text") {
+              full += ev.text;
+              setAnalysis(full);
+            } else if (ev.type === "done") {
+              full = ev.fullText || full;
+              cost = ev.costUsd;
+            } else if (ev.type === "error") {
+              throw new Error(ev.error);
+            }
+          } catch { /* skip */ }
+        }
+      }
+
+      setAnalysis(full);
+      setAnalysisCost(cost);
       if (!transcription.trim()) {
-        const auto = extractAutoTranscription(res.text);
+        const auto = extractAutoTranscription(full);
         if (auto) setTranscription(auto);
       }
       // persist project
@@ -175,19 +216,19 @@ export function VariationsPanel() {
           workspace_id: ws,
           name: file?.name ?? "Untitled project",
           status: "analyzed",
-          transcription: transcription.trim() || extractAutoTranscription(res.text) || null,
-          analysis_text: res.text,
+          transcription: transcription.trim() || extractAutoTranscription(full) || null,
+          analysis_text: full,
           frames_metadata: frames.map((f) => ({ time: f.time, w: f.width, h: f.height })),
         }).select("id").single();
         if (pr) setProjectId(pr.id);
         if (sourceVideoId) {
           await supabase.from("source_videos").update({
-            analysis_text: res.text,
-            transcription: transcription.trim() || extractAutoTranscription(res.text) || null,
+            analysis_text: full,
+            transcription: transcription.trim() || extractAutoTranscription(full) || null,
           }).eq("id", sourceVideoId);
         }
       }
-      toast.success(`Análisis listo. Costo: $${Number(res.costUsd ?? 0).toFixed(4)}`);
+      toast.success(`Análisis listo. Costo: $${Number(cost ?? 0).toFixed(4)}`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Error en análisis");
     } finally {
