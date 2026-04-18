@@ -32,11 +32,7 @@ export function AppHeader() {
     if (!profile?.id) return;
     let cancelled = false;
     const load = async () => {
-      // get_day_cost_usd y daily_cap_usd aún no están en types.ts generado.
-      const sb = supabase as unknown as {
-        rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: number | string | null }>;
-      };
-      const { data: cost } = await sb.rpc("get_day_cost_usd", { p_user_id: profile.id });
+      const { data: cost } = await supabase.rpc("get_day_cost_usd", { p_user_id: profile.id });
       if (!cancelled) {
         setDayStats({
           spent: Number(cost ?? 0),
@@ -59,7 +55,7 @@ export function AppHeader() {
       : dayStats.spent >= dayStats.cap
         ? "border-destructive/50 bg-destructive/10 text-destructive"
         : dayStats.spent >= dayStats.cap * 0.8
-          ? "border-primary/50 bg-primary/10 text-primary"
+          ? "border-warning/50 bg-warning/10 text-warning"
           : "border-border bg-background text-muted-foreground";
 
   return (

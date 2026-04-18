@@ -165,14 +165,7 @@ function AdminPage() {
                           const v = Number(e.target.value);
                           if (Number.isNaN(v) || v < 0) return;
                           if (v === Number(r.daily_cap_usd)) return;
-                          const sb = supabase as unknown as {
-                            from: (t: string) => {
-                              update: (vals: Record<string, unknown>) => {
-                                eq: (k: string, val: string) => Promise<{ error: { message: string } | null }>;
-                              };
-                            };
-                          };
-                          const { error } = await sb.from("profiles").update({ daily_cap_usd: v }).eq("id", r.id);
+                          const { error } = await supabase.from("profiles").update({ daily_cap_usd: v }).eq("id", r.id);
                           if (error) toast.error(error.message);
                           else { toast.success(`Tope de ${r.email}: $${v.toFixed(2)}`); load(); }
                         }}

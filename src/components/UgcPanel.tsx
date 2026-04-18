@@ -386,6 +386,7 @@ function UgcRowCard({ row, workspaceId }: { row: UgcRow; workspaceId: string | n
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
         body: JSON.stringify(body),
       });
+      if (await handleCapResponse(res)) { setVideoTask({ status: "idle" }); return; }
       if (!res.ok) {
         const t = await res.text();
         throw new Error(t.slice(0, 200));
