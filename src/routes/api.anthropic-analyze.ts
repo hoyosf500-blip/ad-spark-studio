@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { SYS_ANALYZE } from "@/lib/system-prompts";
 import { dataUrlToBase64, logUsage } from "@/utils/anthropic.functions";
+import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
 type FrameInput = { time: number; dataUrl: string };
@@ -28,6 +29,9 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
         const { data: claims, error: claimsErr } = await supabase.auth.getClaims(token);
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
+
+        const cap = await checkSpendingCap(supabase, userId);
+        if (!cap.ok) return capExceededResponse(cap);
 
         const body = (await request.json()) as {
           frames: FrameInput[];

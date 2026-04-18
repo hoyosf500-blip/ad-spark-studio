@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
+import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
 const ENDPOINT =
@@ -46,6 +47,9 @@ export const Route = createFileRoute("/api/wan-create-task")({
           return new Response("Unauthorized", { status: 401 });
         }
         const userId = claims.claims.sub;
+
+        const cap = await checkSpendingCap(userClient, userId);
+        if (!cap.ok) return capExceededResponse(cap);
 
         const body = (await request.json()) as Body;
         if (!body.sceneId || !body.workspaceId || !body.imageUrl || !body.promptEn) {

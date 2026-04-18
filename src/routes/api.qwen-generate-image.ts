@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
+import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
 const QWEN_COST_USD = 0.04;
@@ -60,6 +61,9 @@ export const Route = createFileRoute("/api/qwen-generate-image")({
           return new Response("Unauthorized", { status: 401 });
         }
         const userId = claims.claims.sub;
+
+        const cap = await checkSpendingCap(userClient, userId);
+        if (!cap.ok) return capExceededResponse(cap);
 
         const body = (await request.json()) as Body;
         if (!body.sceneId || !body.workspaceId || !body.promptEn) {
