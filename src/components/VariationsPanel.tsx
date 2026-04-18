@@ -710,17 +710,30 @@ export function VariationsPanel() {
         {analysis && (
           <Card className="p-5 space-y-4">
             <div className="flex items-center justify-between gap-4">
-              <h2 className="font-mono-display text-lg font-bold">Generar 6 variaciones</h2>
+              <div>
+                <h2 className="font-mono-display text-lg font-bold">Variaciones</h2>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Podés generar las 6 de una o hacer clic en "Generar solo esta" en cada tarjeta.
+                </p>
+              </div>
               <Button onClick={generateAll} disabled={running}
                 className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
                 {running ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
-                {running ? "Generando…" : "⚡ Generar TODAS"}
+                {running ? "Generando…" : "⚡ Generar las 6"}
               </Button>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-4">
               {variations.map((v) => (
-                <VariationCard key={v.type} v={v} frames={frames} videoUrl={videoUrl} workspaceId={workspaceId} />
+                <VariationCard
+                  key={v.type}
+                  v={v}
+                  frames={frames}
+                  videoUrl={videoUrl}
+                  workspaceId={workspaceId}
+                  running={running}
+                  onGenerate={() => runOneVariation(v.type, v.label)}
+                />
               ))}
             </div>
           </Card>
