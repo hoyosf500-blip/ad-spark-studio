@@ -36,6 +36,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
           variationType: string;
           variationLabel: string;
           productPhoto?: string | null;
+          productInfo?: string | null;
           referenceFrames?: FrameInput[];
           model?: string;
           workspaceId?: string | null;
@@ -69,6 +70,12 @@ export const Route = createFileRoute("/api/anthropic-generate")({
           const { mediaType, b64 } = dataUrlToBase64(body.productPhoto);
           content.push({ type: "text", text: "\n\n=== PRODUCT PHOTO ===" });
           content.push({ type: "image", source: { type: "base64", media_type: mediaType, data: b64 } });
+        }
+        if (body.productInfo?.trim()) {
+          content.push({
+            type: "text",
+            text: `\n\n=== PRODUCT INFO (keep the product name verbatim in SCREEN TEXT and CTA beats; match price + audience when writing the hook) ===\n${body.productInfo.trim()}`,
+          });
         }
         if (body.referenceFrames?.length) {
           content.push({ type: "text", text: `\n\n=== REFERENCE FRAMES (${body.referenceFrames.length}) ===` });

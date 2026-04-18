@@ -3,19 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   Upload, Loader2, Search, Zap, Copy, CheckCircle2, AlertTriangle, Image as ImageIcon, X, Wand2,
-  Film, Sparkles as SparklesIcon, FileText,
+  Film, FileText, Package,
 } from "lucide-react";
 import { extractFrames, fileToDataUrl, type ExtractedFrame } from "@/lib/frame-extraction";
 import { parseScenes, type ParsedScene } from "@/lib/scene-parser";
 import { VARIATIONS } from "@/lib/variation-defs";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { UgcPanel } from "@/components/UgcPanel";
 
 type StepId = 0 | 1 | 2 | 3;
 const STEPS: ReadonlyArray<{ id: StepId; label: string }> = [
@@ -102,6 +101,18 @@ export function VariationsPanel() {
 
   const [productPhoto, setProductPhoto] = useState<string | null>(null);
   const [transcription, setTranscription] = useState("");
+
+  // Product data (B2) — fed as productInfo to /api/anthropic-analyze and /api/anthropic-generate
+  const [productName, setProductName] = useState("");
+  const [productOneLiner, setProductOneLiner] = useState("");
+  const [productPrice, setProductPrice] = useState("");
+  const [productAudience, setProductAudience] = useState("");
+  const productInfo = [
+    productName && `Producto: ${productName}`,
+    productOneLiner && `Qué hace: ${productOneLiner}`,
+    productPrice && `Precio: ${productPrice}`,
+    productAudience && `Audiencia: ${productAudience}`,
+  ].filter(Boolean).join("\n") || null;
 
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState("");
@@ -236,6 +247,7 @@ export function VariationsPanel() {
           frames: frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl })),
           productPhoto,
           transcription: transcription.trim() || null,
+          productInfo,
           model,
           workspaceId: ws,
         }),
@@ -359,6 +371,7 @@ export function VariationsPanel() {
           variationType: type,
           variationLabel: label,
           productPhoto,
+          productInfo,
           referenceFrames: pickReferenceFrames(type, frames),
           model,
           workspaceId,
@@ -461,18 +474,8 @@ export function VariationsPanel() {
           : 0;
 
   return (
-    <Tabs defaultValue="video" className="space-y-6">
-      <TabsList className="grid w-full grid-cols-2 h-12">
-        <TabsTrigger value="video" className="gap-2 font-mono-display text-sm">
-          <Film className="h-4 w-4" /> Video Variations
-        </TabsTrigger>
-        <TabsTrigger value="ugc" className="gap-2 font-mono-display text-sm">
-          <SparklesIcon className="h-4 w-4" /> UGC Generator
-        </TabsTrigger>
-      </TabsList>
-
-      <TabsContent value="video" className="space-y-6 mt-0">
-        <StepperNav current={currentStep} />
+    <div className="space-y-6">
+      <StepperNav current={currentStep} />
 
         {/* Step 1 — Subir video + producto */}
         <Card className="p-5 space-y-4">
@@ -508,6 +511,45 @@ export function VariationsPanel() {
               Extrayendo frames {extractProgress?.done ?? 0}/{extractProgress?.total ?? 0}…
             </div>
           )}
+
+          {/* Datos del producto (B2) */}
+          <div className="rounded-lg border border-border bg-background/60 p-4 space-y-3">
+            <div className="flex items-start gap-2">
+              <Package className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <div className="text-sm font-bold">Datos del producto</div>
+                <div className="text-[11px] text-muted-foreground">
+                  Claude los usa para el análisis y las 6 variaciones. Todo opcional, pero mejora mucho los scripts.
+                </div>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-2">
+              <Input
+                placeholder="Nombre del producto"
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+                className="h-9 text-sm"
+              />
+              <Input
+                placeholder="Precio (ej. $89.900 COD)"
+                value={productPrice}
+                onChange={(e) => setProductPrice(e.target.value)}
+                className="h-9 text-sm"
+              />
+              <Input
+                placeholder="Qué hace / beneficio principal"
+                value={productOneLiner}
+                onChange={(e) => setProductOneLiner(e.target.value)}
+                className="h-9 text-sm md:col-span-2"
+              />
+              <Input
+                placeholder="Audiencia (ej. mujeres 35+ con dolor de espalda)"
+                value={productAudience}
+                onChange={(e) => setProductAudience(e.target.value)}
+                className="h-9 text-sm md:col-span-2"
+              />
+            </div>
+          </div>
 
           {/* Transcripción prominente */}
           <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 space-y-2">
@@ -611,20 +653,7 @@ export function VariationsPanel() {
             </div>
           </Card>
         )}
-      </TabsContent>
-
-      <TabsContent value="ugc" className="mt-0">
-        <UgcPanel
-          workspaceId={workspaceId}
-          projectId={projectId}
-          sourceVideoId={sourceVideoId}
-          analysisText={analysis}
-          transcription={transcription}
-          productInfo={productPhoto ? "Producto referencia adjunta como foto" : null}
-          model={model}
-        />
-      </TabsContent>
-    </Tabs>
+    </div>
   );
 }
 

@@ -33,6 +33,7 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
           frames: FrameInput[];
           productPhoto?: string | null;
           transcription?: string | null;
+          productInfo?: string | null;
           model?: string;
           workspaceId?: string | null;
         };
@@ -62,6 +63,12 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
           const { mediaType, b64 } = dataUrlToBase64(body.productPhoto);
           content.push({ type: "text", text: "\n\nFOTO DEL PRODUCTO (referencia adicional, no es un frame del video):" });
           content.push({ type: "image", source: { type: "base64", media_type: mediaType, data: b64 } });
+        }
+        if (body.productInfo?.trim()) {
+          content.push({
+            type: "text",
+            text: `\n\nDATOS DEL PRODUCTO (úsalos para entender qué se anuncia, el precio, el público y el beneficio clave):\n${body.productInfo.trim()}`,
+          });
         }
         if (body.transcription?.trim()) {
           content.push({
