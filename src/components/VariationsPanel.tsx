@@ -4,9 +4,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   Upload, Loader2, Search, Zap, Copy, CheckCircle2, AlertTriangle, Image as ImageIcon, X, Wand2,
+  Film, Sparkles as SparklesIcon, FileText,
 } from "lucide-react";
 import { extractFrames, fileToDataUrl, type ExtractedFrame } from "@/lib/frame-extraction";
 import { parseScenes, type ParsedScene } from "@/lib/scene-parser";
@@ -14,6 +16,49 @@ import { VARIATIONS } from "@/lib/variation-defs";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { UgcPanel } from "@/components/UgcPanel";
+
+type StepId = 0 | 1 | 2 | 3;
+const STEPS: ReadonlyArray<{ id: StepId; label: string }> = [
+  { id: 0, label: "Subir" },
+  { id: 1, label: "Analizar" },
+  { id: 2, label: "Generar" },
+  { id: 3, label: "Resultados" },
+];
+
+function StepperNav({ current }: { current: StepId }) {
+  return (
+    <div className="flex items-stretch rounded-lg border border-border bg-card overflow-hidden">
+      {STEPS.map((s, i) => {
+        const state: "done" | "active" | "pending" =
+          s.id < current ? "done" : s.id === current ? "active" : "pending";
+        return (
+          <div
+            key={s.id}
+            className={[
+              "flex-1 flex items-center justify-center gap-2 px-3 py-3 text-sm font-mono-display",
+              state === "active" && "bg-primary/15 text-primary font-bold border-b-2 border-primary",
+              state === "done" && "text-success/90",
+              state === "pending" && "text-muted-foreground/60",
+              i > 0 && "border-l border-border",
+            ].filter(Boolean).join(" ")}
+          >
+            <span
+              className={[
+                "flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold",
+                state === "active" && "bg-primary text-primary-foreground",
+                state === "done" && "bg-success/20 text-success",
+                state === "pending" && "bg-muted text-muted-foreground/60",
+              ].filter(Boolean).join(" ")}
+            >
+              {state === "done" ? <CheckCircle2 className="h-3.5 w-3.5" /> : i + 1}
+            </span>
+            <span>{s.label}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 // Clon sends ALL frames (beat-by-beat replica); other variations get 5 distributed (first, 25%, 50%, 75%, last).
 function pickReferenceFrames(
@@ -406,115 +451,169 @@ export function VariationsPanel() {
   };
 
   // ─── render ───────────────────────────────────────────────────────
+  const currentStep: StepId =
+    variations.some((v) => v.status === "done" || v.status === "truncated")
+      ? (variations.every((v) => v.status === "done" || v.status === "truncated") ? 3 : 2)
+      : analysis
+        ? 2
+        : frames.length > 0
+          ? 1
+          : 0;
+
   return (
-    <div className="space-y-6">
-      {/* upload + product photo */}
-      <Card className="p-5 space-y-4">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
+    <Tabs defaultValue="video" className="space-y-6">
+      <TabsList className="grid w-full grid-cols-2 h-12">
+        <TabsTrigger value="video" className="gap-2 font-mono-display text-sm">
+          <Film className="h-4 w-4" /> Video Variations
+        </TabsTrigger>
+        <TabsTrigger value="ugc" className="gap-2 font-mono-display text-sm">
+          <SparklesIcon className="h-4 w-4" /> UGC Generator
+        </TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="video" className="space-y-6 mt-0">
+        <StepperNav current={currentStep} />
+
+        {/* Step 1 — Subir video + producto */}
+        <Card className="p-5 space-y-4">
           <div>
-            <h2 className="font-mono-display text-lg font-bold">1. Sube tu video ganador</h2>
-            <p className="text-xs text-muted-foreground">.mp4 · extracción 1fps · máx 1024×1820</p>
+            <h2 className="font-mono-display text-xl font-bold">Sube tu video ganador + producto</h2>
+            <p className="text-xs text-muted-foreground mt-1">.mp4 · extracción 1 fps · máx 1024×1820</p>
           </div>
-          <Select value={model} onValueChange={setModel}>
-            <SelectTrigger className="w-56"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="claude-sonnet-4-5-20250929">Sonnet 4.5 ($3/$15)</SelectItem>
-              <SelectItem value="claude-3-5-sonnet-20241022">Sonnet 3.5 ($3/$15)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
 
-        <div className="grid md:grid-cols-2 gap-3">
-          <FilePicker icon={Upload} label="Video" accept="video/mp4,video/*" onFile={onPickVideo}
-            current={file?.name ?? null} disabled={extracting} />
-          <FilePicker icon={ImageIcon} label="Foto de producto (opcional)" accept="image/*"
-            onFile={onPickProductPhoto} current={productPhoto ? "imagen cargada" : null}
-            onClear={() => setProductPhoto(null)} />
-        </div>
-
-        {extracting && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin text-primary" />
-            Extrayendo frames {extractProgress?.done ?? 0}/{extractProgress?.total ?? 0}…
+          <div className="grid md:grid-cols-2 gap-3">
+            <BigFilePicker
+              icon={Film}
+              emoji="📹"
+              label="Video .mp4"
+              accept="video/mp4,video/*"
+              onFile={onPickVideo}
+              current={file?.name ?? null}
+              disabled={extracting}
+            />
+            <BigFilePicker
+              icon={ImageIcon}
+              emoji="📷"
+              label="Foto del producto"
+              accept="image/*"
+              onFile={onPickProductPhoto}
+              current={productPhoto ? "imagen cargada" : null}
+              onClear={() => setProductPhoto(null)}
+            />
           </div>
-        )}
 
-        {frames.length > 0 && (
-          <div>
-            <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
-              {frames.length} frames · {duration}s
+          {extracting && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin text-primary" />
+              Extrayendo frames {extractProgress?.done ?? 0}/{extractProgress?.total ?? 0}…
             </div>
-            <div className="flex gap-1.5 overflow-x-auto pb-2">
-              {frames.map((f) => (
-                <div key={f.time} className="relative flex-shrink-0">
-                  <img src={f.dataUrl} alt={`frame ${f.time}s`}
-                    className="h-16 w-auto rounded border border-border" />
-                  <span className="absolute bottom-0.5 left-0.5 rounded bg-black/70 px-1 text-[9px] font-mono-display text-primary">
-                    {f.time}s
-                  </span>
+          )}
+
+          {/* Transcripción prominente */}
+          <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 space-y-2">
+            <div className="flex items-start gap-2">
+              <FileText className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <div className="text-sm font-bold text-primary">Transcripción del video</div>
+                <div className="text-[11px] text-muted-foreground">
+                  Lo que dice la persona en el video. El Clon la usa palabra por palabra.
                 </div>
-              ))}
+              </div>
+            </div>
+            <Textarea
+              placeholder='Ejemplo: "le duele aquí, podría ser una hernia discal..."'
+              value={transcription}
+              onChange={(e) => setTranscription(e.target.value)}
+              rows={3}
+              className="text-sm bg-background/60"
+            />
+            <div className="text-[10px] text-muted-foreground">
+              Opcional — si la dejas vacía, Claude intenta transcribir de los frames.
             </div>
           </div>
-        )}
-      </Card>
 
-      {/* analyze */}
-      {frames.length > 0 && (
-        <Card className="p-5 space-y-3">
-          <div className="flex items-center justify-between gap-4">
-            <h2 className="font-mono-display text-lg font-bold">2. Analizar con Claude</h2>
-            <Button onClick={runAnalysis} disabled={analyzing}
-              className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-              {analyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-              {analyzing ? "Analizando…" : "🔍 Analizar video"}
-            </Button>
-          </div>
-          <Textarea
-            placeholder="Transcripción del usuario (opcional). Si la dejas vacía, Claude la extraerá del video."
-            value={transcription}
-            onChange={(e) => setTranscription(e.target.value)}
-            rows={3}
-            className="text-sm"
-          />
-          {analysis && (
-            <div className="space-y-2">
+          {frames.length > 0 && (
+            <div>
+              <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
+                {frames.length} frames · {duration}s
+              </div>
+              <div className="flex gap-1.5 overflow-x-auto pb-2">
+                {frames.map((f) => (
+                  <div key={f.time} className="relative flex-shrink-0">
+                    <img src={f.dataUrl} alt={`frame ${f.time}s`}
+                      className="h-16 w-auto rounded border border-border" />
+                    <span className="absolute bottom-0.5 left-0.5 rounded bg-black/70 px-1 text-[9px] font-mono-display text-primary">
+                      {f.time}s
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Botón Analizar + modelo */}
+          {frames.length > 0 && (
+            <div className="flex items-stretch gap-2">
+              <Button
+                onClick={runAnalysis}
+                disabled={analyzing}
+                className="flex-1 h-11 gap-2 bg-primary text-primary-foreground hover:bg-primary/90 font-mono-display text-sm font-bold"
+              >
+                {analyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                {analyzing ? "Analizando…" : "🔍 Analizar video"}
+              </Button>
+              <Select value={model} onValueChange={setModel}>
+                <SelectTrigger className="w-44 h-11"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="claude-sonnet-4-5-20250929">Sonnet 4.5 ($3/$15)</SelectItem>
+                  <SelectItem value="claude-3-5-sonnet-20241022">Sonnet 3.5 ($3/$15)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+        </Card>
+
+        {/* Step 2 — Análisis resultado */}
+        {analysis && (
+          <Card className="p-5 space-y-3">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <h2 className="font-mono-display text-lg font-bold">Análisis de Claude</h2>
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 <Badge variant="outline" className="border-success/40 text-success">
-                  <CheckCircle2 className="h-3 w-3 mr-1" /> análisis listo
+                  <CheckCircle2 className="h-3 w-3 mr-1" /> listo
                 </Badge>
                 <span>${Number(analysisCost ?? 0).toFixed(4)} USD</span>
                 <CopyBtn text={analysis} />
               </div>
-              <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed">
-                {analysis}
-              </pre>
             </div>
-          )}
-        </Card>
-      )}
+            <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed">
+              {analysis}
+            </pre>
+          </Card>
+        )}
 
-      {/* variations */}
-      {analysis && (
-        <Card className="p-5 space-y-4">
-          <div className="flex items-center justify-between gap-4">
-            <h2 className="font-mono-display text-lg font-bold">3. Generar 6 variaciones</h2>
-            <Button onClick={generateAll} disabled={running}
-              className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-              {running ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
-              {running ? "Generando…" : "⚡ Generar TODAS"}
-            </Button>
-          </div>
+        {/* Step 3 — Generar variaciones */}
+        {analysis && (
+          <Card className="p-5 space-y-4">
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="font-mono-display text-lg font-bold">Generar 6 variaciones</h2>
+              <Button onClick={generateAll} disabled={running}
+                className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+                {running ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
+                {running ? "Generando…" : "⚡ Generar TODAS"}
+              </Button>
+            </div>
 
-          <div className="grid lg:grid-cols-2 gap-4">
-            {variations.map((v) => (
-              <VariationCard key={v.type} v={v} frames={frames} videoUrl={videoUrl} workspaceId={workspaceId} />
-            ))}
-          </div>
-        </Card>
-      )}
+            <div className="grid lg:grid-cols-2 gap-4">
+              {variations.map((v) => (
+                <VariationCard key={v.type} v={v} frames={frames} videoUrl={videoUrl} workspaceId={workspaceId} />
+              ))}
+            </div>
+          </Card>
+        )}
+      </TabsContent>
 
-      {analysis && (
+      <TabsContent value="ugc" className="mt-0">
         <UgcPanel
           workspaceId={workspaceId}
           projectId={projectId}
@@ -524,8 +623,8 @@ export function VariationsPanel() {
           productInfo={productPhoto ? "Producto referencia adjunta como foto" : null}
           model={model}
         />
-      )}
-    </div>
+      </TabsContent>
+    </Tabs>
   );
 }
 
@@ -548,26 +647,37 @@ function extractAutoTranscription(text: string): string | null {
   return null;
 }
 
-function FilePicker({ icon: Icon, label, accept, onFile, current, onClear, disabled }: {
-  icon: typeof Upload; label: string; accept: string; current: string | null;
+function BigFilePicker({ icon: Icon, emoji, label, accept, onFile, current, onClear, disabled }: {
+  icon: typeof Upload; emoji: string; label: string; accept: string; current: string | null;
   onFile: (f: File | null) => void; onClear?: () => void; disabled?: boolean;
 }) {
   const ref = useRef<HTMLInputElement>(null);
+  const hasFile = Boolean(current);
   return (
-    <div className="rounded-lg border border-dashed border-border bg-background p-3 flex items-center gap-3">
-      <Icon className="h-5 w-5 text-primary flex-shrink-0" />
-      <div className="flex-1 min-w-0">
-        <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</div>
-        <div className="truncate text-sm">{current ?? <span className="text-muted-foreground">Ningún archivo</span>}</div>
+    <div
+      className={`rounded-xl border-2 border-dashed p-5 flex flex-col items-center justify-center text-center gap-2 transition-colors cursor-pointer ${
+        hasFile ? "border-primary/60 bg-primary/5" : "border-border bg-background hover:border-primary/40 hover:bg-primary/5"
+      } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+      onClick={() => !disabled && ref.current?.click()}
+    >
+      <div className="text-3xl leading-none">{emoji}</div>
+      <Icon className="h-4 w-4 text-primary" />
+      <div className="text-xs uppercase tracking-wider text-muted-foreground font-mono-display">{label}</div>
+      <div className="truncate max-w-full text-sm">
+        {current ?? <span className="text-muted-foreground">Click para elegir archivo</span>}
       </div>
       <input ref={ref} type="file" accept={accept} className="hidden"
         onChange={(e) => onFile(e.target.files?.[0] ?? null)} />
       {current && onClear && (
-        <Button size="sm" variant="ghost" onClick={onClear}><X className="h-3.5 w-3.5" /></Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="h-7 px-2 text-[11px]"
+          onClick={(e) => { e.stopPropagation(); onClear(); }}
+        >
+          <X className="h-3 w-3 mr-1" /> Quitar
+        </Button>
       )}
-      <Button size="sm" variant="outline" onClick={() => ref.current?.click()} disabled={disabled}>
-        Elegir
-      </Button>
     </div>
   );
 }
