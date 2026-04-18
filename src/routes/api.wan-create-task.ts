@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
+import { authenticateRequest } from "@/lib/dashscope-async";
 import type { Database } from "@/integrations/supabase/types";
 
 const ENDPOINT =
@@ -31,25 +31,12 @@ export const Route = createFileRoute("/api/wan-create-task")({
           return new Response("DASHSCOPE_API_KEY not configured", { status: 500 });
         }
 
-        const authHeader = request.headers.get("authorization");
-        if (!authHeader?.startsWith("Bearer ")) {
-          return new Response("Unauthorized", { status: 401 });
+        const auth = await authenticateRequest(request, { checkCap: true });
+        if (!auth.ok) {
+          const headers = auth.status === 429 ? { "content-type": "application/json" } : undefined;
+          return new Response(auth.error, { status: auth.status, headers });
         }
-        const token = authHeader.slice(7);
-
-        const userClient = createClient<Database>(
-          process.env.SUPABASE_URL!,
-          process.env.SUPABASE_PUBLISHABLE_KEY!,
-          { auth: { persistSession: false } },
-        );
-        const { data: claims, error: claimsErr } = await userClient.auth.getClaims(token);
-        if (claimsErr || !claims?.claims?.sub) {
-          return new Response("Unauthorized", { status: 401 });
-        }
-        const userId = claims.claims.sub;
-
-        const cap = await checkSpendingCap(userClient, userId);
-        if (!cap.ok) return capExceededResponse(cap);
+        const userId = auth.userId;
 
         const body = (await request.json()) as Body;
         if (!body.sceneId || !body.workspaceId || !body.imageUrl || !body.promptEn) {
