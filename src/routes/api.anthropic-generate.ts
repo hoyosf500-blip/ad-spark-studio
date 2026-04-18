@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { SYS_GENERATE } from "@/lib/system-prompts";
 import { SCENE_FORMAT } from "@/lib/scene-format";
+import { HOOK_PLAYBOOKS } from "@/lib/variation-defs";
 import { dataUrlToBase64, calcCost, logUsage } from "@/utils/anthropic.functions";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -56,6 +57,10 @@ export const Route = createFileRoute("/api/anthropic-generate")({
             ? " CLON: replicate the original structure beat-by-beat and keep the transcription WORD-FOR-WORD in the SCRIPT sections (Spanish, zero paraphrasing)."
             : " NOT a clone: create a fresh script inspired by the analysis — do NOT copy the original transcription verbatim, only reuse it for insight.");
         content.push({ type: "text", text: header });
+        const playbook = HOOK_PLAYBOOKS[body.variationType];
+        if (playbook) {
+          content.push({ type: "text", text: `\n\n${playbook}` });
+        }
         content.push({ type: "text", text: `\n\n=== SCENE FORMAT (MANDATORY) ===\n${SCENE_FORMAT}` });
         content.push({ type: "text", text: `\n\n=== ANALYSIS ===\n${body.analysis}` });
         if (body.transcription?.trim()) {
