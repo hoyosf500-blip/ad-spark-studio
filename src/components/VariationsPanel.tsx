@@ -236,21 +236,19 @@ export function VariationsPanel() {
       const token = session?.access_token;
       if (!token) throw new Error("No auth session");
 
-      const res = await fetch("/_serverFn/src_utils_anthropic_functions_ts--anthropicGenerate_createServerFn_handler", {
+      const res = await fetch("/api/anthropic-generate", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
         body: JSON.stringify({
-          data: {
-            analysis,
-            transcription: transcription || null,
-            variationType: type,
-            variationLabel: label,
-            productPhoto,
-            referenceFrames: frames.slice(0, Math.min(8, frames.length)).map((f) => ({ time: f.time, dataUrl: f.dataUrl })),
-            model,
-            workspaceId,
-            variationId,
-          },
+          analysis,
+          transcription: transcription || null,
+          variationType: type,
+          variationLabel: label,
+          productPhoto,
+          referenceFrames: frames.slice(0, Math.min(8, frames.length)).map((f) => ({ time: f.time, dataUrl: f.dataUrl })),
+          model,
+          workspaceId,
+          variationId,
         }),
       });
       if (!res.ok || !res.body) throw new Error(`stream HTTP ${res.status}`);
