@@ -25,6 +25,7 @@ import { Route as ApiUgcGenerateRouteImport } from './routes/api.ugc-generate'
 import { Route as ApiQwenGenerateImageRouteImport } from './routes/api.qwen-generate-image'
 import { Route as ApiKlingPollTaskRouteImport } from './routes/api.kling-poll-task'
 import { Route as ApiKlingCreateTaskRouteImport } from './routes/api.kling-create-task'
+import { Route as ApiDetectProductRouteImport } from './routes/api.detect-product'
 import { Route as ApiAnthropicGenerateRouteImport } from './routes/api.anthropic-generate'
 import { Route as ApiAnthropicAnalyzeRouteImport } from './routes/api.anthropic-analyze'
 
@@ -108,6 +109,11 @@ const ApiKlingCreateTaskRoute = ApiKlingCreateTaskRouteImport.update({
   path: '/api/kling-create-task',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDetectProductRoute = ApiDetectProductRouteImport.update({
+  id: '/api/detect-product',
+  path: '/api/detect-product',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAnthropicGenerateRoute = ApiAnthropicGenerateRouteImport.update({
   id: '/api/anthropic-generate',
   path: '/api/anthropic-generate',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/variations': typeof VariationsRoute
   '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/detect-product': typeof ApiDetectProductRoute
   '/api/kling-create-task': typeof ApiKlingCreateTaskRoute
   '/api/kling-poll-task': typeof ApiKlingPollTaskRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/variations': typeof VariationsRoute
   '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/detect-product': typeof ApiDetectProductRoute
   '/api/kling-create-task': typeof ApiKlingCreateTaskRoute
   '/api/kling-poll-task': typeof ApiKlingPollTaskRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/variations': typeof VariationsRoute
   '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/detect-product': typeof ApiDetectProductRoute
   '/api/kling-create-task': typeof ApiKlingCreateTaskRoute
   '/api/kling-poll-task': typeof ApiKlingPollTaskRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/variations'
     | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
+    | '/api/detect-product'
     | '/api/kling-create-task'
     | '/api/kling-poll-task'
     | '/api/qwen-generate-image'
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/variations'
     | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
+    | '/api/detect-product'
     | '/api/kling-create-task'
     | '/api/kling-poll-task'
     | '/api/qwen-generate-image'
@@ -233,6 +244,7 @@ export interface FileRouteTypes {
     | '/variations'
     | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
+    | '/api/detect-product'
     | '/api/kling-create-task'
     | '/api/kling-poll-task'
     | '/api/qwen-generate-image'
@@ -254,6 +266,7 @@ export interface RootRouteChildren {
   VariationsRoute: typeof VariationsRoute
   ApiAnthropicAnalyzeRoute: typeof ApiAnthropicAnalyzeRoute
   ApiAnthropicGenerateRoute: typeof ApiAnthropicGenerateRoute
+  ApiDetectProductRoute: typeof ApiDetectProductRoute
   ApiKlingCreateTaskRoute: typeof ApiKlingCreateTaskRoute
   ApiKlingPollTaskRoute: typeof ApiKlingPollTaskRoute
   ApiQwenGenerateImageRoute: typeof ApiQwenGenerateImageRoute
@@ -378,6 +391,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiKlingCreateTaskRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/detect-product': {
+      id: '/api/detect-product'
+      path: '/api/detect-product'
+      fullPath: '/api/detect-product'
+      preLoaderRoute: typeof ApiDetectProductRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/anthropic-generate': {
       id: '/api/anthropic-generate'
       path: '/api/anthropic-generate'
@@ -406,6 +426,7 @@ const rootRouteChildren: RootRouteChildren = {
   VariationsRoute: VariationsRoute,
   ApiAnthropicAnalyzeRoute: ApiAnthropicAnalyzeRoute,
   ApiAnthropicGenerateRoute: ApiAnthropicGenerateRoute,
+  ApiDetectProductRoute: ApiDetectProductRoute,
   ApiKlingCreateTaskRoute: ApiKlingCreateTaskRoute,
   ApiKlingPollTaskRoute: ApiKlingPollTaskRoute,
   ApiQwenGenerateImageRoute: ApiQwenGenerateImageRoute,

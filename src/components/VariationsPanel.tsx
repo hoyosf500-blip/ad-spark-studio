@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import {
   Upload, Loader2, Search, Zap, Copy, CheckCircle2, AlertTriangle, Image as ImageIcon, X, Wand2,
-  Film, FileText, Package,
+  Film, FileText, Package, Sparkles,
 } from "lucide-react";
 import { extractFrames, fileToDataUrl, type ExtractedFrame } from "@/lib/frame-extraction";
 import { parseScenes, type ParsedScene } from "@/lib/scene-parser";
@@ -107,6 +107,7 @@ export function VariationsPanel() {
   const [productOneLiner, setProductOneLiner] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productAudience, setProductAudience] = useState("");
+  const [detecting, setDetecting] = useState(false);
   const productInfo = [
     productName && `Producto: ${productName}`,
     productOneLiner && `Qué hace: ${productOneLiner}`,
@@ -228,6 +229,40 @@ export function VariationsPanel() {
     if (!f) return;
     const url = await fileToDataUrl(f);
     setProductPhoto(url);
+  };
+
+  // ─── auto-detect product data from photo (B3) ─────────────────────
+  const onAutoDetect = async () => {
+    if (!productPhoto) { toast.error("Sube primero una foto del producto"); return; }
+    setDetecting(true);
+    try {
+      const ws = await ensureWorkspace();
+      const session = (await supabase.auth.getSession()).data.session;
+      const token = session?.access_token;
+      if (!token) throw new Error("No auth session");
+
+      const res = await fetch("/api/detect-product", {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        body: JSON.stringify({ productPhoto, workspaceId: ws }),
+      });
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(`HTTP ${res.status}: ${txt.slice(0, 200) || res.statusText}`);
+      }
+      const data = (await res.json()) as {
+        name?: string; oneLiner?: string; price?: string; audience?: string; costUsd?: number;
+      };
+      if (data.name) setProductName(data.name);
+      if (data.oneLiner) setProductOneLiner(data.oneLiner);
+      if (data.price) setProductPrice(data.price);
+      if (data.audience) setProductAudience(data.audience);
+      toast.success(`Detectado · $${Number(data.costUsd ?? 0).toFixed(4)}`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error detectando producto");
+    } finally {
+      setDetecting(false);
+    }
   };
 
   // ─── analyze (streaming SSE) ──────────────────────────────────────
@@ -512,16 +547,29 @@ export function VariationsPanel() {
             </div>
           )}
 
-          {/* Datos del producto (B2) */}
+          {/* Datos del producto (B2 + B3 auto-detect) */}
           <div className="rounded-lg border border-border bg-background/60 p-4 space-y-3">
-            <div className="flex items-start gap-2">
-              <Package className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-              <div>
-                <div className="text-sm font-bold">Datos del producto</div>
-                <div className="text-[11px] text-muted-foreground">
-                  Claude los usa para el análisis y las 6 variaciones. Todo opcional, pero mejora mucho los scripts.
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-start gap-2 min-w-0">
+                <Package className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <div className="min-w-0">
+                  <div className="text-sm font-bold">Datos del producto</div>
+                  <div className="text-[11px] text-muted-foreground">
+                    Claude los usa para el análisis y las 6 variaciones. Todo opcional, pero mejora mucho los scripts.
+                  </div>
                 </div>
               </div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-8 gap-1.5 border-primary/40 text-primary hover:bg-primary/10 shrink-0"
+                onClick={onAutoDetect}
+                disabled={detecting || !productPhoto}
+                title={!productPhoto ? "Sube primero una foto del producto" : "Usa Claude para rellenar los 4 campos"}
+              >
+                {detecting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                <span className="text-[11px] font-mono-display">Auto-detectar</span>
+              </Button>
             </div>
             <div className="grid md:grid-cols-2 gap-2">
               <Input
