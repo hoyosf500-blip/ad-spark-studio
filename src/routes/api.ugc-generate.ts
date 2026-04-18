@@ -8,7 +8,7 @@ type Body = {
   workspaceId: string;
   projectId?: string | null;
   sourceVideoId?: string | null;
-  style: "iphone_selfie" | "kitchen_chat" | "walk_talk" | "couch_testimonial";
+  style: "ugc-casual" | "ugc-testimonial" | "ugc-viral" | "ugc-unboxing";
   analysisText: string;
   transcription?: string | null;
   productInfo?: string | null;
@@ -16,15 +16,16 @@ type Body = {
   model?: string;
 };
 
+// VERBATIM from editor de videos ugc.txt line 1211 — do not edit.
 const STYLE_DESC: Record<Body["style"], string> = {
-  iphone_selfie:
-    "iPhone selfie testimonial — Latina woman 28-38 holding product front-camera, natural window light, handheld testimonial vibe, bedroom or living-room in Colombia.",
-  kitchen_chat:
-    "Kitchen chat — woman standing in a real Colombian kitchen, product on counter, casual conversational delivery while cooking or preparing something.",
-  walk_talk:
-    "Walk-and-talk — woman or man walking in a Colombian street or park, holding the product, casual on-the-go testimonial.",
-  couch_testimonial:
-    "Couch testimonial — person sitting on a sofa with a pet or book nearby, product in hand, intimate trustworthy tone.",
+  "ugc-casual":
+    "Casual dolor — she HAS the problem, discovers the product for the first time. Tone: vulnerable, relatable, hopeful. Structure: problem (Shot 1-2) → discovery of product (Shot 2-3, NOT Shot 1) → first reaction → CTA. She shows WHERE it hurts with physical indicators (touching the zone, wincing, restricted movement). Product appears mid-video, never at the start. Hook: pain moment or frustrated gesture.",
+  "ugc-testimonial":
+    "Testimonial — she ALREADY used the product, shares her result. Tone: confident, grateful, recommending to a friend. Structure: before context with time anchor (\"llevo 2 semanas\", \"desde el mes pasado\") → product use → result with before/after verbal contrast (\"antes no podía ni agacharme, ahora...\") → recommendation. Product appears early. Hook: transformation statement or before/after contrast.",
+  "ugc-viral":
+    "Hook viral — pattern interrupt, personal brand energy, NO physical product shown in the video. The PERSON is the product. Tone: bold, magnetic, class-giving. Structure: attention-grab → knowledge drop with mini-class format (\"3 cosas que NO sabías sobre tu dolor de espalda\") → authority proof → soft CTA (follow/comment). Do NOT reference /image1 in the prompt. No \"paga al recibir\". Settings: gym, car, walking outdoors, anywhere with personality — NOT home apartment. Hook: unexpected action, controversial statement, or pattern interrupt.",
+  "ugc-unboxing":
+    "Unboxing COD — she opens the package ON CAMERA. Tone: excited, genuine surprise, show-and-tell. Structure: package arrives (doorbell or package in hands) → anticipation beats (reads label, feels weight, shows security seal) → opens and reveals product — this reveal moment is the hero visual → first impression reaction → CTA with \"paga al recibir\". Reference product as \"pictured in /image1\" at the reveal moment. Hook: package in hands or doorbell.",
 };
 
 export const Route = createFileRoute("/api/ugc-generate")({
