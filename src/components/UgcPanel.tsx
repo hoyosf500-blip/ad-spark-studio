@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Wand2, Zap, AlertTriangle, CheckCircle2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { handleCapResponse } from "@/lib/handle-cap";
 
 const UGC_STYLES = [
   { key: "ugc-casual", emoji: "📱", label: "Casual dolor" },

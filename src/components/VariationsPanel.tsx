@@ -13,6 +13,7 @@ import {
 import { extractFrames, fileToDataUrl, type ExtractedFrame } from "@/lib/frame-extraction";
 import { parseScenes, type ParsedScene } from "@/lib/scene-parser";
 import { VARIATIONS } from "@/lib/variation-defs";
+import { handleCapResponse } from "@/lib/handle-cap";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 
