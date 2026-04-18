@@ -220,7 +220,7 @@ function AdminPage() {
           </p>
         </DialogContent>
       </Dialog>
-    </div>
+    </AppShell>
   );
 }
 
