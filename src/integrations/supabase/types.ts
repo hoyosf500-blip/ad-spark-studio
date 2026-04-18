@@ -538,47 +538,89 @@ export type Database = {
       }
       ugc_generations: {
         Row: {
+          animation_prompt_en: string | null
+          cost_usd: number
           created_at: string
           data: Json
           id: string
-          language: string | null
-          model: string
-          project_id: string | null
-          prompt: string | null
+          image_generation_id: string | null
+          image_prompt_en: string | null
+          script_text: string | null
+          source_project_id: string | null
+          source_video_id: string | null
+          status: string
           style: string
           updated_at: string
+          user_id: string
+          video_generation_id: string | null
+          video_model: string | null
           workspace_id: string
         }
         Insert: {
+          animation_prompt_en?: string | null
+          cost_usd?: number
           created_at?: string
           data?: Json
           id?: string
-          language?: string | null
-          model: string
-          project_id?: string | null
-          prompt?: string | null
+          image_generation_id?: string | null
+          image_prompt_en?: string | null
+          script_text?: string | null
+          source_project_id?: string | null
+          source_video_id?: string | null
+          status?: string
           style: string
           updated_at?: string
+          user_id: string
+          video_generation_id?: string | null
+          video_model?: string | null
           workspace_id: string
         }
         Update: {
+          animation_prompt_en?: string | null
+          cost_usd?: number
           created_at?: string
           data?: Json
           id?: string
-          language?: string | null
-          model?: string
-          project_id?: string | null
-          prompt?: string | null
+          image_generation_id?: string | null
+          image_prompt_en?: string | null
+          script_text?: string | null
+          source_project_id?: string | null
+          source_video_id?: string | null
+          status?: string
           style?: string
           updated_at?: string
+          user_id?: string
+          video_generation_id?: string | null
+          video_model?: string | null
           workspace_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "ugc_generations_project_id_fkey"
-            columns: ["project_id"]
+            foreignKeyName: "ugc_generations_image_generation_id_fkey"
+            columns: ["image_generation_id"]
+            isOneToOne: false
+            referencedRelation: "image_generations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ugc_generations_source_project_id_fkey"
+            columns: ["source_project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ugc_generations_source_video_id_fkey"
+            columns: ["source_video_id"]
+            isOneToOne: false
+            referencedRelation: "source_videos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ugc_generations_video_generation_id_fkey"
+            columns: ["video_generation_id"]
+            isOneToOne: false
+            referencedRelation: "video_generations"
             referencedColumns: ["id"]
           },
           {
