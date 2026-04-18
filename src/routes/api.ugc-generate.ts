@@ -16,14 +16,68 @@ type Body = {
   model?: string;
 };
 
-// VERBATIM from editor de videos ugc.txt line 1211 — do not edit.
+// Style descriptions — ugc-casual / ugc-testimonial / ugc-unboxing preserved verbatim from HTML standalone.
+// ugc-viral rewritten 2026-04-18 applying create-viral-content skill research:
+// BuzzSumo 100M headlines, Outbrain +63% negative superlatives, WHAT→HOW→WHY NOW→PAYOFF body,
+// command-close (no engagement bait), Spanish AI-tells blacklist.
 const STYLE_DESC: Record<Body["style"], string> = {
   "ugc-casual":
     "Casual dolor — she HAS the problem, discovers the product for the first time. Tone: vulnerable, relatable, hopeful. Structure: problem (Shot 1-2) → discovery of product (Shot 2-3, NOT Shot 1) → first reaction → CTA. She shows WHERE it hurts with physical indicators (touching the zone, wincing, restricted movement). Product appears mid-video, never at the start. Hook: pain moment or frustrated gesture.",
   "ugc-testimonial":
     "Testimonial — she ALREADY used the product, shares her result. Tone: confident, grateful, recommending to a friend. Structure: before context with time anchor (\"llevo 2 semanas\", \"desde el mes pasado\") → product use → result with before/after verbal contrast (\"antes no podía ni agacharme, ahora...\") → recommendation. Product appears early. Hook: transformation statement or before/after contrast.",
   "ugc-viral":
-    "Hook viral — pattern interrupt, personal brand energy, NO physical product shown in the video. The PERSON is the product. Tone: bold, magnetic, class-giving. Structure: attention-grab → knowledge drop with mini-class format (\"3 cosas que NO sabías sobre tu dolor de espalda\") → authority proof → soft CTA (follow/comment). Do NOT reference /image1 in the prompt. No \"paga al recibir\". Settings: gym, car, walking outdoors, anywhere with personality — NOT home apartment. Hook: unexpected action, controversial statement, or pattern interrupt.",
+    `Hook viral — personal-brand UGC. The Avatar IS the product. Product NEVER appears in frame. Do NOT reference /image1.
+
+════ HOOK (0–2s) — pick exactly ONE of these four patterns ════
+A. CONTRARIAN + STAKES (highest CTR):
+   "Nadie te va a decir que [creencia común] te está [costando algo concreto medible]."
+   ej: "Nadie te va a decir que esa cena de las 10pm te está robando el sueño profundo."
+B. TRIBAL SPLIT (ego trigger):
+   "Esto separa [quien quieres ser] de [quien nunca quieres volver a ser]."
+   ej: "Esto separa a la que se recupera del dolor lumbar de la que vive 10 años con él."
+C. NEGATIVE SUPERLATIVE (+63% vs positivo — research Outbrain):
+   "Los [N impar] errores que [destruyen / arruinan / sabotean] tu [outcome]."
+   N debe ser 3, 5 o 7 — números impares rinden mejor que pares.
+D. PATTERN INTERRUPT: acción inesperada + corte + frase de impacto.
+   ej: se tira al piso, "así duerme una lumbalgia de 40 años."
+
+════ BODY (2–22s) — 4-beat build OBLIGATORIO ════
+1. WHAT    (2–5s):  concepto en 1 frase corta. Sin hedging.
+2. HOW     (5–12s): mecanismo + 1 ejemplo específico con número real. Contraste verbal antes/después.
+3. WHY NOW (12–17s): urgencia física o estacional. Síntoma que empeora hoy.
+4. PAYOFF  (17–22s): resultado tangible que puede conseguir esta semana. Número o tiempo concreto.
+
+════ CLOSER (22–30s) — COMMAND, never a request ════
+Patrón obligatorio: "Tu próximo [acción cotidiana] no debería [forma vieja]. Debería [forma nueva específica]."
+ej: "Tu próximo levantamiento no debería venir de la espalda. Debería empezar en la cadera."
+
+❌ PROHIBIDO en el closer:
+- "dale like", "suscríbete", "sígueme"
+- "déjame saber en los comentarios", "¿qué opinan?", "cuéntame abajo"
+- "comenta X y te envío", "escribe la palabra YA"
+- mención de COD, "paga al recibir", precio, envío
+
+════ BLACKLIST (AI tells en español — CERO tolerancia) ════
+❌ "Hola chicos / Hola familia / Hola qué tal"
+❌ "Les voy a contar" / "Les traigo" / "Hoy vengo a..."
+❌ "Esto les va a cambiar la vida" / "No van a creer"
+❌ "Increíble" / "Revolucionario" / "Impresionante" / "Brutal"
+❌ "Literalmente" como muletilla
+❌ "La verdad es que..." al inicio de frase
+❌ Transiciones: "Pero lo mejor viene ahora", "Ahora sí lo bueno", "Prepárate porque..."
+❌ Listas recitadas: "Primero... Segundo... Tercero..."
+
+════ VOICE (obligatorio) ════
+• Variación de longitud de oración: mezclar frases de 3 palabras con frases de 14. Nunca 5 frases seguidas de la misma duración.
+• Ratio 1:1 — 1 ejemplo concreto con número por cada claim abstracto.
+• Cero "beneficios" genéricos. Siempre: "vas a sentir X en Y minutos" o "tu Z deja de doler el día N".
+• Contracciones naturales colombianas: "pa' que", "ni de broma", "eso sí", "en serio".
+
+════ SETTING ════
+Gym con pesas de fondo · carro en parqueadero · caminando calle de barrio · escaleras urbanas · cocina abierta con café recién hecho. NUNCA sala-apartamento beige con sofá. Luz natural dura o contraluz — no softbox uniforme.
+
+════ HOOKS EXTRA (las 3 alternativas del final) ════
+Deben venir de patrones DISTINTOS (una A, una B, una C). No variaciones de la misma frase.`,
   "ugc-unboxing":
     "Unboxing COD — she opens the package ON CAMERA. Tone: excited, genuine surprise, show-and-tell. Structure: package arrives (doorbell or package in hands) → anticipation beats (reads label, feels weight, shows security seal) → opens and reveals product — this reveal moment is the hero visual → first impression reaction → CTA with \"paga al recibir\". Reference product as \"pictured in /image1\" at the reveal moment. Hook: package in hands or doorbell.",
 };

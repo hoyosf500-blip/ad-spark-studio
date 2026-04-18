@@ -69,7 +69,11 @@ src/
     __root.tsx                  # shell + AuthProvider + Toaster
     index.tsx                   # landing pública
     auth.tsx                    # sign up / sign in
-    dashboard.tsx               # tab principal
+    dashboard.tsx               # home privada (stats + últimos proyectos con thumbnails)
+    variations.tsx              # página dedicada flujo A
+    ugc.tsx                     # página dedicada flujo B
+    library.tsx                 # biblioteca de assets generados (thumbnails + filtros)
+    projects.tsx                # listado de proyectos/videos fuente
     admin.tsx                   # /admin, solo is_admin=true
     api.anthropic-analyze.ts    # Claude SSE análisis frame-by-frame
     api.anthropic-generate.ts   # Claude SSE 6 variaciones
@@ -82,14 +86,20 @@ src/
     api.veo3-create-task.ts
     api.veo3-poll-task.ts
   components/
-    AppHeader.tsx               # cost pill + admin button + signout
+    AppShell.tsx                # sidebar estilo Guardian CRM (ámbar), colapsable, envuelve rutas privadas
+    AppHeader.tsx               # cost pill + admin button + signout (dentro del shell)
+    WorkspaceSwitcher.tsx       # selector de workspace en el sidebar
     VariationsPanel.tsx         # flujo A: video → 6 variaciones
     UgcPanel.tsx                # flujo B: 4 estilos UGC
-    ui/                         # shadcn
+    ui/                         # shadcn (incluye sidebar.tsx)
   lib/
     system-prompts.ts           # SYS_ANALYZE, SYS_GENERATE, SYS_UGC (VERBATIM del HTML)
     auth-context.tsx            # useAuth() — profile, user, signOut, refreshProfile
     dashscope-async.ts          # createDashscopeTask + pollDashscopeTask + authenticateRequest
+    signed-urls.ts              # batchSignedUrls con cache 55min + videoPosterUrl
+    scene-parser.ts             # parsing de escenas del output de Claude
+    variation-defs.ts           # definiciones de las 6 variaciones
+    frame-extraction.ts         # extracción de frames del video fuente
   integrations/supabase/
     client.ts                   # browser client
     types.ts                    # Database schema types (auto)
@@ -98,6 +108,18 @@ src/
     anthropic.functions.ts      # dataUrlToBase64, logUsage, priceFor, calcCost
 supabase/migrations/*.sql       # schema + RLS
 ```
+
+## Shell de navegación
+
+Rutas privadas (dashboard, variations, ugc, library, projects, admin) se renderizan **dentro** de [src/components/AppShell.tsx](src/components/AppShell.tsx). Estilo: sidebar ámbar Guardian CRM, colapsable, con secciones "Main" (Dashboard/Variaciones/UGC) y "Library" (Library/Proyectos). No duplicar layout en rutas hijas — solo renderizar el contenido; el shell ya pone header, workspace switcher y nav.
+
+## Previews de imágenes/videos
+
+**Nunca mostrar URLs firmadas crudas en UI** (dashboard, projects, library, variations, ugc). Usar siempre [src/lib/signed-urls.ts](src/lib/signed-urls.ts):
+- `batchSignedUrls(bucket, paths)` → firma en lote + cache 55min (TTL signed URL = 7 días)
+- `videoPosterUrl(url)` → añade `#t=0.1` para thumbnail del primer frame
+
+Render como `<img src={signedUrl}>` o `<video poster={videoPosterUrl(signedUrl)}>`, nunca como link a la URL.
 
 ## System prompts — NO tocar
 
@@ -149,7 +171,7 @@ Roadmap en `../lovable-prompt-inicial.md` (fuera del repo, en `Desktop/`). Estad
 - ✅ Fase 2: Qwen imagen
 - ✅ Fase 3: Wan video async + reanudación
 - ✅ Fase 4: UGC Generator (4 estilos × 3 modelos)
-- 🚧 Fase 5: `/library` + workspace selector + ZIP + métricas `/admin`
+- 🚧 Fase 5: `/library` y `WorkspaceSwitcher` ya existen (verificar completitud: ZIP + métricas `/admin`)
 - (opcional) Fase 6: Meta/TikTok Ads API auto-ingest
 
 ## Gotchas históricos
@@ -165,9 +187,11 @@ Roadmap en `../lovable-prompt-inicial.md` (fuera del repo, en `Desktop/`). Estad
 ## Build & dev
 
 ```bash
-bun run dev       # vite dev (HMR)
-bun run build     # regenera routeTree.gen.ts + build SSR
-bun run lint      # eslint
+bun run dev        # vite dev (HMR)
+bun run build      # regenera routeTree.gen.ts + build SSR (production)
+bun run build:dev  # igual pero mode=development (source maps, sin minify)
+bun run lint       # eslint
+bun run format     # prettier --write .
 ```
 
 Git commits desde Claude Code: usar identity `-c user.email="hoyosf500@gmail.com" -c user.name="hoyosf500-blip"` (Lovable usa otra identidad).
