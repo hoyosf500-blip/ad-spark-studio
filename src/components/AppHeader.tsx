@@ -55,7 +55,7 @@ export function AppHeader() {
       : dayStats.spent >= dayStats.cap
         ? "border-destructive/50 bg-destructive/10 text-destructive"
         : dayStats.spent >= dayStats.cap * 0.8
-          ? "border-primary/50 bg-primary/10 text-primary"
+          ? "border-warning/50 bg-warning/10 text-warning"
           : "border-border bg-background text-muted-foreground";
 
   return (
