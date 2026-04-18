@@ -8,10 +8,10 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 const UGC_STYLES = [
-  { key: "iphone_selfie", emoji: "🤳", label: "iPhone selfie" },
-  { key: "kitchen_chat", emoji: "🍳", label: "Kitchen chat" },
-  { key: "walk_talk", emoji: "🚶‍♀️", label: "Walk & talk" },
-  { key: "couch_testimonial", emoji: "🛋️", label: "Couch testimonial" },
+  { key: "ugc-casual", emoji: "📱", label: "Casual dolor" },
+  { key: "ugc-testimonial", emoji: "🗣️", label: "Testimonial" },
+  { key: "ugc-viral", emoji: "🎯", label: "Hook viral" },
+  { key: "ugc-unboxing", emoji: "📦", label: "Unboxing COD" },
 ] as const;
 
 const VIDEO_MODELS = [
