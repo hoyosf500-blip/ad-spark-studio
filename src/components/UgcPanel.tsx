@@ -212,13 +212,16 @@ export function UgcPanel({
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2">
         {UGC_STYLES.map((s) => {
           const active = stream.active === s.key;
+          const needsAnalysis = s.key !== "ugc-viral";
+          const blocked = !!stream.active || (needsAnalysis && !analysisText);
           return (
             <Button
               key={s.key}
               onClick={() => generate(s.key)}
-              disabled={!!stream.active || !analysisText}
+              disabled={blocked}
               variant="outline"
               className="h-auto py-3 flex flex-col items-center gap-1 hover:border-primary"
+              title={needsAnalysis && !analysisText ? "Selecciona un proyecto con análisis primero" : undefined}
             >
               <span className="text-xl">{s.emoji}</span>
               <span className="text-xs font-mono-display">{s.label}</span>

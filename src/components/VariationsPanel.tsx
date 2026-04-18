@@ -528,6 +528,8 @@ export function VariationsPanel() {
               onFile={onPickVideo}
               current={file?.name ?? null}
               disabled={extracting}
+              previewUrl={videoUrl}
+              previewKind="video"
             />
             <BigFilePicker
               icon={ImageIcon}
@@ -537,6 +539,8 @@ export function VariationsPanel() {
               onFile={onPickProductPhoto}
               current={productPhoto ? "imagen cargada" : null}
               onClear={() => setProductPhoto(null)}
+              previewUrl={productPhoto}
+              previewKind="image"
             />
           </div>
 
@@ -724,23 +728,45 @@ function extractAutoTranscription(text: string): string | null {
   return null;
 }
 
-function BigFilePicker({ icon: Icon, emoji, label, accept, onFile, current, onClear, disabled }: {
+function BigFilePicker({ icon: Icon, emoji, label, accept, onFile, current, onClear, disabled, previewUrl, previewKind }: {
   icon: typeof Upload; emoji: string; label: string; accept: string; current: string | null;
   onFile: (f: File | null) => void; onClear?: () => void; disabled?: boolean;
+  previewUrl?: string | null; previewKind?: "image" | "video";
 }) {
   const ref = useRef<HTMLInputElement>(null);
   const hasFile = Boolean(current);
+  const hasPreview = Boolean(previewUrl);
   return (
     <div
-      className={`rounded-xl border-2 border-dashed p-5 flex flex-col items-center justify-center text-center gap-2 transition-colors cursor-pointer ${
+      className={`rounded-xl border-2 border-dashed p-4 flex flex-col items-center justify-center text-center gap-2 transition-colors cursor-pointer overflow-hidden ${
         hasFile ? "border-primary/60 bg-primary/5" : "border-border bg-background hover:border-primary/40 hover:bg-primary/5"
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
       onClick={() => !disabled && ref.current?.click()}
     >
-      <div className="text-3xl leading-none">{emoji}</div>
-      <Icon className="h-4 w-4 text-primary" />
-      <div className="text-xs uppercase tracking-wider text-muted-foreground font-mono-display">{label}</div>
-      <div className="truncate max-w-full text-sm">
+      {hasPreview ? (
+        previewKind === "video" ? (
+          <video
+            src={previewUrl!}
+            muted
+            playsInline
+            className="w-full max-h-40 rounded-md object-cover border border-primary/30"
+            preload="metadata"
+          />
+        ) : (
+          <img
+            src={previewUrl!}
+            alt={label}
+            className="w-full max-h-40 rounded-md object-cover border border-primary/30"
+          />
+        )
+      ) : (
+        <div className="text-3xl leading-none">{emoji}</div>
+      )}
+      <div className="flex items-center gap-1.5">
+        <Icon className="h-3.5 w-3.5 text-primary" />
+        <div className="text-xs uppercase tracking-wider text-muted-foreground font-mono-display">{label}</div>
+      </div>
+      <div className="truncate max-w-full text-xs">
         {current ?? <span className="text-muted-foreground">Click para elegir archivo</span>}
       </div>
       <input ref={ref} type="file" accept={accept} className="hidden"
