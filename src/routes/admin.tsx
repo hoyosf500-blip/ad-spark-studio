@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/lib/auth-context";
-import { AppHeader } from "@/components/AppHeader";
+import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -106,9 +106,8 @@ function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <AppHeader />
-      <main className="mx-auto max-w-7xl px-4 py-8">
+    <AppShell>
+      <main className="mx-auto max-w-7xl px-4 py-6">
         <div className="mb-6">
           <h1 className="font-mono-display text-2xl font-bold text-foreground">Admin Panel</h1>
           <p className="mt-1 text-xs text-muted-foreground">
