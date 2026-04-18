@@ -42,6 +42,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
           variationLabel: string;
           productPhoto?: string | null;
           productInfo?: string | null;
+          creativeBrief?: string | null;
           referenceFrames?: FrameInput[];
           model?: string;
           workspaceId?: string | null;
@@ -61,6 +62,14 @@ export const Route = createFileRoute("/api/anthropic-generate")({
             ? " CLON: replicate the original structure beat-by-beat and keep the transcription WORD-FOR-WORD in the SCRIPT sections (Spanish, zero paraphrasing)."
             : " NOT a clone: create a fresh script inspired by the analysis — do NOT copy the original transcription verbatim, only reuse it for insight.");
         content.push({ type: "text", text: header });
+        if (body.creativeBrief?.trim()) {
+          content.push({
+            type: "text",
+            text:
+              `\n\n=== BRIEF CREATIVO DEL CLIENTE (semilla en lenguaje natural — expandila usando los playbooks de hook viral abajo y la estructura de escenas. NO la copies literal; interpretala como dirección creativa.) ===\n` +
+              body.creativeBrief.trim(),
+          });
+        }
         const playbook = HOOK_PLAYBOOKS[body.variationType];
         if (playbook) {
           content.push({ type: "text", text: `\n\n${playbook}` });

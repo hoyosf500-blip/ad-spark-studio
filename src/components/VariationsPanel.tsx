@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
@@ -108,6 +109,7 @@ export function VariationsPanel() {
   const [productOneLiner, setProductOneLiner] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productAudience, setProductAudience] = useState("");
+  const [creativeBrief, setCreativeBrief] = useState("");
   const [detecting, setDetecting] = useState(false);
   const productInfo = [
     productName && `Producto: ${productName}`,
@@ -410,6 +412,7 @@ export function VariationsPanel() {
           variationLabel: label,
           productPhoto,
           productInfo,
+          creativeBrief: creativeBrief.trim() || null,
           referenceFrames: pickReferenceFrames(type, frames),
           model,
           workspaceId,
@@ -604,6 +607,19 @@ export function VariationsPanel() {
                 onChange={(e) => setProductAudience(e.target.value)}
                 className="h-9 text-sm md:col-span-2"
               />
+              <div className="md:col-span-2">
+                <Label className="text-xs">Idea / brief creativo (opcional)</Label>
+                <Textarea
+                  value={creativeBrief}
+                  onChange={(e) => setCreativeBrief(e.target.value)}
+                  placeholder="Ej: mujer bailando con buen hook sosteniendo un termo, música alegre, gym al fondo"
+                  rows={3}
+                  className="text-sm"
+                />
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Descríbelo como si hablaras con un creativo. Claude lo expande con los playbooks de hook viral.
+                </p>
+              </div>
             </div>
           </div>
 

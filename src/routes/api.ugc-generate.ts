@@ -13,6 +13,7 @@ type Body = {
   analysisText?: string | null;
   transcription?: string | null;
   productInfo?: string | null;
+  creativeBrief?: string | null;
   videoModel?: "wan2.6-i2v" | "kling2.5-turbo" | "veo3";
   model?: string;
 };
@@ -138,6 +139,9 @@ export const Route = createFileRoute("/api/ugc-generate")({
             : "";
 
         const userText = [
+          body.creativeBrief?.trim()
+            ? `BRIEF CREATIVO DEL CLIENTE (semilla en lenguaje natural — expandila con las reglas de STYLE. NO la copies literal; úsala como dirección):\n${body.creativeBrief.trim()}`
+            : "",
           `STYLE: ${body.style} — ${STYLE_DESC[body.style]}`,
           `TARGET MODEL: ${targetModelLabel}`,
           klingRules,
