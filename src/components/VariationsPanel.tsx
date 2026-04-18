@@ -246,6 +246,7 @@ export function VariationsPanel() {
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
         body: JSON.stringify({ productPhoto, workspaceId: ws }),
       });
+      if (await handleCapResponse(res)) { setDetecting(false); return; }
       if (!res.ok) {
         const txt = await res.text().catch(() => "");
         throw new Error(`HTTP ${res.status}: ${txt.slice(0, 200) || res.statusText}`);
@@ -287,6 +288,7 @@ export function VariationsPanel() {
           workspaceId: ws,
         }),
       });
+      if (await handleCapResponse(res)) { setAnalyzing(false); return; }
       if (!res.ok || !res.body) {
         const txt = await res.text().catch(() => "");
         throw new Error(`HTTP ${res.status}: ${txt.slice(0, 200) || res.statusText}`);
@@ -413,6 +415,7 @@ export function VariationsPanel() {
           variationId,
         }),
       });
+      if (await handleCapResponse(res)) return;
       if (!res.ok || !res.body) throw new Error(`stream HTTP ${res.status}`);
 
       const reader = res.body.getReader();
@@ -1020,6 +1023,7 @@ function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
           duration: 5,
         }),
       });
+      if (await handleCapResponse(res)) return;
       if (!res.ok) {
         const t = await res.text();
         throw new Error(t.slice(0, 200));
@@ -1054,6 +1058,7 @@ function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
           referenceFrameDataUrl: useI2I ? refFrameUrl : null,
         }),
       });
+      if (await handleCapResponse(res)) { setGenerating(false); return; }
       if (!res.ok) {
         const t = await res.text();
         throw new Error(t.slice(0, 200));

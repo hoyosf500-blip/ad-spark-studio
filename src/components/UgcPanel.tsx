@@ -136,6 +136,7 @@ export function UgcPanel({
           model,
         }),
       });
+      if (await handleCapResponse(res)) return;
       if (!res.ok || !res.body) {
         const t = await res.text().catch(() => "");
         throw new Error(`HTTP ${res.status}: ${t.slice(0, 200) || res.statusText}`);
@@ -325,6 +326,7 @@ function UgcRowCard({ row, workspaceId }: { row: UgcRow; workspaceId: string | n
           useI2I: false,
         }),
       });
+      if (await handleCapResponse(res)) return;
       if (!res.ok) {
         const t = await res.text();
         throw new Error(t.slice(0, 200));
