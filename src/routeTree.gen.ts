@@ -13,6 +13,8 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiWanPollTaskRouteImport } from './routes/api.wan-poll-task'
+import { Route as ApiWanCreateTaskRouteImport } from './routes/api.wan-create-task'
 import { Route as ApiQwenGenerateImageRouteImport } from './routes/api.qwen-generate-image'
 import { Route as ApiAnthropicGenerateRouteImport } from './routes/api.anthropic-generate'
 
@@ -36,6 +38,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWanPollTaskRoute = ApiWanPollTaskRouteImport.update({
+  id: '/api/wan-poll-task',
+  path: '/api/wan-poll-task',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWanCreateTaskRoute = ApiWanCreateTaskRouteImport.update({
+  id: '/api/wan-create-task',
+  path: '/api/wan-create-task',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiQwenGenerateImageRoute = ApiQwenGenerateImageRouteImport.update({
   id: '/api/qwen-generate-image',
   path: '/api/qwen-generate-image',
@@ -54,6 +66,8 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
+  '/api/wan-create-task': typeof ApiWanCreateTaskRoute
+  '/api/wan-poll-task': typeof ApiWanPollTaskRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +76,8 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
+  '/api/wan-create-task': typeof ApiWanCreateTaskRoute
+  '/api/wan-poll-task': typeof ApiWanPollTaskRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +87,8 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
+  '/api/wan-create-task': typeof ApiWanCreateTaskRoute
+  '/api/wan-poll-task': typeof ApiWanPollTaskRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +99,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/api/anthropic-generate'
     | '/api/qwen-generate-image'
+    | '/api/wan-create-task'
+    | '/api/wan-poll-task'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +109,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/api/anthropic-generate'
     | '/api/qwen-generate-image'
+    | '/api/wan-create-task'
+    | '/api/wan-poll-task'
   id:
     | '__root__'
     | '/'
@@ -97,6 +119,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/api/anthropic-generate'
     | '/api/qwen-generate-image'
+    | '/api/wan-create-task'
+    | '/api/wan-poll-task'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +130,8 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   ApiAnthropicGenerateRoute: typeof ApiAnthropicGenerateRoute
   ApiQwenGenerateImageRoute: typeof ApiQwenGenerateImageRoute
+  ApiWanCreateTaskRoute: typeof ApiWanCreateTaskRoute
+  ApiWanPollTaskRoute: typeof ApiWanPollTaskRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -138,6 +164,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/wan-poll-task': {
+      id: '/api/wan-poll-task'
+      path: '/api/wan-poll-task'
+      fullPath: '/api/wan-poll-task'
+      preLoaderRoute: typeof ApiWanPollTaskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/wan-create-task': {
+      id: '/api/wan-create-task'
+      path: '/api/wan-create-task'
+      fullPath: '/api/wan-create-task'
+      preLoaderRoute: typeof ApiWanCreateTaskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/qwen-generate-image': {
       id: '/api/qwen-generate-image'
       path: '/api/qwen-generate-image'
@@ -162,6 +202,8 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   ApiAnthropicGenerateRoute: ApiAnthropicGenerateRoute,
   ApiQwenGenerateImageRoute: ApiQwenGenerateImageRoute,
+  ApiWanCreateTaskRoute: ApiWanCreateTaskRoute,
+  ApiWanPollTaskRoute: ApiWanPollTaskRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
