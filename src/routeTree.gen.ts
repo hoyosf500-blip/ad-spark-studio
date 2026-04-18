@@ -15,7 +15,12 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiWanPollTaskRouteImport } from './routes/api.wan-poll-task'
 import { Route as ApiWanCreateTaskRouteImport } from './routes/api.wan-create-task'
+import { Route as ApiVeo3PollTaskRouteImport } from './routes/api.veo3-poll-task'
+import { Route as ApiVeo3CreateTaskRouteImport } from './routes/api.veo3-create-task'
+import { Route as ApiUgcGenerateRouteImport } from './routes/api.ugc-generate'
 import { Route as ApiQwenGenerateImageRouteImport } from './routes/api.qwen-generate-image'
+import { Route as ApiKlingPollTaskRouteImport } from './routes/api.kling-poll-task'
+import { Route as ApiKlingCreateTaskRouteImport } from './routes/api.kling-create-task'
 import { Route as ApiAnthropicGenerateRouteImport } from './routes/api.anthropic-generate'
 import { Route as ApiAnthropicAnalyzeRouteImport } from './routes/api.anthropic-analyze'
 
@@ -49,9 +54,34 @@ const ApiWanCreateTaskRoute = ApiWanCreateTaskRouteImport.update({
   path: '/api/wan-create-task',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiVeo3PollTaskRoute = ApiVeo3PollTaskRouteImport.update({
+  id: '/api/veo3-poll-task',
+  path: '/api/veo3-poll-task',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiVeo3CreateTaskRoute = ApiVeo3CreateTaskRouteImport.update({
+  id: '/api/veo3-create-task',
+  path: '/api/veo3-create-task',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUgcGenerateRoute = ApiUgcGenerateRouteImport.update({
+  id: '/api/ugc-generate',
+  path: '/api/ugc-generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiQwenGenerateImageRoute = ApiQwenGenerateImageRouteImport.update({
   id: '/api/qwen-generate-image',
   path: '/api/qwen-generate-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiKlingPollTaskRoute = ApiKlingPollTaskRouteImport.update({
+  id: '/api/kling-poll-task',
+  path: '/api/kling-poll-task',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiKlingCreateTaskRoute = ApiKlingCreateTaskRouteImport.update({
+  id: '/api/kling-create-task',
+  path: '/api/kling-create-task',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAnthropicGenerateRoute = ApiAnthropicGenerateRouteImport.update({
@@ -72,7 +102,12 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/kling-create-task': typeof ApiKlingCreateTaskRoute
+  '/api/kling-poll-task': typeof ApiKlingPollTaskRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
+  '/api/ugc-generate': typeof ApiUgcGenerateRoute
+  '/api/veo3-create-task': typeof ApiVeo3CreateTaskRoute
+  '/api/veo3-poll-task': typeof ApiVeo3PollTaskRoute
   '/api/wan-create-task': typeof ApiWanCreateTaskRoute
   '/api/wan-poll-task': typeof ApiWanPollTaskRoute
 }
@@ -83,7 +118,12 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/kling-create-task': typeof ApiKlingCreateTaskRoute
+  '/api/kling-poll-task': typeof ApiKlingPollTaskRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
+  '/api/ugc-generate': typeof ApiUgcGenerateRoute
+  '/api/veo3-create-task': typeof ApiVeo3CreateTaskRoute
+  '/api/veo3-poll-task': typeof ApiVeo3PollTaskRoute
   '/api/wan-create-task': typeof ApiWanCreateTaskRoute
   '/api/wan-poll-task': typeof ApiWanPollTaskRoute
 }
@@ -95,7 +135,12 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/kling-create-task': typeof ApiKlingCreateTaskRoute
+  '/api/kling-poll-task': typeof ApiKlingPollTaskRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
+  '/api/ugc-generate': typeof ApiUgcGenerateRoute
+  '/api/veo3-create-task': typeof ApiVeo3CreateTaskRoute
+  '/api/veo3-poll-task': typeof ApiVeo3PollTaskRoute
   '/api/wan-create-task': typeof ApiWanCreateTaskRoute
   '/api/wan-poll-task': typeof ApiWanPollTaskRoute
 }
@@ -108,7 +153,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
+    | '/api/kling-create-task'
+    | '/api/kling-poll-task'
     | '/api/qwen-generate-image'
+    | '/api/ugc-generate'
+    | '/api/veo3-create-task'
+    | '/api/veo3-poll-task'
     | '/api/wan-create-task'
     | '/api/wan-poll-task'
   fileRoutesByTo: FileRoutesByTo
@@ -119,7 +169,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
+    | '/api/kling-create-task'
+    | '/api/kling-poll-task'
     | '/api/qwen-generate-image'
+    | '/api/ugc-generate'
+    | '/api/veo3-create-task'
+    | '/api/veo3-poll-task'
     | '/api/wan-create-task'
     | '/api/wan-poll-task'
   id:
@@ -130,7 +185,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
+    | '/api/kling-create-task'
+    | '/api/kling-poll-task'
     | '/api/qwen-generate-image'
+    | '/api/ugc-generate'
+    | '/api/veo3-create-task'
+    | '/api/veo3-poll-task'
     | '/api/wan-create-task'
     | '/api/wan-poll-task'
   fileRoutesById: FileRoutesById
@@ -142,7 +202,12 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   ApiAnthropicAnalyzeRoute: typeof ApiAnthropicAnalyzeRoute
   ApiAnthropicGenerateRoute: typeof ApiAnthropicGenerateRoute
+  ApiKlingCreateTaskRoute: typeof ApiKlingCreateTaskRoute
+  ApiKlingPollTaskRoute: typeof ApiKlingPollTaskRoute
   ApiQwenGenerateImageRoute: typeof ApiQwenGenerateImageRoute
+  ApiUgcGenerateRoute: typeof ApiUgcGenerateRoute
+  ApiVeo3CreateTaskRoute: typeof ApiVeo3CreateTaskRoute
+  ApiVeo3PollTaskRoute: typeof ApiVeo3PollTaskRoute
   ApiWanCreateTaskRoute: typeof ApiWanCreateTaskRoute
   ApiWanPollTaskRoute: typeof ApiWanPollTaskRoute
 }
@@ -191,11 +256,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiWanCreateTaskRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/veo3-poll-task': {
+      id: '/api/veo3-poll-task'
+      path: '/api/veo3-poll-task'
+      fullPath: '/api/veo3-poll-task'
+      preLoaderRoute: typeof ApiVeo3PollTaskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/veo3-create-task': {
+      id: '/api/veo3-create-task'
+      path: '/api/veo3-create-task'
+      fullPath: '/api/veo3-create-task'
+      preLoaderRoute: typeof ApiVeo3CreateTaskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ugc-generate': {
+      id: '/api/ugc-generate'
+      path: '/api/ugc-generate'
+      fullPath: '/api/ugc-generate'
+      preLoaderRoute: typeof ApiUgcGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/qwen-generate-image': {
       id: '/api/qwen-generate-image'
       path: '/api/qwen-generate-image'
       fullPath: '/api/qwen-generate-image'
       preLoaderRoute: typeof ApiQwenGenerateImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/kling-poll-task': {
+      id: '/api/kling-poll-task'
+      path: '/api/kling-poll-task'
+      fullPath: '/api/kling-poll-task'
+      preLoaderRoute: typeof ApiKlingPollTaskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/kling-create-task': {
+      id: '/api/kling-create-task'
+      path: '/api/kling-create-task'
+      fullPath: '/api/kling-create-task'
+      preLoaderRoute: typeof ApiKlingCreateTaskRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/anthropic-generate': {
@@ -222,10 +322,24 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   ApiAnthropicAnalyzeRoute: ApiAnthropicAnalyzeRoute,
   ApiAnthropicGenerateRoute: ApiAnthropicGenerateRoute,
+  ApiKlingCreateTaskRoute: ApiKlingCreateTaskRoute,
+  ApiKlingPollTaskRoute: ApiKlingPollTaskRoute,
   ApiQwenGenerateImageRoute: ApiQwenGenerateImageRoute,
+  ApiUgcGenerateRoute: ApiUgcGenerateRoute,
+  ApiVeo3CreateTaskRoute: ApiVeo3CreateTaskRoute,
+  ApiVeo3PollTaskRoute: ApiVeo3PollTaskRoute,
   ApiWanCreateTaskRoute: ApiWanCreateTaskRoute,
   ApiWanPollTaskRoute: ApiWanPollTaskRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
