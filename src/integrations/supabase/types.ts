@@ -249,6 +249,7 @@ export type Database = {
           id: string
           prompt: string | null
           provider: string
+          public_url: string | null
           reference_url: string | null
           scene_id: string | null
           size: string | null
@@ -266,6 +267,7 @@ export type Database = {
           id?: string
           prompt?: string | null
           provider?: string
+          public_url?: string | null
           reference_url?: string | null
           scene_id?: string | null
           size?: string | null
@@ -283,6 +285,7 @@ export type Database = {
           id?: string
           prompt?: string | null
           provider?: string
+          public_url?: string | null
           reference_url?: string | null
           scene_id?: string | null
           size?: string | null

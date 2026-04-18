@@ -13,6 +13,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiQwenGenerateImageRouteImport } from './routes/api.qwen-generate-image'
 import { Route as ApiAnthropicGenerateRouteImport } from './routes/api.anthropic-generate'
 
 const DashboardRoute = DashboardRouteImport.update({
@@ -35,6 +36,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiQwenGenerateImageRoute = ApiQwenGenerateImageRouteImport.update({
+  id: '/api/qwen-generate-image',
+  path: '/api/qwen-generate-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAnthropicGenerateRoute = ApiAnthropicGenerateRouteImport.update({
   id: '/api/anthropic-generate',
   path: '/api/anthropic-generate',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,12 +70,25 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/auth' | '/dashboard' | '/api/anthropic-generate'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/dashboard'
+    | '/api/anthropic-generate'
+    | '/api/qwen-generate-image'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/auth' | '/dashboard' | '/api/anthropic-generate'
+  to:
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/dashboard'
+    | '/api/anthropic-generate'
+    | '/api/qwen-generate-image'
   id:
     | '__root__'
     | '/'
@@ -75,6 +96,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/api/anthropic-generate'
+    | '/api/qwen-generate-image'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -83,6 +105,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
   ApiAnthropicGenerateRoute: typeof ApiAnthropicGenerateRoute
+  ApiQwenGenerateImageRoute: typeof ApiQwenGenerateImageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -115,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/qwen-generate-image': {
+      id: '/api/qwen-generate-image'
+      path: '/api/qwen-generate-image'
+      fullPath: '/api/qwen-generate-image'
+      preLoaderRoute: typeof ApiQwenGenerateImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/anthropic-generate': {
       id: '/api/anthropic-generate'
       path: '/api/anthropic-generate'
@@ -131,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
   ApiAnthropicGenerateRoute: ApiAnthropicGenerateRoute,
+  ApiQwenGenerateImageRoute: ApiQwenGenerateImageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

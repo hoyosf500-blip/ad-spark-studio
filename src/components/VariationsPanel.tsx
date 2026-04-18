@@ -439,7 +439,7 @@ export function VariationsPanel() {
 
           <div className="grid lg:grid-cols-2 gap-4">
             {variations.map((v) => (
-              <VariationCard key={v.type} v={v} frames={frames} videoUrl={videoUrl} />
+              <VariationCard key={v.type} v={v} frames={frames} videoUrl={videoUrl} workspaceId={workspaceId} />
             ))}
           </div>
         </Card>
@@ -503,8 +503,8 @@ function CopyBtn({ text, label = "Copiar" }: { text: string; label?: string }) {
   );
 }
 
-function VariationCard({ v, frames, videoUrl: _videoUrl }: {
-  v: VariationState; frames: ExtractedFrame[]; videoUrl: string | null;
+function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId }: {
+  v: VariationState; frames: ExtractedFrame[]; videoUrl: string | null; workspaceId: string | null;
 }) {
   return (
     <div className="rounded-xl border border-border bg-background overflow-hidden">
@@ -538,28 +538,161 @@ function VariationCard({ v, frames, videoUrl: _videoUrl }: {
             </div>
           )}
           {v.scenes.map((s) => (
-            <div key={s.orderIdx} className="p-4 space-y-2">
-              <div className="flex items-center justify-between">
-                <h4 className="font-mono-display text-xs font-bold text-primary">{s.title}</h4>
-                {s.toolRecommended && (
-                  <Badge variant="outline" className="text-[10px]">{s.toolRecommended}</Badge>
-                )}
-              </div>
-              <div className="grid sm:grid-cols-[80px_1fr] gap-3 items-start">
-                {s.timeStartSec != null && (
-                  <img src={pickFrameAt(frames, s.timeStartSec) ?? ""} alt={`ref ${s.timeStartSec}s`}
-                    className="w-20 h-auto rounded border border-border" />
-                )}
-                <div className="space-y-2 min-w-0">
-                  <PromptField label="Script (ES)" text={s.scriptEs} />
-                  <PromptField label="Image prompt (EN)" text={s.imagePromptEn} mono />
-                  <PromptField label="Animation prompt (EN)" text={s.animationPromptEn} mono />
-                  {s.screenText && <PromptField label="Screen text" text={s.screenText} />}
-                  {s.attachNote && <PromptField label="Attach note" text={s.attachNote} />}
-                </div>
+            <SceneRow
+              key={s.orderIdx}
+              s={s}
+              frames={frames}
+              workspaceId={workspaceId}
+              variationType={v.type}
+              variationId={v.variationId}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
+  s: ParsedScene;
+  frames: ExtractedFrame[];
+  workspaceId: string | null;
+  variationType: string;
+  variationId?: string;
+}) {
+  const refFrameUrl = pickFrameAt(frames, s.timeStartSec);
+  const [useI2I, setUseI2I] = useState<boolean>(variationType === "clon");
+  const [size, setSize] = useState<string>("928*1664");
+  const [generating, setGenerating] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [sceneDbId, setSceneDbId] = useState<string | null>(null);
+
+  // Resolve the scene DB id (created during persist) by variation_id + order_idx
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      if (!variationId) return;
+      const { data } = await supabase
+        .from("variation_scenes")
+        .select("id, generated_image_id")
+        .eq("variation_id", variationId)
+        .eq("order_idx", s.orderIdx)
+        .maybeSingle();
+      if (cancelled || !data) return;
+      setSceneDbId(data.id);
+      if (data.generated_image_id) {
+        const { data: img } = await supabase
+          .from("image_generations")
+          .select("public_url")
+          .eq("id", data.generated_image_id)
+          .maybeSingle();
+        if (img?.public_url) setImageUrl(img.public_url);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [variationId, s.orderIdx]);
+
+  const generate = async () => {
+    if (!s.imagePromptEn) { toast.error("Esta escena no tiene image prompt"); return; }
+    if (!workspaceId) { toast.error("Workspace no listo"); return; }
+    if (!sceneDbId) { toast.error("Escena no persistida aún"); return; }
+    setGenerating(true);
+    try {
+      const session = (await supabase.auth.getSession()).data.session;
+      const token = session?.access_token;
+      if (!token) throw new Error("No auth session");
+      const res = await fetch("/api/qwen-generate-image", {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          sceneId: sceneDbId,
+          workspaceId,
+          promptEn: s.imagePromptEn,
+          size,
+          useI2I,
+          referenceFrameDataUrl: useI2I ? refFrameUrl : null,
+        }),
+      });
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error(t.slice(0, 200));
+      }
+      const json = (await res.json()) as { imageUrl: string; costUsd: number };
+      setImageUrl(json.imageUrl);
+      toast.success(`Imagen lista · $${json.costUsd.toFixed(2)} USD`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error generando imagen");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  return (
+    <div className="p-4 space-y-2">
+      <div className="flex items-center justify-between">
+        <h4 className="font-mono-display text-xs font-bold text-primary">{s.title}</h4>
+        {s.toolRecommended && (
+          <Badge variant="outline" className="text-[10px]">{s.toolRecommended}</Badge>
+        )}
+      </div>
+      <div className="grid sm:grid-cols-[80px_1fr] gap-3 items-start">
+        {s.timeStartSec != null && refFrameUrl && (
+          <img src={refFrameUrl} alt={`ref ${s.timeStartSec}s`}
+            className="w-20 h-auto rounded border border-border" />
+        )}
+        <div className="space-y-2 min-w-0">
+          <PromptField label="Script (ES)" text={s.scriptEs} />
+          <PromptField label="Image prompt (EN)" text={s.imagePromptEn} mono />
+          <PromptField label="Animation prompt (EN)" text={s.animationPromptEn} mono />
+          {s.screenText && <PromptField label="Screen text" text={s.screenText} />}
+          {s.attachNote && <PromptField label="Attach note" text={s.attachNote} />}
+        </div>
+      </div>
+
+      {/* Image generation block */}
+      {s.imagePromptEn && (
+        <div className="mt-3 rounded-md border border-border bg-card/50 p-3 space-y-2">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div className="flex items-center gap-2">
+              <label className="flex items-center gap-1.5 text-[11px] cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={useI2I}
+                  onChange={(e) => setUseI2I(e.target.checked)}
+                  disabled={!refFrameUrl}
+                  className="h-3.5 w-3.5 accent-primary"
+                />
+                <span>i2i (frame ref)</span>
+              </label>
+              <Select value={size} onValueChange={setSize}>
+                <SelectTrigger className="h-7 w-32 text-[11px]"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="928*1664">928×1664 (9:16)</SelectItem>
+                  <SelectItem value="1024*1024">1024×1024 (1:1)</SelectItem>
+                  <SelectItem value="1280*720">1280×720 (16:9)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button size="sm" onClick={generate} disabled={generating || !sceneDbId}
+              className="h-7 gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[11px]">
+              {generating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Wand2 className="h-3 w-3" />}
+              {imageUrl ? "Regenerar" : "Generar con Qwen ($0.04)"}
+            </Button>
+          </div>
+          {imageUrl && (
+            <div className="flex items-start gap-3">
+              <a href={imageUrl} target="_blank" rel="noreferrer">
+                <img src={imageUrl} alt="generated"
+                  className="w-48 h-auto rounded border border-border" />
+              </a>
+              <div className="flex flex-col gap-1.5">
+                <CopyBtn text={imageUrl} label="Copiar URL" />
+                <Button size="sm" variant="outline" className="h-6 text-[10px]" asChild>
+                  <a href={imageUrl} download target="_blank" rel="noreferrer">Descargar</a>
+                </Button>
               </div>
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>
