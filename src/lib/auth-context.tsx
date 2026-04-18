@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         alert("Tu cuenta está suspendida. Contacta al administrador.");
         return;
       }
-      setProfile(data as unknown as Profile);
+      setProfile(data as Profile);
     }
   };
 
