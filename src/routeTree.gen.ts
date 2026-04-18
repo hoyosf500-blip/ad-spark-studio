@@ -17,7 +17,6 @@ import { Route as ApiWanPollTaskRouteImport } from './routes/api.wan-poll-task'
 import { Route as ApiWanCreateTaskRouteImport } from './routes/api.wan-create-task'
 import { Route as ApiQwenGenerateImageRouteImport } from './routes/api.qwen-generate-image'
 import { Route as ApiAnthropicGenerateRouteImport } from './routes/api.anthropic-generate'
-import { Route as ApiAnthropicAnalyzeRouteImport } from './routes/api.anthropic-analyze'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -59,18 +58,12 @@ const ApiAnthropicGenerateRoute = ApiAnthropicGenerateRouteImport.update({
   path: '/api/anthropic-generate',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAnthropicAnalyzeRoute = ApiAnthropicAnalyzeRouteImport.update({
-  id: '/api/anthropic-analyze',
-  path: '/api/anthropic-analyze',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
-  '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
   '/api/wan-create-task': typeof ApiWanCreateTaskRoute
@@ -81,7 +74,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
-  '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
   '/api/wan-create-task': typeof ApiWanCreateTaskRoute
@@ -93,7 +85,6 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
-  '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/qwen-generate-image': typeof ApiQwenGenerateImageRoute
   '/api/wan-create-task': typeof ApiWanCreateTaskRoute
@@ -106,7 +97,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/dashboard'
-    | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
     | '/api/qwen-generate-image'
     | '/api/wan-create-task'
@@ -117,7 +107,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/dashboard'
-    | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
     | '/api/qwen-generate-image'
     | '/api/wan-create-task'
@@ -128,7 +117,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/dashboard'
-    | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
     | '/api/qwen-generate-image'
     | '/api/wan-create-task'
@@ -140,7 +128,6 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
-  ApiAnthropicAnalyzeRoute: typeof ApiAnthropicAnalyzeRoute
   ApiAnthropicGenerateRoute: typeof ApiAnthropicGenerateRoute
   ApiQwenGenerateImageRoute: typeof ApiQwenGenerateImageRoute
   ApiWanCreateTaskRoute: typeof ApiWanCreateTaskRoute
@@ -205,13 +192,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAnthropicGenerateRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/anthropic-analyze': {
-      id: '/api/anthropic-analyze'
-      path: '/api/anthropic-analyze'
-      fullPath: '/api/anthropic-analyze'
-      preLoaderRoute: typeof ApiAnthropicAnalyzeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -220,7 +200,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
-  ApiAnthropicAnalyzeRoute: ApiAnthropicAnalyzeRoute,
   ApiAnthropicGenerateRoute: ApiAnthropicGenerateRoute,
   ApiQwenGenerateImageRoute: ApiQwenGenerateImageRoute,
   ApiWanCreateTaskRoute: ApiWanCreateTaskRoute,

@@ -6,9 +6,10 @@ export type ExtractedFrame = {
   height: number;
 };
 
-const MAX_W = 1024;
-const MAX_H = 1820;
-const QUALITY = 0.92;
+const MAX_W = 768;
+const MAX_H = 1366;
+const QUALITY = 0.75;
+const MAX_FRAMES = 12;
 
 function fitWithin(srcW: number, srcH: number) {
   const ratio = Math.min(MAX_W / srcW, MAX_H / srcH, 1);
@@ -40,8 +41,14 @@ export async function extractFrames(
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas 2d context unavailable");
 
+  // Cap to MAX_FRAMES sampling evenly across the timeline.
+  const totalSamples = Math.min(duration, MAX_FRAMES);
+  const step = duration / totalSamples;
+  const times: number[] = [];
+  for (let i = 0; i < totalSamples; i++) times.push(Math.min(duration - 0.01, Math.round(i * step)));
+
   const frames: ExtractedFrame[] = [];
-  for (let t = 0; t < duration; t++) {
+  for (const t of times) {
     await new Promise<void>((resolve, reject) => {
       const onSeeked = () => {
         video.removeEventListener("seeked", onSeeked);
@@ -58,7 +65,7 @@ export async function extractFrames(
     ctx.drawImage(video, 0, 0, w, h);
     const dataUrl = canvas.toDataURL("image/jpeg", QUALITY);
     frames.push({ time: t, dataUrl, width: w, height: h });
-    onProgress?.(frames.length, duration);
+    onProgress?.(frames.length, totalSamples);
   }
 
   return { frames, durationSec: duration, videoUrl: url };

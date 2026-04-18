@@ -152,29 +152,16 @@ export function VariationsPanel() {
     setAnalyzing(true); setAnalysis("");
     try {
       const ws = await ensureWorkspace();
-      const { data: { session } } = await supabase.auth.getSession();
-      const token = session?.access_token;
-      if (!token) throw new Error("No hay sesión activa");
-      const httpRes = await fetch("/api/anthropic-analyze", {
-        method: "POST",
-        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-        body: JSON.stringify({
+      const { anthropicAnalyze } = await import("@/utils/anthropic.functions");
+      const res = await anthropicAnalyze({
+        data: {
           frames: frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl })),
           productPhoto,
           transcription: transcription.trim() || null,
           model,
           workspaceId: ws,
-        }),
+        },
       });
-      if (!httpRes.ok) {
-        const errText = await httpRes.text();
-        throw new Error(`Análisis falló (${httpRes.status}): ${errText.slice(0, 300)}`);
-      }
-      const res = (await httpRes.json()) as {
-        text: string;
-        costUsd: number;
-        isTruncated: boolean;
-      };
       setAnalysis(res.text);
       setAnalysisCost(res.costUsd);
       // Auto-suggest transcription if user didn't provide one
