@@ -34,6 +34,7 @@ function NavItem({ to, label, icon: Icon }: { to: string; label: string; icon: t
       <SidebarMenuButton asChild tooltip={label}>
         <Link
           to={to}
+          preload="intent"
           activeProps={{
             className:
               "bg-primary/15 text-primary font-semibold border-l-2 border-primary",
