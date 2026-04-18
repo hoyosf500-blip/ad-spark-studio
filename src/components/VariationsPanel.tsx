@@ -842,6 +842,75 @@ function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
           )}
         </div>
       )}
+
+      {/* Video generation block (Wan 2.6 i2v) */}
+      {s.animationPromptEn && (
+        <div className="mt-2 rounded-md border border-border bg-card/50 p-3 space-y-2">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              Video · 5s · 720×1280
+            </div>
+            {video.status === "idle" && (
+              <Button
+                size="sm"
+                onClick={generateVideo}
+                disabled={!imageUrl || !sceneDbId}
+                title={!imageUrl ? "Genera la imagen primero" : undefined}
+                className="h-7 gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[11px]"
+              >
+                <Zap className="h-3 w-3" />
+                {imageUrl ? "Generar video ($0.30)" : "Genera la imagen primero"}
+              </Button>
+            )}
+            {video.status === "running" && (
+              <Badge variant="outline" className="border-primary/40 text-primary text-[10px]">
+                <Loader2 className="h-2.5 w-2.5 mr-1 animate-spin" />
+                ⏱ {video.elapsedSec}s
+              </Badge>
+            )}
+            {video.status === "failed" && (
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="border-destructive/40 text-destructive text-[10px]">
+                  <AlertTriangle className="h-2.5 w-2.5 mr-1" /> {video.error.slice(0, 60)}
+                </Badge>
+                <Button
+                  size="sm"
+                  onClick={generateVideo}
+                  disabled={!imageUrl}
+                  className="h-7 gap-1.5 text-[11px]"
+                  variant="outline"
+                >
+                  Reintentar
+                </Button>
+              </div>
+            )}
+          </div>
+          {video.status === "done" && (
+            <div className="flex items-start gap-3">
+              <video
+                controls
+                src={video.videoUrl}
+                className="w-48 h-auto rounded border border-border"
+              />
+              <div className="flex flex-col gap-1.5">
+                <CopyBtn text={video.videoUrl} label="Copiar URL" />
+                <Button size="sm" variant="outline" className="h-6 text-[10px]" asChild>
+                  <a href={video.videoUrl} download target="_blank" rel="noreferrer">Descargar</a>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-6 text-[10px]"
+                  onClick={generateVideo}
+                  disabled={!imageUrl}
+                >
+                  Regenerar
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
