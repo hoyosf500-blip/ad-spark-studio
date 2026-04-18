@@ -12,25 +12,9 @@ export async function checkSpendingCap(
   supabase: SupabaseClient<Database>,
   userId: string,
 ): Promise<CapCheck> {
-  // daily_cap_usd y get_day_cost_usd aún no están en types.ts generado;
-  // se castean puntualmente hasta el próximo regen.
-  const sb = supabase as unknown as {
-    from: (t: string) => {
-      select: (c: string) => {
-        eq: (k: string, v: string) => {
-          single: () => Promise<{ data: { daily_cap_usd: number | string | null } | null }>;
-        };
-      };
-    };
-    rpc: (
-      fn: string,
-      args: Record<string, unknown>,
-    ) => Promise<{ data: number | string | null }>;
-  };
-
   const [{ data: prof }, { data: dayCost }] = await Promise.all([
-    sb.from("profiles").select("daily_cap_usd").eq("id", userId).single(),
-    sb.rpc("get_day_cost_usd", { p_user_id: userId }),
+    supabase.from("profiles").select("daily_cap_usd").eq("id", userId).single(),
+    supabase.rpc("get_day_cost_usd", { p_user_id: userId }),
   ]);
 
   const cap = Number(prof?.daily_cap_usd ?? 20);
