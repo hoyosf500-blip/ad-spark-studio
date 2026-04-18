@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
+import { batchSignedUrls } from "@/lib/signed-urls";
 import {
   Wand2, Sparkles, Library as LibraryIcon, FolderKanban, TrendingUp, DollarSign,
   Image as ImageIcon, Video, Plus,
@@ -28,7 +29,10 @@ function DashboardPage() {
   const { user, loading, profile, activeWorkspaceId } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState<Stats | null>(null);
-  const [recent, setRecent] = useState<{ id: string; name: string; status: string; updated_at: string }[]>([]);
+  const [recent, setRecent] = useState<{
+    id: string; name: string; status: string; updated_at: string;
+    thumbUrl: string | null;
+  }[]>([]);
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth", search: { mode: "signin" } });
@@ -62,7 +66,32 @@ function DashboardPage() {
         .eq("workspace_id", ws)
         .order("updated_at", { ascending: false })
         .limit(5);
-      setRecent(rec ?? []);
+      const projectIds = (rec ?? []).map((r) => r.id);
+      const svByProject: Record<string, { path: string | null; filename: string | null }> = {};
+      if (projectIds.length) {
+        const { data: svs } = await supabase
+          .from("source_videos")
+          .select("project_id,storage_path,filename,created_at")
+          .in("project_id", projectIds)
+          .order("created_at", { ascending: true });
+        for (const sv of svs ?? []) {
+          if (sv.project_id && svByProject[sv.project_id] === undefined) {
+            svByProject[sv.project_id] = { path: sv.storage_path, filename: sv.filename };
+          }
+        }
+      }
+      const urls = await batchSignedUrls(
+        "source-videos",
+        Object.values(svByProject).map((s) => s.path).filter(Boolean) as string[],
+      );
+      setRecent(
+        (rec ?? []).map((r) => {
+          const sv = svByProject[r.id];
+          const raw = sv?.path ? urls[sv.path] : null;
+          const name = prettyProjectName(r.name, sv?.filename);
+          return { ...r, name, thumbUrl: raw ?? null };
+        }),
+      );
     })();
   }, [activeWorkspaceId]);
 
@@ -140,14 +169,15 @@ function DashboardPage() {
             ) : (
               <div className="space-y-1.5">
                 {recent.map((p) => (
-                  <div key={p.id} className="flex items-center justify-between rounded-md border border-border bg-background/40 px-3 py-2">
-                    <div className="min-w-0">
+                  <div key={p.id} className="flex items-center gap-3 rounded-md border border-border bg-background/40 px-3 py-2">
+                    <ProjectThumb url={p.thumbUrl} />
+                    <div className="min-w-0 flex-1">
                       <div className="truncate text-sm font-medium">{p.name}</div>
                       <div className="text-[10px] text-muted-foreground">
                         {new Date(p.updated_at).toLocaleString("es-CO")}
                       </div>
                     </div>
-                    <Badge variant="outline" className="text-[10px]">{p.status}</Badge>
+                    <Badge variant="outline" className="text-[10px] shrink-0">{p.status}</Badge>
                   </div>
                 ))}
               </div>
@@ -166,6 +196,41 @@ function DashboardPage() {
       </div>
     </AppShell>
   );
+}
+
+function ProjectThumb({ url }: { url: string | null }) {
+  if (!url) {
+    return (
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-primary/10 ring-1 ring-primary/20">
+        <FolderKanban className="h-5 w-5 text-primary/70" />
+      </div>
+    );
+  }
+  return (
+    <video
+      src={`${url}#t=0.1`}
+      muted
+      playsInline
+      preload="auto"
+      className="h-12 w-12 shrink-0 rounded-md border border-border object-cover bg-black"
+    />
+  );
+}
+
+function prettyProjectName(rawName: string, filename?: string | null): string {
+  const looksLikeUrl = /^https?:|^blob:|^data:/i.test(rawName);
+  const hasNoSpaces = !/\s/.test(rawName);
+  const tooLong = rawName.length > 80;
+  const isTokeny = hasNoSpaces && rawName.length > 40 && /^[A-Za-z0-9_\-./:%?=&+]+$/.test(rawName);
+  const broken = looksLikeUrl || tooLong || isTokeny;
+  if (!broken) return rawName;
+  if (filename && filename.trim()) return filename.replace(/\.[a-zA-Z0-9]+$/, "");
+  try {
+    const u = new URL(rawName);
+    const seg = decodeURIComponent(u.pathname.split("/").pop() ?? "").replace(/^\d+_/, "");
+    if (seg) return seg.replace(/\.[a-zA-Z0-9]+$/, "");
+  } catch { /* fallthrough */ }
+  return "Proyecto sin nombre";
 }
 
 function KpiCard({
