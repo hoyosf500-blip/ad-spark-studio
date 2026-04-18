@@ -944,6 +944,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      invite_member: {
+        Args: { _email: string; _role?: string; _ws: string }
+        Returns: Json
+      }
       is_active: { Args: { _uid: string }; Returns: boolean }
       is_admin: { Args: { _uid: string }; Returns: boolean }
       is_ws_member: { Args: { _uid: string; _ws: string }; Returns: boolean }
