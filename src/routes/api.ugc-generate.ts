@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { SYS_UGC } from "@/lib/system-prompts";
 import { logUsage } from "@/utils/anthropic.functions";
+import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
 type Body = {
@@ -101,6 +102,9 @@ export const Route = createFileRoute("/api/ugc-generate")({
         const { data: claims, error: claimsErr } = await sb.auth.getClaims(token);
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
+
+        const cap = await checkSpendingCap(sb, userId);
+        if (!cap.ok) return capExceededResponse(cap);
 
         const body = (await request.json()) as Body;
         // analysisText is required for every style EXCEPT ugc-viral (viral = fresh personal-brand content, no source needed).

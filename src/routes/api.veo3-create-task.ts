@@ -15,8 +15,11 @@ export const Route = createFileRoute("/api/veo3-create-task")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const auth = await authenticateRequest(request);
-        if (!auth.ok) return new Response(auth.error, { status: auth.status });
+        const auth = await authenticateRequest(request, { checkCap: true });
+        if (!auth.ok) {
+          const headers = auth.status === 429 ? { "content-type": "application/json" } : undefined;
+          return new Response(auth.error, { status: auth.status, headers });
+        }
 
         const body = (await request.json()) as Body;
         if (!body.workspaceId || !body.imageUrl || !body.promptEn) {

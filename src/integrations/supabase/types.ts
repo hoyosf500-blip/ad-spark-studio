@@ -364,6 +364,7 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          daily_cap_usd: number
           email: string
           full_name: string | null
           id: string
@@ -374,6 +375,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          daily_cap_usd?: number
           email: string
           full_name?: string | null
           id: string
@@ -384,6 +386,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          daily_cap_usd?: number
           email?: string
           full_name?: string | null
           id?: string
@@ -944,6 +947,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_day_cost_usd: { Args: { p_user_id: string }; Returns: number }
       invite_member: {
         Args: { _email: string; _role?: string; _ws: string }
         Returns: Json

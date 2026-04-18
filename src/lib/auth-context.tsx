@@ -9,6 +9,7 @@ export type Profile = {
   is_admin: boolean;
   is_active: boolean;
   total_cost_usd: number;
+  daily_cap_usd: number;
   created_at: string;
 };
 
@@ -61,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadProfile = async (uid: string) => {
     const { data } = await supabase
       .from("profiles")
-      .select("id,email,full_name,is_admin,is_active,total_cost_usd,created_at")
+      .select("id,email,full_name,is_admin,is_active,total_cost_usd,daily_cap_usd,created_at")
       .eq("id", uid)
       .maybeSingle();
     if (data) {
@@ -73,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         alert("Tu cuenta está suspendida. Contacta al administrador.");
         return;
       }
-      setProfile(data as Profile);
+      setProfile(data as unknown as Profile);
     }
   };
 

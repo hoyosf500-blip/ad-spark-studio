@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
 import { Users, UserCheck, DollarSign, Activity, Eye, Pause, Play, ShieldOff } from "lucide-react";
 
 type Row = {
@@ -21,6 +22,7 @@ type Row = {
   is_admin: boolean;
   is_active: boolean;
   total_cost_usd: number;
+  daily_cap_usd: number;
   created_at: string;
 };
 
@@ -41,11 +43,11 @@ function AdminPage() {
     setBusy(true);
     const { data, error } = await supabase
       .from("profiles")
-      .select("id,email,full_name,is_admin,is_active,total_cost_usd,created_at")
+      .select("id,email,full_name,is_admin,is_active,total_cost_usd,daily_cap_usd,created_at")
       .order("created_at", { ascending: true });
     if (error) toast.error(error.message);
     else {
-      const r = (data ?? []) as Row[];
+      const r = (data ?? []) as unknown as Row[];
       setRows(r);
       const since = new Date();
       since.setDate(1); since.setHours(0, 0, 0, 0);
@@ -136,6 +138,7 @@ function AdminPage() {
                 <TableHead className="text-[11px] uppercase tracking-wider">Nombre</TableHead>
                 <TableHead className="text-[11px] uppercase tracking-wider">Registro</TableHead>
                 <TableHead className="text-[11px] uppercase tracking-wider">Costo</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider">Tope diario</TableHead>
                 <TableHead className="text-[11px] uppercase tracking-wider">Estado</TableHead>
                 <TableHead className="text-[11px] uppercase tracking-wider">Admin</TableHead>
                 <TableHead className="text-right text-[11px] uppercase tracking-wider">Acciones</TableHead>
@@ -152,6 +155,31 @@ function AdminPage() {
                       {new Date(r.created_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell className="font-mono-display text-xs">${Number(r.total_cost_usd).toFixed(3)}</TableCell>
+                    <TableCell>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        defaultValue={Number(r.daily_cap_usd ?? 20).toFixed(2)}
+                        onBlur={async (e) => {
+                          const v = Number(e.target.value);
+                          if (Number.isNaN(v) || v < 0) return;
+                          if (v === Number(r.daily_cap_usd)) return;
+                          const sb = supabase as unknown as {
+                            from: (t: string) => {
+                              update: (vals: Record<string, unknown>) => {
+                                eq: (k: string, val: string) => Promise<{ error: { message: string } | null }>;
+                              };
+                            };
+                          };
+                          const { error } = await sb.from("profiles").update({ daily_cap_usd: v }).eq("id", r.id);
+                          if (error) toast.error(error.message);
+                          else { toast.success(`Tope de ${r.email}: $${v.toFixed(2)}`); load(); }
+                        }}
+                        className="h-7 w-20 text-xs"
+                        disabled={!profile?.is_admin}
+                      />
+                    </TableCell>
                     <TableCell>
                       {r.is_active ? (
                         <Badge variant="outline" className="border-success/40 bg-success/10 text-success">Activo</Badge>
@@ -188,7 +216,7 @@ function AdminPage() {
                 );
               })}
               {rows.length === 0 && !busy && (
-                <TableRow><TableCell colSpan={7} className="py-8 text-center text-muted-foreground">Sin usuarios</TableCell></TableRow>
+                <TableRow><TableCell colSpan={8} className="py-8 text-center text-muted-foreground">Sin usuarios</TableCell></TableRow>
               )}
             </TableBody>
           </Table>

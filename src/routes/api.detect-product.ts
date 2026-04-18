@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { dataUrlToBase64, logUsage } from "@/utils/anthropic.functions";
+import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
 type Body = {
@@ -45,6 +46,9 @@ export const Route = createFileRoute("/api/detect-product")({
         const { data: claims, error: claimsErr } = await sb.auth.getClaims(token);
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
+
+        const cap = await checkSpendingCap(sb, userId);
+        if (!cap.ok) return capExceededResponse(cap);
 
         const body = (await request.json()) as Body;
         if (!body.productPhoto) return new Response("productPhoto required", { status: 400 });

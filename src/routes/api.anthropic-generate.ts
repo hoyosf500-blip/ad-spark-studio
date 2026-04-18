@@ -4,6 +4,7 @@ import { SYS_GENERATE } from "@/lib/system-prompts";
 import { SCENE_FORMAT } from "@/lib/scene-format";
 import { HOOK_PLAYBOOKS } from "@/lib/variation-defs";
 import { dataUrlToBase64, calcCost, logUsage } from "@/utils/anthropic.functions";
+import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
 type FrameInput = { time: number; dataUrl: string };
@@ -30,6 +31,9 @@ export const Route = createFileRoute("/api/anthropic-generate")({
         const { data: claims, error: claimsErr } = await supabase.auth.getClaims(token);
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
+
+        const cap = await checkSpendingCap(supabase, userId);
+        if (!cap.ok) return capExceededResponse(cap);
 
         const body = (await request.json()) as {
           analysis: string;
