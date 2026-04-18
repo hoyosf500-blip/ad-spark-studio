@@ -32,11 +32,7 @@ export function AppHeader() {
     if (!profile?.id) return;
     let cancelled = false;
     const load = async () => {
-      // get_day_cost_usd y daily_cap_usd aún no están en types.ts generado.
-      const sb = supabase as unknown as {
-        rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: number | string | null }>;
-      };
-      const { data: cost } = await sb.rpc("get_day_cost_usd", { p_user_id: profile.id });
+      const { data: cost } = await supabase.rpc("get_day_cost_usd", { p_user_id: profile.id });
       if (!cancelled) {
         setDayStats({
           spent: Number(cost ?? 0),
