@@ -13,6 +13,7 @@ import { parseScenes, type ParsedScene } from "@/lib/scene-parser";
 import { VARIATIONS } from "@/lib/variation-defs";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { UgcPanel } from "@/components/UgcPanel";
 
 type VariationState = {
   type: string;
@@ -484,6 +485,18 @@ export function VariationsPanel() {
             ))}
           </div>
         </Card>
+      )}
+
+      {analysis && (
+        <UgcPanel
+          workspaceId={workspaceId}
+          projectId={projectId}
+          sourceVideoId={sourceVideoId}
+          analysisText={analysis}
+          transcription={transcription}
+          productInfo={productPhoto ? "Producto referencia adjunta como foto" : null}
+          model={model}
+        />
       )}
     </div>
   );
