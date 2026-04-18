@@ -830,17 +830,34 @@ function CopyBtn({ text, label = "Copiar" }: { text: string; label?: string }) {
   );
 }
 
-function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId }: {
+function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId, running, onGenerate }: {
   v: VariationState; frames: ExtractedFrame[]; videoUrl: string | null; workspaceId: string | null;
+  running?: boolean;
+  onGenerate?: () => void | Promise<void>;
 }) {
   return (
     <div className="rounded-xl border border-border bg-background overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-card">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-card gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           <span className="text-base">{v.emoji}</span>
-          <span className="font-mono-display text-sm font-bold">{v.label}</span>
+          <span className="font-mono-display text-sm font-bold truncate">{v.label}</span>
         </div>
-        <StatusPill v={v} />
+        <div className="flex items-center gap-2 shrink-0">
+          {(v.status === "idle" || v.status === "error") && onGenerate && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={onGenerate}
+              disabled={running}
+              className="h-7 px-2 text-[11px] gap-1"
+              title="Generar solo esta variación"
+            >
+              <Zap className="h-3 w-3" />
+              Generar solo esta
+            </Button>
+          )}
+          <StatusPill v={v} />
+        </div>
       </div>
 
       {v.status === "running" && (
@@ -874,6 +891,20 @@ function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId }: {
               variationId={v.variationId}
             />
           ))}
+          {onGenerate && (
+            <div className="px-4 py-2 flex justify-end bg-card/40">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={onGenerate}
+                disabled={running}
+                className="h-6 px-2 text-[11px] text-muted-foreground hover:text-foreground"
+                title="Volver a generar esta variación"
+              >
+                ↻ Regenerar
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>
