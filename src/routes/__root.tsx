@@ -38,6 +38,10 @@ export const Route = createRootRoute({
       { property: "og:description", content: "Variaciones de video ads con Claude + Qwen + Wan" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Ad Factory Studio" },
+      { name: "twitter:description", content: "Variaciones de video ads con Claude + Qwen + Wan" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8d47f2f8-e75b-4aa4-8db3-c431332e4137/id-preview-0bf643d3--c00e8816-bf4a-4621-b7ec-4931cf0e09f4.lovable.app-1776495338533.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8d47f2f8-e75b-4aa4-8db3-c431332e4137/id-preview-0bf643d3--c00e8816-bf4a-4621-b7ec-4931cf0e09f4.lovable.app-1776495338533.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
