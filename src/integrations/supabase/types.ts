@@ -383,29 +383,38 @@ export type Database = {
       }
       projects: {
         Row: {
+          analysis_text: string | null
           created_at: string
           data: Json
+          frames_metadata: Json
           id: string
           name: string
           status: string
+          transcription: string | null
           updated_at: string
           workspace_id: string
         }
         Insert: {
+          analysis_text?: string | null
           created_at?: string
           data?: Json
+          frames_metadata?: Json
           id?: string
           name: string
           status?: string
+          transcription?: string | null
           updated_at?: string
           workspace_id: string
         }
         Update: {
+          analysis_text?: string | null
           created_at?: string
           data?: Json
+          frames_metadata?: Json
           id?: string
           name?: string
           status?: string
+          transcription?: string | null
           updated_at?: string
           workspace_id?: string
         }
@@ -429,6 +438,7 @@ export type Database = {
           id: string
           project_id: string | null
           storage_path: string | null
+          transcription: string | null
           updated_at: string
           workspace_id: string
         }
@@ -441,6 +451,7 @@ export type Database = {
           id?: string
           project_id?: string | null
           storage_path?: string | null
+          transcription?: string | null
           updated_at?: string
           workspace_id: string
         }
@@ -453,6 +464,7 @@ export type Database = {
           id?: string
           project_id?: string | null
           storage_path?: string | null
+          transcription?: string | null
           updated_at?: string
           workspace_id?: string
         }
@@ -568,14 +580,23 @@ export type Database = {
       variation_scenes: {
         Row: {
           animation_prompt: string | null
+          animation_prompt_en: string | null
+          attach_note: string | null
           created_at: string
           generated_image_id: string | null
           generated_video_id: string | null
           id: string
           image_prompt: string | null
+          image_prompt_en: string | null
+          order_idx: number | null
+          reference_frame_time_sec: number | null
           reference_frame_url: string | null
           scene_index: number
           scene_text: string | null
+          screen_text: string | null
+          script_es: string | null
+          title: string | null
+          tool_recommended: string | null
           updated_at: string
           use_i2i: boolean
           variation_id: string
@@ -583,14 +604,23 @@ export type Database = {
         }
         Insert: {
           animation_prompt?: string | null
+          animation_prompt_en?: string | null
+          attach_note?: string | null
           created_at?: string
           generated_image_id?: string | null
           generated_video_id?: string | null
           id?: string
           image_prompt?: string | null
+          image_prompt_en?: string | null
+          order_idx?: number | null
+          reference_frame_time_sec?: number | null
           reference_frame_url?: string | null
           scene_index: number
           scene_text?: string | null
+          screen_text?: string | null
+          script_es?: string | null
+          title?: string | null
+          tool_recommended?: string | null
           updated_at?: string
           use_i2i?: boolean
           variation_id: string
@@ -598,14 +628,23 @@ export type Database = {
         }
         Update: {
           animation_prompt?: string | null
+          animation_prompt_en?: string | null
+          attach_note?: string | null
           created_at?: string
           generated_image_id?: string | null
           generated_video_id?: string | null
           id?: string
           image_prompt?: string | null
+          image_prompt_en?: string | null
+          order_idx?: number | null
+          reference_frame_time_sec?: number | null
           reference_frame_url?: string | null
           scene_index?: number
           scene_text?: string | null
+          screen_text?: string | null
+          script_es?: string | null
+          title?: string | null
+          tool_recommended?: string | null
           updated_at?: string
           use_i2i?: boolean
           variation_id?: string
@@ -632,7 +671,13 @@ export type Database = {
         Row: {
           created_at: string
           data: Json
+          elapsed_seconds: number | null
+          full_text: string | null
           id: string
+          input_tokens: number | null
+          is_truncated: boolean
+          model: string | null
+          output_tokens: number | null
           project_id: string
           script: string | null
           source_video_id: string | null
@@ -644,7 +689,13 @@ export type Database = {
         Insert: {
           created_at?: string
           data?: Json
+          elapsed_seconds?: number | null
+          full_text?: string | null
           id?: string
+          input_tokens?: number | null
+          is_truncated?: boolean
+          model?: string | null
+          output_tokens?: number | null
           project_id: string
           script?: string | null
           source_video_id?: string | null
@@ -656,7 +707,13 @@ export type Database = {
         Update: {
           created_at?: string
           data?: Json
+          elapsed_seconds?: number | null
+          full_text?: string | null
           id?: string
+          input_tokens?: number | null
+          is_truncated?: boolean
+          model?: string | null
+          output_tokens?: number | null
           project_id?: string
           script?: string | null
           source_video_id?: string | null
