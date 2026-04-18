@@ -9,6 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VariationsRouteImport } from './routes/variations'
+import { Route as UgcRouteImport } from './routes/ugc'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -24,6 +28,26 @@ import { Route as ApiKlingCreateTaskRouteImport } from './routes/api.kling-creat
 import { Route as ApiAnthropicGenerateRouteImport } from './routes/api.anthropic-generate'
 import { Route as ApiAnthropicAnalyzeRouteImport } from './routes/api.anthropic-analyze'
 
+const VariationsRoute = VariationsRouteImport.update({
+  id: '/variations',
+  path: '/variations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UgcRoute = UgcRouteImport.update({
+  id: '/ugc',
+  path: '/ugc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -100,6 +124,10 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
+  '/library': typeof LibraryRoute
+  '/projects': typeof ProjectsRoute
+  '/ugc': typeof UgcRoute
+  '/variations': typeof VariationsRoute
   '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/kling-create-task': typeof ApiKlingCreateTaskRoute
@@ -116,6 +144,10 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
+  '/library': typeof LibraryRoute
+  '/projects': typeof ProjectsRoute
+  '/ugc': typeof UgcRoute
+  '/variations': typeof VariationsRoute
   '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/kling-create-task': typeof ApiKlingCreateTaskRoute
@@ -133,6 +165,10 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
+  '/library': typeof LibraryRoute
+  '/projects': typeof ProjectsRoute
+  '/ugc': typeof UgcRoute
+  '/variations': typeof VariationsRoute
   '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/kling-create-task': typeof ApiKlingCreateTaskRoute
@@ -151,6 +187,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/dashboard'
+    | '/library'
+    | '/projects'
+    | '/ugc'
+    | '/variations'
     | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
     | '/api/kling-create-task'
@@ -167,6 +207,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/dashboard'
+    | '/library'
+    | '/projects'
+    | '/ugc'
+    | '/variations'
     | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
     | '/api/kling-create-task'
@@ -183,6 +227,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/dashboard'
+    | '/library'
+    | '/projects'
+    | '/ugc'
+    | '/variations'
     | '/api/anthropic-analyze'
     | '/api/anthropic-generate'
     | '/api/kling-create-task'
@@ -200,6 +248,10 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
+  LibraryRoute: typeof LibraryRoute
+  ProjectsRoute: typeof ProjectsRoute
+  UgcRoute: typeof UgcRoute
+  VariationsRoute: typeof VariationsRoute
   ApiAnthropicAnalyzeRoute: typeof ApiAnthropicAnalyzeRoute
   ApiAnthropicGenerateRoute: typeof ApiAnthropicGenerateRoute
   ApiKlingCreateTaskRoute: typeof ApiKlingCreateTaskRoute
@@ -214,6 +266,34 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/variations': {
+      id: '/variations'
+      path: '/variations'
+      fullPath: '/variations'
+      preLoaderRoute: typeof VariationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ugc': {
+      id: '/ugc'
+      path: '/ugc'
+      fullPath: '/ugc'
+      preLoaderRoute: typeof UgcRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -320,6 +400,10 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
+  LibraryRoute: LibraryRoute,
+  ProjectsRoute: ProjectsRoute,
+  UgcRoute: UgcRoute,
+  VariationsRoute: VariationsRoute,
   ApiAnthropicAnalyzeRoute: ApiAnthropicAnalyzeRoute,
   ApiAnthropicGenerateRoute: ApiAnthropicGenerateRoute,
   ApiKlingCreateTaskRoute: ApiKlingCreateTaskRoute,
