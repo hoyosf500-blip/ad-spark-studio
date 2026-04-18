@@ -1,11 +1,29 @@
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Shield, LogOut, Zap } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export function AppHeader() {
-  const { profile, signOut } = useAuth();
+  const { profile, signOut, refreshProfile, user } = useAuth();
   const navigate = useNavigate();
+
+  // Realtime: refresh profile when total_cost_usd changes
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel(`profile-cost-${user.id}`)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "profiles", filter: `id=eq.${user.id}` },
+        () => refreshProfile(),
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, refreshProfile]);
 
   if (!profile) return null;
 
