@@ -414,7 +414,7 @@ export function VariationsPanel() {
                 <Badge variant="outline" className="border-success/40 text-success">
                   <CheckCircle2 className="h-3 w-3 mr-1" /> análisis listo
                 </Badge>
-                <span>${analysisCost.toFixed(4)} USD</span>
+                <span>${Number(analysisCost ?? 0).toFixed(4)} USD</span>
                 <CopyBtn text={analysis} />
               </div>
               <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed">
@@ -939,11 +939,11 @@ function StatusPill({ v }: { v: VariationState }) {
     );
   }
   if (v.status === "error") return <Badge variant="outline" className="border-destructive/40 text-destructive text-[10px]">error</Badge>;
-  if (v.status === "truncated") return <Badge variant="outline" className="border-warning/40 text-warning text-[10px]">truncado · {v.elapsedSec}s · ${v.costUsd.toFixed(4)}</Badge>;
+  if (v.status === "truncated") return <Badge variant="outline" className="border-warning/40 text-warning text-[10px]">truncado · {v.elapsedSec}s · ${Number(v.costUsd ?? 0).toFixed(4)}</Badge>;
   return (
     <Badge variant="outline" className="border-success/40 text-success text-[10px]">
       <Wand2 className="h-2.5 w-2.5 mr-1" />
-      {v.elapsedSec}s · ${v.costUsd.toFixed(4)}
+      {v.elapsedSec}s · ${Number(v.costUsd ?? 0).toFixed(4)}
     </Badge>
   );
 }

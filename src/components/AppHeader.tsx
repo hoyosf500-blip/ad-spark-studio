@@ -27,7 +27,7 @@ export function AppHeader() {
 
   if (!profile) return null;
 
-  const cost = (profile.total_cost_usd ?? 0).toFixed(3);
+  const cost = Number(profile.total_cost_usd ?? 0).toFixed(3);
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-sm">
