@@ -32,7 +32,7 @@ type VariationState = {
 const DEFAULT_MODEL = "claude-sonnet-4-5-20250929";
 
 export function VariationsPanel() {
-  const { user } = useAuth();
+  const { user, activeWorkspaceId, refreshWorkspaces, setActiveWorkspaceId } = useAuth();
   const [model, setModel] = useState<string>(DEFAULT_MODEL);
 
   const [file, setFile] = useState<File | null>(null);
@@ -76,17 +76,22 @@ export function VariationsPanel() {
     return () => window.clearInterval(id);
   }, []);
 
-  // Ensure the user has a personal workspace (auto-create on first use)
+  // Resolve the workspace to use: prefer active from context, else create personal
   const ensureWorkspace = useCallback(async () => {
     if (!user) return null;
+    if (activeWorkspaceId) {
+      if (workspaceId !== activeWorkspaceId) setWorkspaceId(activeWorkspaceId);
+      return activeWorkspaceId;
+    }
     if (workspaceId) return workspaceId;
     const { data: existing } = await supabase
       .from("workspaces").select("id").eq("owner_id", user.id).limit(1).maybeSingle();
     if (existing) {
       setWorkspaceId(existing.id);
-      // ensure membership row
       await supabase.from("workspace_members")
         .upsert({ workspace_id: existing.id, user_id: user.id, role: "owner" }, { onConflict: "workspace_id,user_id" });
+      setActiveWorkspaceId(existing.id);
+      await refreshWorkspaces();
       return existing.id;
     }
     const { data: created, error } = await supabase
@@ -94,8 +99,17 @@ export function VariationsPanel() {
     if (error || !created) { toast.error("No se pudo crear el workspace"); return null; }
     await supabase.from("workspace_members").insert({ workspace_id: created.id, user_id: user.id, role: "owner" });
     setWorkspaceId(created.id);
+    setActiveWorkspaceId(created.id);
+    await refreshWorkspaces();
     return created.id;
-  }, [user, workspaceId]);
+  }, [user, workspaceId, activeWorkspaceId, refreshWorkspaces, setActiveWorkspaceId]);
+
+  // Sync local workspaceId with active changes
+  useEffect(() => {
+    if (activeWorkspaceId && workspaceId !== activeWorkspaceId) {
+      setWorkspaceId(activeWorkspaceId);
+    }
+  }, [activeWorkspaceId, workspaceId]);
 
   // ─── upload + frame extraction ────────────────────────────────────
   const onPickVideo = async (f: File | null) => {
