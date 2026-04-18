@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Sparkles, Package, FileText, FolderKanban, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { UgcPanel } from "@/components/UgcPanel";
@@ -36,6 +37,7 @@ function UgcRoute() {
   const [productOneLiner, setProductOneLiner] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productAudience, setProductAudience] = useState("");
+  const [creativeBrief, setCreativeBrief] = useState("");
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth", search: { mode: "signin" } });
@@ -195,6 +197,15 @@ function UgcRoute() {
               onChange={(e) => setProductAudience(e.target.value)}
               className="h-9 text-sm md:col-span-2"
             />
+            <div className="md:col-span-2">
+              <Label className="text-xs">Idea / brief creativo (opcional)</Label>
+              <Textarea
+                value={creativeBrief}
+                onChange={(e) => setCreativeBrief(e.target.value)}
+                placeholder="Ej: mujer bailando con buen hook sosteniendo un termo, música alegre"
+                rows={3}
+              />
+            </div>
           </div>
         </Card>
 
@@ -215,6 +226,7 @@ function UgcRoute() {
           analysisText={analysisText}
           transcription={transcription}
           productInfo={productInfo}
+          creativeBrief={creativeBrief.trim() || null}
           model="claude-sonnet-4-5-20250929"
         />
       </div>
