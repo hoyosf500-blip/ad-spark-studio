@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -12,11 +12,19 @@ export type Profile = {
   created_at: string;
 };
 
+export type WorkspaceLite = { id: string; name: string; owner_id: string };
+
+const ACTIVE_WS_KEY = "afs.activeWorkspaceId";
+
 type Ctx = {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
+  workspaces: WorkspaceLite[];
+  activeWorkspaceId: string | null;
+  setActiveWorkspaceId: (id: string | null) => void;
+  refreshWorkspaces: () => Promise<WorkspaceLite[]>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 };
@@ -26,6 +34,10 @@ const AuthCtx = createContext<Ctx>({
   session: null,
   profile: null,
   loading: true,
+  workspaces: [],
+  activeWorkspaceId: null,
+  setActiveWorkspaceId: () => {},
+  refreshWorkspaces: async () => [],
   signOut: async () => {},
   refreshProfile: async () => {},
 });
@@ -35,6 +47,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [workspaces, setWorkspaces] = useState<WorkspaceLite[]>([]);
+  const [activeWorkspaceId, setActiveWorkspaceIdState] = useState<string | null>(null);
+
+  const setActiveWorkspaceId = useCallback((id: string | null) => {
+    setActiveWorkspaceIdState(id);
+    try {
+      if (id) localStorage.setItem(ACTIVE_WS_KEY, id);
+      else localStorage.removeItem(ACTIVE_WS_KEY);
+    } catch {}
+  }, []);
 
   const loadProfile = async (uid: string) => {
     const { data } = await supabase
@@ -43,7 +65,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .eq("id", uid)
       .maybeSingle();
     if (data) {
-      // Block suspended users
       if (!data.is_active) {
         await supabase.auth.signOut();
         setProfile(null);
@@ -56,32 +77,76 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const refreshWorkspaces = useCallback(async (): Promise<WorkspaceLite[]> => {
+    const { data: sess } = await supabase.auth.getSession();
+    const uid = sess.session?.user.id;
+    if (!uid) {
+      setWorkspaces([]);
+      return [];
+    }
+    // RLS already filters: admins see all, members see their own
+    const { data, error } = await supabase
+      .from("workspaces")
+      .select("id,name,owner_id")
+      .order("created_at", { ascending: true });
+    if (error) {
+      console.warn("workspaces load error", error.message);
+      setWorkspaces([]);
+      return [];
+    }
+    const list = (data ?? []) as WorkspaceLite[];
+    setWorkspaces(list);
+
+    // pick active: stored → first
+    let stored: string | null = null;
+    try { stored = localStorage.getItem(ACTIVE_WS_KEY); } catch {}
+    const exists = stored && list.some((w) => w.id === stored);
+    if (exists) {
+      setActiveWorkspaceIdState(stored!);
+    } else if (list.length > 0) {
+      setActiveWorkspaceIdState(list[0].id);
+      try { localStorage.setItem(ACTIVE_WS_KEY, list[0].id); } catch {}
+    } else {
+      setActiveWorkspaceIdState(null);
+    }
+    return list;
+  }, []);
+
   useEffect(() => {
-    // Set up listener FIRST
     const { data: sub } = supabase.auth.onAuthStateChange((_evt, s) => {
       setSession(s);
       setUser(s?.user ?? null);
       if (s?.user) {
-        // defer to avoid deadlock
-        setTimeout(() => loadProfile(s.user.id), 0);
+        setTimeout(() => {
+          loadProfile(s.user.id);
+          refreshWorkspaces();
+        }, 0);
       } else {
         setProfile(null);
+        setWorkspaces([]);
+        setActiveWorkspaceIdState(null);
       }
     });
 
     supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s);
       setUser(s?.user ?? null);
-      if (s?.user) loadProfile(s.user.id).finally(() => setLoading(false));
-      else setLoading(false);
+      if (s?.user) {
+        Promise.all([loadProfile(s.user.id), refreshWorkspaces()]).finally(() => setLoading(false));
+      } else {
+        setLoading(false);
+      }
     });
 
     return () => sub.subscription.unsubscribe();
-  }, []);
+  }, [refreshWorkspaces]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
     setProfile(null);
+    setWorkspaces([]);
+    setActiveWorkspaceIdState(null);
+    try { localStorage.removeItem(ACTIVE_WS_KEY); } catch {}
   };
 
   const refreshProfile = async () => {
@@ -89,7 +154,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthCtx.Provider value={{ user, session, profile, loading, signOut, refreshProfile }}>
+    <AuthCtx.Provider
+      value={{
+        user, session, profile, loading,
+        workspaces, activeWorkspaceId, setActiveWorkspaceId, refreshWorkspaces,
+        signOut, refreshProfile,
+      }}
+    >
       {children}
     </AuthCtx.Provider>
   );
