@@ -42,7 +42,7 @@ async function logUsage(opts: {
 }) {
   const cost = calcCost(opts.model, opts.inputTokens, opts.outputTokens);
   const sb = adminClient();
-  await sb.from("api_usage").insert({
+  const row = {
     user_id: opts.userId,
     workspace_id: opts.workspaceId ?? null,
     provider: "anthropic",
@@ -52,7 +52,9 @@ async function logUsage(opts: {
     output_tokens: opts.outputTokens,
     cost_usd: cost,
     metadata: opts.metadata ?? {},
-  });
+  };
+  // Cast: the generated type for insert can be too strict in some Supabase versions.
+  await sb.from("api_usage").insert(row as never);
   return cost;
 }
 
