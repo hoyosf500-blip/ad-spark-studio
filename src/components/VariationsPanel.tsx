@@ -553,6 +553,12 @@ function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId }: {
   );
 }
 
+type VideoTaskState =
+  | { status: "idle" }
+  | { status: "running"; taskId: string; startedAt: number; elapsedSec: number }
+  | { status: "done"; videoUrl: string }
+  | { status: "failed"; error: string };
+
 function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
   s: ParsedScene;
   frames: ExtractedFrame[];
@@ -567,6 +573,10 @@ function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [sceneDbId, setSceneDbId] = useState<string | null>(null);
 
+  // Video task state (Wan)
+  const [video, setVideo] = useState<VideoTaskState>({ status: "idle" });
+  const pollRef = useRef<number | null>(null);
+
   // Resolve the scene DB id (created during persist) by variation_id + order_idx
   useEffect(() => {
     let cancelled = false;
@@ -574,7 +584,7 @@ function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
       if (!variationId) return;
       const { data } = await supabase
         .from("variation_scenes")
-        .select("id, generated_image_id")
+        .select("id, generated_image_id, generated_video_id")
         .eq("variation_id", variationId)
         .eq("order_idx", s.orderIdx)
         .maybeSingle();
@@ -588,9 +598,146 @@ function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
           .maybeSingle();
         if (img?.public_url) setImageUrl(img.public_url);
       }
+      if (data.generated_video_id) {
+        const { data: vid } = await supabase
+          .from("video_generations")
+          .select("public_url")
+          .eq("id", data.generated_video_id)
+          .maybeSingle();
+        if (vid?.public_url) {
+          setVideo({ status: "done", videoUrl: vid.public_url });
+          return;
+        }
+      }
+      // Resume in-flight task: latest wan_i2v for this scene
+      const { data: task } = await supabase
+        .from("async_tasks")
+        .select("id, status, result, started_at, created_at")
+        .eq("related_scene_id", data.id)
+        .eq("task_type", "wan_i2v")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (cancelled || !task) return;
+      if (task.status === "pending" || task.status === "running") {
+        const startedAt = new Date(task.started_at ?? task.created_at).getTime();
+        setVideo({
+          status: "running",
+          taskId: task.id,
+          startedAt,
+          elapsedSec: Math.round((Date.now() - startedAt) / 1000),
+        });
+      } else if (task.status === "done") {
+        const r = (task.result ?? {}) as { publicUrl?: string };
+        if (r.publicUrl) setVideo({ status: "done", videoUrl: r.publicUrl });
+      } else if (task.status === "failed") {
+        const r = (task.result ?? {}) as { error?: string };
+        setVideo({ status: "failed", error: r.error ?? "unknown" });
+      }
     })();
     return () => { cancelled = true; };
   }, [variationId, s.orderIdx]);
+
+  // Live timer + polling while running
+  useEffect(() => {
+    if (video.status !== "running") return;
+    const startedAt = video.startedAt;
+    const taskId = video.taskId;
+
+    const tick = window.setInterval(() => {
+      setVideo((cur) =>
+        cur.status === "running"
+          ? { ...cur, elapsedSec: Math.round((Date.now() - startedAt) / 1000) }
+          : cur,
+      );
+    }, 1000);
+
+    const pollOnce = async () => {
+      try {
+        const session = (await supabase.auth.getSession()).data.session;
+        const token = session?.access_token;
+        if (!token) return;
+        const res = await fetch("/api/wan-poll-task", {
+          method: "POST",
+          headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+          body: JSON.stringify({ taskId }),
+        });
+        if (!res.ok) return;
+        const j = (await res.json()) as
+          | { status: "running" }
+          | { status: "done"; videoUrl: string }
+          | { status: "failed"; error: string };
+        if (j.status === "done") {
+          setVideo({ status: "done", videoUrl: j.videoUrl });
+          toast.success("Video listo · $0.30 USD");
+        } else if (j.status === "failed") {
+          setVideo({ status: "failed", error: j.error });
+          toast.error(`Video falló: ${j.error}`);
+        }
+      } catch { /* ignore */ }
+    };
+
+    // Poll immediately, then every 20s
+    pollOnce();
+    const poll = window.setInterval(pollOnce, 20000);
+    pollRef.current = poll;
+
+    // Realtime: react to other tabs/cron updates
+    const channel = supabase
+      .channel(`wan-task-${taskId}`)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "async_tasks", filter: `id=eq.${taskId}` },
+        (payload) => {
+          const row = payload.new as { status?: string; result?: { publicUrl?: string; error?: string } };
+          if (row.status === "done" && row.result?.publicUrl) {
+            setVideo({ status: "done", videoUrl: row.result.publicUrl });
+          } else if (row.status === "failed") {
+            setVideo({ status: "failed", error: row.result?.error ?? "unknown" });
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      window.clearInterval(tick);
+      window.clearInterval(poll);
+      supabase.removeChannel(channel);
+    };
+  }, [video.status, video.status === "running" ? video.taskId : null, video.status === "running" ? video.startedAt : null]);
+
+  const generateVideo = async () => {
+    if (!sceneDbId || !workspaceId) { toast.error("Escena no lista"); return; }
+    if (!imageUrl) { toast.error("Genera la imagen primero"); return; }
+    if (!s.animationPromptEn) { toast.error("Esta escena no tiene animation prompt"); return; }
+    try {
+      const session = (await supabase.auth.getSession()).data.session;
+      const token = session?.access_token;
+      if (!token) throw new Error("No auth session");
+      const res = await fetch("/api/wan-create-task", {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          sceneId: sceneDbId,
+          workspaceId,
+          imageUrl,
+          promptEn: s.animationPromptEn,
+          size: "720*1280",
+          duration: 5,
+        }),
+      });
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error(t.slice(0, 200));
+      }
+      const j = (await res.json()) as { taskId: string };
+      const startedAt = Date.now();
+      setVideo({ status: "running", taskId: j.taskId, startedAt, elapsedSec: 0 });
+      toast.success("Tarea de video creada");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error creando tarea");
+    }
+  };
 
   const generate = async () => {
     if (!s.imagePromptEn) { toast.error("Esta escena no tiene image prompt"); return; }
