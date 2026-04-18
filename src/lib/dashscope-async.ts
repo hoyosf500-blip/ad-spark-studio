@@ -311,6 +311,7 @@ export async function pollDashscopeTask(opts: {
 
 export async function authenticateRequest(
   request: Request,
+  opts: { checkCap?: boolean } = {},
 ): Promise<
   | { ok: true; userId: string }
   | { ok: false; status: number; error: string }
@@ -327,14 +328,16 @@ export async function authenticateRequest(
   if (error || !claims?.claims?.sub) return { ok: false, status: 401, error: "Unauthorized" };
   const userId = claims.claims.sub;
 
-  const cap = await checkSpendingCap(sb, userId);
-  if (!cap.ok) {
-    // Devolvemos un error con status 429 y el JSON serializado para que el caller lo retorne tal cual.
-    return {
-      ok: false,
-      status: 429,
-      error: JSON.stringify({ error: cap.error, spentToday: cap.spentToday, cap: cap.cap }),
-    };
+  // Solo create-task chequea el cap; los poll-task son de tareas ya pagadas.
+  if (opts.checkCap) {
+    const cap = await checkSpendingCap(sb, userId);
+    if (!cap.ok) {
+      return {
+        ok: false,
+        status: 429,
+        error: JSON.stringify({ error: cap.error, spentToday: cap.spentToday, cap: cap.cap }),
+      };
+    }
   }
 
   return { ok: true, userId };
