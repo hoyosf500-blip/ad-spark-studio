@@ -6,10 +6,10 @@ export type ExtractedFrame = {
   height: number;
 };
 
-const MAX_W = 768;
-const MAX_H = 1366;
-const QUALITY = 0.75;
-const MAX_FRAMES = 12;
+const MAX_W = 1024;
+const MAX_H = 1820;
+const QUALITY = 0.92;
+const MAX_FRAMES = 60; // safety ceiling — 1 minute of video at 1 fps
 
 function fitWithin(srcW: number, srcH: number) {
   const ratio = Math.min(MAX_W / srcW, MAX_H / srcH, 1);
@@ -41,11 +41,19 @@ export async function extractFrames(
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas 2d context unavailable");
 
-  // Cap to MAX_FRAMES sampling evenly across the timeline.
-  const totalSamples = Math.min(duration, MAX_FRAMES);
-  const step = duration / totalSamples;
+  // 1 frame per second + final tail frame, capped at MAX_FRAMES.
   const times: number[] = [];
-  for (let i = 0; i < totalSamples; i++) times.push(Math.min(duration - 0.01, Math.round(i * step)));
+  for (let t = 0; t < duration; t += 1) times.push(t);
+  const tail = Math.max(0, video.duration - 0.2);
+  if (!times.length || times[times.length - 1] < tail - 0.3) times.push(tail);
+  if (times.length > MAX_FRAMES) {
+    const step = (times.length - 1) / (MAX_FRAMES - 1);
+    const picked: number[] = [];
+    for (let i = 0; i < MAX_FRAMES; i++) picked.push(times[Math.round(i * step)]);
+    times.length = 0;
+    times.push(...picked);
+  }
+  const totalSamples = times.length;
 
   const frames: ExtractedFrame[] = [];
   for (const t of times) {

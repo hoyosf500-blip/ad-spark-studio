@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { SYS_GENERATE } from "@/lib/system-prompts";
+import { SCENE_FORMAT } from "@/lib/scene-format";
 import { dataUrlToBase64, calcCost, logUsage } from "@/utils/anthropic.functions";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -45,17 +46,24 @@ export const Route = createFileRoute("/api/anthropic-generate")({
         }
 
         const model = body.model || "claude-sonnet-4-5-20250929";
+        const isClone = body.variationType === "clon";
         const content: ContentBlock[] = [];
-        content.push({
-          type: "text",
-          text:
-            `Generate the full ad script for variation type: **${body.variationType}** ` +
-            `(label: "${body.variationLabel}"). Use the analysis below as the canonical source. ` +
-            `Output every scene separated by lines of "▬▬▬▬▬▬▬▬▬▬▬▬▬▬" exactly as defined in your role.`,
-        });
+        const header =
+          `Generate the full ad script for variation type: **${body.variationType}** ` +
+          `(label: "${body.variationLabel}"). Use the analysis below as the canonical source.` +
+          (isClone
+            ? " CLON: replicate the original structure beat-by-beat and keep the transcription WORD-FOR-WORD in the SCRIPT sections (Spanish, zero paraphrasing)."
+            : " NOT a clone: create a fresh script inspired by the analysis — do NOT copy the original transcription verbatim, only reuse it for insight.");
+        content.push({ type: "text", text: header });
+        content.push({ type: "text", text: `\n\n=== SCENE FORMAT (MANDATORY) ===\n${SCENE_FORMAT}` });
         content.push({ type: "text", text: `\n\n=== ANALYSIS ===\n${body.analysis}` });
         if (body.transcription?.trim()) {
-          content.push({ type: "text", text: `\n\n=== TRANSCRIPTION ===\n${body.transcription.trim()}` });
+          content.push({
+            type: "text",
+            text: isClone
+              ? `\n\n=== TRANSCRIPTION (use WORD-FOR-WORD across the SCRIPT fields) ===\n${body.transcription.trim()}`
+              : `\n\n=== TRANSCRIPTION (reference only — do NOT copy verbatim) ===\n${body.transcription.trim()}`,
+          });
         }
         if (body.productPhoto) {
           const { mediaType, b64 } = dataUrlToBase64(body.productPhoto);
@@ -71,64 +79,90 @@ export const Route = createFileRoute("/api/anthropic-generate")({
           }
         }
 
-        const upstream = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            "x-api-key": apiKey,
-            "anthropic-version": "2023-06-01",
-          },
-          body: JSON.stringify({
-            model, max_tokens: 8192, stream: true,
-            system: SYS_GENERATE,
-            messages: [{ role: "user", content }],
-          }),
-        });
-        if (!upstream.ok || !upstream.body) {
-          const errText = await upstream.text();
-          return new Response(`Anthropic ${upstream.status}: ${errText.slice(0, 500)}`, { status: 502 });
-        }
+        const MAX_TOKENS = 32000;
+        const MAX_CONTINUATIONS = 2;
 
         let fullText = "", inputTokens = 0, outputTokens = 0;
         let stopReason: string | null = null;
         const dec = new TextDecoder();
         const enc = new TextEncoder();
 
+        type Msg = { role: "user" | "assistant"; content: ContentBlock[] | string };
+        const messages: Msg[] = [{ role: "user", content }];
+
         const stream = new ReadableStream<Uint8Array>({
           async start(controller) {
-            const reader = upstream.body!.getReader();
-            let buf = "";
             try {
-              for (;;) {
-                const { value, done } = await reader.read();
-                if (done) break;
-                buf += dec.decode(value, { stream: true });
-                let idx;
-                while ((idx = buf.indexOf("\n\n")) !== -1) {
-                  const chunk = buf.slice(0, idx); buf = buf.slice(idx + 2);
-                  const dl = chunk.split("\n").find((l) => l.startsWith("data: "));
-                  if (!dl) continue;
-                  try {
-                    const evt = JSON.parse(dl.slice(6).trim()) as {
-                      type: string;
-                      delta?: { type?: string; text?: string; stop_reason?: string };
-                      message?: { usage?: { input_tokens?: number; output_tokens?: number } };
-                      usage?: { input_tokens?: number; output_tokens?: number };
-                    };
-                    if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
-                      const t = evt.delta.text ?? "";
-                      fullText += t;
-                      controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: t })}\n\n`));
-                    } else if (evt.type === "message_start") {
-                      inputTokens = evt.message?.usage?.input_tokens ?? inputTokens;
-                    } else if (evt.type === "message_delta") {
-                      if (evt.delta?.stop_reason) stopReason = evt.delta.stop_reason;
-                      if (evt.usage?.output_tokens) outputTokens = evt.usage.output_tokens;
-                      if (evt.usage?.input_tokens) inputTokens = evt.usage.input_tokens;
-                    }
-                  } catch { /* skip */ }
+              for (let attempt = 0; attempt <= MAX_CONTINUATIONS; attempt++) {
+                const upstream = await fetch("https://api.anthropic.com/v1/messages", {
+                  method: "POST",
+                  headers: {
+                    "content-type": "application/json",
+                    "x-api-key": apiKey,
+                    "anthropic-version": "2023-06-01",
+                  },
+                  body: JSON.stringify({
+                    model, max_tokens: MAX_TOKENS, stream: true,
+                    system: SYS_GENERATE,
+                    messages,
+                  }),
+                });
+                if (!upstream.ok || !upstream.body) {
+                  const errText = await upstream.text().catch(() => "");
+                  controller.enqueue(enc.encode(`data: ${JSON.stringify({
+                    type: "error", error: `Anthropic ${upstream.status}: ${errText.slice(0, 300)}`,
+                  })}\n\n`));
+                  break;
                 }
+
+                const reader = upstream.body.getReader();
+                let buf = "";
+                let attemptText = "";
+                let attemptStop: string | null = null;
+                let attemptIn = 0, attemptOut = 0;
+                for (;;) {
+                  const { value, done } = await reader.read();
+                  if (done) break;
+                  buf += dec.decode(value, { stream: true });
+                  let idx;
+                  while ((idx = buf.indexOf("\n\n")) !== -1) {
+                    const chunk = buf.slice(0, idx); buf = buf.slice(idx + 2);
+                    const dl = chunk.split("\n").find((l) => l.startsWith("data: "));
+                    if (!dl) continue;
+                    try {
+                      const evt = JSON.parse(dl.slice(6).trim()) as {
+                        type: string;
+                        delta?: { type?: string; text?: string; stop_reason?: string };
+                        message?: { usage?: { input_tokens?: number; output_tokens?: number } };
+                        usage?: { input_tokens?: number; output_tokens?: number };
+                      };
+                      if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+                        const t = evt.delta.text ?? "";
+                        attemptText += t;
+                        fullText += t;
+                        controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: t })}\n\n`));
+                      } else if (evt.type === "message_start") {
+                        attemptIn = evt.message?.usage?.input_tokens ?? attemptIn;
+                      } else if (evt.type === "message_delta") {
+                        if (evt.delta?.stop_reason) attemptStop = evt.delta.stop_reason;
+                        if (evt.usage?.output_tokens) attemptOut = evt.usage.output_tokens;
+                        if (evt.usage?.input_tokens) attemptIn = evt.usage.input_tokens;
+                      }
+                    } catch { /* skip */ }
+                  }
+                }
+                inputTokens += attemptIn;
+                outputTokens += attemptOut;
+                stopReason = attemptStop;
+
+                if (attemptStop !== "max_tokens" || attempt >= MAX_CONTINUATIONS || !attemptText) break;
+                messages.push({ role: "assistant", content: attemptText });
+                messages.push({
+                  role: "user",
+                  content: "Continúa exactamente desde donde te cortaste, sin repetir lo anterior. Mantén el formato ═══ y completa todas las secciones pendientes (escenas restantes, AVATAR, HOOKS EXTRA, EFFECTS DENSITY MAP, ENERGY ARC, TIMELINE CAPCUT, RECOMMENDATION).",
+                });
               }
+
               const cost = await logUsage({
                 userId,
                 workspaceId: body.workspaceId ?? null,
@@ -139,6 +173,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                   variationLabel: body.variationLabel,
                   variationId: body.variationId ?? null,
                   isTruncated: stopReason === "max_tokens",
+                  maxTokens: MAX_TOKENS,
                 },
               });
               controller.enqueue(enc.encode(`data: ${JSON.stringify({
@@ -149,7 +184,6 @@ export const Route = createFileRoute("/api/anthropic-generate")({
               controller.enqueue(enc.encode(`data: ${JSON.stringify({
                 type: "error", error: err instanceof Error ? err.message : String(err),
               })}\n\n`));
-              // Best-effort partial usage log
               if (inputTokens || outputTokens) {
                 await logUsage({
                   userId, workspaceId: body.workspaceId ?? null, model,
@@ -158,7 +192,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                   metadata: { variationType: body.variationType, partial: true },
                 }).catch(() => {});
               }
-              void calcCost; // keep import used
+              void calcCost;
             } finally {
               controller.close();
             }

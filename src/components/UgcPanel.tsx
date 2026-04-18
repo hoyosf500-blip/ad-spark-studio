@@ -112,8 +112,8 @@ export function UgcPanel({
       toast.error("Workspace no listo");
       return;
     }
-    if (!analysisText) {
-      toast.error("Necesitas un análisis primero");
+    if (!analysisText && style !== "ugc-viral") {
+      toast.error("Necesitas un análisis primero (ugc-viral es la excepción: no requiere análisis)");
       return;
     }
     setStream({ active: style, text: "" });

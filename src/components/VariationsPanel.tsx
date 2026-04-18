@@ -15,6 +15,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { UgcPanel } from "@/components/UgcPanel";
 
+// Clon sends ALL frames (beat-by-beat replica); other variations get 5 distributed (first, 25%, 50%, 75%, last).
+function pickReferenceFrames(
+  type: string,
+  frames: ExtractedFrame[],
+): Array<{ time: number; dataUrl: string }> {
+  if (type === "clon" || frames.length <= 5) {
+    return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
+  }
+  const last = frames.length - 1;
+  const idxs = Array.from(new Set([0, Math.round(last * 0.25), Math.round(last * 0.5), Math.round(last * 0.75), last]));
+  return idxs.map((i) => ({ time: frames[i].time, dataUrl: frames[i].dataUrl }));
+}
+
 type VariationState = {
   type: string;
   label: string;
@@ -301,7 +314,7 @@ export function VariationsPanel() {
           variationType: type,
           variationLabel: label,
           productPhoto,
-          referenceFrames: frames.slice(0, Math.min(8, frames.length)).map((f) => ({ time: f.time, dataUrl: f.dataUrl })),
+          referenceFrames: pickReferenceFrames(type, frames),
           model,
           workspaceId,
           variationId,

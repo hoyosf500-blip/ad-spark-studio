@@ -9,7 +9,7 @@ type Body = {
   projectId?: string | null;
   sourceVideoId?: string | null;
   style: "ugc-casual" | "ugc-testimonial" | "ugc-viral" | "ugc-unboxing";
-  analysisText: string;
+  analysisText?: string | null;
   transcription?: string | null;
   productInfo?: string | null;
   videoModel?: "wan2.6-i2v" | "kling2.5-turbo" | "veo3";
@@ -49,8 +49,10 @@ export const Route = createFileRoute("/api/ugc-generate")({
         const userId = claims.claims.sub;
 
         const body = (await request.json()) as Body;
-        if (!body.workspaceId || !body.style || !body.analysisText) {
-          return new Response("Missing fields: workspaceId, style, analysisText", { status: 400 });
+        // analysisText is required for every style EXCEPT ugc-viral (viral = fresh personal-brand content, no source needed).
+        const viralNoAnalysis = body.style === "ugc-viral";
+        if (!body.workspaceId || !body.style || (!viralNoAnalysis && !body.analysisText)) {
+          return new Response("Missing fields: workspaceId, style, analysisText (analysisText optional only for ugc-viral)", { status: 400 });
         }
         const model = body.model || "claude-sonnet-4-5-20250929";
         const videoModel = body.videoModel || "wan2.6-i2v";
@@ -61,12 +63,29 @@ export const Route = createFileRoute("/api/ugc-generate")({
               ? "Kling 3.0"
               : "Seedance 2.0";
 
+        const isKling = videoModel === "kling2.5-turbo";
+        const klingRules = isKling
+          ? [
+              `LANGUAGE RULES (Kling 3.0): the IMAGE PROMPT and ANIMATION PROMPT MUST be fully in ENGLISH — no Spanish words inside them except the SCRIPT dialogue itself (which stays Spanish).`,
+              body.transcription
+                ? `Translate the Spanish transcription into natural English BEFORE embedding it as dialogue cues in the ANIMATION PROMPT (subject's mouth shapes English). The SCRIPT stays in Spanish for overlay text.`
+                : "",
+            ].filter(Boolean).join("\n")
+          : "";
+
+        const analysisBlock = body.analysisText
+          ? `SOURCE VIDEO ANALYSIS (for reference only — do NOT copy structure, this UGC is a fresh testimonial):\n${body.analysisText.slice(0, 12000)}`
+          : viralNoAnalysis
+            ? `NO SOURCE VIDEO. This is a fresh personal-brand viral piece — invent the scenario from scratch using the STYLE guidance and PRODUCT INFO.`
+            : "";
+
         const userText = [
           `STYLE: ${body.style} — ${STYLE_DESC[body.style]}`,
           `TARGET MODEL: ${targetModelLabel}`,
+          klingRules,
           body.productInfo ? `PRODUCT INFO:\n${body.productInfo}` : "",
           body.transcription ? `USER TRANSCRIPTION (use word-for-word, split across shots naturally):\n${body.transcription}` : "",
-          `SOURCE VIDEO ANALYSIS (for reference only — do NOT copy structure, this UGC is a fresh testimonial):\n${body.analysisText.slice(0, 12000)}`,
+          analysisBlock,
           `\nProduce ONLY the PROMPT and HOOKS sections, exactly per the format. No preamble.`,
         ]
           .filter(Boolean)
