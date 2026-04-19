@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { SYS_UGC } from "@/lib/system-prompts";
 import { logUsage } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
-import { checkScript } from "@/lib/winning-framework";
+import { WINNING_PREAMBLE, checkScript } from "@/lib/winning-framework";
 import type { Database } from "@/integrations/supabase/types";
 
 type Body = {
