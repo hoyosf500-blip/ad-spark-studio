@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { SYS_UGC } from "@/lib/system-prompts";
 import { logUsage } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
+import { checkScript } from "@/lib/winning-framework";
 import type { Database } from "@/integrations/supabase/types";
 
 type Body = {
@@ -228,6 +229,7 @@ export const Route = createFileRoute("/api/ugc-generate")({
 
               // Parse PROMPT and HOOKS sections + extract image/animation prompts
               const parsed = parseUgcOutput(fullText);
+              const validation = checkScript(fullText);
 
               // Persist row
               const admin = createClient<Database>(
@@ -250,6 +252,7 @@ export const Route = createFileRoute("/api/ugc-generate")({
                   cost_usd: cost,
                   status: "ready",
                   data: { fullText, hooks: parsed.hooks, stopReason },
+                  validation,
                 } as never)
                 .select("id")
                 .single();
@@ -266,6 +269,7 @@ export const Route = createFileRoute("/api/ugc-generate")({
                 stopReason,
                 isTruncated: stopReason === "max_tokens",
                 model,
+                validation,
               })}\n\n`));
             } catch (err) {
               controller.enqueue(enc.encode(`data: ${JSON.stringify({
