@@ -198,13 +198,16 @@ function UgcRoute() {
               className="h-9 text-sm md:col-span-2"
             />
             <div className="md:col-span-2">
-              <Label className="text-xs">Idea / brief creativo (opcional)</Label>
+              <Label className="text-xs">Idea creativa (opcional)</Label>
               <Textarea
                 value={creativeBrief}
                 onChange={(e) => setCreativeBrief(e.target.value)}
-                placeholder="Ej: mujer bailando con buen hook sosteniendo un termo, música alegre"
+                placeholder="Ej: testimonial en el carro camino al trabajo, tono relajado, cara cansada al inicio, alivio al final."
                 rows={3}
               />
+              <p className="text-[11px] text-muted-foreground mt-1">
+                Tono, setting, personaje, emoción. No escribas dosis ni precio — esos ya los tiene.
+              </p>
             </div>
           </div>
         </Card>

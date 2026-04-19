@@ -142,15 +142,15 @@ export const Route = createFileRoute("/api/ugc-generate")({
         const isViral = body.style === "ugc-viral";
         const userText = [
           !isViral ? WINNING_PREAMBLE : "",
-          body.creativeBrief?.trim()
-            ? `BRIEF CREATIVO DEL CLIENTE (semilla en lenguaje natural — expandila con las reglas de STYLE. NO la copies literal; úsala como dirección):\n${body.creativeBrief.trim()}`
-            : "",
           `STYLE: ${body.style} — ${STYLE_DESC[body.style]}`,
           `TARGET MODEL: ${targetModelLabel}`,
           klingRules,
           body.productInfo ? `PRODUCT INFO:\n${body.productInfo}` : "",
           body.transcription ? `USER TRANSCRIPTION (use word-for-word, split across shots naturally):\n${body.transcription}` : "",
           analysisBlock,
+          body.creativeBrief?.trim()
+            ? `=== IDEA CREATIVA DEL USUARIO ===\n${body.creativeBrief.trim()}\n\nCONTRATO:\n- La IDEA dicta SOLO: tono, setting, personaje, emoción, ritmo.\n- La IDEA NO dicta: componente, dosis, precio, testimonios, claims médicos.\n- Si contradice PRODUCT INFO / TRANSCRIPTION / ANALYSIS, prevalecen los datos reales.\n- Si la IDEA menciona un dato concreto que no está en los inputs, IGNORALO.`
+            : "",
           `\nProduce ONLY the PROMPT and HOOKS sections, exactly per the format. No preamble.`,
         ]
           .filter(Boolean)
