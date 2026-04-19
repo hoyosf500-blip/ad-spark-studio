@@ -139,7 +139,9 @@ export const Route = createFileRoute("/api/ugc-generate")({
             ? `NO SOURCE VIDEO. This is a fresh personal-brand viral piece — invent the scenario from scratch using the STYLE guidance and PRODUCT INFO.`
             : "";
 
+        const isViral = body.style === "ugc-viral";
         const userText = [
+          !isViral ? WINNING_PREAMBLE : "",
           body.creativeBrief?.trim()
             ? `BRIEF CREATIVO DEL CLIENTE (semilla en lenguaje natural — expandila con las reglas de STYLE. NO la copies literal; úsala como dirección):\n${body.creativeBrief.trim()}`
             : "",
