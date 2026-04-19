@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   Upload, Loader2, Search, Zap, Copy, CheckCircle2, AlertTriangle, Image as ImageIcon, X, Wand2,
@@ -926,13 +927,14 @@ function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId, running, o
   );
 }
 
-type VideoTaskState =
-  | { status: "idle" }
-  | { status: "running"; taskId: string; startedAt: number; elapsedSec: number }
-  | { status: "done"; videoUrl: string }
-  | { status: "failed"; error: string };
+type HiggsfieldPrompts = {
+  nano_banana: string;
+  seedream: string;
+  kling: string;
+  seedance: string;
+};
 
-function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
+function SceneRow({ s, frames, workspaceId, variationId }: {
   s: ParsedScene;
   frames: ExtractedFrame[];
   workspaceId: string | null;
@@ -940,212 +942,70 @@ function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
   variationId?: string;
 }) {
   const refFrameUrl = pickFrameAt(frames, s.timeStartSec);
-  const [useI2I, setUseI2I] = useState<boolean>(variationType === "clon");
-  const [size, setSize] = useState<string>("928*1664");
-  const [generating, setGenerating] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [sceneDbId, setSceneDbId] = useState<string | null>(null);
+  const [prompts, setPrompts] = useState<HiggsfieldPrompts | null>(null);
+  const [loadingPrompts, setLoadingPrompts] = useState(false);
 
-  // Video task state (Wan)
-  const [video, setVideo] = useState<VideoTaskState>({ status: "idle" });
-  const pollRef = useRef<number | null>(null);
-
-  // Resolve the scene DB id (created during persist) by variation_id + order_idx
+  // Resolve the scene DB id (created during persist) by variation_id + order_idx.
+  // If prompts already exist in DB, hydrate them so we don't re-generate.
   useEffect(() => {
     let cancelled = false;
     (async () => {
       if (!variationId) return;
       const { data } = await supabase
         .from("variation_scenes")
-        .select("id, generated_image_id, generated_video_id")
+        .select("id, prompt_nano_banana, prompt_seedream, prompt_kling, prompt_seedance")
         .eq("variation_id", variationId)
         .eq("order_idx", s.orderIdx)
         .maybeSingle();
       if (cancelled || !data) return;
       setSceneDbId(data.id);
-      if (data.generated_image_id) {
-        const { data: img } = await supabase
-          .from("image_generations")
-          .select("public_url")
-          .eq("id", data.generated_image_id)
-          .maybeSingle();
-        if (img?.public_url) setImageUrl(img.public_url);
-      }
-      if (data.generated_video_id) {
-        const { data: vid } = await supabase
-          .from("video_generations")
-          .select("public_url")
-          .eq("id", data.generated_video_id)
-          .maybeSingle();
-        if (vid?.public_url) {
-          setVideo({ status: "done", videoUrl: vid.public_url });
-          return;
-        }
-      }
-      // Resume in-flight task: latest wan_i2v for this scene
-      const { data: task } = await supabase
-        .from("async_tasks")
-        .select("id, status, result, started_at, created_at")
-        .eq("related_scene_id", data.id)
-        .eq("task_type", "wan_i2v")
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (cancelled || !task) return;
-      if (task.status === "pending" || task.status === "running") {
-        const startedAt = new Date(task.started_at ?? task.created_at).getTime();
-        setVideo({
-          status: "running",
-          taskId: task.id,
-          startedAt,
-          elapsedSec: Math.round((Date.now() - startedAt) / 1000),
+      if (data.prompt_nano_banana && data.prompt_seedream && data.prompt_kling && data.prompt_seedance) {
+        setPrompts({
+          nano_banana: data.prompt_nano_banana,
+          seedream: data.prompt_seedream,
+          kling: data.prompt_kling,
+          seedance: data.prompt_seedance,
         });
-      } else if (task.status === "done") {
-        const r = (task.result ?? {}) as { publicUrl?: string };
-        if (r.publicUrl) setVideo({ status: "done", videoUrl: r.publicUrl });
-      } else if (task.status === "failed") {
-        const r = (task.result ?? {}) as { error?: string };
-        setVideo({ status: "failed", error: r.error ?? "unknown" });
       }
     })();
     return () => { cancelled = true; };
   }, [variationId, s.orderIdx]);
 
-  // Live timer + polling while running
-  useEffect(() => {
-    if (video.status !== "running") return;
-    const startedAt = video.startedAt;
-    const taskId = video.taskId;
-
-    const tick = window.setInterval(() => {
-      setVideo((cur) =>
-        cur.status === "running"
-          ? { ...cur, elapsedSec: Math.round((Date.now() - startedAt) / 1000) }
-          : cur,
-      );
-    }, 1000);
-
-    const pollOnce = async () => {
-      try {
-        const session = (await supabase.auth.getSession()).data.session;
-        const token = session?.access_token;
-        if (!token) return;
-        const res = await fetch("/api/wan-poll-task", {
-          method: "POST",
-          headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-          body: JSON.stringify({ taskId }),
-        });
-        if (!res.ok) return;
-        const j = (await res.json()) as
-          | { status: "running" }
-          | { status: "done"; videoUrl: string }
-          | { status: "failed"; error: string };
-        if (j.status === "done") {
-          setVideo({ status: "done", videoUrl: j.videoUrl });
-          toast.success("Video listo · $0.30 USD");
-        } else if (j.status === "failed") {
-          setVideo({ status: "failed", error: j.error });
-          toast.error(`Video falló: ${j.error}`);
-        }
-      } catch { /* ignore */ }
-    };
-
-    // Poll immediately, then every 20s
-    pollOnce();
-    const poll = window.setInterval(pollOnce, 20000);
-    pollRef.current = poll;
-
-    // Realtime: react to other tabs/cron updates
-    const channel = supabase
-      .channel(`wan-task-${taskId}`)
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "async_tasks", filter: `id=eq.${taskId}` },
-        (payload) => {
-          const row = payload.new as { status?: string; result?: { publicUrl?: string; error?: string } };
-          if (row.status === "done" && row.result?.publicUrl) {
-            setVideo({ status: "done", videoUrl: row.result.publicUrl });
-          } else if (row.status === "failed") {
-            setVideo({ status: "failed", error: row.result?.error ?? "unknown" });
-          }
-        },
-      )
-      .subscribe();
-
-    return () => {
-      window.clearInterval(tick);
-      window.clearInterval(poll);
-      supabase.removeChannel(channel);
-    };
-  }, [video.status, video.status === "running" ? video.taskId : null, video.status === "running" ? video.startedAt : null]);
-
-  const generateVideo = async () => {
-    if (!sceneDbId || !workspaceId) { toast.error("Escena no lista"); return; }
-    if (!imageUrl) { toast.error("Genera la imagen primero"); return; }
-    if (!s.animationPromptEn) { toast.error("Esta escena no tiene animation prompt"); return; }
-    try {
-      const session = (await supabase.auth.getSession()).data.session;
-      const token = session?.access_token;
-      if (!token) throw new Error("No auth session");
-      const res = await fetch("/api/wan-create-task", {
-        method: "POST",
-        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-        body: JSON.stringify({
-          sceneId: sceneDbId,
-          workspaceId,
-          imageUrl,
-          promptEn: s.animationPromptEn,
-          size: "720*1280",
-          duration: 5,
-        }),
-      });
-      if (await handleCapResponse(res)) return;
-      if (!res.ok) {
-        const t = await res.text();
-        throw new Error(t.slice(0, 200));
-      }
-      const j = (await res.json()) as { taskId: string };
-      const startedAt = Date.now();
-      setVideo({ status: "running", taskId: j.taskId, startedAt, elapsedSec: 0 });
-      toast.success("Tarea de video creada");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Error creando tarea");
-    }
-  };
-
-  const generate = async () => {
-    if (!s.imagePromptEn) { toast.error("Esta escena no tiene image prompt"); return; }
-    if (!workspaceId) { toast.error("Workspace no listo"); return; }
+  const generatePrompts = async () => {
     if (!sceneDbId) { toast.error("Escena no persistida aún"); return; }
-    setGenerating(true);
+    if (!workspaceId) { toast.error("Workspace no listo"); return; }
+    setLoadingPrompts(true);
     try {
       const session = (await supabase.auth.getSession()).data.session;
       const token = session?.access_token;
       if (!token) throw new Error("No auth session");
-      const res = await fetch("/api/qwen-generate-image", {
+      const res = await fetch("/api/generate-higgsfield-prompts", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-        body: JSON.stringify({
-          sceneId: sceneDbId,
-          workspaceId,
-          promptEn: s.imagePromptEn,
-          size,
-          useI2I,
-          referenceFrameDataUrl: useI2I ? refFrameUrl : null,
-        }),
+        body: JSON.stringify({ sceneId: sceneDbId, workspaceId }),
       });
-      if (await handleCapResponse(res)) { setGenerating(false); return; }
+      if (await handleCapResponse(res)) { setLoadingPrompts(false); return; }
       if (!res.ok) {
         const t = await res.text();
         throw new Error(t.slice(0, 200));
       }
-      const json = (await res.json()) as { imageUrl: string; costUsd: number };
-      setImageUrl(json.imageUrl);
-      toast.success(`Imagen lista · $${Number(json.costUsd ?? 0).toFixed(2)} USD`);
+      const j = (await res.json()) as {
+        ok: true;
+        cached: boolean;
+        costUsd: number;
+        prompts: HiggsfieldPrompts;
+      };
+      setPrompts(j.prompts);
+      toast.success(
+        j.cached
+          ? "Prompts recuperados del caché"
+          : `Prompts listos · $${Number(j.costUsd ?? 0).toFixed(4)} USD`,
+      );
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Error generando imagen");
+      toast.error(e instanceof Error ? e.message : "Error generando prompts");
     } finally {
-      setGenerating(false);
+      setLoadingPrompts(false);
     }
   };
 
@@ -1171,121 +1031,80 @@ function SceneRow({ s, frames, workspaceId, variationType, variationId }: {
         </div>
       </div>
 
-      {/* Image generation block */}
-      {s.imagePromptEn && (
-        <div className="mt-3 rounded-md border border-border bg-card/50 p-3 space-y-2">
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <div className="flex items-center gap-2">
-              <label className="flex items-center gap-1.5 text-[11px] cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={useI2I}
-                  onChange={(e) => setUseI2I(e.target.checked)}
-                  disabled={!refFrameUrl}
-                  className="h-3.5 w-3.5 accent-primary"
-                />
-                <span>i2i (frame ref)</span>
-              </label>
-              <Select value={size} onValueChange={setSize}>
-                <SelectTrigger className="h-7 w-32 text-[11px]"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="928*1664">928×1664 (9:16)</SelectItem>
-                  <SelectItem value="1024*1024">1024×1024 (1:1)</SelectItem>
-                  <SelectItem value="1280*720">1280×720 (16:9)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <Button size="sm" onClick={generate} disabled={generating || !sceneDbId}
-              className="h-7 gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[11px]">
-              {generating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Wand2 className="h-3 w-3" />}
-              {imageUrl ? "Regenerar" : "Generar con Qwen ($0.04)"}
-            </Button>
+      {/* Higgsfield Prompts block */}
+      <div className="mt-3 rounded-md border border-border bg-card/50 p-3 space-y-2">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-3 w-3 text-primary" />
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              Higgsfield prompts · Nano Banana Pro · Seedream 4 · Kling 2.5 Turbo · Seedance 2.0
+            </span>
           </div>
-          {imageUrl && (
-            <div className="flex items-start gap-3">
-              <a href={imageUrl} target="_blank" rel="noreferrer">
-                <img src={imageUrl} alt="generated"
-                  className="w-48 h-auto rounded border border-border" />
-              </a>
-              <div className="flex flex-col gap-1.5">
-                <CopyBtn text={imageUrl} label="Copiar URL" />
-                <Button size="sm" variant="outline" className="h-6 text-[10px]" asChild>
-                  <a href={imageUrl} download target="_blank" rel="noreferrer">Descargar</a>
-                </Button>
-              </div>
-            </div>
-          )}
+          <Button
+            size="sm"
+            onClick={generatePrompts}
+            disabled={loadingPrompts || !sceneDbId}
+            className="h-7 gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[11px]"
+          >
+            {loadingPrompts ? <Loader2 className="h-3 w-3 animate-spin" /> : <Wand2 className="h-3 w-3" />}
+            {prompts ? "Regenerar prompts" : "Generar prompts (~$0.003)"}
+          </Button>
         </div>
-      )}
 
-      {/* Video generation block (Wan 2.6 i2v) */}
-      {s.animationPromptEn && (
-        <div className="mt-2 rounded-md border border-border bg-card/50 p-3 space-y-2">
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-              Video · 5s · 720×1280
-            </div>
-            {video.status === "idle" && (
-              <Button
-                size="sm"
-                onClick={generateVideo}
-                disabled={!imageUrl || !sceneDbId}
-                title={!imageUrl ? "Genera la imagen primero" : undefined}
-                className="h-7 gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[11px]"
-              >
-                <Zap className="h-3 w-3" />
-                {imageUrl ? "Generar video ($0.30)" : "Genera la imagen primero"}
-              </Button>
-            )}
-            {video.status === "running" && (
-              <Badge variant="outline" className="border-primary/40 text-primary text-[10px]">
-                <Loader2 className="h-2.5 w-2.5 mr-1 animate-spin" />
-                ⏱ {video.elapsedSec}s
-              </Badge>
-            )}
-            {video.status === "failed" && (
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="border-destructive/40 text-destructive text-[10px]">
-                  <AlertTriangle className="h-2.5 w-2.5 mr-1" /> {video.error.slice(0, 60)}
-                </Badge>
-                <Button
-                  size="sm"
-                  onClick={generateVideo}
-                  disabled={!imageUrl}
-                  className="h-7 gap-1.5 text-[11px]"
-                  variant="outline"
-                >
-                  Reintentar
-                </Button>
-              </div>
-            )}
-          </div>
-          {video.status === "done" && (
-            <div className="flex items-start gap-3">
-              <video
-                controls
-                src={video.videoUrl}
-                className="w-48 h-auto rounded border border-border"
+        {prompts && (
+          <Tabs defaultValue="nano_banana" className="w-full">
+            <TabsList className="grid w-full grid-cols-4 h-8">
+              <TabsTrigger value="nano_banana" className="text-[10px] py-1">Nano Banana</TabsTrigger>
+              <TabsTrigger value="seedream" className="text-[10px] py-1">Seedream 4</TabsTrigger>
+              <TabsTrigger value="kling" className="text-[10px] py-1">Kling 2.5</TabsTrigger>
+              <TabsTrigger value="seedance" className="text-[10px] py-1">Seedance 2.0</TabsTrigger>
+            </TabsList>
+            <TabsContent value="nano_banana" className="mt-2">
+              <HiggsPromptBlock
+                label="Imagen · conversacional"
+                hint="Pegalo en Nano Banana Pro (Higgsfield). Natural language, una sola toma."
+                text={prompts.nano_banana}
               />
-              <div className="flex flex-col gap-1.5">
-                <CopyBtn text={video.videoUrl} label="Copiar URL" />
-                <Button size="sm" variant="outline" className="h-6 text-[10px]" asChild>
-                  <a href={video.videoUrl} download target="_blank" rel="noreferrer">Descargar</a>
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="h-6 text-[10px]"
-                  onClick={generateVideo}
-                  disabled={!imageUrl}
-                >
-                  Regenerar
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+            </TabsContent>
+            <TabsContent value="seedream" className="mt-2">
+              <HiggsPromptBlock
+                label="Imagen · structured photoreal"
+                hint="Pegalo en Seedream 4 (Higgsfield). Tags separados por coma."
+                text={prompts.seedream}
+              />
+            </TabsContent>
+            <TabsContent value="kling" className="mt-2">
+              <HiggsPromptBlock
+                label="Video · motion-from-reference"
+                hint="Adjuntá la imagen (Nano Banana o Seedream) como primer frame en Kling 2.5 Turbo. Este prompt describe sólo el movimiento."
+                text={prompts.kling}
+              />
+            </TabsContent>
+            <TabsContent value="seedance" className="mt-2">
+              <HiggsPromptBlock
+                label="Video · motion arc"
+                hint="Pegalo en Seedance 2.0 (Higgsfield). Arco cinematográfico."
+                text={prompts.seedance}
+              />
+            </TabsContent>
+          </Tabs>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function HiggsPromptBlock({ label, hint, text }: { label: string; hint: string; text: string }) {
+  return (
+    <div className="space-y-1.5 rounded border border-border bg-background/40 p-2">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</span>
+        <CopyBtn text={text} label="Copiar" />
+      </div>
+      <div className="font-mono-display text-[11px] leading-relaxed text-foreground whitespace-pre-wrap break-words">
+        {text}
+      </div>
+      <div className="text-[10px] text-muted-foreground italic">{hint}</div>
     </div>
   );
 }

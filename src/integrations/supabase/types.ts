@@ -650,6 +650,10 @@ export type Database = {
           image_prompt: string | null
           image_prompt_en: string | null
           order_idx: number | null
+          prompt_kling: string | null
+          prompt_nano_banana: string | null
+          prompt_seedance: string | null
+          prompt_seedream: string | null
           reference_frame_time_sec: number | null
           reference_frame_url: string | null
           scene_index: number
@@ -674,6 +678,10 @@ export type Database = {
           image_prompt?: string | null
           image_prompt_en?: string | null
           order_idx?: number | null
+          prompt_kling?: string | null
+          prompt_nano_banana?: string | null
+          prompt_seedance?: string | null
+          prompt_seedream?: string | null
           reference_frame_time_sec?: number | null
           reference_frame_url?: string | null
           scene_index: number
@@ -698,6 +706,10 @@ export type Database = {
           image_prompt?: string | null
           image_prompt_en?: string | null
           order_idx?: number | null
+          prompt_kling?: string | null
+          prompt_nano_banana?: string | null
+          prompt_seedance?: string | null
+          prompt_seedream?: string | null
           reference_frame_time_sec?: number | null
           reference_frame_url?: string | null
           scene_index?: number

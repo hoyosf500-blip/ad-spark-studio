@@ -9,6 +9,8 @@ const PRICING: Record<string, { input: number; output: number }> = {
   "claude-opus-4-6": { input: 5, output: 25 },
   "claude-opus-4-5": { input: 5, output: 25 },
   "claude-3-5-sonnet-20241022": { input: 3, output: 15 },
+  "claude-haiku-4-5": { input: 0.8, output: 4 },
+  "claude-haiku-4-5-20251001": { input: 0.8, output: 4 },
 };
 
 export function priceFor(model: string) {
