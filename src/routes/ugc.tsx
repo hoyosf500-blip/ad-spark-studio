@@ -7,8 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Sparkles, Package, FileText, FolderKanban, AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sparkles, Package, FileText, FolderKanban, AlertTriangle, Wand2, Loader2, ImageIcon, Clock } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { fileToDataUrl } from "@/lib/frame-extraction";
 import { UgcPanel } from "@/components/UgcPanel";
 
 export const Route = createFileRoute("/ugc")({
@@ -21,6 +24,8 @@ type ProjectRow = {
   analysis_text: string | null;
   transcription: string | null;
 };
+
+type Duration = "8" | "12" | "15" | "20" | "30";
 
 const NO_PROJECT = "__viral__";
 
@@ -38,6 +43,9 @@ function UgcRoute() {
   const [productPrice, setProductPrice] = useState("");
   const [productAudience, setProductAudience] = useState("");
   const [creativeBrief, setCreativeBrief] = useState("");
+  const [productPhoto, setProductPhoto] = useState<string | null>(null);
+  const [detecting, setDetecting] = useState(false);
+  const [duration, setDuration] = useState<Duration>("12");
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth", search: { mode: "signin" } });
@@ -82,6 +90,45 @@ function UgcRoute() {
     return s || null;
   }, [productName, productOneLiner, productPrice, productAudience]);
 
+  const handleDetect = async () => {
+    if (!productPhoto) { toast.error("Sube primero una foto del producto"); return; }
+    setDetecting(true);
+    try {
+      const session = (await supabase.auth.getSession()).data.session;
+      const token = session?.access_token;
+      if (!token) throw new Error("No autorizado");
+      const res = await fetch("/api/detect-product", {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        body: JSON.stringify({ productPhoto, workspaceId: activeWorkspaceId }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = (await res.json()) as {
+        name?: string; oneLiner?: string; price?: string; audience?: string; costUsd?: number;
+      };
+      if (data.name) setProductName(data.name);
+      if (data.oneLiner) setProductOneLiner(data.oneLiner);
+      if (data.price) setProductPrice(data.price);
+      if (data.audience) setProductAudience(data.audience);
+      toast.success(`Datos detectados · $${Number(data.costUsd ?? 0).toFixed(4)}`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al detectar");
+    } finally {
+      setDetecting(false);
+    }
+  };
+
+  const onPickPhoto = async (f: File | null) => {
+    if (!f) return;
+    if (!f.type.startsWith("image/")) { toast.error("Selecciona una imagen"); return; }
+    try {
+      const url = await fileToDataUrl(f);
+      setProductPhoto(url);
+    } catch {
+      toast.error("No se pudo leer la imagen");
+    }
+  };
+
   if (loading || !user) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -96,9 +143,9 @@ function UgcRoute() {
     <AppShell>
       <div className="mx-auto max-w-7xl space-y-4 p-6">
         <div>
-          <h1 className="font-mono-display text-2xl font-bold">UGC Generator</h1>
+          <h1 className="font-mono-display text-2xl font-bold">📱 UGC Video Generator</h1>
           <p className="text-xs text-muted-foreground mt-1">
-            Genera testimoniales realistas en 4 estilos. Usa un análisis existente o arranca en modo Viral desde cero.
+            Sube foto del producto → elegí estilo y modelo → genera prompt UGC listo para el modelo IA.
           </p>
         </div>
 
@@ -139,75 +186,145 @@ function UgcRoute() {
               </div>
             </div>
           )}
-
-          {!isViral && analysisText && (
-            <div className="space-y-2">
-              <div className="flex items-start gap-2">
-                <FileText className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                <div>
-                  <div className="text-sm font-bold">Transcripción</div>
-                  <div className="text-[11px] text-muted-foreground">
-                    Palabra por palabra del video origen. La usa el UGC para sonar natural.
-                  </div>
-                </div>
-              </div>
-              <Textarea
-                value={transcription}
-                onChange={(e) => setTranscription(e.target.value)}
-                rows={3}
-                className="text-sm bg-background/60"
-                placeholder="La transcripción se carga sola del proyecto — edítala si quieres afinarla."
-              />
-            </div>
-          )}
         </Card>
 
-        <Card className="p-5 space-y-3">
+        {/* Guión / Transcripción — siempre visible */}
+        <Card className="p-5 space-y-2">
           <div className="flex items-start gap-2">
-            <Package className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+            <FileText className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
             <div>
-              <div className="text-sm font-bold">Datos del producto</div>
+              <div className="text-sm font-bold">Guión / Transcripción (opcional)</div>
               <div className="text-[11px] text-muted-foreground">
-                Todo opcional. Claude los usa para que el UGC mencione el nombre y el precio reales.
+                Si querés que diga algo específico, pegalo aquí. Se usa palabra por palabra.
               </div>
             </div>
           </div>
-          <div className="grid md:grid-cols-2 gap-2">
-            <Input
-              placeholder="Nombre del producto"
-              value={productName}
-              onChange={(e) => setProductName(e.target.value)}
-              className="h-9 text-sm"
-            />
-            <Input
-              placeholder="Precio (ej. $89.900 COD)"
-              value={productPrice}
-              onChange={(e) => setProductPrice(e.target.value)}
-              className="h-9 text-sm"
-            />
-            <Input
-              placeholder="Qué hace / beneficio principal"
-              value={productOneLiner}
-              onChange={(e) => setProductOneLiner(e.target.value)}
-              className="h-9 text-sm md:col-span-2"
-            />
-            <Input
-              placeholder="Audiencia (ej. mujeres 35+ con dolor lumbar)"
-              value={productAudience}
-              onChange={(e) => setProductAudience(e.target.value)}
-              className="h-9 text-sm md:col-span-2"
-            />
-            <div className="md:col-span-2">
-              <Label className="text-xs">Idea creativa (opcional)</Label>
-              <Textarea
-                value={creativeBrief}
-                onChange={(e) => setCreativeBrief(e.target.value)}
-                placeholder="Ej: testimonial en el carro camino al trabajo, tono relajado, cara cansada al inicio, alivio al final."
-                rows={3}
+          <Textarea
+            value={transcription}
+            onChange={(e) => setTranscription(e.target.value)}
+            placeholder='Ej: "Mirá lo que me llegó… esto es X, me lo recomendó mi vecina…"'
+            rows={4}
+            className="text-sm"
+          />
+          {transcription.trim() && (
+            <p className="text-[11px] text-success mt-1">
+              ✓ {transcription.trim().split(/\s+/).length} palabras — se usará exacto
+            </p>
+          )}
+        </Card>
+
+        {/* Datos del producto — foto + auto-detect + campos */}
+        <Card className="p-5 space-y-4">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex items-start gap-2">
+              <Package className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <div className="text-sm font-bold">Datos del producto</div>
+                <div className="text-[11px] text-muted-foreground">
+                  Subí una foto del producto y dejá que Claude llene los campos.
+                </div>
+              </div>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleDetect}
+              disabled={!productPhoto || detecting}
+              className="flex-shrink-0"
+            >
+              {detecting ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" /> : <Wand2 className="h-3.5 w-3.5 mr-1.5" />}
+              🤖 Auto-detectar
+            </Button>
+          </div>
+
+          <div className="grid md:grid-cols-[140px_1fr] gap-4">
+            {/* Foto */}
+            <label
+              className="relative h-[140px] w-[140px] rounded-lg border-2 border-dashed border-border hover:border-primary cursor-pointer flex flex-col items-center justify-center gap-1 bg-background/50 overflow-hidden transition-colors"
+              title={productPhoto ? "Cambiar foto" : "Subir foto del producto"}
+            >
+              {productPhoto ? (
+                <>
+                  <img src={productPhoto} alt="producto" className="absolute inset-0 h-full w-full object-cover" />
+                  <span className="absolute bottom-1 left-1 right-1 text-center text-[10px] bg-success/80 text-success-foreground rounded px-1 py-0.5">
+                    ✅ Producto
+                  </span>
+                </>
+              ) : (
+                <>
+                  <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                  <span className="text-[11px] text-muted-foreground text-center px-1">Foto producto</span>
+                </>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                onChange={(e) => onPickPhoto(e.target.files?.[0] ?? null)}
               />
-              <p className="text-[11px] text-muted-foreground mt-1">
-                Tono, setting, personaje, emoción. No escribas dosis ni precio — esos ya los tiene.
-              </p>
+            </label>
+
+            {/* Campos */}
+            <div className="grid gap-2 grid-cols-1 md:grid-cols-2">
+              <Input
+                placeholder="Nombre del producto"
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+                className="h-9 text-sm"
+              />
+              <Input
+                placeholder="Precio (ej. $89.900 COP)"
+                value={productPrice}
+                onChange={(e) => setProductPrice(e.target.value)}
+                className="h-9 text-sm"
+              />
+              <Input
+                placeholder="Qué hace / beneficio principal"
+                value={productOneLiner}
+                onChange={(e) => setProductOneLiner(e.target.value)}
+                className="h-9 text-sm md:col-span-2"
+              />
+              <Input
+                placeholder="Audiencia (ej. mujeres 35+ con dolor lumbar)"
+                value={productAudience}
+                onChange={(e) => setProductAudience(e.target.value)}
+                className="h-9 text-sm md:col-span-2"
+              />
+              <div className="md:col-span-2">
+                <Label className="text-xs">Idea creativa (opcional)</Label>
+                <Textarea
+                  value={creativeBrief}
+                  onChange={(e) => setCreativeBrief(e.target.value)}
+                  placeholder="Ej: testimonial en el carro camino al trabajo, tono relajado, cara cansada al inicio, alivio al final."
+                  rows={3}
+                />
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Tono, setting, personaje, emoción. No escribas dosis ni precio — esos ya los tiene.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Selector de duración */}
+        <Card className="p-5">
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label className="text-xs flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5 text-primary" /> Duración
+              </Label>
+              <Select value={duration} onValueChange={(v) => setDuration(v as Duration)}>
+                <SelectTrigger className="h-9 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="8">8 segundos</SelectItem>
+                  <SelectItem value="12">12 segundos</SelectItem>
+                  <SelectItem value="15">15 segundos</SelectItem>
+                  <SelectItem value="20">20 segundos</SelectItem>
+                  <SelectItem value="30">30 segundos</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </Card>
@@ -230,6 +347,8 @@ function UgcRoute() {
           transcription={transcription}
           productInfo={productInfo}
           creativeBrief={creativeBrief.trim() || null}
+          productPhoto={productPhoto}
+          duration={duration}
           model="claude-sonnet-4-5-20250929"
         />
       </div>

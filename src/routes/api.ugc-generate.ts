@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { SYS_UGC } from "@/lib/system-prompts";
-import { logUsage } from "@/utils/anthropic.functions";
+import { logUsage, dataUrlToBase64 } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import { WINNING_PREAMBLE, checkScript } from "@/lib/winning-framework";
 import type { Database } from "@/integrations/supabase/types";
@@ -14,10 +14,16 @@ type Body = {
   analysisText?: string | null;
   transcription?: string | null;
   productInfo?: string | null;
+  productPhoto?: string | null;
+  duration?: string;
   creativeBrief?: string | null;
   videoModel?: "wan2.6-i2v" | "kling2.5-turbo" | "veo3";
   model?: string;
 };
+
+type ContentBlock =
+  | { type: "text"; text: string }
+  | { type: "image"; source: { type: "base64"; media_type: string; data: string } };
 
 // Style descriptions — ugc-casual / ugc-testimonial / ugc-unboxing preserved verbatim from HTML standalone.
 // ugc-viral rewritten 2026-04-18 applying create-viral-content skill research:
@@ -140,10 +146,12 @@ export const Route = createFileRoute("/api/ugc-generate")({
             : "";
 
         const isViral = body.style === "ugc-viral";
+        const durationStr = body.duration ?? "12";
         const userText = [
           !isViral ? WINNING_PREAMBLE : "",
           `STYLE: ${body.style} — ${STYLE_DESC[body.style]}`,
           `TARGET MODEL: ${targetModelLabel}`,
+          `DURATION: ${durationStr} seconds`,
           klingRules,
           body.productInfo ? `PRODUCT INFO:\n${body.productInfo}` : "",
           body.transcription ? `USER TRANSCRIPTION (use word-for-word, split across shots naturally):\n${body.transcription}` : "",
@@ -155,6 +163,14 @@ export const Route = createFileRoute("/api/ugc-generate")({
         ]
           .filter(Boolean)
           .join("\n\n");
+
+        const content: ContentBlock[] = [];
+        if (body.productPhoto) {
+          const { mediaType, b64 } = dataUrlToBase64(body.productPhoto);
+          content.push({ type: "text", text: "=== PRODUCT PHOTO (reference) ===" });
+          content.push({ type: "image", source: { type: "base64", media_type: mediaType, data: b64 } });
+        }
+        content.push({ type: "text", text: userText });
 
         const upstream = await fetch("https://api.anthropic.com/v1/messages", {
           method: "POST",
@@ -168,7 +184,7 @@ export const Route = createFileRoute("/api/ugc-generate")({
             max_tokens: 4096,
             stream: true,
             system: SYS_UGC,
-            messages: [{ role: "user", content: [{ type: "text", text: userText }] }],
+            messages: [{ role: "user", content }],
           }),
         });
         if (!upstream.ok || !upstream.body) {

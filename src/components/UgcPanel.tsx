@@ -51,6 +51,8 @@ export function UgcPanel({
   transcription,
   productInfo,
   creativeBrief,
+  productPhoto,
+  duration,
   model,
 }: {
   workspaceId: string | null;
@@ -60,6 +62,8 @@ export function UgcPanel({
   transcription: string;
   productInfo: string | null;
   creativeBrief?: string | null;
+  productPhoto?: string | null;
+  duration?: string;
   model: string;
 }) {
   const [generations, setGenerations] = useState<UgcRow[]>([]);
@@ -136,6 +140,8 @@ export function UgcPanel({
           transcription: transcription?.trim() || null,
           productInfo,
           creativeBrief: creativeBrief ?? null,
+          productPhoto: productPhoto ?? null,
+          duration: duration ?? "12",
           videoModel,
           model,
         }),
