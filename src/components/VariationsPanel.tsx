@@ -15,6 +15,7 @@ import { extractFrames, fileToDataUrl, type ExtractedFrame } from "@/lib/frame-e
 import { parseScenes, type ParsedScene } from "@/lib/scene-parser";
 import { VARIATIONS } from "@/lib/variation-defs";
 import { handleCapResponse } from "@/lib/handle-cap";
+import type { ScriptValidation } from "@/lib/winning-framework";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 
@@ -86,6 +87,7 @@ type VariationState = {
   costUsd: number;
   error?: string;
   variationId?: string;
+  validation?: ScriptValidation | null;
 };
 
 const DEFAULT_MODEL = "claude-sonnet-4-5-20250929";
@@ -428,6 +430,7 @@ export function VariationsPanel() {
       let full = "";
       let cost = 0;
       let truncated = false;
+      let validation: ScriptValidation | null = null;
       for (;;) {
         const { value, done } = await reader.read();
         if (done) break;
@@ -440,7 +443,7 @@ export function VariationsPanel() {
           try {
             const ev = JSON.parse(dataLine.slice(6).trim()) as
               | { type: "text"; text: string }
-              | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean }
+              | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean; validation?: ScriptValidation | null }
               | { type: "error"; error: string };
             if (ev.type === "text") {
               full += ev.text;
@@ -449,6 +452,7 @@ export function VariationsPanel() {
               );
             } else if (ev.type === "done") {
               full = ev.fullText || full; cost = ev.costUsd; truncated = ev.isTruncated;
+              validation = ev.validation ?? null;
             } else if (ev.type === "error") {
               throw new Error(ev.error);
             }
@@ -461,7 +465,7 @@ export function VariationsPanel() {
 
       setVariations((prev) =>
         prev.map((v) => v.type === type
-          ? { ...v, status: truncated ? "truncated" : "done", text: full, scenes, elapsedSec: elapsed, costUsd: cost, variationId }
+          ? { ...v, status: truncated ? "truncated" : "done", text: full, scenes, elapsedSec: elapsed, costUsd: cost, variationId, validation }
           : v),
       );
 
@@ -843,6 +847,16 @@ function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId, running, o
           <span className="font-mono-display text-sm font-bold truncate">{v.label}</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
+          {(v.status === "done" || v.status === "truncated") && v.validation && !v.validation.pass && (
+            <Badge
+              variant="outline"
+              className="h-6 gap-1 border-warning/50 bg-warning/10 text-warning text-[10px]"
+              title={`Gates pendientes: ${v.validation.violations.join(" · ")}. Considerá regenerar.`}
+            >
+              <AlertTriangle className="h-3 w-3" />
+              {v.validation.violations.length} gate{v.validation.violations.length === 1 ? "" : "s"}
+            </Badge>
+          )}
           {(v.status === "idle" || v.status === "error") && onGenerate && (
             <Button
               size="sm"

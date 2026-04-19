@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { SYS_GENERATE } from "@/lib/system-prompts";
 import { SCENE_FORMAT } from "@/lib/scene-format";
 import { HOOK_PLAYBOOKS } from "@/lib/variation-defs";
+import { WINNING_PREAMBLE, checkScript } from "@/lib/winning-framework";
 import { dataUrlToBase64, calcCost, logUsage } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
@@ -69,6 +70,9 @@ export const Route = createFileRoute("/api/anthropic-generate")({
               `\n\n=== BRIEF CREATIVO DEL CLIENTE (semilla en lenguaje natural — expandila usando los playbooks de hook viral abajo y la estructura de escenas. NO la copies literal; interpretala como dirección creativa.) ===\n` +
               body.creativeBrief.trim(),
           });
+        }
+        if (!isClone) {
+          content.push({ type: "text", text: `\n\n${WINNING_PREAMBLE}` });
         }
         const playbook = HOOK_PLAYBOOKS[body.variationType];
         if (playbook) {
@@ -188,6 +192,8 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                 });
               }
 
+              const validation = isClone ? null : checkScript(fullText);
+
               const cost = await logUsage({
                 userId,
                 workspaceId: body.workspaceId ?? null,
@@ -199,11 +205,24 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                   variationId: body.variationId ?? null,
                   isTruncated: stopReason === "max_tokens",
                   maxTokens: MAX_TOKENS,
+                  validationPass: validation?.pass ?? null,
+                  validationViolations: validation?.violations ?? null,
                 },
               });
+
+              if (validation && body.variationId) {
+                try {
+                  await supabase
+                    .from("variations")
+                    .update({ validation } as never)
+                    .eq("id", body.variationId);
+                } catch { /* non-fatal */ }
+              }
+
               controller.enqueue(enc.encode(`data: ${JSON.stringify({
                 type: "done", fullText, inputTokens, outputTokens,
                 costUsd: cost, stopReason, isTruncated: stopReason === "max_tokens", model,
+                validation,
               })}\n\n`));
             } catch (err) {
               controller.enqueue(enc.encode(`data: ${JSON.stringify({
