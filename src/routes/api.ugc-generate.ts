@@ -17,7 +17,7 @@ type Body = {
   productPhoto?: string | null;
   duration?: string;
   creativeBrief?: string | null;
-  videoModel?: "wan2.6-i2v" | "kling2.5-turbo" | "veo3";
+  videoModel?: "wan2.6-i2v" | "kling2.5-turbo";
   model?: string;
 };
 
@@ -123,16 +123,12 @@ export const Route = createFileRoute("/api/ugc-generate")({
         const model = body.model || "claude-sonnet-4-5-20250929";
         const videoModel = body.videoModel || "wan2.6-i2v";
         const targetModelLabel =
-          videoModel === "veo3"
-            ? "Veo 3.1 Fast"
-            : videoModel === "kling2.5-turbo"
-              ? "Kling 3.0"
-              : "Seedance 2.0";
+          videoModel === "kling2.5-turbo" ? "Kling 2.5 Turbo" : "Seedance 2.0";
 
         const isKling = videoModel === "kling2.5-turbo";
         const klingRules = isKling
           ? [
-              `LANGUAGE RULES (Kling 3.0): the IMAGE PROMPT and ANIMATION PROMPT MUST be fully in ENGLISH — no Spanish words inside them except the SCRIPT dialogue itself (which stays Spanish).`,
+              `LANGUAGE RULES (Kling 2.5 Turbo): the IMAGE PROMPT and ANIMATION PROMPT MUST be fully in ENGLISH — no Spanish words inside them except the SCRIPT dialogue itself (which stays Spanish).`,
               body.transcription
                 ? `Translate the Spanish transcription into natural English BEFORE embedding it as dialogue cues in the ANIMATION PROMPT (subject's mouth shapes English). The SCRIPT stays in Spanish for overlay text.`
                 : "",
