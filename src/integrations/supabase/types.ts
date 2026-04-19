@@ -555,6 +555,7 @@ export type Database = {
           style: string
           updated_at: string
           user_id: string
+          validation: Json | null
           video_generation_id: string | null
           video_model: string | null
           workspace_id: string
@@ -574,6 +575,7 @@ export type Database = {
           style: string
           updated_at?: string
           user_id: string
+          validation?: Json | null
           video_generation_id?: string | null
           video_model?: string | null
           workspace_id: string
@@ -593,6 +595,7 @@ export type Database = {
           style?: string
           updated_at?: string
           user_id?: string
+          validation?: Json | null
           video_generation_id?: string | null
           video_model?: string | null
           workspace_id?: string
@@ -741,6 +744,7 @@ export type Database = {
           source_video_id: string | null
           title: string | null
           updated_at: string
+          validation: Json | null
           variation_type: string
           workspace_id: string
         }
@@ -759,6 +763,7 @@ export type Database = {
           source_video_id?: string | null
           title?: string | null
           updated_at?: string
+          validation?: Json | null
           variation_type: string
           workspace_id: string
         }
@@ -777,6 +782,7 @@ export type Database = {
           source_video_id?: string | null
           title?: string | null
           updated_at?: string
+          validation?: Json | null
           variation_type?: string
           workspace_id?: string
         }
