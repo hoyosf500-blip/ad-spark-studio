@@ -1,0 +1,74 @@
+- generic [ref=e12]:
+  - generic [ref=e15]:
+    - link "Biblioteca de anuncios de Meta" [ref=e18] [cursor=pointer]:
+      - /url: /ads/library/?source=fb-logo
+      - generic [ref=e20]: Biblioteca de anuncios de Meta
+    - generic [ref=e22]: Biblioteca de anuncios
+    - menuitem "Informe de la biblioteca de anuncios" [ref=e24] [cursor=pointer]:
+      - generic [ref=e25]: Informe de la biblioteca de anuncios
+    - menuitem "API de la biblioteca de anuncios" [ref=e27] [cursor=pointer]:
+      - generic [ref=e28]: API de la biblioteca de anuncios
+    - menuitem "Contenido de marca" [ref=e30] [cursor=pointer]:
+      - generic [ref=e31]: Contenido de marca
+    - menuitem "Open navigation panel" [ref=e33] [cursor=pointer]
+  - generic [ref=e40]:
+    - combobox "Colombia" [ref=e44] [cursor=pointer]:
+      - generic [ref=e51]: Colombia
+    - combobox "Todos los anuncios" [ref=e62] [cursor=pointer]:
+      - generic [ref=e72]: Todos los anuncios
+    - generic [ref=e82]:
+      - generic [ref=e88]: Buscar por palabra clave o anunciante
+      - generic [ref=e94]:
+        - searchbox "Buscar por palabra clave o anunciante" [ref=e100]: Nobox Vital Colombia
+        - button "Borrar" [ref=e102] [cursor=pointer]
+  - generic [ref=e105]:
+    - generic [ref=e107]:
+      - img "Foto del perfil de la página" [ref=e112]
+      - link "Nobox Vital Colombia" [ref=e115] [cursor=pointer]:
+        - /url: https://facebook.com/100092946597393
+        - heading "Nobox Vital Colombia" [level=1] [ref=e116]
+    - generic [ref=e117]:
+      - link "Anuncios" [ref=e118] [cursor=pointer]
+      - link "Información" [ref=e119] [cursor=pointer]
+  - dialog [ref=e120]:
+    - generic [ref=e121]:
+      - link [ref=e122] [cursor=pointer]:
+        - /url: /
+        - heading [level=4] [ref=e123]: Iniciar sesión
+      - menuitem [ref=e124] [cursor=pointer]
+    - generic [ref=e126]:
+      - generic [ref=e127]:
+        - heading [level=4] [ref=e129]: Biblioteca de anuncios
+        - menuitem [ref=e131] [cursor=pointer]:
+          - heading [level=4] [ref=e133]: Informe de la biblioteca de anuncios
+        - menuitem [ref=e135] [cursor=pointer]:
+          - heading [level=4] [ref=e137]: API de la biblioteca de anuncios
+        - menuitem [ref=e139] [cursor=pointer]:
+          - heading [level=4] [ref=e141]: Contenido de marca
+      - separator [ref=e142]
+      - generic [ref=e143]:
+        - menuitem [ref=e145] [cursor=pointer]:
+          - heading [level=4] [ref=e147]: Estado del sistema
+        - menuitem [ref=e149] [cursor=pointer]:
+          - heading [level=4] [ref=e151]: Suscripción a novedades por correo electrónico
+        - menuitem [ref=e153] [cursor=pointer]:
+          - heading [level=4] [ref=e155]: Preguntas frecuentes
+        - menuitem [ref=e157] [cursor=pointer]:
+          - heading [level=4] [ref=e159]: Información sobre anuncios y uso de datos
+        - menuitem [ref=e161] [cursor=pointer]:
+          - heading [level=4] [ref=e163]: Privacidad
+        - menuitem [ref=e165] [cursor=pointer]:
+          - heading [level=4] [ref=e167]: Condiciones
+        - menuitem [ref=e169] [cursor=pointer]:
+          - heading [level=4] [ref=e171]: Cookies
+  - generic [ref=e175]:
+    - progressbar [ref=e176]
+    - progressbar [ref=e177]
+    - progressbar [ref=e178]
+    - progressbar [ref=e179]
+    - progressbar [ref=e180]
+    - progressbar [ref=e181]
+    - progressbar [ref=e182]
+    - progressbar [ref=e183]
+    - progressbar [ref=e184]
+    - progressbar [ref=e185]

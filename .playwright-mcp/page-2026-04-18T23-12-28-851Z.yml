@@ -1,0 +1,1476 @@
+- generic [ref=e1]:
+  - generic [ref=e12]:
+    - generic [ref=e15]:
+      - link "Biblioteca de anuncios de Meta" [ref=e18] [cursor=pointer]:
+        - /url: /ads/library/?source=fb-logo
+        - generic [ref=e20]: Biblioteca de anuncios de Meta
+      - generic [ref=e22]: Biblioteca de anuncios
+      - menuitem "Informe de la biblioteca de anuncios" [ref=e24] [cursor=pointer]:
+        - generic [ref=e25]: Informe de la biblioteca de anuncios
+      - menuitem "API de la biblioteca de anuncios" [ref=e27] [cursor=pointer]:
+        - generic [ref=e28]: API de la biblioteca de anuncios
+      - menuitem "Contenido de marca" [ref=e30] [cursor=pointer]:
+        - generic [ref=e31]: Contenido de marca
+      - menuitem "Open navigation panel" [ref=e33] [cursor=pointer]
+    - generic [ref=e40]:
+      - combobox "Colombia" [ref=e44] [cursor=pointer]:
+        - generic [ref=e51]: Colombia
+      - combobox "Todos los anuncios" [ref=e62] [cursor=pointer]:
+        - generic [ref=e72]: Todos los anuncios
+      - generic [ref=e82]:
+        - generic [ref=e88]: Buscar por palabra clave o anunciante
+        - generic [ref=e94]:
+          - searchbox "Buscar por palabra clave o anunciante" [ref=e100]: Nobox Vital Colombia
+          - button "Borrar" [ref=e102] [cursor=pointer]
+    - generic [ref=e105]:
+      - generic [ref=e107]:
+        - img "Foto del perfil de la página" [ref=e112]
+        - link "Nobox Vital Colombia" [ref=e115] [cursor=pointer]:
+          - /url: https://facebook.com/100092946597393
+          - heading "Nobox Vital Colombia" [level=1] [ref=e116]
+      - generic [ref=e117]:
+        - link "Anuncios" [ref=e118] [cursor=pointer]
+        - link "Información" [ref=e119] [cursor=pointer]
+    - dialog [ref=e120]:
+      - generic [ref=e121]:
+        - link [ref=e122] [cursor=pointer]:
+          - /url: /
+          - heading [level=4] [ref=e123]: Iniciar sesión
+        - menuitem [ref=e124] [cursor=pointer]
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - heading [level=4] [ref=e129]: Biblioteca de anuncios
+          - menuitem [ref=e131] [cursor=pointer]:
+            - heading [level=4] [ref=e133]: Informe de la biblioteca de anuncios
+          - menuitem [ref=e135] [cursor=pointer]:
+            - heading [level=4] [ref=e137]: API de la biblioteca de anuncios
+          - menuitem [ref=e139] [cursor=pointer]:
+            - heading [level=4] [ref=e141]: Contenido de marca
+        - separator [ref=e142]
+        - generic [ref=e143]:
+          - menuitem [ref=e145] [cursor=pointer]:
+            - heading [level=4] [ref=e147]: Estado del sistema
+          - menuitem [ref=e149] [cursor=pointer]:
+            - heading [level=4] [ref=e151]: Suscripción a novedades por correo electrónico
+          - menuitem [ref=e153] [cursor=pointer]:
+            - heading [level=4] [ref=e155]: Preguntas frecuentes
+          - menuitem [ref=e157] [cursor=pointer]:
+            - heading [level=4] [ref=e159]: Información sobre anuncios y uso de datos
+          - menuitem [ref=e161] [cursor=pointer]:
+            - heading [level=4] [ref=e163]: Privacidad
+          - menuitem [ref=e165] [cursor=pointer]:
+            - heading [level=4] [ref=e167]: Condiciones
+          - menuitem [ref=e169] [cursor=pointer]:
+            - heading [level=4] [ref=e171]: Cookies
+    - generic [ref=e172]:
+      - generic [ref=e186]:
+        - heading "~120 resultados" [level=3] [ref=e194]
+        - generic [ref=e195]:
+          - generic [ref=e203]:
+            - generic [ref=e204]:
+              - textbox "Palabra clave" [ref=e206]
+              - button "Filtros" [ref=e210] [cursor=pointer]:
+                - generic [ref=e215]: Filtros
+              - generic [ref=e217]:
+                - generic [ref=e223]: Ordenar
+                - combobox "Ordenar" [ref=e228] [cursor=pointer]:
+                  - generic [ref=e235]: Ordenar por
+            - generic [ref=e240]:
+              - generic [ref=e241]:
+                - strong [ref=e242]: Estado activo
+                - text: ": Anuncios activos"
+              - button "Eliminar" [ref=e243] [cursor=pointer]:
+                - generic [ref=e246]: Eliminar
+          - generic [ref=e250]:
+            - generic [ref=e252]:
+              - generic [ref=e254]:
+                - generic [ref=e255]:
+                  - generic [ref=e262]: Activo
+                  - generic [ref=e265]: "Identificador de la biblioteca: 1139943361273017"
+                  - generic [ref=e267]: En circulación desde el 18 jun 2025
+                  - generic [ref=e269]: Plataformas
+                  - generic [ref=e292]:
+                    - strong [ref=e293]: 13 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e296] [cursor=pointer]:
+                  - generic [ref=e299]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e302] [cursor=pointer]:
+                - generic [ref=e306]: Ver detalles del resumen
+              - separator [ref=e307]
+              - generic [ref=e312]:
+                - generic [ref=e314]:
+                  - img "Paula Recomienda" [ref=e315]
+                  - generic [ref=e317]:
+                    - link "Paula Recomienda" [ref=e318] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e322]:
+                      - strong [ref=e324]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e325]:
+                  - button "💎 Medir la tensión ahora es más fácil. ✅ Guía de voz en español para una medición clara. 👉 99 memorias para dos personas. 🔰 Pantalla LCD fácil de leer. 🚚 Envío gratuito y pago al recibir en Colombia." [ref=e328]:
+                    - generic [ref=e331]:
+                      - text: 💎 Medir la tensión ahora es más fácil.
+                      - text: ✅ Guía de voz en español para una medición clara.
+                      - text: 👉 99 memorias para dos personas.
+                      - text: 🔰 Pantalla LCD fácil de leer.
+                      - text: 🚚 Envío gratuito y pago al recibir en Colombia.
+                  - group "Video player" [ref=e341]:
+                    - button "Reproducir video" [ref=e343] [cursor=pointer]
+                    - generic [ref=e345]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:26
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+            - generic [ref=e347]:
+              - generic [ref=e349]:
+                - generic [ref=e350]:
+                  - generic [ref=e357]: Activo
+                  - generic [ref=e360]: "Identificador de la biblioteca: 684141820650984"
+                  - generic [ref=e362]: En circulación desde el 18 abr 2025
+                  - generic [ref=e364]: Plataformas
+                - button "Abrir menú desplegable" [ref=e388] [cursor=pointer]:
+                  - generic [ref=e391]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e394] [cursor=pointer]:
+                - generic [ref=e398]: Ver detalles del anuncio
+              - separator [ref=e399]
+              - generic [ref=e404]:
+                - generic [ref=e406]:
+                  - img "Paula Recomienda" [ref=e407]
+                  - generic [ref=e409]:
+                    - link "Paula Recomienda" [ref=e410] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e414]:
+                      - strong [ref=e416]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e417]:
+                  - button "⚡ La solución perfecta para organizar tus medicamentos. 💊 Organiza tus pastillas por días 💧 Botella de agua de gran capacidad ✅ Organiza tus suplementos o medicamentos 🌿 Ideal para adultos mayores, deportistas y personas activas." [ref=e420]:
+                    - generic [ref=e423]:
+                      - text: ⚡ La solución perfecta para organizar tus medicamentos.
+                      - text: 💊 Organiza tus pastillas por días
+                      - text: 💧 Botella de agua de gran capacidad
+                      - text: ✅ Organiza tus suplementos o medicamentos
+                      - text: 🌿 Ideal para adultos mayores, deportistas y personas activas.
+                  - group "Video player" [ref=e433]:
+                    - button "Reproducir video" [ref=e435] [cursor=pointer]
+                    - generic [ref=e437]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:40
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e438]:
+                    - generic [ref=e439]:
+                      - button "API.WHATSAPP.COM" [ref=e441]:
+                        - generic [ref=e442]: API.WHATSAPP.COM
+                      - button "💎 Organiza tus medicamentos" [ref=e444]:
+                        - generic [ref=e445]: 💎 Organiza tus medicamentos
+                      - button "🚚 Envío gratis" [ref=e447]:
+                        - generic [ref=e448]: 🚚 Envío gratis
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e450]:
+                      - generic [ref=e454]: Enviar mensaje de WhatsApp
+            - generic [ref=e456]:
+              - generic [ref=e458]:
+                - generic [ref=e459]:
+                  - generic [ref=e466]: Activo
+                  - generic [ref=e469]: "Identificador de la biblioteca: 1389208982350986"
+                  - generic [ref=e471]: En circulación desde el 14 jun 2025
+                  - generic [ref=e473]: Plataformas
+                - button "Abrir menú desplegable" [ref=e497] [cursor=pointer]:
+                  - generic [ref=e500]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e503] [cursor=pointer]:
+                - generic [ref=e507]: Ver detalles del anuncio
+              - separator [ref=e508]
+              - generic [ref=e513]:
+                - generic [ref=e515]:
+                  - img "Paula Recomienda" [ref=e516]
+                  - generic [ref=e518]:
+                    - link "Paula Recomienda" [ref=e519] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e523]:
+                      - strong [ref=e525]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e526]:
+                  - button "⚡ La solución perfecta para organizar tus medicamentos. 💊 Organiza tus pastillas por días 💧 Botella de agua de gran capacidad ✅ Organiza tus suplementos o medicamentos 🌿 Ideal para adultos mayores, deportistas y personas activas." [ref=e529]:
+                    - generic [ref=e532]:
+                      - text: ⚡ La solución perfecta para organizar tus medicamentos.
+                      - text: 💊 Organiza tus pastillas por días
+                      - text: 💧 Botella de agua de gran capacidad
+                      - text: ✅ Organiza tus suplementos o medicamentos
+                      - text: 🌿 Ideal para adultos mayores, deportistas y personas activas.
+                  - group "Video player" [ref=e542]:
+                    - button "Reproducir video" [ref=e544] [cursor=pointer]
+                    - generic [ref=e546]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:40
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e547]:
+                    - generic [ref=e548]:
+                      - button "API.WHATSAPP.COM" [ref=e550]:
+                        - generic [ref=e551]: API.WHATSAPP.COM
+                      - button "💎 Organiza tus medicamentos" [ref=e553]:
+                        - generic [ref=e554]: 💎 Organiza tus medicamentos
+                      - button "🚚 Envío gratis" [ref=e556]:
+                        - generic [ref=e557]: 🚚 Envío gratis
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e559]:
+                      - generic [ref=e563]: Enviar mensaje de WhatsApp
+            - generic [ref=e565]:
+              - generic [ref=e567]:
+                - generic [ref=e568]:
+                  - generic [ref=e575]: Activo
+                  - generic [ref=e578]: "Identificador de la biblioteca: 882436897983609"
+                  - generic [ref=e580]: En circulación desde el 28 ene 2026
+                  - generic [ref=e582]: Plataformas
+                  - generic [ref=e610]:
+                    - strong [ref=e611]: 2 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e614] [cursor=pointer]:
+                  - generic [ref=e617]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e620] [cursor=pointer]:
+                - generic [ref=e624]: Ver detalles del resumen
+              - separator [ref=e625]
+              - generic [ref=e630]:
+                - generic [ref=e632]:
+                  - img "Nobox Vital Colombia" [ref=e633]
+                  - generic [ref=e635]:
+                    - link "Nobox Vital Colombia" [ref=e636] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e640]:
+                      - strong [ref=e642]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e643]:
+                  - button "“Tomar agua no siempre es suficiente. Quería un apoyo extra para mis riñones y este suplemento me dio tranquilidad.” 🫘 Apoyo al cuidado renal 🌿 Ingredientes naturales 💧 Apoya el sistema urinario" [ref=e646]:
+                    - generic [ref=e649]:
+                      - text: “Tomar agua no siempre es suficiente.
+                      - text: Quería un apoyo extra para mis riñones y este suplemento me dio tranquilidad.”
+                      - text: 🫘 Apoyo al cuidado renal
+                      - text: 🌿 Ingredientes naturales
+                      - text: 💧 Apoya el sistema urinario
+                  - group "Video player" [ref=e659]:
+                    - button "Reproducir video" [ref=e661] [cursor=pointer]
+                    - generic [ref=e663]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:40
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+            - generic [ref=e665]:
+              - generic [ref=e667]:
+                - generic [ref=e668]:
+                  - generic [ref=e675]: Activo
+                  - generic [ref=e678]: "Identificador de la biblioteca: 2328072564307647"
+                  - generic [ref=e680]: En circulación desde el 29 dic 2025
+                  - generic [ref=e682]: Plataformas
+                - button "Abrir menú desplegable" [ref=e711] [cursor=pointer]:
+                  - generic [ref=e714]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e717] [cursor=pointer]:
+                - generic [ref=e721]: Ver detalles del anuncio
+              - separator [ref=e722]
+              - generic [ref=e727]:
+                - generic [ref=e729]:
+                  - img "Nobox Vital Colombia" [ref=e730]
+                  - generic [ref=e732]:
+                    - link "Nobox Vital Colombia" [ref=e733] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e737]:
+                      - strong [ref=e739]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e740]:
+                  - button "🌟 “ Trabajo muchas horas de pie y siempre terminaba con las piernas súper pesadas. Empecé a usar esta cremita y de verdad se siente el descanso”. 🦵✨ Ayuda a mejorar la apariencia de las várices 🌬️ Sensación de frescura inmediata en las piernas 🌿 Ingredientes naturales y suaves con la piel" [ref=e743]:
+                    - generic [ref=e746]:
+                      - text: 🌟 “ Trabajo muchas horas de pie y siempre terminaba con las piernas súper pesadas. Empecé a usar esta cremita y de verdad se siente el descanso”.
+                      - text: 🦵✨ Ayuda a mejorar la apariencia de las várices
+                      - text: 🌬️ Sensación de frescura inmediata en las piernas
+                      - text: 🌿 Ingredientes naturales y suaves con la piel
+                  - group "Video player" [ref=e756]:
+                    - button "Reproducir video" [ref=e758] [cursor=pointer]
+                    - generic [ref=e760]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:31
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e761]:
+                    - generic [ref=e762]:
+                      - button "API.WHATSAPP.COM" [ref=e764]:
+                        - generic [ref=e765]: API.WHATSAPP.COM
+                      - button "🌿 Producto 100% natural" [ref=e767]:
+                        - generic [ref=e768]: 🌿 Producto 100% natural
+                      - button "+8,900 personas ya la usan" [ref=e770]:
+                        - generic [ref=e771]: +8,900 personas ya la usan
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e773]:
+                      - generic [ref=e777]: Enviar mensaje de WhatsApp
+            - generic [ref=e779]:
+              - generic [ref=e781]:
+                - generic [ref=e782]:
+                  - generic [ref=e789]: Activo
+                  - generic [ref=e792]: "Identificador de la biblioteca: 1549037273048992"
+                  - generic [ref=e794]: En circulación desde el 7 ene 2026
+                  - generic [ref=e796]: Plataformas
+                - button "Abrir menú desplegable" [ref=e825] [cursor=pointer]:
+                  - generic [ref=e828]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e831] [cursor=pointer]:
+                - generic [ref=e835]: Ver detalles del anuncio
+              - separator [ref=e836]
+              - generic [ref=e841]:
+                - generic [ref=e843]:
+                  - img "Nobox Vital Colombia" [ref=e844]
+                  - generic [ref=e846]:
+                    - link "Nobox Vital Colombia" [ref=e847] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e851]:
+                      - strong [ref=e853]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e854]:
+                  - button "“Mi hermano quería cambiar, pero el impulso le ganaba. Este spray le ha ayudado muchísimo.” 🌿 Elaborado con ingredientes naturales. 👉 Calma el deseo cuando aparece. 🔥 Evita recaídas innecesarias. 🚚 Envíos contraentrega a todo Colombia" [ref=e857]:
+                    - generic [ref=e860]:
+                      - text: “Mi hermano quería cambiar, pero el impulso le ganaba. Este spray le ha ayudado muchísimo.”
+                      - text: 🌿 Elaborado con ingredientes naturales.
+                      - text: 👉 Calma el deseo cuando aparece.
+                      - text: 🔥 Evita recaídas innecesarias.
+                      - text: 🚚 Envíos contraentrega a todo Colombia
+                  - group "Video player" [ref=e870]:
+                    - button "Reproducir video" [ref=e872] [cursor=pointer]
+                    - generic [ref=e874]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:35
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e875]:
+                    - generic [ref=e876]:
+                      - button "API.WHATSAPP.COM" [ref=e878]:
+                        - generic [ref=e879]: API.WHATSAPP.COM
+                      - button "🍃 Producto 100% Natural" [ref=e881]:
+                        - generic [ref=e882]: 🍃 Producto 100% Natural
+                      - button "+8,700 personas ya lo usan" [ref=e884]:
+                        - generic [ref=e885]: +8,700 personas ya lo usan
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e887]:
+                      - generic [ref=e891]: Enviar mensaje de WhatsApp
+            - generic [ref=e893]:
+              - generic [ref=e895]:
+                - generic [ref=e896]:
+                  - generic [ref=e903]: Activo
+                  - generic [ref=e906]: "Identificador de la biblioteca: 1947294039218252"
+                  - generic [ref=e908]: En circulación desde el 28 ene 2026
+                  - generic [ref=e910]: Plataformas
+                  - generic [ref=e938]:
+                    - strong [ref=e939]: 2 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e942] [cursor=pointer]:
+                  - generic [ref=e945]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e948] [cursor=pointer]:
+                - generic [ref=e952]: Ver detalles del resumen
+              - separator [ref=e953]
+              - generic [ref=e958]:
+                - generic [ref=e960]:
+                  - img "Nobox Vital Colombia" [ref=e961]
+                  - generic [ref=e963]:
+                    - link "Nobox Vital Colombia" [ref=e964] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e968]:
+                      - strong [ref=e970]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e971]:
+                  - button "✨ “Tengo 42 años y el médico me dijo que era propensa a formar cálculos. Empecé a cuidar mis riñones con STONE DISSOLVER y con el tiempo sentí más ligereza y tranquilidad.” 🫘 Apoyo al cuidado renal 🌿 Ingredientes naturales 💧 Apoya el sistema urinario" [ref=e974]:
+                    - generic [ref=e977]:
+                      - text: ✨ “Tengo 42 años y el médico me dijo que era propensa a formar cálculos.
+                      - text: Empecé a cuidar mis riñones con STONE DISSOLVER y con el tiempo sentí más ligereza y tranquilidad.”
+                      - text: 🫘 Apoyo al cuidado renal
+                      - text: 🌿 Ingredientes naturales
+                      - text: 💧 Apoya el sistema urinario
+                  - group "Video player" [ref=e988]:
+                    - button "Reproducir video" [ref=e990] [cursor=pointer]
+                    - generic [ref=e992]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:37
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+            - generic [ref=e994]:
+              - generic [ref=e996]:
+                - generic [ref=e997]:
+                  - generic [ref=e1004]: Activo
+                  - generic [ref=e1007]: "Identificador de la biblioteca: 2242754249545663"
+                  - generic [ref=e1009]: En circulación desde el 29 dic 2025
+                  - generic [ref=e1011]: Plataformas
+                  - generic [ref=e1039]:
+                    - strong [ref=e1040]: 3 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e1043] [cursor=pointer]:
+                  - generic [ref=e1046]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e1049] [cursor=pointer]:
+                - generic [ref=e1053]: Ver detalles del resumen
+              - separator [ref=e1054]
+              - generic [ref=e1059]:
+                - generic [ref=e1061]:
+                  - img "Nobox Vital Colombia" [ref=e1062]
+                  - generic [ref=e1064]:
+                    - link "Nobox Vital Colombia" [ref=e1065] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e1069]:
+                      - strong [ref=e1071]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1072]:
+                  - button "“ Trabajo muchas horas sentada y en la noche sentía ardor y pesadez en las piernas. Desde que uso Crema Varicose siento descanso y comodidad \" 🦵✨ 🦵✨ Ayuda a mejorar la apariencia de las várices 🌬️ Sensación de frescura inmediata en las piernas 🌿 Ingredientes naturales y suaves con la piel" [ref=e1075]:
+                    - generic [ref=e1078]:
+                      - text: “ Trabajo muchas horas sentada y en la noche sentía ardor y pesadez en las piernas. Desde que uso Crema Varicose siento descanso y comodidad " 🦵✨
+                      - text: 🦵✨ Ayuda a mejorar la apariencia de las várices
+                      - text: 🌬️ Sensación de frescura inmediata en las piernas
+                      - text: 🌿 Ingredientes naturales y suaves con la piel
+                  - group "Video player" [ref=e1088]:
+                    - button "Reproducir video" [ref=e1090] [cursor=pointer]
+                    - generic [ref=e1092]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:32
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+            - generic [ref=e1094]:
+              - generic [ref=e1096]:
+                - generic [ref=e1097]:
+                  - generic [ref=e1104]: Activo
+                  - generic [ref=e1107]: "Identificador de la biblioteca: 1651271069574200"
+                  - generic [ref=e1109]: En circulación desde el 8 ene 2026
+                  - generic [ref=e1111]: Plataformas
+                  - generic [ref=e1139]:
+                    - strong [ref=e1140]: 8 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e1143] [cursor=pointer]:
+                  - generic [ref=e1146]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e1149] [cursor=pointer]:
+                - generic [ref=e1153]: Ver detalles del resumen
+              - separator [ref=e1154]
+              - generic [ref=e1159]:
+                - generic [ref=e1161]:
+                  - img "Nobox Vital Colombia" [ref=e1162]
+                  - generic [ref=e1164]:
+                    - link "Nobox Vital Colombia" [ref=e1165] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e1169]:
+                      - strong [ref=e1171]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1172]:
+                  - button "“Yo llegaba todos los días con las piernas súper cansadas y pesadas. Empecé a usar esta cremita y la verdad sí se siente el cambio 😍 🦵✨ 🦵✨ Ayuda a mejorar la apariencia de las várices 🌬️ Sensación de frescura inmediata en las piernas 🌿 Ingredientes naturales y suaves con la piel" [ref=e1175]:
+                    - generic [ref=e1178]:
+                      - text: “Yo llegaba todos los días con las piernas súper cansadas y pesadas. Empecé a usar esta cremita y la verdad sí se siente el cambio 😍 🦵✨
+                      - text: 🦵✨ Ayuda a mejorar la apariencia de las várices
+                      - text: 🌬️ Sensación de frescura inmediata en las piernas
+                      - text: 🌿 Ingredientes naturales y suaves con la piel
+                  - group "Video player" [ref=e1188]:
+                    - button "Reproducir video" [ref=e1190] [cursor=pointer]
+                    - generic [ref=e1192]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:37
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+            - generic [ref=e1194]:
+              - generic [ref=e1196]:
+                - generic [ref=e1197]:
+                  - generic [ref=e1204]: Activo
+                  - generic [ref=e1207]: "Identificador de la biblioteca: 1643081799704757"
+                  - generic [ref=e1209]: En circulación desde el 1 jul 2025
+                  - generic [ref=e1211]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1240] [cursor=pointer]:
+                  - generic [ref=e1243]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1246] [cursor=pointer]:
+                - generic [ref=e1250]: Ver detalles del anuncio
+              - separator [ref=e1251]
+              - generic [ref=e1256]:
+                - generic [ref=e1258]:
+                  - img "Paula Recomienda" [ref=e1259]
+                  - generic [ref=e1261]:
+                    - link "Paula Recomienda" [ref=e1262] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e1266]:
+                      - strong [ref=e1268]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1269]:
+                  - 'button "💎 Recupera el brillo de tus vidrios, y dejalos como nuevos. 🌟 Con una fórmula efectiva que funciona en TODO tipo de vidrio: ventanas, espejos, parabrisas y más. ✨ Sirve para todo tipo de vidrio ✅ Remueve manchas imposibles con facilidad 🚫 Adiós a los remedios caseros que no sirven. Ordena el tuyo ahora con envío gratis y pagas al recibir https://www.nobox.com.co/desmanchador" [ref=e1272]':
+                    - generic [ref=e1275]:
+                      - text: 💎 Recupera el brillo de tus vidrios, y dejalos como nuevos.
+                      - text: "🌟 Con una fórmula efectiva que funciona en TODO tipo de vidrio: ventanas, espejos, parabrisas y más."
+                      - text: ✨ Sirve para todo tipo de vidrio
+                      - text: ✅ Remueve manchas imposibles con facilidad
+                      - text: 🚫 Adiós a los remedios caseros que no sirven.
+                      - text: Ordena el tuyo ahora con envío gratis y pagas al recibir
+                      - link "https://www.nobox.com.co/desmanchador" [ref=e1277] [cursor=pointer]:
+                        - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.nobox.com.co%2Fdesmanchador&h=AT5v5dL92R1Xlw-Ia_uYEEkyZBKpAvnXBSwDsH3f6vK7PUOoZa9beTqxxLzd9gAMYWlNebemFv5NLgj59lQ6u0pi3mFVF74am6TODFYFMBwOt6vx_bUpxhCcRuGnDIGStQ1Pbg6RW1D4UqPmBr5Vj5NwVxoGWAcZ4J1e_g
+                  - group "Video player" [ref=e1287]:
+                    - button "Reproducir video" [ref=e1289] [cursor=pointer]
+                    - generic [ref=e1291]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:40
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "WWW.NOBOX.COM.CO +29,980 Hogares ya lo usan 🌟 Vidrios limpios en segundos Comprar" [ref=e1293] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.nobox.com.co%2Fdesmanchador&h=AT5v5dL92R1Xlw-Ia_uYEEkyZBKpAvnXBSwDsH3f6vK7PUOoZa9beTqxxLzd9gAMYWlNebemFv5NLgj59lQ6u0pi3mFVF74am6TODFYFMBwOt6vx_bUpxhCcRuGnDIGStQ1Pbg6RW1D4UqPmBr5Vj5NwVxoGWAcZ4J1e_g
+                    - generic [ref=e1294]:
+                      - generic [ref=e1295]:
+                        - button "WWW.NOBOX.COM.CO" [ref=e1297]:
+                          - generic [ref=e1298]: WWW.NOBOX.COM.CO
+                        - button "+29,980 Hogares ya lo usan" [ref=e1300]:
+                          - generic [ref=e1301]: +29,980 Hogares ya lo usan
+                        - button "🌟 Vidrios limpios en segundos" [ref=e1303]:
+                          - generic [ref=e1304]: 🌟 Vidrios limpios en segundos
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1306]:
+                        - generic [ref=e1310]: Comprar
+            - generic [ref=e1312]:
+              - generic [ref=e1314]:
+                - generic [ref=e1315]:
+                  - generic [ref=e1322]: Activo
+                  - generic [ref=e1325]: "Identificador de la biblioteca: 1399356738302009"
+                  - generic [ref=e1327]: En circulación desde el 22 ene 2026
+                  - generic [ref=e1329]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1358] [cursor=pointer]:
+                  - generic [ref=e1361]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1364] [cursor=pointer]:
+                - generic [ref=e1368]: Ver detalles del anuncio
+              - separator [ref=e1369]
+              - generic [ref=e1374]:
+                - generic [ref=e1376]:
+                  - img "Nobox Vital Colombia" [ref=e1377]
+                  - generic [ref=e1379]:
+                    - link "Nobox Vital Colombia" [ref=e1380] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e1384]:
+                      - strong [ref=e1386]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1387]:
+                  - button "🌟 “Se lo regalé a mi papá porque siempre decía que quería dejar el cigarr0 , pero el impulso le ganaba. Empezó a usar Fumarex y dice que ahora maneja mejor esos momentos.” ✨ Ayuda a controlar el impulso 🌿 Fórmula natural con menta y lavanda 👌 Fácil de llevar y usar 🚚 Envíos contraentrega a todo Colombia" [ref=e1390]:
+                    - generic [ref=e1393]:
+                      - text: 🌟 “Se lo regalé a mi papá porque siempre decía que quería dejar el cigarr0 , pero el impulso le ganaba. Empezó a usar Fumarex y dice que ahora maneja mejor esos momentos.”
+                      - text: ✨ Ayuda a controlar el impulso
+                      - text: 🌿 Fórmula natural con menta y lavanda
+                      - text: 👌 Fácil de llevar y usar
+                      - text: 🚚 Envíos contraentrega a todo Colombia
+                  - group "Video player" [ref=e1404]:
+                    - button "Reproducir video" [ref=e1406] [cursor=pointer]
+                    - generic [ref=e1408]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:37
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e1409]:
+                    - generic [ref=e1410]:
+                      - button "API.WHATSAPP.COM" [ref=e1412]:
+                        - generic [ref=e1413]: API.WHATSAPP.COM
+                      - button "🍃 Producto 100% Natural" [ref=e1415]:
+                        - generic [ref=e1416]: 🍃 Producto 100% Natural
+                      - button "+8,700 personas ya lo usan" [ref=e1418]:
+                        - generic [ref=e1419]: +8,700 personas ya lo usan
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e1421]:
+                      - generic [ref=e1425]: Enviar mensaje de WhatsApp
+            - generic [ref=e1427]:
+              - generic [ref=e1429]:
+                - generic [ref=e1430]:
+                  - generic [ref=e1437]: Activo
+                  - generic [ref=e1440]: "Identificador de la biblioteca: 876391951791829"
+                  - generic [ref=e1442]: En circulación desde el 6 ene 2026
+                  - generic [ref=e1444]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1473] [cursor=pointer]:
+                  - generic [ref=e1476]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1479] [cursor=pointer]:
+                - generic [ref=e1483]: Ver detalles del anuncio
+              - separator [ref=e1484]
+              - generic [ref=e1489]:
+                - generic [ref=e1491]:
+                  - img "Nobox Vital Colombia" [ref=e1492]
+                  - generic [ref=e1494]:
+                    - link "Nobox Vital Colombia" [ref=e1495] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e1499]:
+                      - strong [ref=e1501]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1502]:
+                  - button "“Llevo dos semanas usándolo y mi cuello se ve mucho más firme. Me encanta porque lo hago en casa 💖” 💆‍♀️ Menos papada 🛁 Spa en casa 💪 Piel más tonificada 💥 Masaje profundo" [ref=e1505]:
+                    - generic [ref=e1508]:
+                      - text: “Llevo dos semanas usándolo y mi cuello se ve mucho más firme. Me encanta porque lo hago en casa 💖”
+                      - text: 💆‍♀️ Menos papada
+                      - text: 🛁 Spa en casa
+                      - text: 💪 Piel más tonificada
+                      - text: 💥 Masaje profundo
+                  - group "Video player" [ref=e1518]:
+                    - button "Reproducir video" [ref=e1520] [cursor=pointer]
+                    - generic [ref=e1522]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:33
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e1523]:
+                    - generic [ref=e1524]:
+                      - button "API.WHATSAPP.COM" [ref=e1526]:
+                        - generic [ref=e1527]: API.WHATSAPP.COM
+                      - button "⭐ Spa facial en casa" [ref=e1529]:
+                        - generic [ref=e1530]: ⭐ Spa facial en casa
+                      - button "+9,890 mujeres ya lo usan" [ref=e1532]:
+                        - generic [ref=e1533]: +9,890 mujeres ya lo usan
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e1535]:
+                      - generic [ref=e1539]: Enviar mensaje de WhatsApp
+            - generic [ref=e1541]:
+              - generic [ref=e1543]:
+                - generic [ref=e1544]:
+                  - generic [ref=e1551]: Activo
+                  - generic [ref=e1554]: "Identificador de la biblioteca: 1554515212422007"
+                  - generic [ref=e1556]: En circulación desde el 8 ene 2026
+                  - generic [ref=e1558]: Plataformas
+                  - generic [ref=e1586]:
+                    - strong [ref=e1587]: 5 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e1590] [cursor=pointer]:
+                  - generic [ref=e1593]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e1596] [cursor=pointer]:
+                - generic [ref=e1600]: Ver detalles del resumen
+              - separator [ref=e1601]
+              - generic [ref=e1606]:
+                - generic [ref=e1608]:
+                  - img "Nobox Vital Colombia" [ref=e1609]
+                  - generic [ref=e1611]:
+                    - link "Nobox Vital Colombia" [ref=e1612] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e1616]:
+                      - strong [ref=e1618]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1619]:
+                  - button "“Después de los 35 la papada se me notaba más, pero esto me ha ayudado bastante ✨” 🛁 Spa en casa 💪 Piel más tonificada 💥 Masaje profundo" [ref=e1622]:
+                    - generic [ref=e1625]:
+                      - text: “Después de los 35 la papada se me notaba más, pero esto me ha ayudado bastante ✨”
+                      - text: 🛁 Spa en casa
+                      - text: 💪 Piel más tonificada
+                      - text: 💥 Masaje profundo
+                  - group "Video player" [ref=e1635]:
+                    - button "Reproducir video" [ref=e1637] [cursor=pointer]
+                    - generic [ref=e1639]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:36
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+            - generic [ref=e1641]:
+              - generic [ref=e1643]:
+                - generic [ref=e1644]:
+                  - generic [ref=e1651]: Activo
+                  - generic [ref=e1654]: "Identificador de la biblioteca: 4148724788731392"
+                  - generic [ref=e1656]: En circulación desde el 18 jun 2025
+                  - generic [ref=e1658]: Plataformas
+                  - generic [ref=e1681]:
+                    - strong [ref=e1682]: 4 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e1685] [cursor=pointer]:
+                  - generic [ref=e1688]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e1691] [cursor=pointer]:
+                - generic [ref=e1695]: Ver detalles del resumen
+              - separator [ref=e1696]
+              - generic [ref=e1701]:
+                - generic [ref=e1703]:
+                  - img "Paula Recomienda" [ref=e1704]
+                  - generic [ref=e1706]:
+                    - link "Paula Recomienda" [ref=e1707] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e1711]:
+                      - strong [ref=e1713]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1714]:
+                  - button "💎 Medir la tensión ahora es más fácil. ✅ Guía de voz en español para una medición clara. 👉 99 memorias para dos personas. 🔰 Pantalla LCD fácil de leer. 🚚 Envío gratuito y pago al recibir en Colombia." [ref=e1717]:
+                    - generic [ref=e1720]:
+                      - text: 💎 Medir la tensión ahora es más fácil.
+                      - text: ✅ Guía de voz en español para una medición clara.
+                      - text: 👉 99 memorias para dos personas.
+                      - text: 🔰 Pantalla LCD fácil de leer.
+                      - text: 🚚 Envío gratuito y pago al recibir en Colombia.
+                  - group "Video player" [ref=e1730]:
+                    - button "Reproducir video" [ref=e1732] [cursor=pointer]
+                    - generic [ref=e1734]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:48
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+            - generic [ref=e1736]:
+              - generic [ref=e1738]:
+                - generic [ref=e1739]:
+                  - generic [ref=e1746]: Activo
+                  - generic [ref=e1749]: "Identificador de la biblioteca: 1606360057049088"
+                  - generic [ref=e1751]: En circulación desde el 6 ene 2026
+                  - generic [ref=e1753]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1782] [cursor=pointer]:
+                  - generic [ref=e1785]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1788] [cursor=pointer]:
+                - generic [ref=e1792]: Ver detalles del anuncio
+              - separator [ref=e1793]
+              - generic [ref=e1798]:
+                - generic [ref=e1800]:
+                  - img "Nobox Vital Colombia" [ref=e1801]
+                  - generic [ref=e1803]:
+                    - link "Nobox Vital Colombia" [ref=e1804] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e1808]:
+                      - strong [ref=e1810]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1811]:
+                  - button "“Me encanta porque es un masaje suave y la papada se va viendo mejor poco a poco 💕” 🛁 Spa en casa 💪 Piel más tonificada 💥 Masaje profundo" [ref=e1814]:
+                    - generic [ref=e1817]:
+                      - text: “Me encanta porque es un masaje suave y la papada se va viendo mejor poco a poco 💕”
+                      - text: 🛁 Spa en casa
+                      - text: 💪 Piel más tonificada
+                      - text: 💥 Masaje profundo
+                  - group "Video player" [ref=e1827]:
+                    - button "Reproducir video" [ref=e1829] [cursor=pointer]
+                    - generic [ref=e1831]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:35
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e1832]:
+                    - generic [ref=e1833]:
+                      - button "API.WHATSAPP.COM" [ref=e1835]:
+                        - generic [ref=e1836]: API.WHATSAPP.COM
+                      - button "⭐ Spa facial en casa" [ref=e1838]:
+                        - generic [ref=e1839]: ⭐ Spa facial en casa
+                      - button "+9,890 mujeres ya lo usan" [ref=e1841]:
+                        - generic [ref=e1842]: +9,890 mujeres ya lo usan
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e1844]:
+                      - generic [ref=e1848]: Enviar mensaje de WhatsApp
+            - generic [ref=e1850]:
+              - generic [ref=e1852]:
+                - generic [ref=e1853]:
+                  - generic [ref=e1860]: Activo
+                  - generic [ref=e1863]: "Identificador de la biblioteca: 3842269559400204"
+                  - generic [ref=e1865]: En circulación desde el 7 mar 2026
+                  - generic [ref=e1867]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1896] [cursor=pointer]:
+                  - generic [ref=e1899]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1902] [cursor=pointer]:
+                - generic [ref=e1906]: Ver detalles del anuncio
+              - separator [ref=e1907]
+              - generic [ref=e1912]:
+                - generic [ref=e1914]:
+                  - img "Nobox Vital Colombia" [ref=e1915]
+                  - generic [ref=e1917]:
+                    - link "Nobox Vital Colombia" [ref=e1918] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e1922]:
+                      - strong [ref=e1924]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1925]:
+                  - button "“Mi papá no creía en nada, pero esto le ha ayudado a no caer tan fácil.” 🌿 Elaborado con ingredientes naturales. 👉 Calma el deseo cuando aparece. 🔥 Evita recaídas innecesarias. 🚚 Envíos contraentrega a todo Colombia" [ref=e1928]:
+                    - generic [ref=e1931]:
+                      - text: “Mi papá no creía en nada, pero esto le ha ayudado a no caer tan fácil.”
+                      - text: 🌿 Elaborado con ingredientes naturales.
+                      - text: 👉 Calma el deseo cuando aparece.
+                      - text: 🔥 Evita recaídas innecesarias.
+                      - text: 🚚 Envíos contraentrega a todo Colombia
+                  - group "Video player" [ref=e1941]:
+                    - button "Reproducir video" [ref=e1943] [cursor=pointer]
+                    - generic [ref=e1945]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:37
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e1946]:
+                    - generic [ref=e1947]:
+                      - button "API.WHATSAPP.COM" [ref=e1949]:
+                        - generic [ref=e1950]: API.WHATSAPP.COM
+                      - button "🍃 Producto 100% Natural" [ref=e1952]:
+                        - generic [ref=e1953]: 🍃 Producto 100% Natural
+                      - button "+8,700 personas ya lo usan" [ref=e1955]:
+                        - generic [ref=e1956]: +8,700 personas ya lo usan
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e1958]:
+                      - generic [ref=e1962]: Enviar mensaje de WhatsApp
+            - generic [ref=e1964]:
+              - generic [ref=e1966]:
+                - generic [ref=e1967]:
+                  - generic [ref=e1974]: Activo
+                  - generic [ref=e1977]: "Identificador de la biblioteca: 812918835156905"
+                  - generic [ref=e1979]: En circulación desde el 22 feb 2026
+                  - generic [ref=e1981]: Plataformas
+                  - generic [ref=e1999]:
+                    - strong [ref=e2000]: 5 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e2003] [cursor=pointer]:
+                  - generic [ref=e2006]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e2009] [cursor=pointer]:
+                - generic [ref=e2013]: Ver detalles del resumen
+              - separator [ref=e2014]
+              - generic [ref=e2019]:
+                - generic [ref=e2021]:
+                  - img "Nobox Vital Colombia" [ref=e2022]
+                  - generic [ref=e2024]:
+                    - link "Nobox Vital Colombia" [ref=e2025] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e2029]:
+                      - strong [ref=e2031]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2032]:
+                  - button "♻ Cuando la rodilla molesta, hasta los movimientos más simples se sienten incómodos. 👉 La Rodillera TermiX ofrece calorcito agradable que ayuda a relajar la rodilla y aporta comodidad. Ideal para personas que buscan bienestar en casa. 🏡✨ 🚚 Envío gratis y pago contraentrega a todo Colombia" [ref=e2035]:
+                    - generic [ref=e2038]:
+                      - text: ♻ Cuando la rodilla molesta, hasta los movimientos más simples se sienten incómodos.
+                      - text: 👉 La Rodillera TermiX ofrece calorcito agradable que ayuda a relajar la rodilla y aporta comodidad.
+                      - text: Ideal para personas que buscan bienestar en casa. 🏡✨
+                      - text: 🚚 Envío gratis y pago contraentrega a todo Colombia
+                  - group "Video player" [ref=e2048]:
+                    - button "Reproducir video" [ref=e2050] [cursor=pointer]
+                    - generic [ref=e2052]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:38
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+            - generic [ref=e2054]:
+              - generic [ref=e2056]:
+                - generic [ref=e2057]:
+                  - generic [ref=e2064]: Activo
+                  - generic [ref=e2067]: "Identificador de la biblioteca: 899701699505291"
+                  - generic [ref=e2069]: En circulación desde el 8 mar 2026
+                  - generic [ref=e2071]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2100] [cursor=pointer]:
+                  - generic [ref=e2103]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2106] [cursor=pointer]:
+                - generic [ref=e2110]: Ver detalles del anuncio
+              - separator [ref=e2111]
+              - generic [ref=e2116]:
+                - generic [ref=e2118]:
+                  - img "Nobox Vital Colombia" [ref=e2119]
+                  - generic [ref=e2121]:
+                    - link "Nobox Vital Colombia" [ref=e2122] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100092946597393/
+                    - generic [ref=e2126]:
+                      - strong [ref=e2128]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2129]:
+                  - button "🌟 “Se lo regalé a mi papá porque siempre decía que quería dejar el cigarr0 , pero el impulso le ganaba. Empezó a usar Fumarex y dice que ahora maneja mejor esos momentos.” ✨ Ayuda a controlar el impulso 🌿 Fórmula natural con menta y lavanda 👌 Fácil de llevar y usar 🚚 Envíos contraentrega a todo Colombia" [ref=e2132]:
+                    - generic [ref=e2135]:
+                      - text: 🌟 “Se lo regalé a mi papá porque siempre decía que quería dejar el cigarr0 , pero el impulso le ganaba. Empezó a usar Fumarex y dice que ahora maneja mejor esos momentos.”
+                      - text: ✨ Ayuda a controlar el impulso
+                      - text: 🌿 Fórmula natural con menta y lavanda
+                      - text: 👌 Fácil de llevar y usar
+                      - text: 🚚 Envíos contraentrega a todo Colombia
+                  - group "Video player" [ref=e2146]:
+                    - button "Reproducir video" [ref=e2148] [cursor=pointer]
+                    - generic [ref=e2150]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:37
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e2151]:
+                    - generic [ref=e2152]:
+                      - button "API.WHATSAPP.COM" [ref=e2154]:
+                        - generic [ref=e2155]: API.WHATSAPP.COM
+                      - button "🍃 Producto 100% Natural" [ref=e2157]:
+                        - generic [ref=e2158]: 🍃 Producto 100% Natural
+                      - button "+8,700 personas ya lo usan" [ref=e2160]:
+                        - generic [ref=e2161]: +8,700 personas ya lo usan
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e2163]:
+                      - generic [ref=e2167]: Enviar mensaje de WhatsApp
+          - button "Ver más" [ref=e2168] [cursor=pointer]:
+            - generic [ref=e2169]: Ver más
+      - generic [ref=e2172]:
+        - generic [ref=e2180]: Estado del sistema
+        - generic [ref=e2184]:
+          - list [ref=e2185]:
+            - listitem [ref=e2186]:
+              - heading "API de la biblioteca de anuncios" [level=3] [ref=e2187]:
+                - link "API de la biblioteca de anuncios" [ref=e2188] [cursor=pointer]:
+                  - /url: /ads/library/api/?source=archive-landing-page
+            - listitem [ref=e2189]:
+              - heading "Información sobre anuncios y uso de datos" [level=3] [ref=e2190]:
+                - link "Información sobre anuncios y uso de datos" [ref=e2191] [cursor=pointer]:
+                  - /url: /ads/about/?entry_product=ad_library
+            - listitem [ref=e2192]:
+              - heading "Privacidad" [level=3] [ref=e2193]:
+                - link "Privacidad" [ref=e2194] [cursor=pointer]:
+                  - /url: /privacy/center/?entry_point=privacy_basics_redirect
+            - listitem [ref=e2195]:
+              - heading "Condiciones" [level=3] [ref=e2196]:
+                - link "Condiciones" [ref=e2197] [cursor=pointer]:
+                  - /url: /policies/
+            - listitem [ref=e2198]:
+              - heading "Cookies" [level=3] [ref=e2199]:
+                - link "Cookies" [ref=e2200] [cursor=pointer]:
+                  - /url: /policies/cookies/
+          - heading "Meta © 2026 | Español" [level=3] [ref=e2202]:
+            - text: Meta © 2026 |
+            - link "Español" [ref=e2203] [cursor=pointer]:
+              - /url: /language/
+  - dialog "Vincular a anuncio" [ref=e2206]:
+    - generic [ref=e2208]:
+      - generic [ref=e2209]:
+        - heading "Vincular a anuncio" [level=3] [ref=e2212]
+        - button "Cerrar" [active] [ref=e2215] [cursor=pointer]:
+          - generic [ref=e2218]: Cerrar
+      - generic [ref=e2225]:
+        - text: Este anuncio proviene de un enlace de URL
+        - generic [ref=e2228]:
+          - generic [ref=e2230]:
+            - generic [ref=e2231]:
+              - generic [ref=e2238]: Activo
+              - generic [ref=e2241]: "Identificador de la biblioteca: 1139943361273017"
+              - generic [ref=e2243]: En circulación desde el 18 jun 2025
+              - generic [ref=e2245]: Plataformas
+            - button "Abrir menú desplegable" [ref=e2269] [cursor=pointer]:
+              - generic [ref=e2272]: Abrir menú desplegable
+          - button "Ver detalles del anuncio" [ref=e2275] [cursor=pointer]:
+            - generic [ref=e2279]: Ver detalles del anuncio
+          - separator [ref=e2280]
+          - generic [ref=e2285]:
+            - generic [ref=e2287]:
+              - img "Paula Recomienda" [ref=e2288]
+              - generic [ref=e2290]:
+                - link "Paula Recomienda" [ref=e2291] [cursor=pointer]:
+                  - /url: https://www.facebook.com/100092946597393/
+                - generic [ref=e2295]:
+                  - strong [ref=e2297]: Publicidad
+                  - generic:
+                    - strong
+            - generic [ref=e2298]:
+              - button "💎 Medir la tensión ahora es más fácil. ✅ Guía de voz en español para una medición clara. 👉 99 memorias para dos personas. 🔰 Pantalla LCD fácil de leer. 🚚 Envío gratuito y pago al recibir en Colombia." [ref=e2301]:
+                - generic [ref=e2304]:
+                  - text: 💎 Medir la tensión ahora es más fácil.
+                  - text: ✅ Guía de voz en español para una medición clara.
+                  - text: 👉 99 memorias para dos personas.
+                  - text: 🔰 Pantalla LCD fácil de leer.
+                  - text: 🚚 Envío gratuito y pago al recibir en Colombia.
+              - group "Video player" [ref=e2314]:
+                - button "Reproducir video" [ref=e2316] [cursor=pointer]
+                - generic [ref=e2318]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Reproducir"
+                    - generic: 0:00 / 0:26
+                  - generic:
+                    - generic:
+                      - slider "Change Position"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Configuración"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Ver en pantalla completa"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - slider "Ajustar volumen"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Reactivar":
+                              - img
+              - generic [ref=e2319]:
+                - generic [ref=e2320]:
+                  - button "API.WHATSAPP.COM" [ref=e2322]:
+                    - generic [ref=e2323]: API.WHATSAPP.COM
+                  - button "⭐ Medir la presión ahora es más fácil" [ref=e2325]:
+                    - generic [ref=e2326]: ⭐ Medir la presión ahora es más fácil
+                  - button "🚚 Envío gratis" [ref=e2328]:
+                    - generic [ref=e2329]: 🚚 Envío gratis
+                  - generic:
+                    - button
+                - button "Enviar mensaje de WhatsApp" [disabled] [ref=e2331]:
+                  - generic [ref=e2335]: Enviar mensaje de WhatsApp
+      - button "Cerrar" [ref=e2338] [cursor=pointer]:
+        - generic [ref=e2342]: Cerrar

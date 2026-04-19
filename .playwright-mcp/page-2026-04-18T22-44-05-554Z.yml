@@ -1,0 +1,206 @@
+- generic [ref=e1]:
+  - generic [ref=e12]:
+    - generic [ref=e15]:
+      - link "Biblioteca de anuncios de Meta" [ref=e18] [cursor=pointer]:
+        - /url: /ads/library/?source=fb-logo
+        - generic [ref=e20]: Biblioteca de anuncios de Meta
+      - generic [ref=e22]: Biblioteca de anuncios
+      - menuitem "Informe de la biblioteca de anuncios" [ref=e24] [cursor=pointer]:
+        - generic [ref=e25]: Informe de la biblioteca de anuncios
+      - menuitem "API de la biblioteca de anuncios" [ref=e27] [cursor=pointer]:
+        - generic [ref=e28]: API de la biblioteca de anuncios
+      - menuitem "Contenido de marca" [ref=e30] [cursor=pointer]:
+        - generic [ref=e31]: Contenido de marca
+      - menuitem "Open navigation panel" [ref=e33] [cursor=pointer]
+    - generic [ref=e40]:
+      - combobox "Colombia" [ref=e44] [cursor=pointer]:
+        - generic [ref=e51]: Colombia
+      - combobox "Todos los anuncios" [ref=e62] [cursor=pointer]:
+        - generic [ref=e72]: Todos los anuncios
+      - generic [ref=e82]:
+        - generic [ref=e88]: Buscar por palabra clave o anunciante
+        - generic [ref=e94]:
+          - searchbox "Buscar por palabra clave o anunciante" [ref=e100]: Paco Recomienda
+          - button "Borrar" [ref=e102] [cursor=pointer]
+    - generic [ref=e105]:
+      - generic [ref=e107]:
+        - img "Foto del perfil de la página" [ref=e112]
+        - link "Paco Recomienda" [ref=e115] [cursor=pointer]:
+          - /url: https://facebook.com/pacorecomienda
+          - heading "Paco Recomienda" [level=1] [ref=e116]
+      - generic [ref=e117]:
+        - link "Anuncios" [ref=e118] [cursor=pointer]
+        - link "Información" [ref=e119] [cursor=pointer]
+    - dialog [ref=e120]:
+      - generic [ref=e121]:
+        - link [ref=e122] [cursor=pointer]:
+          - /url: /
+          - heading [level=4] [ref=e123]: Iniciar sesión
+        - menuitem [ref=e124] [cursor=pointer]
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - heading [level=4] [ref=e129]: Biblioteca de anuncios
+          - menuitem [ref=e131] [cursor=pointer]:
+            - heading [level=4] [ref=e133]: Informe de la biblioteca de anuncios
+          - menuitem [ref=e135] [cursor=pointer]:
+            - heading [level=4] [ref=e137]: API de la biblioteca de anuncios
+          - menuitem [ref=e139] [cursor=pointer]:
+            - heading [level=4] [ref=e141]: Contenido de marca
+        - separator [ref=e142]
+        - generic [ref=e143]:
+          - menuitem [ref=e145] [cursor=pointer]:
+            - heading [level=4] [ref=e147]: Estado del sistema
+          - menuitem [ref=e149] [cursor=pointer]:
+            - heading [level=4] [ref=e151]: Suscripción a novedades por correo electrónico
+          - menuitem [ref=e153] [cursor=pointer]:
+            - heading [level=4] [ref=e155]: Preguntas frecuentes
+          - menuitem [ref=e157] [cursor=pointer]:
+            - heading [level=4] [ref=e159]: Información sobre anuncios y uso de datos
+          - menuitem [ref=e161] [cursor=pointer]:
+            - heading [level=4] [ref=e163]: Privacidad
+          - menuitem [ref=e165] [cursor=pointer]:
+            - heading [level=4] [ref=e167]: Condiciones
+          - menuitem [ref=e169] [cursor=pointer]:
+            - heading [level=4] [ref=e171]: Cookies
+    - generic [ref=e172]:
+      - generic [ref=e190]:
+        - generic [ref=e198]:
+          - generic [ref=e199]:
+            - textbox "Palabra clave" [ref=e201]
+            - button "Filtros" [ref=e205] [cursor=pointer]:
+              - generic [ref=e210]: Filtros
+            - generic [ref=e212]:
+              - generic [ref=e218]: Ordenar
+              - combobox "Ordenar" [ref=e223] [cursor=pointer]:
+                - generic [ref=e230]: Ordenar por
+          - generic [ref=e235]:
+            - generic [ref=e236]:
+              - strong [ref=e237]: Estado activo
+              - text: ": Anuncios activos"
+            - button "Eliminar" [ref=e238] [cursor=pointer]:
+              - generic [ref=e241]: Eliminar
+        - generic [ref=e246]:
+          - generic [ref=e247]:
+            - heading "No hay ningún anuncio que coincida con los criterios de búsqueda" [level=2] [ref=e248]
+            - generic [ref=e249]: Elimina o cambia los filtros que aplicaste para obtener resultados diferentes.
+          - button "Borrar filtros" [ref=e251] [cursor=pointer]:
+            - generic [ref=e255]: Borrar filtros
+          - link "Ver consejos de búsqueda." [ref=e257] [cursor=pointer]:
+            - /url: "#"
+          - generic:
+            - list
+      - generic [ref=e259]:
+        - generic [ref=e267]: Estado del sistema
+        - generic [ref=e271]:
+          - list [ref=e272]:
+            - listitem [ref=e273]:
+              - heading "API de la biblioteca de anuncios" [level=3] [ref=e274]:
+                - link "API de la biblioteca de anuncios" [ref=e275] [cursor=pointer]:
+                  - /url: /ads/library/api/?source=archive-landing-page
+            - listitem [ref=e276]:
+              - heading "Información sobre anuncios y uso de datos" [level=3] [ref=e277]:
+                - link "Información sobre anuncios y uso de datos" [ref=e278] [cursor=pointer]:
+                  - /url: /ads/about/?entry_product=ad_library
+            - listitem [ref=e279]:
+              - heading "Privacidad" [level=3] [ref=e280]:
+                - link "Privacidad" [ref=e281] [cursor=pointer]:
+                  - /url: /privacy/center/?entry_point=privacy_basics_redirect
+            - listitem [ref=e282]:
+              - heading "Condiciones" [level=3] [ref=e283]:
+                - link "Condiciones" [ref=e284] [cursor=pointer]:
+                  - /url: /policies/
+            - listitem [ref=e285]:
+              - heading "Cookies" [level=3] [ref=e286]:
+                - link "Cookies" [ref=e287] [cursor=pointer]:
+                  - /url: /policies/cookies/
+          - heading "Meta © 2026 | Español" [level=3] [ref=e289]:
+            - text: Meta © 2026 |
+            - link "Español" [ref=e290] [cursor=pointer]:
+              - /url: /language/
+  - dialog "Vincular a anuncio" [ref=e293]:
+    - generic [ref=e295]:
+      - generic [ref=e296]:
+        - heading "Vincular a anuncio" [level=3] [ref=e299]
+        - button "Cerrar" [active] [ref=e302] [cursor=pointer]:
+          - generic [ref=e305]: Cerrar
+      - generic [ref=e312]:
+        - text: Este anuncio proviene de un enlace de URL
+        - generic [ref=e315]:
+          - generic [ref=e317]:
+            - generic [ref=e318]:
+              - generic [ref=e325]: Activo
+              - generic [ref=e328]: "Identificador de la biblioteca: 1547786189716113"
+              - generic [ref=e330]: En circulación desde el 11 oct 2025
+              - generic [ref=e332]: Plataformas
+              - generic [ref=e361]: Transparencia de la UE
+            - button "Abrir menú desplegable" [ref=e368] [cursor=pointer]:
+              - generic [ref=e371]: Abrir menú desplegable
+          - button "Ver detalles del anuncio" [ref=e374] [cursor=pointer]:
+            - generic [ref=e378]: Ver detalles del anuncio
+          - separator [ref=e379]
+          - generic [ref=e384]:
+            - generic [ref=e386]:
+              - img "Paco Recomienda" [ref=e387]
+              - generic [ref=e389]:
+                - link "Paco Recomienda" [ref=e390] [cursor=pointer]:
+                  - /url: https://www.facebook.com/pacorecomienda/
+                - generic [ref=e394]:
+                  - strong [ref=e396]: Publicidad
+                  - generic:
+                    - strong
+            - generic [ref=e397]:
+              - 'button "❌Los médicos lo llaman CIÁTICA 👨‍⚕️: \"Las vértebras lumbares están pinzando el nervio ciático, sientes calambrazos desde la espalda hasta la cadera o incluso hasta la pierna. Este cinturón ayuda a aliviar el dolor ciático porque descomprime tu espalda. Sientes alivio desde el primer día gracias a los microimanes de turmalina, que actúan como antiinflamatorios. ¡Pide ya tu cinturón y acaba con el dolor para siempre!\" ✅ PAGO CONTRAREEMBOLSO AQUÍ https://envialia24h.com/products/faja-lumbar-termica-tourmabelt" [ref=e400]':
+                - generic [ref=e403]:
+                  - text: "❌Los médicos lo llaman CIÁTICA 👨‍⚕️: \"Las vértebras lumbares están pinzando el nervio ciático, sientes calambrazos desde la espalda hasta la cadera o incluso hasta la pierna. Este cinturón ayuda a aliviar el dolor ciático porque descomprime tu espalda. Sientes alivio desde el primer día gracias a los microimanes de turmalina, que actúan como antiinflamatorios. ¡Pide ya tu cinturón y acaba con el dolor para siempre!\""
+                  - text: ✅ PAGO CONTRAREEMBOLSO AQUÍ
+                  - link "https://envialia24h.com/products/faja-lumbar-termica-tourmabelt" [ref=e405] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fenvialia24h.com%2Fproducts%2Ffaja-lumbar-termica-tourmabelt&h=AT7PGvtxjGNymoAgvQ05m3-k4E8QpoFlTrc7Uvwtu6Ao1786FGG2q3saHf0cUpnc480RM2cQJJWaG5NE5ioe09p58D40MqyKd3B9ePVCEc80gu2bYW9eUl30jJhO9-tBn1ddyA-Au4FUqx66C7RohrnbeBV0SbpoyPGYjQ
+              - group "Video player" [ref=e415]:
+                - button "Reproducir video" [ref=e417] [cursor=pointer]
+                - generic [ref=e419]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Reproducir"
+                    - generic: 0:00 / 0:25
+                  - generic:
+                    - generic:
+                      - slider "Change Position"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Configuración"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Ver en pantalla completa"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - slider "Ajustar volumen"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Reactivar":
+                              - img
+              - link "ENVIALIA24H.COM ✅ Contrareembolso Envío GRATIS 24/48h Comprar" [ref=e421] [cursor=pointer]:
+                - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fenvialia24h.com%2Fproducts%2Ffaja-lumbar-termica-tourmabelt&h=AT7PGvtxjGNymoAgvQ05m3-k4E8QpoFlTrc7Uvwtu6Ao1786FGG2q3saHf0cUpnc480RM2cQJJWaG5NE5ioe09p58D40MqyKd3B9ePVCEc80gu2bYW9eUl30jJhO9-tBn1ddyA-Au4FUqx66C7RohrnbeBV0SbpoyPGYjQ
+                - generic [ref=e422]:
+                  - generic [ref=e423]:
+                    - button "ENVIALIA24H.COM" [ref=e425]:
+                      - generic [ref=e426]: ENVIALIA24H.COM
+                    - button "✅ Contrareembolso" [ref=e428]:
+                      - generic [ref=e429]: ✅ Contrareembolso
+                    - button "Envío GRATIS 24/48h" [ref=e431]:
+                      - generic [ref=e432]: Envío GRATIS 24/48h
+                    - generic:
+                      - button
+                  - button "Comprar" [ref=e434]:
+                    - generic [ref=e438]: Comprar
+      - button "Cerrar" [ref=e441] [cursor=pointer]:
+        - generic [ref=e445]: Cerrar

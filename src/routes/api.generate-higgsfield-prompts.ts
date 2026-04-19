@@ -1,10 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { logUsage } from "@/utils/anthropic.functions";
+import { logUsage, dataUrlToBase64 } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
-type Body = { sceneId: string; workspaceId?: string | null };
+type Body = {
+  sceneId: string;
+  workspaceId?: string | null;
+  referenceFrameDataUrl?: string | null;
+};
 
 type Prompts = {
   nano_banana: string;
@@ -13,17 +17,22 @@ type Prompts = {
   seedance: string;
 };
 
-const SYS = `You translate a single ad-script SCENE into 4 production-ready prompts for Higgsfield.ai, one per model:
+const SYS = `You translate a single ad-script SCENE into 4 production-ready prompts for Higgsfield.ai, one per model. CRITICAL: when a reference frame image is attached, your PRIMARY job is to describe THAT image — its exact composition, framing, subject, wardrobe, props, overlays, lighting, color palette. Do NOT invent a new scene. The variation tool exists so the generated image replicates the reference as closely as possible. Textual fields (scene beat, script) are secondary context; the attached image is the ground truth.
 
 1) NANO BANANA PRO (image, conversational)
    - Natural language, like describing the shot to a cinematographer.
    - Include: subject + wardrobe/props, setting, framing (close-up / medium / wide), camera angle, lighting mood, color palette, photographic style ("shot on 50mm", "natural light", "documentary", etc).
+   - Mirror the exact composition of the reference frame if attached (anatomical overlay stays anatomical overlay; product close-up stays product close-up; do NOT convert it into a talking-head).
    - 1 dense paragraph, English, <=80 words. No markdown, no lists.
 
-2) SEEDREAM 4 (image, structured photoreal)
-   - Comma-separated structured tags. Photorealism first.
-   - Order: subject -> action -> wardrobe -> setting -> framing -> camera/lens -> lighting -> color -> style keywords -> quality tags ("highly detailed, 8k, photorealistic").
-   - 1 line, English, <=60 tags. No sentences.
+2) SEEDREAM 4 (image, structured photoreal — STRICT TAG FORMAT)
+   - Comma-separated tags ONLY. NO full sentences. NO narrative. NO "a young male doctor turns to face the camera" — that is wrong.
+   - Each tag is a noun phrase or short descriptor, 1-5 words, separated by ", ".
+   - Required order: [subject], [subject state/pose], [wardrobe/props], [setting], [framing: close-up / medium / wide], [camera angle], [lens/focal length], [lighting descriptor], [color palette descriptors], [photo style], [quality tags].
+   - If the reference is an anatomical diagram, overlay, product macro, or text-on-screen composition: the tags must describe THAT, not a new actor scene.
+   - HARD LIMIT: <=2800 characters total (the 3000 char Seedream cap has margin). Prefer brevity — 40-80 comma tags is ideal.
+   - Example format: "anatomical spine close-up, lumbar vertebrae highlighted red, semi-transparent muscle overlay, dark clinical background, macro shot, studio softbox lighting, high contrast, deep reds, cool blues, medical illustration photorealism, 8k, ultra detailed"
+   - Example of WRONG format (narrative — reject internally and rewrite as tags): "A young male doctor turns to face the camera while holding a red marker..."
 
 3) KLING 2.5 TURBO (video, motion from reference image)
    - The reference image is the first frame. Describe ONLY the motion, camera move, timing, and emotional beat over 5s. Do NOT redescribe the static scene.
@@ -95,47 +104,58 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
 
         const { data: variation } = await sb
           .from("variations")
-          .select("id, type, label, project_id")
+          .select("id, variation_type, title, project_id")
           .eq("id", scene.variation_id)
           .maybeSingle();
 
-        let productInfo = "";
+        let productName = "";
         let analysisExcerpt = "";
         if (variation?.project_id) {
           const { data: project } = await sb
             .from("projects")
-            .select("product_name, product_one_liner, product_price, product_audience, analysis_text")
+            .select("name, analysis_text")
             .eq("id", variation.project_id)
             .maybeSingle();
           if (project) {
-            const parts = [
-              project.product_name && `Product: ${project.product_name}`,
-              project.product_one_liner && `One-liner: ${project.product_one_liner}`,
-              project.product_price && `Price: ${project.product_price}`,
-              project.product_audience && `Audience: ${project.product_audience}`,
-            ].filter(Boolean);
-            productInfo = parts.join("\n");
+            productName = project.name ?? "";
             if (project.analysis_text) analysisExcerpt = project.analysis_text.slice(0, 1500);
           }
         }
 
         const userMsg = [
-          variation && `Variation: ${variation.type} -- "${variation.label}"`,
+          variation && `Variation: ${variation.variation_type} -- "${variation.title ?? ""}"`,
           `Scene order: ${scene.order_idx}${scene.title ? ` -- ${scene.title}` : ""}`,
           scene.reference_frame_time_sec != null &&
-            `Reference frame at: ${scene.reference_frame_time_sec}s of the source ad`,
+            `Reference frame at: ${scene.reference_frame_time_sec}s of the source ad (attached as image when available — MATCH its exact composition, framing, subject, and lighting).`,
           scene.scene_text && `=== SCENE BEAT ===\n${scene.scene_text}`,
           scene.script_es && `=== SPOKEN LINE (Spanish) ===\n${scene.script_es}`,
           scene.screen_text && `=== SCREEN TEXT ===\n${scene.screen_text}`,
           scene.image_prompt_en && `=== ORIGINAL IMAGE PROMPT (rewrite/enrich) ===\n${scene.image_prompt_en}`,
           scene.animation_prompt_en &&
             `=== ORIGINAL ANIMATION PROMPT (rewrite/enrich) ===\n${scene.animation_prompt_en}`,
-          productInfo && `=== PRODUCT CONTEXT ===\n${productInfo}`,
+          productName && `=== PRODUCT NAME ===\n${productName}`,
           analysisExcerpt && `=== ANALYSIS EXCERPT ===\n${analysisExcerpt}`,
           `Return ONLY the JSON with keys nano_banana, seedream, kling, seedance.`,
         ]
           .filter(Boolean)
           .join("\n\n");
+
+        // Multimodal: if the reference frame is provided, attach it so Haiku SEES
+        // the exact composition (subject, framing, lighting, overlays) instead of
+        // guessing from the textual scene beat. The variation tool's core purpose is
+        // that each generated image replicates/resembles the reference as closely as possible.
+        const userContent: Array<
+          | { type: "text"; text: string }
+          | { type: "image"; source: { type: "base64"; media_type: string; data: string } }
+        > = [];
+        if (body.referenceFrameDataUrl) {
+          const { mediaType, b64 } = dataUrlToBase64(body.referenceFrameDataUrl);
+          userContent.push({
+            type: "image",
+            source: { type: "base64", media_type: mediaType, data: b64 },
+          });
+        }
+        userContent.push({ type: "text", text: userMsg });
 
         const model = "claude-haiku-4-5-20251001";
         const upstream = await fetch("https://api.anthropic.com/v1/messages", {
@@ -149,7 +169,7 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
             model,
             max_tokens: 1200,
             system: SYS,
-            messages: [{ role: "user", content: userMsg }],
+            messages: [{ role: "user", content: userContent }],
           }),
         });
 
@@ -181,9 +201,11 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           ) {
             return new Response("Incomplete prompts in response", { status: 502 });
           }
+          const seedreamTrim = obj.seedream.trim();
           prompts = {
             nano_banana: obj.nano_banana.trim(),
-            seedream: obj.seedream.trim(),
+            // Seedream 4 has a 3000-char hard cap in Higgsfield UI. Leave margin.
+            seedream: seedreamTrim.length > 2800 ? seedreamTrim.slice(0, 2800) : seedreamTrim,
             kling: obj.kling.trim(),
             seedance: obj.seedance.trim(),
           };

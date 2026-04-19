@@ -1,0 +1,208 @@
+- generic [ref=e1]:
+  - generic [ref=e12]:
+    - generic [ref=e15]:
+      - link "Biblioteca de anuncios de Meta" [ref=e18] [cursor=pointer]:
+        - /url: /ads/library/?source=fb-logo
+        - generic [ref=e20]: Biblioteca de anuncios de Meta
+      - generic [ref=e22]: Biblioteca de anuncios
+      - menuitem "Informe de la biblioteca de anuncios" [ref=e24] [cursor=pointer]:
+        - generic [ref=e25]: Informe de la biblioteca de anuncios
+      - menuitem "API de la biblioteca de anuncios" [ref=e27] [cursor=pointer]:
+        - generic [ref=e28]: API de la biblioteca de anuncios
+      - menuitem "Contenido de marca" [ref=e30] [cursor=pointer]:
+        - generic [ref=e31]: Contenido de marca
+      - menuitem "Open navigation panel" [ref=e33] [cursor=pointer]
+    - generic [ref=e40]:
+      - combobox "Colombia" [ref=e44] [cursor=pointer]:
+        - generic [ref=e51]: Colombia
+      - combobox "Todos los anuncios" [ref=e62] [cursor=pointer]:
+        - generic [ref=e72]: Todos los anuncios
+      - generic [ref=e82]:
+        - generic [ref=e88]: Buscar por palabra clave o anunciante
+        - generic [ref=e94]:
+          - searchbox "Buscar por palabra clave o anunciante" [ref=e100]: Cloud Nine Ecuador
+          - button "Borrar" [ref=e102] [cursor=pointer]
+    - generic [ref=e105]:
+      - generic [ref=e107]:
+        - img "Foto del perfil de la página" [ref=e112]
+        - link "Cloud Nine Ecuador" [ref=e115] [cursor=pointer]:
+          - /url: https://facebook.com/61556246204710
+          - heading "Cloud Nine Ecuador" [level=1] [ref=e116]
+      - generic [ref=e117]:
+        - link "Anuncios" [ref=e118] [cursor=pointer]
+        - link "Información" [ref=e119] [cursor=pointer]
+    - dialog [ref=e120]:
+      - generic [ref=e121]:
+        - link [ref=e122] [cursor=pointer]:
+          - /url: /
+          - heading [level=4] [ref=e123]: Iniciar sesión
+        - menuitem [ref=e124] [cursor=pointer]
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - heading [level=4] [ref=e129]: Biblioteca de anuncios
+          - menuitem [ref=e131] [cursor=pointer]:
+            - heading [level=4] [ref=e133]: Informe de la biblioteca de anuncios
+          - menuitem [ref=e135] [cursor=pointer]:
+            - heading [level=4] [ref=e137]: API de la biblioteca de anuncios
+          - menuitem [ref=e139] [cursor=pointer]:
+            - heading [level=4] [ref=e141]: Contenido de marca
+        - separator [ref=e142]
+        - generic [ref=e143]:
+          - menuitem [ref=e145] [cursor=pointer]:
+            - heading [level=4] [ref=e147]: Estado del sistema
+          - menuitem [ref=e149] [cursor=pointer]:
+            - heading [level=4] [ref=e151]: Suscripción a novedades por correo electrónico
+          - menuitem [ref=e153] [cursor=pointer]:
+            - heading [level=4] [ref=e155]: Preguntas frecuentes
+          - menuitem [ref=e157] [cursor=pointer]:
+            - heading [level=4] [ref=e159]: Información sobre anuncios y uso de datos
+          - menuitem [ref=e161] [cursor=pointer]:
+            - heading [level=4] [ref=e163]: Privacidad
+          - menuitem [ref=e165] [cursor=pointer]:
+            - heading [level=4] [ref=e167]: Condiciones
+          - menuitem [ref=e169] [cursor=pointer]:
+            - heading [level=4] [ref=e171]: Cookies
+    - generic [ref=e172]:
+      - generic [ref=e177]:
+        - generic [ref=e185]:
+          - generic [ref=e186]:
+            - textbox "Palabra clave" [ref=e188]
+            - button "Filtros" [ref=e192] [cursor=pointer]:
+              - generic [ref=e197]: Filtros
+            - generic [ref=e199]:
+              - generic [ref=e205]: Ordenar
+              - combobox "Ordenar" [ref=e210] [cursor=pointer]:
+                - generic [ref=e217]: Ordenar por
+          - generic [ref=e222]:
+            - generic [ref=e223]:
+              - strong [ref=e224]: Estado activo
+              - text: ": Anuncios activos"
+            - button "Eliminar" [ref=e225] [cursor=pointer]:
+              - generic [ref=e228]: Eliminar
+        - generic [ref=e233]:
+          - generic [ref=e234]:
+            - heading "No hay ningún anuncio que coincida con los criterios de búsqueda" [level=2] [ref=e235]
+            - generic [ref=e236]: Elimina o cambia los filtros que aplicaste para obtener resultados diferentes.
+          - button "Borrar filtros" [ref=e238] [cursor=pointer]:
+            - generic [ref=e242]: Borrar filtros
+          - link "Ver consejos de búsqueda." [ref=e244] [cursor=pointer]:
+            - /url: "#"
+          - generic:
+            - list
+      - generic [ref=e246]:
+        - generic [ref=e254]: Estado del sistema
+        - generic [ref=e258]:
+          - list [ref=e259]:
+            - listitem [ref=e260]:
+              - heading "API de la biblioteca de anuncios" [level=3] [ref=e261]:
+                - link "API de la biblioteca de anuncios" [ref=e262] [cursor=pointer]:
+                  - /url: /ads/library/api/?source=archive-landing-page
+            - listitem [ref=e263]:
+              - heading "Información sobre anuncios y uso de datos" [level=3] [ref=e264]:
+                - link "Información sobre anuncios y uso de datos" [ref=e265] [cursor=pointer]:
+                  - /url: /ads/about/?entry_product=ad_library
+            - listitem [ref=e266]:
+              - heading "Privacidad" [level=3] [ref=e267]:
+                - link "Privacidad" [ref=e268] [cursor=pointer]:
+                  - /url: /privacy/center/?entry_point=privacy_basics_redirect
+            - listitem [ref=e269]:
+              - heading "Condiciones" [level=3] [ref=e270]:
+                - link "Condiciones" [ref=e271] [cursor=pointer]:
+                  - /url: /policies/
+            - listitem [ref=e272]:
+              - heading "Cookies" [level=3] [ref=e273]:
+                - link "Cookies" [ref=e274] [cursor=pointer]:
+                  - /url: /policies/cookies/
+          - heading "Meta © 2026 | Español" [level=3] [ref=e276]:
+            - text: Meta © 2026 |
+            - link "Español" [ref=e277] [cursor=pointer]:
+              - /url: /language/
+  - dialog "Vincular a anuncio" [ref=e280]:
+    - generic [ref=e282]:
+      - generic [ref=e283]:
+        - heading "Vincular a anuncio" [level=3] [ref=e286]
+        - button "Cerrar" [active] [ref=e289] [cursor=pointer]:
+          - generic [ref=e292]: Cerrar
+      - generic [ref=e299]:
+        - text: Este anuncio proviene de un enlace de URL
+        - generic [ref=e302]:
+          - generic [ref=e304]:
+            - generic [ref=e305]:
+              - generic [ref=e312]: Activo
+              - generic [ref=e315]: "Identificador de la biblioteca: 813059191838587"
+              - generic [ref=e317]: En circulación desde el 19 mar 2026
+              - generic [ref=e319]: Plataformas
+            - button "Abrir menú desplegable" [ref=e348] [cursor=pointer]:
+              - generic [ref=e351]: Abrir menú desplegable
+          - button "Ver detalles del anuncio" [ref=e354] [cursor=pointer]:
+            - generic [ref=e358]: Ver detalles del anuncio
+          - separator [ref=e359]
+          - generic [ref=e364]:
+            - generic [ref=e366]:
+              - img "Cloud Nine Ecuador" [ref=e367]
+              - generic [ref=e369]:
+                - link "Cloud Nine Ecuador" [ref=e370] [cursor=pointer]:
+                  - /url: https://www.facebook.com/61556246204710/
+                - generic [ref=e374]:
+                  - strong [ref=e376]: Publicidad
+                  - generic:
+                    - strong
+            - generic [ref=e377]:
+              - button "¿Sientes que ya no rindes como antes en la 🛏️? No siempre es la edad. Muchas veces es falta de energía y minerales. SELERB Magnesium apoya la vitalidad masculina, el rendimiento físico y la recuperación diaria de forma natural. 💪 Más energía 🔥 Mejor desempeño 🧠 Mayor enfoque 👉 Descúbrelo aquí." [ref=e380]:
+                - generic [ref=e383]:
+                  - text: ¿Sientes que ya no rindes como antes en la 🛏️? No siempre es la edad.
+                  - text: Muchas veces es falta de energía y minerales.
+                  - text: SELERB Magnesium apoya la vitalidad masculina, el rendimiento físico y la recuperación diaria de forma natural.
+                  - text: 💪 Más energía
+                  - text: 🔥 Mejor desempeño
+                  - text: 🧠 Mayor enfoque
+                  - text: 👉 Descúbrelo aquí.
+              - group "Video player" [ref=e394]:
+                - button "Reproducir video" [ref=e396] [cursor=pointer]
+                - generic [ref=e398]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Reproducir"
+                    - generic: 0:00 / 0:00
+                  - generic:
+                    - generic:
+                      - slider "Change Position"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Configuración"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Ver en pantalla completa"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - slider "Ajustar volumen"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Reactivar":
+                              - img
+              - link "CLOUDNINEC.COM GARANTÍA DE 30 DÍAS🤝🏻 ⭐️⭐️⭐️⭐️⭐️ 4.5/5 Comprar" [ref=e400] [cursor=pointer]:
+                - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fcloudninec.com%2Fpages%2Femmy-gp-copy-of-selerb&h=AT7TIfGlrJJr3CFBVqteEMl8xNLDeVwgNFnyPHB1rLgeLPLvGAx4qdq3OFmFoWfY9pkyamPlIrbpL8l6CUrBsjLaUo2BCFS40UkOokNpqt6KSseBsKEwJsg0qveqHe3-CICZmwRrW6hIzRCS-ZXdq-KeHlmjw4MC6Ohqdg
+                - generic [ref=e401]:
+                  - generic [ref=e402]:
+                    - button "CLOUDNINEC.COM" [ref=e404]:
+                      - generic [ref=e405]: CLOUDNINEC.COM
+                    - button "GARANTÍA DE 30 DÍAS🤝🏻" [ref=e407]:
+                      - generic [ref=e408]: GARANTÍA DE 30 DÍAS🤝🏻
+                    - button "⭐️⭐️⭐️⭐️⭐️ 4.5/5" [ref=e410]:
+                      - generic [ref=e411]: ⭐️⭐️⭐️⭐️⭐️ 4.5/5
+                    - generic:
+                      - button
+                  - button "Comprar" [ref=e413]:
+                    - generic [ref=e417]: Comprar
+      - button "Cerrar" [ref=e420] [cursor=pointer]:
+        - generic [ref=e424]: Cerrar

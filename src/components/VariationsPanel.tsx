@@ -983,7 +983,11 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
       const res = await fetch("/api/generate-higgsfield-prompts", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-        body: JSON.stringify({ sceneId: sceneDbId, workspaceId }),
+        body: JSON.stringify({
+          sceneId: sceneDbId,
+          workspaceId,
+          referenceFrameDataUrl: refFrameUrl ?? null,
+        }),
       });
       if (await handleCapResponse(res)) { setLoadingPrompts(false); return; }
       if (!res.ok) {

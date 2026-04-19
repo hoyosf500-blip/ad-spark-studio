@@ -1,0 +1,2291 @@
+- generic [ref=e1]:
+  - generic [ref=e12]:
+    - generic [ref=e15]:
+      - link "Biblioteca de anuncios de Meta" [ref=e18] [cursor=pointer]:
+        - /url: /ads/library/?source=fb-logo
+        - generic [ref=e20]: Biblioteca de anuncios de Meta
+      - generic [ref=e22]: Biblioteca de anuncios
+      - menuitem "Informe de la biblioteca de anuncios" [ref=e24] [cursor=pointer]:
+        - generic [ref=e25]: Informe de la biblioteca de anuncios
+      - menuitem "API de la biblioteca de anuncios" [ref=e27] [cursor=pointer]:
+        - generic [ref=e28]: API de la biblioteca de anuncios
+      - menuitem "Contenido de marca" [ref=e30] [cursor=pointer]:
+        - generic [ref=e31]: Contenido de marca
+      - menuitem "Open navigation panel" [ref=e33] [cursor=pointer]
+    - generic [ref=e40]:
+      - combobox "Colombia" [ref=e44] [cursor=pointer]:
+        - generic [ref=e51]: Colombia
+      - combobox "Todos los anuncios" [ref=e62] [cursor=pointer]:
+        - generic [ref=e72]: Todos los anuncios
+      - generic [ref=e82]:
+        - generic [ref=e88]: Buscar por palabra clave o anunciante
+        - generic [ref=e94]:
+          - searchbox "Buscar por palabra clave o anunciante" [ref=e100]: Luisa Recomienda
+          - button "Borrar" [ref=e102] [cursor=pointer]
+    - generic [ref=e105]:
+      - generic [ref=e107]:
+        - img "Foto del perfil de la página" [ref=e112]
+        - link "Luisa Recomienda" [ref=e115] [cursor=pointer]:
+          - /url: https://facebook.com/61573223488366
+          - heading "Luisa Recomienda" [level=1] [ref=e116]
+      - generic [ref=e117]:
+        - link "Anuncios" [ref=e118] [cursor=pointer]
+        - link "Información" [ref=e119] [cursor=pointer]
+    - dialog [ref=e120]:
+      - generic [ref=e121]:
+        - link [ref=e122] [cursor=pointer]:
+          - /url: /
+          - heading [level=4] [ref=e123]: Iniciar sesión
+        - menuitem [ref=e124] [cursor=pointer]
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - heading [level=4] [ref=e129]: Biblioteca de anuncios
+          - menuitem [ref=e131] [cursor=pointer]:
+            - heading [level=4] [ref=e133]: Informe de la biblioteca de anuncios
+          - menuitem [ref=e135] [cursor=pointer]:
+            - heading [level=4] [ref=e137]: API de la biblioteca de anuncios
+          - menuitem [ref=e139] [cursor=pointer]:
+            - heading [level=4] [ref=e141]: Contenido de marca
+        - separator [ref=e142]
+        - generic [ref=e143]:
+          - menuitem [ref=e145] [cursor=pointer]:
+            - heading [level=4] [ref=e147]: Estado del sistema
+          - menuitem [ref=e149] [cursor=pointer]:
+            - heading [level=4] [ref=e151]: Suscripción a novedades por correo electrónico
+          - menuitem [ref=e153] [cursor=pointer]:
+            - heading [level=4] [ref=e155]: Preguntas frecuentes
+          - menuitem [ref=e157] [cursor=pointer]:
+            - heading [level=4] [ref=e159]: Información sobre anuncios y uso de datos
+          - menuitem [ref=e161] [cursor=pointer]:
+            - heading [level=4] [ref=e163]: Privacidad
+          - menuitem [ref=e165] [cursor=pointer]:
+            - heading [level=4] [ref=e167]: Condiciones
+          - menuitem [ref=e169] [cursor=pointer]:
+            - heading [level=4] [ref=e171]: Cookies
+    - generic [ref=e172]:
+      - generic [ref=e186]:
+        - heading "~74 resultados" [level=3] [ref=e194]
+        - generic [ref=e195]:
+          - generic [ref=e203]:
+            - generic [ref=e204]:
+              - textbox "Palabra clave" [ref=e206]
+              - button "Filtros" [ref=e210] [cursor=pointer]:
+                - generic [ref=e215]: Filtros
+              - generic [ref=e217]:
+                - generic [ref=e223]: Ordenar
+                - combobox "Ordenar" [ref=e228] [cursor=pointer]:
+                  - generic [ref=e235]: Ordenar por
+            - generic [ref=e240]:
+              - generic [ref=e241]:
+                - strong [ref=e242]: Estado activo
+                - text: ": Anuncios activos"
+              - button "Eliminar" [ref=e243] [cursor=pointer]:
+                - generic [ref=e246]: Eliminar
+          - generic [ref=e250]:
+            - generic [ref=e252]:
+              - generic [ref=e254]:
+                - generic [ref=e255]:
+                  - generic [ref=e262]: Activo
+                  - generic [ref=e265]: "Identificador de la biblioteca: 1649175392719173"
+                  - generic [ref=e267]: En circulación desde el 4 nov 2025
+                  - generic [ref=e269]: Plataformas
+                - button "Abrir menú desplegable" [ref=e298] [cursor=pointer]:
+                  - generic [ref=e301]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e304] [cursor=pointer]:
+                - generic [ref=e308]: Ver detalles del anuncio
+              - separator [ref=e309]
+              - generic [ref=e314]:
+                - generic [ref=e316]:
+                  - img "Luisa Recomienda" [ref=e317]
+                  - generic [ref=e319]:
+                    - link "Luisa Recomienda" [ref=e320] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e324]:
+                      - strong [ref=e326]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e327]:
+                  - 'button "🎯 ¡Haz que cada entrenamiento cuente! Con nuestro Brasier Deportivo tendrás: ✔️ Soporte de alto impacto ✔️ Realce natural y favorecedor ✔️ Máxima comodidad durante todo el día Diseñado para moverte libre, verte increíble y sentirte segura 💪 Perfecto para tus rutinas, caminatas o uso diario. 👚 Tallas desde XS hasta 4XL 🎨 Colores disponibles: Negro · Beige · Blanco 🚚 Envío GRATIS a toda Colombia 💳 Paga solo cuando lo recibas 📦 ¡Stock limitado! Haz clic y asegura el tuyo antes de que se agoten 👇" [ref=e330]':
+                    - generic [ref=e333]:
+                      - text: 🎯 ¡Haz que cada entrenamiento cuente!
+                      - text: "Con nuestro Brasier Deportivo tendrás:"
+                      - text: ✔️ Soporte de alto impacto
+                      - text: ✔️ Realce natural y favorecedor
+                      - text: ✔️ Máxima comodidad durante todo el día
+                      - text: Diseñado para moverte libre, verte increíble y sentirte segura 💪
+                      - text: Perfecto para tus rutinas, caminatas o uso diario.
+                      - text: 👚 Tallas desde XS hasta 4XL
+                      - text: "🎨 Colores disponibles: Negro · Beige · Blanco"
+                      - text: 🚚 Envío GRATIS a toda Colombia
+                      - text: 💳 Paga solo cuando lo recibas
+                      - text: 📦 ¡Stock limitado!
+                      - text: Haz clic y asegura el tuyo antes de que se agoten 👇
+                  - group "Video player" [ref=e343]:
+                    - button "Reproducir video" [ref=e345] [cursor=pointer]
+                    - generic [ref=e347]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:18
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM ¡Ultimas Unidades! 🚚 Envío GRATIS a toda Colombia Más información" [ref=e349] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e350]:
+                      - generic [ref=e351]:
+                        - button "API.WHATSAPP.COM" [ref=e353]:
+                          - generic [ref=e354]: API.WHATSAPP.COM
+                        - button "¡Ultimas Unidades!" [ref=e356]:
+                          - generic [ref=e357]: ¡Ultimas Unidades!
+                        - button "🚚 Envío GRATIS a toda Colombia" [ref=e359]:
+                          - generic [ref=e360]: 🚚 Envío GRATIS a toda Colombia
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e362]:
+                        - generic [ref=e366]: Más información
+            - generic [ref=e368]:
+              - generic [ref=e370]:
+                - generic [ref=e371]:
+                  - generic [ref=e378]: Activo
+                  - generic [ref=e381]: "Identificador de la biblioteca: 1359296952244783"
+                  - generic [ref=e383]: En circulación desde el 4 nov 2025
+                  - generic [ref=e385]: Plataformas
+                - button "Abrir menú desplegable" [ref=e414] [cursor=pointer]:
+                  - generic [ref=e417]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e420] [cursor=pointer]:
+                - generic [ref=e424]: Ver detalles del anuncio
+              - separator [ref=e425]
+              - generic [ref=e430]:
+                - generic [ref=e432]:
+                  - img "Luisa Recomienda" [ref=e433]
+                  - generic [ref=e435]:
+                    - link "Luisa Recomienda" [ref=e436] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e440]:
+                      - strong [ref=e442]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e443]:
+                  - button "✨ Transforma tu figura sin sacrificar comodidad Nuestros Body Faja Moldeadores abrazan tus curvas, mejoran tu postura y te hacen sentir segura todo el día 💃 ✔️ Diseño 100 % colombiano ✔️ Moldea sin marcar ni oprimir ✔️ Invisible bajo la ropa ✔️ Envío GRATIS a todo el país 🚚 💫 Siéntete empoderada, cómoda y hermosa cada día." [ref=e446]:
+                    - generic [ref=e449]:
+                      - text: ✨ Transforma tu figura sin sacrificar comodidad
+                      - text: Nuestros Body Faja Moldeadores abrazan tus curvas, mejoran tu postura y te hacen sentir segura todo el día 💃
+                      - text: ✔️ Diseño 100 % colombiano
+                      - text: ✔️ Moldea sin marcar ni oprimir
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS a todo el país 🚚
+                      - text: 💫 Siéntete empoderada, cómoda y hermosa cada día.
+                  - group "Video player" [ref=e460]:
+                    - button "Reproducir video" [ref=e462] [cursor=pointer]
+                    - generic [ref=e464]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:24
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e465]:
+                    - generic [ref=e466]:
+                      - button "API.WHATSAPP.COM" [ref=e468]:
+                        - generic [ref=e469]: API.WHATSAPP.COM
+                      - button "✨ Descuento especial" [ref=e471]:
+                        - generic [ref=e472]: ✨ Descuento especial
+                      - button "🚚Paga en casa" [ref=e474]:
+                        - generic [ref=e475]: 🚚Paga en casa
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e477]:
+                      - generic [ref=e481]: Enviar mensaje de WhatsApp
+            - generic [ref=e483]:
+              - generic [ref=e485]:
+                - generic [ref=e486]:
+                  - generic [ref=e493]: Activo
+                  - generic [ref=e496]: "Identificador de la biblioteca: 3814969535302713"
+                  - generic [ref=e498]: En circulación desde el 4 nov 2025
+                  - generic [ref=e500]: Plataformas
+                - button "Abrir menú desplegable" [ref=e529] [cursor=pointer]:
+                  - generic [ref=e532]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e535] [cursor=pointer]:
+                - generic [ref=e539]: Ver detalles del anuncio
+              - separator [ref=e540]
+              - generic [ref=e545]:
+                - generic [ref=e547]:
+                  - img "Luisa Recomienda" [ref=e548]
+                  - generic [ref=e550]:
+                    - link "Luisa Recomienda" [ref=e551] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e555]:
+                      - strong [ref=e557]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e558]:
+                  - button "✨ Transforma tu figura sin sacrificar comodidad Nuestros Body Faja Moldeadores abrazan tus curvas, mejoran tu postura y te hacen sentir segura todo el día 💃 ✔️ Diseño 100 % colombiano ✔️ Moldea sin marcar ni oprimir ✔️ Invisible bajo la ropa ✔️ Envío GRATIS a todo el país 🚚 💫 Siéntete empoderada, cómoda y hermosa cada día." [ref=e561]:
+                    - generic [ref=e564]:
+                      - text: ✨ Transforma tu figura sin sacrificar comodidad
+                      - text: Nuestros Body Faja Moldeadores abrazan tus curvas, mejoran tu postura y te hacen sentir segura todo el día 💃
+                      - text: ✔️ Diseño 100 % colombiano
+                      - text: ✔️ Moldea sin marcar ni oprimir
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS a todo el país 🚚
+                      - text: 💫 Siéntete empoderada, cómoda y hermosa cada día.
+                  - group "Video player" [ref=e575]:
+                    - button "Reproducir video" [ref=e577] [cursor=pointer]
+                    - generic [ref=e579]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:26
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e580]:
+                    - generic [ref=e581]:
+                      - button "API.WHATSAPP.COM" [ref=e583]:
+                        - generic [ref=e584]: API.WHATSAPP.COM
+                      - button "✨ Descuento especial" [ref=e586]:
+                        - generic [ref=e587]: ✨ Descuento especial
+                      - button "🚚Paga en casa" [ref=e589]:
+                        - generic [ref=e590]: 🚚Paga en casa
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e592]:
+                      - generic [ref=e596]: Enviar mensaje de WhatsApp
+            - generic [ref=e598]:
+              - generic [ref=e600]:
+                - generic [ref=e601]:
+                  - generic [ref=e608]: Activo
+                  - generic [ref=e611]: "Identificador de la biblioteca: 924502179926705"
+                  - generic [ref=e613]: En circulación desde el 2 dic 2025
+                  - generic [ref=e615]: Plataformas
+                - button "Abrir menú desplegable" [ref=e644] [cursor=pointer]:
+                  - generic [ref=e647]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e650] [cursor=pointer]:
+                - generic [ref=e654]: Ver detalles del anuncio
+              - separator [ref=e655]
+              - generic [ref=e660]:
+                - generic [ref=e662]:
+                  - img "Luisa Recomienda" [ref=e663]
+                  - generic [ref=e665]:
+                    - link "Luisa Recomienda" [ref=e666] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e670]:
+                      - strong [ref=e672]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e673]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días" [ref=e676]:
+                    - generic [ref=e679]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días
+                  - group "Video player" [ref=e689]:
+                    - button "Reproducir video" [ref=e691] [cursor=pointer]
+                    - generic [ref=e693]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:29
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e694]:
+                    - generic [ref=e695]:
+                      - button "API.WHATSAPP.COM" [ref=e697]:
+                        - generic [ref=e698]: API.WHATSAPP.COM
+                      - button "!Oferta Especial¡" [ref=e700]:
+                        - generic [ref=e701]: "!Oferta Especial¡"
+                      - button "paga en casa" [ref=e703]:
+                        - generic [ref=e704]: paga en casa
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e706]:
+                      - generic [ref=e710]: Enviar mensaje de WhatsApp
+            - generic [ref=e712]:
+              - generic [ref=e714]:
+                - generic [ref=e715]:
+                  - generic [ref=e722]: Activo
+                  - generic [ref=e725]: "Identificador de la biblioteca: 860231520302082"
+                  - generic [ref=e727]: En circulación desde el 2 dic 2025
+                  - generic [ref=e729]: Plataformas
+                - button "Abrir menú desplegable" [ref=e758] [cursor=pointer]:
+                  - generic [ref=e761]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e764] [cursor=pointer]:
+                - generic [ref=e768]: Ver detalles del anuncio
+              - separator [ref=e769]
+              - generic [ref=e774]:
+                - generic [ref=e776]:
+                  - img "Luisa Recomienda" [ref=e777]
+                  - generic [ref=e779]:
+                    - link "Luisa Recomienda" [ref=e780] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e784]:
+                      - strong [ref=e786]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e787]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días" [ref=e790]:
+                    - generic [ref=e793]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días
+                  - group "Video player" [ref=e803]:
+                    - button "Reproducir video" [ref=e805] [cursor=pointer]
+                    - generic [ref=e807]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:26
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e808]:
+                    - generic [ref=e809]:
+                      - button "API.WHATSAPP.COM" [ref=e811]:
+                        - generic [ref=e812]: API.WHATSAPP.COM
+                      - button "!Oferta Especial¡" [ref=e814]:
+                        - generic [ref=e815]: "!Oferta Especial¡"
+                      - button "paga en casa" [ref=e817]:
+                        - generic [ref=e818]: paga en casa
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e820]:
+                      - generic [ref=e824]: Enviar mensaje de WhatsApp
+            - generic [ref=e826]:
+              - generic [ref=e828]:
+                - generic [ref=e829]:
+                  - generic [ref=e836]: Activo
+                  - generic [ref=e839]: "Identificador de la biblioteca: 2033404653870846"
+                  - generic [ref=e841]: En circulación desde el 9 feb 2026
+                  - generic [ref=e843]: Plataformas
+                - button "Abrir menú desplegable" [ref=e872] [cursor=pointer]:
+                  - generic [ref=e875]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e878] [cursor=pointer]:
+                - generic [ref=e882]: Ver detalles del anuncio
+              - separator [ref=e883]
+              - generic [ref=e888]:
+                - generic [ref=e890]:
+                  - img "Luisa Recomienda" [ref=e891]
+                  - generic [ref=e893]:
+                    - link "Luisa Recomienda" [ref=e894] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e898]:
+                      - strong [ref=e900]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e901]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días." [ref=e904]:
+                    - generic [ref=e907]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días.
+                  - group "Video player" [ref=e917]:
+                    - button "Reproducir video" [ref=e919] [cursor=pointer]
+                    - generic [ref=e921]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:17
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM 🔥 OJO a esta promo 🔥 paga en casa Más información" [ref=e923] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e924]:
+                      - generic [ref=e925]:
+                        - button "API.WHATSAPP.COM" [ref=e927]:
+                          - generic [ref=e928]: API.WHATSAPP.COM
+                        - button "🔥 OJO a esta promo 🔥" [ref=e930]:
+                          - generic [ref=e931]: 🔥 OJO a esta promo 🔥
+                        - button "paga en casa" [ref=e933]:
+                          - generic [ref=e934]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e936]:
+                        - generic [ref=e940]: Más información
+            - generic [ref=e942]:
+              - generic [ref=e944]:
+                - generic [ref=e945]:
+                  - generic [ref=e952]: Activo
+                  - generic [ref=e955]: "Identificador de la biblioteca: 1308309451123084"
+                  - generic [ref=e957]: En circulación desde el 9 feb 2026
+                  - generic [ref=e959]: Plataformas
+                - button "Abrir menú desplegable" [ref=e988] [cursor=pointer]:
+                  - generic [ref=e991]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e994] [cursor=pointer]:
+                - generic [ref=e998]: Ver detalles del anuncio
+              - separator [ref=e999]
+              - generic [ref=e1004]:
+                - generic [ref=e1006]:
+                  - img "Luisa Recomienda" [ref=e1007]
+                  - generic [ref=e1009]:
+                    - link "Luisa Recomienda" [ref=e1010] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e1014]:
+                      - strong [ref=e1016]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1017]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días." [ref=e1020]:
+                    - generic [ref=e1023]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días.
+                  - group "Video player" [ref=e1033]:
+                    - button "Reproducir video" [ref=e1035] [cursor=pointer]
+                    - generic [ref=e1037]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:26
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM 🔥 OJO a esta promo 🔥 paga en casa Más información" [ref=e1039] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e1040]:
+                      - generic [ref=e1041]:
+                        - button "API.WHATSAPP.COM" [ref=e1043]:
+                          - generic [ref=e1044]: API.WHATSAPP.COM
+                        - button "🔥 OJO a esta promo 🔥" [ref=e1046]:
+                          - generic [ref=e1047]: 🔥 OJO a esta promo 🔥
+                        - button "paga en casa" [ref=e1049]:
+                          - generic [ref=e1050]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1052]:
+                        - generic [ref=e1056]: Más información
+            - generic [ref=e1058]:
+              - generic [ref=e1060]:
+                - generic [ref=e1061]:
+                  - generic [ref=e1068]: Activo
+                  - generic [ref=e1071]: "Identificador de la biblioteca: 727082840446787"
+                  - generic [ref=e1073]: En circulación desde el 2 dic 2025
+                  - generic [ref=e1075]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1104] [cursor=pointer]:
+                  - generic [ref=e1107]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1110] [cursor=pointer]:
+                - generic [ref=e1114]: Ver detalles del anuncio
+              - separator [ref=e1115]
+              - generic [ref=e1120]:
+                - generic [ref=e1122]:
+                  - img "Luisa Recomienda" [ref=e1123]
+                  - generic [ref=e1125]:
+                    - link "Luisa Recomienda" [ref=e1126] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e1130]:
+                      - strong [ref=e1132]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1133]:
+                  - 'button "🎯 ¡Haz que cada entrenamiento cuente! Con nuestro Brasier Deportivo tendrás: ✔️ Soporte de alto impacto ✔️ Realce natural y favorecedor ✔️ Máxima comodidad durante todo el día Diseñado para moverte libre, verte increíble y sentirte segura 💪 Perfecto para tus rutinas, caminatas o uso diario. 👚 Tallas desde XS hasta 4XL 🎨 Colores disponibles: Negro · Beige · Blanco 🚚 Envío GRATIS a toda Colombia 💳 Paga solo cuando lo recibas 📦 ¡Stock limitado! Haz clic y asegura el tuyo antes de que se agoten 👇" [ref=e1136]':
+                    - generic [ref=e1139]:
+                      - text: 🎯 ¡Haz que cada entrenamiento cuente!
+                      - text: "Con nuestro Brasier Deportivo tendrás:"
+                      - text: ✔️ Soporte de alto impacto
+                      - text: ✔️ Realce natural y favorecedor
+                      - text: ✔️ Máxima comodidad durante todo el día
+                      - text: Diseñado para moverte libre, verte increíble y sentirte segura 💪
+                      - text: Perfecto para tus rutinas, caminatas o uso diario.
+                      - text: 👚 Tallas desde XS hasta 4XL
+                      - text: "🎨 Colores disponibles: Negro · Beige · Blanco"
+                      - text: 🚚 Envío GRATIS a toda Colombia
+                      - text: 💳 Paga solo cuando lo recibas
+                      - text: 📦 ¡Stock limitado!
+                      - text: Haz clic y asegura el tuyo antes de que se agoten 👇
+                  - group "Video player" [ref=e1149]:
+                    - button "Reproducir video" [ref=e1151] [cursor=pointer]
+                    - generic [ref=e1153]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:29
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM ¡Ultimas unidades! paga en casa Más información" [ref=e1155] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e1156]:
+                      - generic [ref=e1157]:
+                        - button "API.WHATSAPP.COM" [ref=e1159]:
+                          - generic [ref=e1160]: API.WHATSAPP.COM
+                        - button "¡Ultimas unidades!" [ref=e1162]:
+                          - generic [ref=e1163]: ¡Ultimas unidades!
+                        - button "paga en casa" [ref=e1165]:
+                          - generic [ref=e1166]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1168]:
+                        - generic [ref=e1172]: Más información
+            - generic [ref=e1174]:
+              - generic [ref=e1176]:
+                - generic [ref=e1177]:
+                  - generic [ref=e1184]: Activo
+                  - generic [ref=e1187]: "Identificador de la biblioteca: 1390595329273261"
+                  - generic [ref=e1189]: En circulación desde el 2 dic 2025
+                  - generic [ref=e1191]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1220] [cursor=pointer]:
+                  - generic [ref=e1223]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1226] [cursor=pointer]:
+                - generic [ref=e1230]: Ver detalles del anuncio
+              - separator [ref=e1231]
+              - generic [ref=e1236]:
+                - generic [ref=e1238]:
+                  - img "Luisa Recomienda" [ref=e1239]
+                  - generic [ref=e1241]:
+                    - link "Luisa Recomienda" [ref=e1242] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e1246]:
+                      - strong [ref=e1248]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1249]:
+                  - 'button "🎯 ¡Haz que cada entrenamiento cuente! Con nuestro Brasier Deportivo tendrás: ✔️ Soporte de alto impacto ✔️ Realce natural y favorecedor ✔️ Máxima comodidad durante todo el día Diseñado para moverte libre, verte increíble y sentirte segura 💪 Perfecto para tus rutinas, caminatas o uso diario. 👚 Tallas desde XS hasta 4XL 🎨 Colores disponibles: Negro · Beige · Blanco 🚚 Envío GRATIS a toda Colombia 💳 Paga solo cuando lo recibas 📦 ¡Stock limitado! Haz clic y asegura el tuyo antes de que se agoten 👇" [ref=e1252]':
+                    - generic [ref=e1255]:
+                      - text: 🎯 ¡Haz que cada entrenamiento cuente!
+                      - text: "Con nuestro Brasier Deportivo tendrás:"
+                      - text: ✔️ Soporte de alto impacto
+                      - text: ✔️ Realce natural y favorecedor
+                      - text: ✔️ Máxima comodidad durante todo el día
+                      - text: Diseñado para moverte libre, verte increíble y sentirte segura 💪
+                      - text: Perfecto para tus rutinas, caminatas o uso diario.
+                      - text: 👚 Tallas desde XS hasta 4XL
+                      - text: "🎨 Colores disponibles: Negro · Beige · Blanco"
+                      - text: 🚚 Envío GRATIS a toda Colombia
+                      - text: 💳 Paga solo cuando lo recibas
+                      - text: 📦 ¡Stock limitado!
+                      - text: Haz clic y asegura el tuyo antes de que se agoten 👇
+                  - group "Video player" [ref=e1265]:
+                    - button "Reproducir video" [ref=e1267] [cursor=pointer]
+                    - generic [ref=e1269]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:32
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM ¡Ultimas unidades! paga en casa Más información" [ref=e1271] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e1272]:
+                      - generic [ref=e1273]:
+                        - button "API.WHATSAPP.COM" [ref=e1275]:
+                          - generic [ref=e1276]: API.WHATSAPP.COM
+                        - button "¡Ultimas unidades!" [ref=e1278]:
+                          - generic [ref=e1279]: ¡Ultimas unidades!
+                        - button "paga en casa" [ref=e1281]:
+                          - generic [ref=e1282]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1284]:
+                        - generic [ref=e1288]: Más información
+            - generic [ref=e1290]:
+              - generic [ref=e1292]:
+                - generic [ref=e1293]:
+                  - generic [ref=e1300]: Activo
+                  - generic [ref=e1303]: "Identificador de la biblioteca: 1238275300994619"
+                  - generic [ref=e1305]: En circulación desde el 9 feb 2026
+                  - generic [ref=e1307]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1336] [cursor=pointer]:
+                  - generic [ref=e1339]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1342] [cursor=pointer]:
+                - generic [ref=e1346]: Ver detalles del anuncio
+              - separator [ref=e1347]
+              - generic [ref=e1352]:
+                - generic [ref=e1354]:
+                  - img "Luisa Recomienda" [ref=e1355]
+                  - generic [ref=e1357]:
+                    - link "Luisa Recomienda" [ref=e1358] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e1362]:
+                      - strong [ref=e1364]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1365]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días." [ref=e1368]:
+                    - generic [ref=e1371]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días.
+                  - group "Video player" [ref=e1381]:
+                    - button "Reproducir video" [ref=e1383] [cursor=pointer]
+                    - generic [ref=e1385]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:20
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM 🔥 OJO a esta promo 🔥 paga en casa Más información" [ref=e1387] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e1388]:
+                      - generic [ref=e1389]:
+                        - button "API.WHATSAPP.COM" [ref=e1391]:
+                          - generic [ref=e1392]: API.WHATSAPP.COM
+                        - button "🔥 OJO a esta promo 🔥" [ref=e1394]:
+                          - generic [ref=e1395]: 🔥 OJO a esta promo 🔥
+                        - button "paga en casa" [ref=e1397]:
+                          - generic [ref=e1398]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1400]:
+                        - generic [ref=e1404]: Más información
+            - generic [ref=e1406]:
+              - generic [ref=e1408]:
+                - generic [ref=e1409]:
+                  - generic [ref=e1416]: Activo
+                  - generic [ref=e1419]: "Identificador de la biblioteca: 925122536735570"
+                  - generic [ref=e1421]: En circulación desde el 9 feb 2026
+                  - generic [ref=e1423]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1452] [cursor=pointer]:
+                  - generic [ref=e1455]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1458] [cursor=pointer]:
+                - generic [ref=e1462]: Ver detalles del anuncio
+              - separator [ref=e1463]
+              - generic [ref=e1468]:
+                - generic [ref=e1470]:
+                  - img "Luisa Recomienda" [ref=e1471]
+                  - generic [ref=e1473]:
+                    - link "Luisa Recomienda" [ref=e1474] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e1478]:
+                      - strong [ref=e1480]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1481]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días." [ref=e1484]:
+                    - generic [ref=e1487]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días.
+                  - group "Video player" [ref=e1497]:
+                    - button "Reproducir video" [ref=e1499] [cursor=pointer]
+                    - generic [ref=e1501]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:21
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM 🔥 OJO a esta promo 🔥 paga en casa Más información" [ref=e1503] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e1504]:
+                      - generic [ref=e1505]:
+                        - button "API.WHATSAPP.COM" [ref=e1507]:
+                          - generic [ref=e1508]: API.WHATSAPP.COM
+                        - button "🔥 OJO a esta promo 🔥" [ref=e1510]:
+                          - generic [ref=e1511]: 🔥 OJO a esta promo 🔥
+                        - button "paga en casa" [ref=e1513]:
+                          - generic [ref=e1514]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1516]:
+                        - generic [ref=e1520]: Más información
+            - generic [ref=e1522]:
+              - generic [ref=e1524]:
+                - generic [ref=e1525]:
+                  - generic [ref=e1532]: Activo
+                  - generic [ref=e1535]: "Identificador de la biblioteca: 927038709810590"
+                  - generic [ref=e1537]: En circulación desde el 9 feb 2026
+                  - generic [ref=e1539]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1568] [cursor=pointer]:
+                  - generic [ref=e1571]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1574] [cursor=pointer]:
+                - generic [ref=e1578]: Ver detalles del anuncio
+              - separator [ref=e1579]
+              - generic [ref=e1584]:
+                - generic [ref=e1586]:
+                  - img "Luisa Recomienda" [ref=e1587]
+                  - generic [ref=e1589]:
+                    - link "Luisa Recomienda" [ref=e1590] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e1594]:
+                      - strong [ref=e1596]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1597]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días." [ref=e1600]:
+                    - generic [ref=e1603]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días.
+                  - group "Video player" [ref=e1613]:
+                    - button "Reproducir video" [ref=e1615] [cursor=pointer]
+                    - generic [ref=e1617]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:15
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM 🔥 OJO a esta promo 🔥 paga en casa Más información" [ref=e1619] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e1620]:
+                      - generic [ref=e1621]:
+                        - button "API.WHATSAPP.COM" [ref=e1623]:
+                          - generic [ref=e1624]: API.WHATSAPP.COM
+                        - button "🔥 OJO a esta promo 🔥" [ref=e1626]:
+                          - generic [ref=e1627]: 🔥 OJO a esta promo 🔥
+                        - button "paga en casa" [ref=e1629]:
+                          - generic [ref=e1630]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1632]:
+                        - generic [ref=e1636]: Más información
+            - generic [ref=e1638]:
+              - generic [ref=e1640]:
+                - generic [ref=e1641]:
+                  - generic [ref=e1648]: Activo
+                  - generic [ref=e1651]: "Identificador de la biblioteca: 1409887364210411"
+                  - generic [ref=e1653]: En circulación desde el 9 feb 2026
+                  - generic [ref=e1655]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1684] [cursor=pointer]:
+                  - generic [ref=e1687]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1690] [cursor=pointer]:
+                - generic [ref=e1694]: Ver detalles del anuncio
+              - separator [ref=e1695]
+              - generic [ref=e1700]:
+                - generic [ref=e1702]:
+                  - img "Luisa Recomienda" [ref=e1703]
+                  - generic [ref=e1705]:
+                    - link "Luisa Recomienda" [ref=e1706] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e1710]:
+                      - strong [ref=e1712]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1713]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días." [ref=e1716]:
+                    - generic [ref=e1719]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días.
+                  - group "Video player" [ref=e1729]:
+                    - button "Reproducir video" [ref=e1731] [cursor=pointer]
+                    - generic [ref=e1733]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:23
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM 🔥 OJO a esta promo 🔥 paga en casa Más información" [ref=e1735] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e1736]:
+                      - generic [ref=e1737]:
+                        - button "API.WHATSAPP.COM" [ref=e1739]:
+                          - generic [ref=e1740]: API.WHATSAPP.COM
+                        - button "🔥 OJO a esta promo 🔥" [ref=e1742]:
+                          - generic [ref=e1743]: 🔥 OJO a esta promo 🔥
+                        - button "paga en casa" [ref=e1745]:
+                          - generic [ref=e1746]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1748]:
+                        - generic [ref=e1752]: Más información
+            - generic [ref=e1754]:
+              - generic [ref=e1756]:
+                - generic [ref=e1757]:
+                  - generic [ref=e1764]: Activo
+                  - generic [ref=e1767]: "Identificador de la biblioteca: 1195400389003770"
+                  - generic [ref=e1769]: En circulación desde el 9 feb 2026
+                  - generic [ref=e1771]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1800] [cursor=pointer]:
+                  - generic [ref=e1803]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1806] [cursor=pointer]:
+                - generic [ref=e1810]: Ver detalles del anuncio
+              - separator [ref=e1811]
+              - generic [ref=e1816]:
+                - generic [ref=e1818]:
+                  - img "Luisa Recomienda" [ref=e1819]
+                  - generic [ref=e1821]:
+                    - link "Luisa Recomienda" [ref=e1822] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e1826]:
+                      - strong [ref=e1828]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1829]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días." [ref=e1832]:
+                    - generic [ref=e1835]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días.
+                  - group "Video player" [ref=e1845]:
+                    - button "Reproducir video" [ref=e1847] [cursor=pointer]
+                    - generic [ref=e1849]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:17
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM 🔥 OJO a esta promo 🔥 paga en casa Más información" [ref=e1851] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e1852]:
+                      - generic [ref=e1853]:
+                        - button "API.WHATSAPP.COM" [ref=e1855]:
+                          - generic [ref=e1856]: API.WHATSAPP.COM
+                        - button "🔥 OJO a esta promo 🔥" [ref=e1858]:
+                          - generic [ref=e1859]: 🔥 OJO a esta promo 🔥
+                        - button "paga en casa" [ref=e1861]:
+                          - generic [ref=e1862]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1864]:
+                        - generic [ref=e1868]: Más información
+            - generic [ref=e1870]:
+              - generic [ref=e1872]:
+                - generic [ref=e1873]:
+                  - generic [ref=e1880]: Activo
+                  - generic [ref=e1883]: "Identificador de la biblioteca: 1539141807236337"
+                  - generic [ref=e1885]: En circulación desde el 4 nov 2025
+                  - generic [ref=e1887]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1916] [cursor=pointer]:
+                  - generic [ref=e1919]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1922] [cursor=pointer]:
+                - generic [ref=e1926]: Ver detalles del anuncio
+              - separator [ref=e1927]
+              - generic [ref=e1932]:
+                - generic [ref=e1934]:
+                  - img "Luisa Recomienda" [ref=e1935]
+                  - generic [ref=e1937]:
+                    - link "Luisa Recomienda" [ref=e1938] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e1942]:
+                      - strong [ref=e1944]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1945]:
+                  - 'button "🎯 ¡Haz que cada entrenamiento cuente! Con nuestro Brasier Deportivo tendrás: ✔️ Soporte de alto impacto ✔️ Realce natural y favorecedor ✔️ Máxima comodidad durante todo el día Diseñado para moverte libre, verte increíble y sentirte segura 💪 Perfecto para tus rutinas, caminatas o uso diario. 👚 Tallas desde XS hasta 4XL 🎨 Colores disponibles: Negro · Beige · Blanco 🚚 Envío GRATIS a toda Colombia 💳 Paga solo cuando lo recibas 📦 ¡Stock limitado! Haz clic y asegura el tuyo antes de que se agoten 👇" [ref=e1948]':
+                    - generic [ref=e1951]:
+                      - text: 🎯 ¡Haz que cada entrenamiento cuente!
+                      - text: "Con nuestro Brasier Deportivo tendrás:"
+                      - text: ✔️ Soporte de alto impacto
+                      - text: ✔️ Realce natural y favorecedor
+                      - text: ✔️ Máxima comodidad durante todo el día
+                      - text: Diseñado para moverte libre, verte increíble y sentirte segura 💪
+                      - text: Perfecto para tus rutinas, caminatas o uso diario.
+                      - text: 👚 Tallas desde XS hasta 4XL
+                      - text: "🎨 Colores disponibles: Negro · Beige · Blanco"
+                      - text: 🚚 Envío GRATIS a toda Colombia
+                      - text: 💳 Paga solo cuando lo recibas
+                      - text: 📦 ¡Stock limitado!
+                      - text: Haz clic y asegura el tuyo antes de que se agoten 👇
+                  - group "Video player" [ref=e1961]:
+                    - button "Reproducir video" [ref=e1963] [cursor=pointer]
+                    - generic [ref=e1965]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:29
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM ¡Ultimas Unidades! 🚚 Envío GRATIS a toda Colombia Más información" [ref=e1967] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e1968]:
+                      - generic [ref=e1969]:
+                        - button "API.WHATSAPP.COM" [ref=e1971]:
+                          - generic [ref=e1972]: API.WHATSAPP.COM
+                        - button "¡Ultimas Unidades!" [ref=e1974]:
+                          - generic [ref=e1975]: ¡Ultimas Unidades!
+                        - button "🚚 Envío GRATIS a toda Colombia" [ref=e1977]:
+                          - generic [ref=e1978]: 🚚 Envío GRATIS a toda Colombia
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1980]:
+                        - generic [ref=e1984]: Más información
+            - generic [ref=e1986]:
+              - generic [ref=e1988]:
+                - generic [ref=e1989]:
+                  - generic [ref=e1996]: Activo
+                  - generic [ref=e1999]: "Identificador de la biblioteca: 1592831205370891"
+                  - generic [ref=e2001]: En circulación desde el 9 feb 2026
+                  - generic [ref=e2003]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2032] [cursor=pointer]:
+                  - generic [ref=e2035]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2038] [cursor=pointer]:
+                - generic [ref=e2042]: Ver detalles del anuncio
+              - separator [ref=e2043]
+              - generic [ref=e2048]:
+                - generic [ref=e2050]:
+                  - img "Luisa Recomienda" [ref=e2051]
+                  - generic [ref=e2053]:
+                    - link "Luisa Recomienda" [ref=e2054] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e2058]:
+                      - strong [ref=e2060]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2061]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días." [ref=e2064]:
+                    - generic [ref=e2067]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días.
+                  - group "Video player" [ref=e2077]:
+                    - button "Reproducir video" [ref=e2079] [cursor=pointer]
+                    - generic [ref=e2081]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:17
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM 🔥 OJO a esta promo 🔥 paga en casa Más información" [ref=e2083] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e2084]:
+                      - generic [ref=e2085]:
+                        - button "API.WHATSAPP.COM" [ref=e2087]:
+                          - generic [ref=e2088]: API.WHATSAPP.COM
+                        - button "🔥 OJO a esta promo 🔥" [ref=e2090]:
+                          - generic [ref=e2091]: 🔥 OJO a esta promo 🔥
+                        - button "paga en casa" [ref=e2093]:
+                          - generic [ref=e2094]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e2096]:
+                        - generic [ref=e2100]: Más información
+            - generic [ref=e2102]:
+              - generic [ref=e2104]:
+                - generic [ref=e2105]:
+                  - generic [ref=e2112]: Activo
+                  - generic [ref=e2115]: "Identificador de la biblioteca: 2243922432685341"
+                  - generic [ref=e2117]: En circulación desde el 2 dic 2025
+                  - generic [ref=e2119]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2148] [cursor=pointer]:
+                  - generic [ref=e2151]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2154] [cursor=pointer]:
+                - generic [ref=e2158]: Ver detalles del anuncio
+              - separator [ref=e2159]
+              - generic [ref=e2164]:
+                - generic [ref=e2166]:
+                  - img "Luisa Recomienda" [ref=e2167]
+                  - generic [ref=e2169]:
+                    - link "Luisa Recomienda" [ref=e2170] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e2174]:
+                      - strong [ref=e2176]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2177]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días" [ref=e2180]:
+                    - generic [ref=e2183]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días
+                  - group "Video player" [ref=e2193]:
+                    - button "Reproducir video" [ref=e2195] [cursor=pointer]
+                    - generic [ref=e2197]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:30
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e2198]:
+                    - generic [ref=e2199]:
+                      - button "API.WHATSAPP.COM" [ref=e2201]:
+                        - generic [ref=e2202]: API.WHATSAPP.COM
+                      - button "!Oferta Especial¡" [ref=e2204]:
+                        - generic [ref=e2205]: "!Oferta Especial¡"
+                      - button "paga en casa" [ref=e2207]:
+                        - generic [ref=e2208]: paga en casa
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e2210]:
+                      - generic [ref=e2214]: Enviar mensaje de WhatsApp
+            - generic [ref=e2216]:
+              - generic [ref=e2218]:
+                - generic [ref=e2219]:
+                  - generic [ref=e2226]: Activo
+                  - generic [ref=e2229]: "Identificador de la biblioteca: 4019352201679250"
+                  - generic [ref=e2231]: En circulación desde el 9 feb 2026
+                  - generic [ref=e2233]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2262] [cursor=pointer]:
+                  - generic [ref=e2265]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2268] [cursor=pointer]:
+                - generic [ref=e2272]: Ver detalles del anuncio
+              - separator [ref=e2273]
+              - generic [ref=e2278]:
+                - generic [ref=e2280]:
+                  - img "Luisa Recomienda" [ref=e2281]
+                  - generic [ref=e2283]:
+                    - link "Luisa Recomienda" [ref=e2284] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e2288]:
+                      - strong [ref=e2290]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2291]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días." [ref=e2294]:
+                    - generic [ref=e2297]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días.
+                  - group "Video player" [ref=e2307]:
+                    - button "Reproducir video" [ref=e2309] [cursor=pointer]
+                    - generic [ref=e2311]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:26
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM 🔥 OJO a esta promo 🔥 paga en casa Más información" [ref=e2313] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e2314]:
+                      - generic [ref=e2315]:
+                        - button "API.WHATSAPP.COM" [ref=e2317]:
+                          - generic [ref=e2318]: API.WHATSAPP.COM
+                        - button "🔥 OJO a esta promo 🔥" [ref=e2320]:
+                          - generic [ref=e2321]: 🔥 OJO a esta promo 🔥
+                        - button "paga en casa" [ref=e2323]:
+                          - generic [ref=e2324]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e2326]:
+                        - generic [ref=e2330]: Más información
+            - generic [ref=e2332]:
+              - generic [ref=e2334]:
+                - generic [ref=e2335]:
+                  - generic [ref=e2342]: Activo
+                  - generic [ref=e2345]: "Identificador de la biblioteca: 4130316090516226"
+                  - generic [ref=e2347]: En circulación desde el 2 dic 2025
+                  - generic [ref=e2349]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2378] [cursor=pointer]:
+                  - generic [ref=e2381]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2384] [cursor=pointer]:
+                - generic [ref=e2388]: Ver detalles del anuncio
+              - separator [ref=e2389]
+              - generic [ref=e2394]:
+                - generic [ref=e2396]:
+                  - img "Luisa Recomienda" [ref=e2397]
+                  - generic [ref=e2399]:
+                    - link "Luisa Recomienda" [ref=e2400] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e2404]:
+                      - strong [ref=e2406]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2407]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días" [ref=e2410]:
+                    - generic [ref=e2413]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días
+                  - group "Video player" [ref=e2423]:
+                    - button "Reproducir video" [ref=e2425] [cursor=pointer]
+                    - generic [ref=e2427]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:28
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e2428]:
+                    - generic [ref=e2429]:
+                      - button "API.WHATSAPP.COM" [ref=e2431]:
+                        - generic [ref=e2432]: API.WHATSAPP.COM
+                      - button "!Oferta Especial¡" [ref=e2434]:
+                        - generic [ref=e2435]: "!Oferta Especial¡"
+                      - button "paga en casa" [ref=e2437]:
+                        - generic [ref=e2438]: paga en casa
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e2440]:
+                      - generic [ref=e2444]: Enviar mensaje de WhatsApp
+            - generic [ref=e2446]:
+              - generic [ref=e2448]:
+                - generic [ref=e2449]:
+                  - generic [ref=e2456]: Activo
+                  - generic [ref=e2459]: "Identificador de la biblioteca: 26666423029611919"
+                  - generic [ref=e2461]: En circulación desde el 9 feb 2026
+                  - generic [ref=e2463]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2492] [cursor=pointer]:
+                  - generic [ref=e2495]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2498] [cursor=pointer]:
+                - generic [ref=e2502]: Ver detalles del anuncio
+              - separator [ref=e2503]
+              - generic [ref=e2508]:
+                - generic [ref=e2510]:
+                  - img "Luisa Recomienda" [ref=e2511]
+                  - generic [ref=e2513]:
+                    - link "Luisa Recomienda" [ref=e2514] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e2518]:
+                      - strong [ref=e2520]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2521]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días." [ref=e2524]:
+                    - generic [ref=e2527]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días.
+                  - group "Video player" [ref=e2537]:
+                    - button "Reproducir video" [ref=e2539] [cursor=pointer]
+                    - generic [ref=e2541]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:29
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM 🔥 OJO a esta promo 🔥 paga en casa Más información" [ref=e2543] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e2544]:
+                      - generic [ref=e2545]:
+                        - button "API.WHATSAPP.COM" [ref=e2547]:
+                          - generic [ref=e2548]: API.WHATSAPP.COM
+                        - button "🔥 OJO a esta promo 🔥" [ref=e2550]:
+                          - generic [ref=e2551]: 🔥 OJO a esta promo 🔥
+                        - button "paga en casa" [ref=e2553]:
+                          - generic [ref=e2554]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e2556]:
+                        - generic [ref=e2560]: Más información
+            - generic [ref=e2562]:
+              - generic [ref=e2564]:
+                - generic [ref=e2565]:
+                  - generic [ref=e2572]: Activo
+                  - generic [ref=e2575]: "Identificador de la biblioteca: 25689846420681983"
+                  - generic [ref=e2577]: En circulación desde el 4 feb 2026
+                  - generic [ref=e2579]: Plataformas
+                  - generic [ref=e2607]:
+                    - strong [ref=e2608]: 5 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e2611] [cursor=pointer]:
+                  - generic [ref=e2614]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e2617] [cursor=pointer]:
+                - generic [ref=e2621]: Ver detalles del resumen
+              - separator [ref=e2622]
+              - generic [ref=e2627]:
+                - generic [ref=e2629]:
+                  - img "Luisa Recomienda" [ref=e2630]
+                  - generic [ref=e2632]:
+                    - link "Luisa Recomienda" [ref=e2633] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e2637]:
+                      - strong [ref=e2639]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2640]:
+                  - button "¿Notas canas y tu cabello perdió brillo? 👀 Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨ Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴 Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️ 📦 Envío a toda Colombia 💰 Pagas cuando lo recibes ⏳ Promoción por tiempo limitado 👉 Escríbenos y elige tu tono hoy" [ref=e2643]:
+                    - generic [ref=e2646]:
+                      - text: ¿Notas canas y tu cabello perdió brillo? 👀
+                      - text: Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨
+                      - text: Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴
+                      - text: Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️
+                      - text: 📦 Envío a toda Colombia
+                      - text: 💰 Pagas cuando lo recibes
+                      - text: ⏳ Promoción por tiempo limitado
+                      - text: 👉 Escríbenos y elige tu tono hoy
+                  - link [ref=e2648] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+            - generic [ref=e2651]:
+              - generic [ref=e2653]:
+                - generic [ref=e2654]:
+                  - generic [ref=e2661]: Activo
+                  - generic [ref=e2664]: "Identificador de la biblioteca: 1441174604261247"
+                  - generic [ref=e2666]: En circulación desde el 4 feb 2026
+                  - generic [ref=e2668]: Plataformas
+                  - generic [ref=e2696]:
+                    - strong [ref=e2697]: 5 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e2700] [cursor=pointer]:
+                  - generic [ref=e2703]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e2706] [cursor=pointer]:
+                - generic [ref=e2710]: Ver detalles del resumen
+              - separator [ref=e2711]
+              - generic [ref=e2716]:
+                - generic [ref=e2718]:
+                  - img "Luisa Recomienda" [ref=e2719]
+                  - generic [ref=e2721]:
+                    - link "Luisa Recomienda" [ref=e2722] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e2726]:
+                      - strong [ref=e2728]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2729]:
+                  - button "¿Notas canas y tu cabello perdió brillo? 👀 Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨ Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴 Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️ 📦 Envío a toda Colombia 💰 Pagas cuando lo recibes ⏳ Promoción por tiempo limitado 👉 Escríbenos y elige tu tono hoy" [ref=e2732]:
+                    - generic [ref=e2735]:
+                      - text: ¿Notas canas y tu cabello perdió brillo? 👀
+                      - text: Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨
+                      - text: Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴
+                      - text: Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️
+                      - text: 📦 Envío a toda Colombia
+                      - text: 💰 Pagas cuando lo recibes
+                      - text: ⏳ Promoción por tiempo limitado
+                      - text: 👉 Escríbenos y elige tu tono hoy
+                  - link [ref=e2737] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+            - generic [ref=e2740]:
+              - generic [ref=e2742]:
+                - generic [ref=e2743]:
+                  - generic [ref=e2750]: Activo
+                  - generic [ref=e2753]: "Identificador de la biblioteca: 889037750531091"
+                  - generic [ref=e2755]: En circulación desde el 3 feb 2026
+                  - generic [ref=e2757]: Plataformas
+                  - generic [ref=e2785]:
+                    - strong [ref=e2786]: 5 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e2789] [cursor=pointer]:
+                  - generic [ref=e2792]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e2795] [cursor=pointer]:
+                - generic [ref=e2799]: Ver detalles del resumen
+              - separator [ref=e2800]
+              - generic [ref=e2805]:
+                - generic [ref=e2807]:
+                  - img "Luisa Recomienda" [ref=e2808]
+                  - generic [ref=e2810]:
+                    - link "Luisa Recomienda" [ref=e2811] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e2815]:
+                      - strong [ref=e2817]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2818]:
+                  - button "¿Notas canas y tu cabello perdió brillo? 👀 Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨ Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴 Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️ 📦 Envío a toda Colombia 💰 Pagas cuando lo recibes ⏳ Promoción por tiempo limitado 👉 Escríbenos y elige tu tono hoy" [ref=e2821]:
+                    - generic [ref=e2824]:
+                      - text: ¿Notas canas y tu cabello perdió brillo? 👀
+                      - text: Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨
+                      - text: Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴
+                      - text: Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️
+                      - text: 📦 Envío a toda Colombia
+                      - text: 💰 Pagas cuando lo recibes
+                      - text: ⏳ Promoción por tiempo limitado
+                      - text: 👉 Escríbenos y elige tu tono hoy
+                  - link [ref=e2826] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+            - generic [ref=e2829]:
+              - generic [ref=e2831]:
+                - generic [ref=e2832]:
+                  - generic [ref=e2839]: Activo
+                  - generic [ref=e2842]: "Identificador de la biblioteca: 1338918357718435"
+                  - generic [ref=e2844]: En circulación desde el 4 nov 2025
+                  - generic [ref=e2846]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2875] [cursor=pointer]:
+                  - generic [ref=e2878]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2881] [cursor=pointer]:
+                - generic [ref=e2885]: Ver detalles del anuncio
+              - separator [ref=e2886]
+              - generic [ref=e2891]:
+                - generic [ref=e2893]:
+                  - img "Luisa Recomienda" [ref=e2894]
+                  - generic [ref=e2896]:
+                    - link "Luisa Recomienda" [ref=e2897] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e2901]:
+                      - strong [ref=e2903]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2904]:
+                  - 'button "🎯 ¡Haz que cada entrenamiento cuente! Con nuestro Brasier Deportivo tendrás: ✔️ Soporte de alto impacto ✔️ Realce natural y favorecedor ✔️ Máxima comodidad durante todo el día Diseñado para moverte libre, verte increíble y sentirte segura 💪 Perfecto para tus rutinas, caminatas o uso diario. 👚 Tallas desde XS hasta 4XL 🎨 Colores disponibles: Negro · Beige · Blanco 🚚 Envío GRATIS a toda Colombia 💳 Paga solo cuando lo recibas 📦 ¡Stock limitado! Haz clic y asegura el tuyo antes de que se agoten 👇" [ref=e2907]':
+                    - generic [ref=e2910]:
+                      - text: 🎯 ¡Haz que cada entrenamiento cuente!
+                      - text: "Con nuestro Brasier Deportivo tendrás:"
+                      - text: ✔️ Soporte de alto impacto
+                      - text: ✔️ Realce natural y favorecedor
+                      - text: ✔️ Máxima comodidad durante todo el día
+                      - text: Diseñado para moverte libre, verte increíble y sentirte segura 💪
+                      - text: Perfecto para tus rutinas, caminatas o uso diario.
+                      - text: 👚 Tallas desde XS hasta 4XL
+                      - text: "🎨 Colores disponibles: Negro · Beige · Blanco"
+                      - text: 🚚 Envío GRATIS a toda Colombia
+                      - text: 💳 Paga solo cuando lo recibas
+                      - text: 📦 ¡Stock limitado!
+                      - text: Haz clic y asegura el tuyo antes de que se agoten 👇
+                  - group "Video player" [ref=e2920]:
+                    - button "Reproducir video" [ref=e2922] [cursor=pointer]
+                    - generic [ref=e2924]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:33
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM ¡Ultimas Unidades! 🚚 Envío GRATIS a toda Colombia Más información" [ref=e2926] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e2927]:
+                      - generic [ref=e2928]:
+                        - button "API.WHATSAPP.COM" [ref=e2930]:
+                          - generic [ref=e2931]: API.WHATSAPP.COM
+                        - button "¡Ultimas Unidades!" [ref=e2933]:
+                          - generic [ref=e2934]: ¡Ultimas Unidades!
+                        - button "🚚 Envío GRATIS a toda Colombia" [ref=e2936]:
+                          - generic [ref=e2937]: 🚚 Envío GRATIS a toda Colombia
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e2939]:
+                        - generic [ref=e2943]: Más información
+            - generic [ref=e2945]:
+              - generic [ref=e2947]:
+                - generic [ref=e2948]:
+                  - generic [ref=e2955]: Activo
+                  - generic [ref=e2958]: "Identificador de la biblioteca: 24830178336681680"
+                  - generic [ref=e2960]: En circulación desde el 2 dic 2025
+                  - generic [ref=e2962]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2991] [cursor=pointer]:
+                  - generic [ref=e2994]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2997] [cursor=pointer]:
+                - generic [ref=e3001]: Ver detalles del anuncio
+              - separator [ref=e3002]
+              - generic [ref=e3007]:
+                - generic [ref=e3009]:
+                  - img "Luisa Recomienda" [ref=e3010]
+                  - generic [ref=e3012]:
+                    - link "Luisa Recomienda" [ref=e3013] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e3017]:
+                      - strong [ref=e3019]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e3020]:
+                  - button "Descubre la diferencia ✨ Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃 ✔️ Diseño colombiano ✔️ Invisible bajo la ropa ✔️ Envío GRATIS 🚚 👉 Siéntete segura, todos los días" [ref=e3023]:
+                    - generic [ref=e3026]:
+                      - text: Descubre la diferencia ✨
+                      - text: Nuestros Body Faja Moldeadores realzan tu silueta, mejoran tu postura y se adaptan a tu estilo 💃
+                      - text: ✔️ Diseño colombiano
+                      - text: ✔️ Invisible bajo la ropa
+                      - text: ✔️ Envío GRATIS 🚚
+                      - text: 👉 Siéntete segura, todos los días
+                  - group "Video player" [ref=e3036]:
+                    - button "Reproducir video" [ref=e3038] [cursor=pointer]
+                    - generic [ref=e3040]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:16
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic [ref=e3041]:
+                    - generic [ref=e3042]:
+                      - button "API.WHATSAPP.COM" [ref=e3044]:
+                        - generic [ref=e3045]: API.WHATSAPP.COM
+                      - button "!Oferta Especial¡" [ref=e3047]:
+                        - generic [ref=e3048]: "!Oferta Especial¡"
+                      - button "paga en casa" [ref=e3050]:
+                        - generic [ref=e3051]: paga en casa
+                      - generic:
+                        - button
+                    - button "Enviar mensaje de WhatsApp" [disabled] [ref=e3053]:
+                      - generic [ref=e3057]: Enviar mensaje de WhatsApp
+            - generic [ref=e3059]:
+              - generic [ref=e3061]:
+                - generic [ref=e3062]:
+                  - generic [ref=e3069]: Activo
+                  - generic [ref=e3072]: "Identificador de la biblioteca: 911246308043583"
+                  - generic [ref=e3074]: En circulación desde el 4 feb 2026
+                  - generic [ref=e3076]: Plataformas
+                  - generic [ref=e3104]:
+                    - strong [ref=e3105]: 5 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e3108] [cursor=pointer]:
+                  - generic [ref=e3111]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e3114] [cursor=pointer]:
+                - generic [ref=e3118]: Ver detalles del resumen
+              - separator [ref=e3119]
+              - generic [ref=e3124]:
+                - generic [ref=e3126]:
+                  - img "Luisa Recomienda" [ref=e3127]
+                  - generic [ref=e3129]:
+                    - link "Luisa Recomienda" [ref=e3130] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e3134]:
+                      - strong [ref=e3136]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e3137]:
+                  - button "¿Notas canas y tu cabello perdió brillo? 👀 Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨ Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴 Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️ 📦 Envío a toda Colombia 💰 Pagas cuando lo recibes ⏳ Promoción por tiempo limitado 👉 Escríbenos y elige tu tono hoy" [ref=e3140]:
+                    - generic [ref=e3143]:
+                      - text: ¿Notas canas y tu cabello perdió brillo? 👀
+                      - text: Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨
+                      - text: Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴
+                      - text: Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️
+                      - text: 📦 Envío a toda Colombia
+                      - text: 💰 Pagas cuando lo recibes
+                      - text: ⏳ Promoción por tiempo limitado
+                      - text: 👉 Escríbenos y elige tu tono hoy
+                  - link [ref=e3145] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+            - generic [ref=e3148]:
+              - generic [ref=e3150]:
+                - generic [ref=e3151]:
+                  - generic [ref=e3158]: Activo
+                  - generic [ref=e3161]: "Identificador de la biblioteca: 1582328999471554"
+                  - generic [ref=e3163]: En circulación desde el 4 feb 2026
+                  - generic [ref=e3165]: Plataformas
+                  - generic [ref=e3193]:
+                    - strong [ref=e3194]: 5 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e3197] [cursor=pointer]:
+                  - generic [ref=e3200]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e3203] [cursor=pointer]:
+                - generic [ref=e3207]: Ver detalles del resumen
+              - separator [ref=e3208]
+              - generic [ref=e3213]:
+                - generic [ref=e3215]:
+                  - img "Luisa Recomienda" [ref=e3216]
+                  - generic [ref=e3218]:
+                    - link "Luisa Recomienda" [ref=e3219] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e3223]:
+                      - strong [ref=e3225]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e3226]:
+                  - button "¿Notas canas y tu cabello perdió brillo? 👀 Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨ Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴 Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️ 📦 Envío a toda Colombia 💰 Pagas cuando lo recibes ⏳ Promoción por tiempo limitado 👉 Escríbenos y elige tu tono hoy" [ref=e3229]:
+                    - generic [ref=e3232]:
+                      - text: ¿Notas canas y tu cabello perdió brillo? 👀
+                      - text: Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨
+                      - text: Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴
+                      - text: Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️
+                      - text: 📦 Envío a toda Colombia
+                      - text: 💰 Pagas cuando lo recibes
+                      - text: ⏳ Promoción por tiempo limitado
+                      - text: 👉 Escríbenos y elige tu tono hoy
+                  - link [ref=e3234] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+            - generic [ref=e3237]:
+              - generic [ref=e3239]:
+                - generic [ref=e3240]:
+                  - generic [ref=e3247]: Activo
+                  - generic [ref=e3250]: "Identificador de la biblioteca: 1599044878019770"
+                  - generic [ref=e3252]: En circulación desde el 4 feb 2026
+                  - generic [ref=e3254]: Plataformas
+                  - generic [ref=e3282]:
+                    - strong [ref=e3283]: 5 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e3286] [cursor=pointer]:
+                  - generic [ref=e3289]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e3292] [cursor=pointer]:
+                - generic [ref=e3296]: Ver detalles del resumen
+              - separator [ref=e3297]
+              - generic [ref=e3302]:
+                - generic [ref=e3304]:
+                  - img "Luisa Recomienda" [ref=e3305]
+                  - generic [ref=e3307]:
+                    - link "Luisa Recomienda" [ref=e3308] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e3312]:
+                      - strong [ref=e3314]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e3315]:
+                  - button "¿Notas canas y tu cabello perdió brillo? 👀 Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨ Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴 Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️ 📦 Envío a toda Colombia 💰 Pagas cuando lo recibes ⏳ Promoción por tiempo limitado 👉 Escríbenos y elige tu tono hoy" [ref=e3318]:
+                    - generic [ref=e3321]:
+                      - text: ¿Notas canas y tu cabello perdió brillo? 👀
+                      - text: Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨
+                      - text: Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴
+                      - text: Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️
+                      - text: 📦 Envío a toda Colombia
+                      - text: 💰 Pagas cuando lo recibes
+                      - text: ⏳ Promoción por tiempo limitado
+                      - text: 👉 Escríbenos y elige tu tono hoy
+                  - link [ref=e3323] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+            - generic [ref=e3326]:
+              - generic [ref=e3328]:
+                - generic [ref=e3329]:
+                  - generic [ref=e3336]: Activo
+                  - generic [ref=e3339]: "Identificador de la biblioteca: 1418798706544310"
+                  - generic [ref=e3341]: En circulación desde el 4 feb 2026
+                  - generic [ref=e3343]: Plataformas
+                  - generic [ref=e3371]:
+                    - strong [ref=e3372]: 5 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e3375] [cursor=pointer]:
+                  - generic [ref=e3378]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e3381] [cursor=pointer]:
+                - generic [ref=e3385]: Ver detalles del resumen
+              - separator [ref=e3386]
+              - generic [ref=e3391]:
+                - generic [ref=e3393]:
+                  - img "Luisa Recomienda" [ref=e3394]
+                  - generic [ref=e3396]:
+                    - link "Luisa Recomienda" [ref=e3397] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e3401]:
+                      - strong [ref=e3403]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e3404]:
+                  - button "¿Notas canas y tu cabello perdió brillo? 👀 Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨ Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴 Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️ 📦 Envío a toda Colombia 💰 Pagas cuando lo recibes ⏳ Promoción por tiempo limitado 👉 Escríbenos y elige tu tono hoy" [ref=e3407]:
+                    - generic [ref=e3410]:
+                      - text: ¿Notas canas y tu cabello perdió brillo? 👀
+                      - text: Esta rutina capilar natural ayuda a realzar el color, mejorar la apariencia del cabello y fortalecerlo desde la raíz ✨
+                      - text: Incluye shampoo cubrecanas + colágeno activador + revitalizante capilar 🧴
+                      - text: Uso práctico, resultados visibles desde las primeras aplicaciones 💆‍♀️💆‍♂️
+                      - text: 📦 Envío a toda Colombia
+                      - text: 💰 Pagas cuando lo recibes
+                      - text: ⏳ Promoción por tiempo limitado
+                      - text: 👉 Escríbenos y elige tu tono hoy
+                  - link [ref=e3412] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+            - generic [ref=e3415]:
+              - generic [ref=e3417]:
+                - generic [ref=e3418]:
+                  - generic [ref=e3425]: Activo
+                  - generic [ref=e3428]: "Identificador de la biblioteca: 2358514801229102"
+                  - generic [ref=e3430]: En circulación desde el 2 dic 2025
+                  - generic [ref=e3432]: Plataformas
+                - button "Abrir menú desplegable" [ref=e3461] [cursor=pointer]:
+                  - generic [ref=e3464]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e3467] [cursor=pointer]:
+                - generic [ref=e3471]: Ver detalles del anuncio
+              - separator [ref=e3472]
+              - generic [ref=e3477]:
+                - generic [ref=e3479]:
+                  - img "Luisa Recomienda" [ref=e3480]
+                  - generic [ref=e3482]:
+                    - link "Luisa Recomienda" [ref=e3483] [cursor=pointer]:
+                      - /url: https://www.facebook.com/61573223488366/
+                    - generic [ref=e3487]:
+                      - strong [ref=e3489]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e3490]:
+                  - 'button "🎯 ¡Haz que cada entrenamiento cuente! Con nuestro Brasier Deportivo tendrás: ✔️ Soporte de alto impacto ✔️ Realce natural y favorecedor ✔️ Máxima comodidad durante todo el día Diseñado para moverte libre, verte increíble y sentirte segura 💪 Perfecto para tus rutinas, caminatas o uso diario. 👚 Tallas desde XS hasta 4XL 🎨 Colores disponibles: Negro · Beige · Blanco 🚚 Envío GRATIS a toda Colombia 💳 Paga solo cuando lo recibas 📦 ¡Stock limitado! Haz clic y asegura el tuyo antes de que se agoten 👇" [ref=e3493]':
+                    - generic [ref=e3496]:
+                      - text: 🎯 ¡Haz que cada entrenamiento cuente!
+                      - text: "Con nuestro Brasier Deportivo tendrás:"
+                      - text: ✔️ Soporte de alto impacto
+                      - text: ✔️ Realce natural y favorecedor
+                      - text: ✔️ Máxima comodidad durante todo el día
+                      - text: Diseñado para moverte libre, verte increíble y sentirte segura 💪
+                      - text: Perfecto para tus rutinas, caminatas o uso diario.
+                      - text: 👚 Tallas desde XS hasta 4XL
+                      - text: "🎨 Colores disponibles: Negro · Beige · Blanco"
+                      - text: 🚚 Envío GRATIS a toda Colombia
+                      - text: 💳 Paga solo cuando lo recibas
+                      - text: 📦 ¡Stock limitado!
+                      - text: Haz clic y asegura el tuyo antes de que se agoten 👇
+                  - group "Video player" [ref=e3506]:
+                    - button "Reproducir video" [ref=e3508] [cursor=pointer]
+                    - generic [ref=e3510]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:50
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "API.WHATSAPP.COM ¡Ultimas unidades! paga en casa Más información" [ref=e3512] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fapi.whatsapp.com%2Fsend&h=AT6zHIlPSRmr8kHGYVZ3guefX8vNl-Z8aRuh7FDDh-nHJKtqv2db0nfVD7SOm0G_8sifSEggkTRtLbM1ovePMCyE6P2CgcpR2OsoQRh84Tj4-qKmTo1dcw9MUkFiamjij4j5vwYnCpY3jdOKNq7IAMiEWaCZeR1Utlsr7Q
+                    - generic [ref=e3513]:
+                      - generic [ref=e3514]:
+                        - button "API.WHATSAPP.COM" [ref=e3516]:
+                          - generic [ref=e3517]: API.WHATSAPP.COM
+                        - button "¡Ultimas unidades!" [ref=e3519]:
+                          - generic [ref=e3520]: ¡Ultimas unidades!
+                        - button "paga en casa" [ref=e3522]:
+                          - generic [ref=e3523]: paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e3525]:
+                        - generic [ref=e3529]: Más información
+          - button "Ver más" [ref=e3530] [cursor=pointer]:
+            - generic [ref=e3531]: Ver más
+      - generic [ref=e3534]:
+        - generic [ref=e3542]: Estado del sistema
+        - generic [ref=e3546]:
+          - list [ref=e3547]:
+            - listitem [ref=e3548]:
+              - heading "API de la biblioteca de anuncios" [level=3] [ref=e3549]:
+                - link "API de la biblioteca de anuncios" [ref=e3550] [cursor=pointer]:
+                  - /url: /ads/library/api/?source=archive-landing-page
+            - listitem [ref=e3551]:
+              - heading "Información sobre anuncios y uso de datos" [level=3] [ref=e3552]:
+                - link "Información sobre anuncios y uso de datos" [ref=e3553] [cursor=pointer]:
+                  - /url: /ads/about/?entry_product=ad_library
+            - listitem [ref=e3554]:
+              - heading "Privacidad" [level=3] [ref=e3555]:
+                - link "Privacidad" [ref=e3556] [cursor=pointer]:
+                  - /url: /privacy/center/?entry_point=privacy_basics_redirect
+            - listitem [ref=e3557]:
+              - heading "Condiciones" [level=3] [ref=e3558]:
+                - link "Condiciones" [ref=e3559] [cursor=pointer]:
+                  - /url: /policies/
+            - listitem [ref=e3560]:
+              - heading "Cookies" [level=3] [ref=e3561]:
+                - link "Cookies" [ref=e3562] [cursor=pointer]:
+                  - /url: /policies/cookies/
+          - heading "Meta © 2026 | Español" [level=3] [ref=e3564]:
+            - text: Meta © 2026 |
+            - link "Español" [ref=e3565] [cursor=pointer]:
+              - /url: /language/
+  - dialog "Vincular a anuncio" [ref=e3568]:
+    - generic [ref=e3570]:
+      - generic [ref=e3571]:
+        - heading "Vincular a anuncio" [level=3] [ref=e3574]
+        - button "Cerrar" [active] [ref=e3577] [cursor=pointer]:
+          - generic [ref=e3580]: Cerrar
+      - generic [ref=e3587]:
+        - text: Este anuncio proviene de un enlace de URL
+        - generic [ref=e3590]:
+          - generic [ref=e3592]:
+            - generic [ref=e3593]:
+              - generic [ref=e3600]: Activo
+              - generic [ref=e3603]: "Identificador de la biblioteca: 1359296952244783"
+              - generic [ref=e3605]: En circulación desde el 4 nov 2025
+              - generic [ref=e3607]: Plataformas
+            - button "Abrir menú desplegable" [ref=e3636] [cursor=pointer]:
+              - generic [ref=e3639]: Abrir menú desplegable
+          - button "Ver detalles del anuncio" [ref=e3642] [cursor=pointer]:
+            - generic [ref=e3646]: Ver detalles del anuncio
+          - separator [ref=e3647]
+          - generic [ref=e3652]:
+            - generic [ref=e3654]:
+              - img "Luisa Recomienda" [ref=e3655]
+              - generic [ref=e3657]:
+                - link "Luisa Recomienda" [ref=e3658] [cursor=pointer]:
+                  - /url: https://www.facebook.com/61573223488366/
+                - generic [ref=e3662]:
+                  - strong [ref=e3664]: Publicidad
+                  - generic:
+                    - strong
+            - generic [ref=e3665]:
+              - button "✨ Transforma tu figura sin sacrificar comodidad Nuestros Body Faja Moldeadores abrazan tus curvas, mejoran tu postura y te hacen sentir segura todo el día 💃 ✔️ Diseño 100 % colombiano ✔️ Moldea sin marcar ni oprimir ✔️ Invisible bajo la ropa ✔️ Envío GRATIS a todo el país 🚚 💫 Siéntete empoderada, cómoda y hermosa cada día." [ref=e3668]:
+                - generic [ref=e3671]:
+                  - text: ✨ Transforma tu figura sin sacrificar comodidad
+                  - text: Nuestros Body Faja Moldeadores abrazan tus curvas, mejoran tu postura y te hacen sentir segura todo el día 💃
+                  - text: ✔️ Diseño 100 % colombiano
+                  - text: ✔️ Moldea sin marcar ni oprimir
+                  - text: ✔️ Invisible bajo la ropa
+                  - text: ✔️ Envío GRATIS a todo el país 🚚
+                  - text: 💫 Siéntete empoderada, cómoda y hermosa cada día.
+              - group "Video player" [ref=e3682]:
+                - button "Reproducir video" [ref=e3684] [cursor=pointer]
+                - generic [ref=e3686]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Reproducir"
+                    - generic: 0:00 / 0:24
+                  - generic:
+                    - generic:
+                      - slider "Change Position"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Configuración"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Ver en pantalla completa"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - slider "Ajustar volumen"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Reactivar":
+                              - img
+              - generic [ref=e3687]:
+                - generic [ref=e3688]:
+                  - button "API.WHATSAPP.COM" [ref=e3690]:
+                    - generic [ref=e3691]: API.WHATSAPP.COM
+                  - button "✨ Descuento especial" [ref=e3693]:
+                    - generic [ref=e3694]: ✨ Descuento especial
+                  - button "🚚Paga en casa" [ref=e3696]:
+                    - generic [ref=e3697]: 🚚Paga en casa
+                  - generic:
+                    - button
+                - button "Enviar mensaje de WhatsApp" [disabled] [ref=e3699]:
+                  - generic [ref=e3703]: Enviar mensaje de WhatsApp
+      - button "Cerrar" [ref=e3706] [cursor=pointer]:
+        - generic [ref=e3710]: Cerrar

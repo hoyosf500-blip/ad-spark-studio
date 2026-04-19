@@ -1,0 +1,201 @@
+- generic [ref=e1]:
+  - generic [ref=e12]:
+    - generic [ref=e15]:
+      - link "Biblioteca de anuncios de Meta" [ref=e18] [cursor=pointer]:
+        - /url: /ads/library/?source=fb-logo
+        - generic [ref=e20]: Biblioteca de anuncios de Meta
+      - generic [ref=e22]: Biblioteca de anuncios
+      - menuitem "Informe de la biblioteca de anuncios" [ref=e24] [cursor=pointer]:
+        - generic [ref=e25]: Informe de la biblioteca de anuncios
+      - menuitem "API de la biblioteca de anuncios" [ref=e27] [cursor=pointer]:
+        - generic [ref=e28]: API de la biblioteca de anuncios
+      - menuitem "Contenido de marca" [ref=e30] [cursor=pointer]:
+        - generic [ref=e31]: Contenido de marca
+      - menuitem "Open navigation panel" [ref=e33] [cursor=pointer]
+    - generic [ref=e40]:
+      - combobox "Colombia" [ref=e44] [cursor=pointer]:
+        - generic [ref=e51]: Colombia
+      - combobox "Todos los anuncios" [ref=e62] [cursor=pointer]:
+        - generic [ref=e72]: Todos los anuncios
+      - generic [ref=e82]:
+        - generic [ref=e88]: Buscar por palabra clave o anunciante
+        - generic [ref=e94]:
+          - searchbox "Buscar por palabra clave o anunciante" [ref=e100]: Todo en uno
+          - button "Borrar" [ref=e102] [cursor=pointer]
+    - generic [ref=e105]:
+      - generic [ref=e107]:
+        - img "Foto del perfil de la página" [ref=e112]
+        - link "Todo en uno" [ref=e115] [cursor=pointer]:
+          - /url: https://facebook.com/61565172695696
+          - heading "Todo en uno" [level=1] [ref=e116]
+      - generic [ref=e117]:
+        - link "Anuncios" [ref=e118] [cursor=pointer]
+        - link "Información" [ref=e119] [cursor=pointer]
+    - dialog [ref=e120]:
+      - generic [ref=e121]:
+        - link [ref=e122] [cursor=pointer]:
+          - /url: /
+          - heading [level=4] [ref=e123]: Iniciar sesión
+        - menuitem [ref=e124] [cursor=pointer]
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - heading [level=4] [ref=e129]: Biblioteca de anuncios
+          - menuitem [ref=e131] [cursor=pointer]:
+            - heading [level=4] [ref=e133]: Informe de la biblioteca de anuncios
+          - menuitem [ref=e135] [cursor=pointer]:
+            - heading [level=4] [ref=e137]: API de la biblioteca de anuncios
+          - menuitem [ref=e139] [cursor=pointer]:
+            - heading [level=4] [ref=e141]: Contenido de marca
+        - separator [ref=e142]
+        - generic [ref=e143]:
+          - menuitem [ref=e145] [cursor=pointer]:
+            - heading [level=4] [ref=e147]: Estado del sistema
+          - menuitem [ref=e149] [cursor=pointer]:
+            - heading [level=4] [ref=e151]: Suscripción a novedades por correo electrónico
+          - menuitem [ref=e153] [cursor=pointer]:
+            - heading [level=4] [ref=e155]: Preguntas frecuentes
+          - menuitem [ref=e157] [cursor=pointer]:
+            - heading [level=4] [ref=e159]: Información sobre anuncios y uso de datos
+          - menuitem [ref=e161] [cursor=pointer]:
+            - heading [level=4] [ref=e163]: Privacidad
+          - menuitem [ref=e165] [cursor=pointer]:
+            - heading [level=4] [ref=e167]: Condiciones
+          - menuitem [ref=e169] [cursor=pointer]:
+            - heading [level=4] [ref=e171]: Cookies
+    - generic [ref=e172]:
+      - generic [ref=e190]:
+        - generic [ref=e198]:
+          - generic [ref=e199]:
+            - textbox "Palabra clave" [ref=e201]
+            - button "Filtros" [ref=e205] [cursor=pointer]:
+              - generic [ref=e210]: Filtros
+            - generic [ref=e212]:
+              - generic [ref=e218]: Ordenar
+              - combobox "Ordenar" [ref=e223] [cursor=pointer]:
+                - generic [ref=e230]: Ordenar por
+          - generic [ref=e235]:
+            - generic [ref=e236]:
+              - strong [ref=e237]: Estado activo
+              - text: ": Anuncios activos"
+            - button "Eliminar" [ref=e238] [cursor=pointer]:
+              - generic [ref=e241]: Eliminar
+        - generic [ref=e246]:
+          - generic [ref=e247]:
+            - heading "No hay ningún anuncio que coincida con los criterios de búsqueda" [level=2] [ref=e248]
+            - generic [ref=e249]: Elimina o cambia los filtros que aplicaste para obtener resultados diferentes.
+          - button "Borrar filtros" [ref=e251] [cursor=pointer]:
+            - generic [ref=e255]: Borrar filtros
+          - link "Ver consejos de búsqueda." [ref=e257] [cursor=pointer]:
+            - /url: "#"
+          - generic:
+            - list
+      - generic [ref=e259]:
+        - generic [ref=e267]: Estado del sistema
+        - generic [ref=e271]:
+          - list [ref=e272]:
+            - listitem [ref=e273]:
+              - heading "API de la biblioteca de anuncios" [level=3] [ref=e274]:
+                - link "API de la biblioteca de anuncios" [ref=e275] [cursor=pointer]:
+                  - /url: /ads/library/api/?source=archive-landing-page
+            - listitem [ref=e276]:
+              - heading "Información sobre anuncios y uso de datos" [level=3] [ref=e277]:
+                - link "Información sobre anuncios y uso de datos" [ref=e278] [cursor=pointer]:
+                  - /url: /ads/about/?entry_product=ad_library
+            - listitem [ref=e279]:
+              - heading "Privacidad" [level=3] [ref=e280]:
+                - link "Privacidad" [ref=e281] [cursor=pointer]:
+                  - /url: /privacy/center/?entry_point=privacy_basics_redirect
+            - listitem [ref=e282]:
+              - heading "Condiciones" [level=3] [ref=e283]:
+                - link "Condiciones" [ref=e284] [cursor=pointer]:
+                  - /url: /policies/
+            - listitem [ref=e285]:
+              - heading "Cookies" [level=3] [ref=e286]:
+                - link "Cookies" [ref=e287] [cursor=pointer]:
+                  - /url: /policies/cookies/
+          - heading "Meta © 2026 | Español" [level=3] [ref=e289]:
+            - text: Meta © 2026 |
+            - link "Español" [ref=e290] [cursor=pointer]:
+              - /url: /language/
+  - dialog "Vincular a anuncio" [ref=e293]:
+    - generic [ref=e295]:
+      - generic [ref=e296]:
+        - heading "Vincular a anuncio" [level=3] [ref=e299]
+        - button "Cerrar" [active] [ref=e302] [cursor=pointer]:
+          - generic [ref=e305]: Cerrar
+      - generic [ref=e312]:
+        - text: Este anuncio proviene de un enlace de URL
+        - generic [ref=e315]:
+          - generic [ref=e317]:
+            - generic [ref=e318]:
+              - generic [ref=e325]: Activo
+              - generic [ref=e328]: "Identificador de la biblioteca: 2002661023997320"
+              - generic [ref=e330]: En circulación desde el 11 mar 2026
+              - generic [ref=e332]: Plataformas
+            - button "Abrir menú desplegable" [ref=e361] [cursor=pointer]:
+              - generic [ref=e364]: Abrir menú desplegable
+          - button "Ver detalles del anuncio" [ref=e367] [cursor=pointer]:
+            - generic [ref=e371]: Ver detalles del anuncio
+          - separator [ref=e372]
+          - generic [ref=e377]:
+            - generic [ref=e379]:
+              - img "Todo en uno" [ref=e380]
+              - generic [ref=e382]:
+                - link "Todo en uno" [ref=e383] [cursor=pointer]:
+                  - /url: https://www.facebook.com/61565172695696/
+                - generic [ref=e387]:
+                  - strong [ref=e389]: Publicidad
+                  - generic:
+                    - strong
+            - generic [ref=e390]:
+              - 'button "¿Busca una solución integral que utilice la tecnología más avanzada para mantener su hogar impecable y funcional? Nuestro polvo destapa cañerías de nueva generación es la herramienta completa que actúa donde los métodos tradicionales fallan: su fórmula de acción profunda utiliza una reacción potente para desintegrar obstrucciones a nivel molecular, tal como se observa en el video. Es el recurso definitivo para quienes buscan eficiencia, rapidez y resultados garantizados por la ciencia en el mundo moderno. Tome el control de la salud de sus tuberías con una solución innovadora que redefine el mantenimiento doméstico. Obtenga un descuento exclusivo utilizando el código carms al finalizar su pedido." [ref=e393]':
+                - generic [ref=e395]: "¿Busca una solución integral que utilice la tecnología más avanzada para mantener su hogar impecable y funcional? Nuestro polvo destapa cañerías de nueva generación es la herramienta completa que actúa donde los métodos tradicionales fallan: su fórmula de acción profunda utiliza una reacción potente para desintegrar obstrucciones a nivel molecular, tal como se observa en el video. Es el recurso definitivo para quienes buscan eficiencia, rapidez y resultados garantizados por la ciencia en el mundo moderno. Tome el control de la salud de sus tuberías con una solución innovadora que redefine el mantenimiento doméstico. Obtenga un descuento exclusivo utilizando el código carms al finalizar su pedido."
+              - group "Video player" [ref=e405]:
+                - button "Reproducir video" [ref=e407] [cursor=pointer]
+                - generic [ref=e409]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Reproducir"
+                    - generic: 0:00 / 1:03
+                  - generic:
+                    - generic:
+                      - slider "Change Position"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Configuración"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Ver en pantalla completa"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - slider "Ajustar volumen"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Reactivar":
+                              - img
+              - link "WWW.AQUAECUADOR.COM La tecnología del futuro para las cañerías de hoy Fórmula avanzada de alta penetración para un drenaje libre y duradero. Más información" [ref=e411] [cursor=pointer]:
+                - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.aquaecuador.com%2Fdestapacaneriasecsfb%3Futm_source%3Dfacebook%26utm_medium%3Dcpc%26utm_campaign%3D__cbopolvoverdefb__%26utm_id%3D__AID__%26utm_term%3D__AID_NAME__%26utm_content%3D__CID_NAME__&h=AT73lVvV2ehtwtCfeufpvVr3XZrSav8LRhsi-vxs71bXu_-BDASpYiYtVNfg0YYPLwzh4p9M3-at5UeX0s-mA4NXSoJ_MUtDJEjC_ZZ56Z7jhIldCyF4wIsieuD23rkPgAuzf69rTw3Xq-0Y8hNoyJXgluBej-jLctbP0Q
+                - generic [ref=e412]:
+                  - generic [ref=e413]:
+                    - button "WWW.AQUAECUADOR.COM" [ref=e415]:
+                      - generic [ref=e416]: WWW.AQUAECUADOR.COM
+                    - button "La tecnología del futuro para las cañerías de hoy" [ref=e418]:
+                      - generic [ref=e419]: La tecnología del futuro para las cañerías de hoy
+                    - button "Fórmula avanzada de alta penetración para un drenaje libre y duradero." [ref=e421]:
+                      - generic [ref=e422]: Fórmula avanzada de alta penetración para un drenaje libre y duradero.
+                    - generic:
+                      - button
+                  - button "Más información" [ref=e424]:
+                    - generic [ref=e428]: Más información
+      - button "Cerrar" [ref=e431] [cursor=pointer]:
+        - generic [ref=e435]: Cerrar

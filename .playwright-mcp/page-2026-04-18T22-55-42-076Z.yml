@@ -1,0 +1,115 @@
+- generic [active] [ref=e1]:
+  - text:   
+  - generic [ref=e325]:
+    - link "AI Transcriptions by Riverside" [ref=e327] [cursor=pointer]:
+      - /url: https://riverside.com/
+      - generic [ref=e328]: AI Transcriptions
+      - generic [ref=e329]: by Riverside
+    - generic [ref=e330]:
+      - generic [ref=e331]:
+        - heading "Drop a file to" [level=2] [ref=e332]: Drop a file to
+        - heading "transcribe it." [level=2] [ref=e333]
+        - generic [ref=e337] [cursor=pointer]:
+          - img [ref=e339]
+          - text: Or upload a file
+      - generic [ref=e341]:
+        - heading "Before we start..." [level=3] [ref=e342]: Before we start...
+        - generic [ref=e344]:
+          - generic [ref=e346]:
+            - generic [ref=e348]: intro special2.mp4
+            - generic [ref=e349]:
+              - generic [ref=e350]: 0%
+              - generic [ref=e351] [cursor=pointer]: Replace
+              - img [ref=e352]
+          - generic [ref=e356] [cursor=pointer]: "Language: English"
+          - generic [ref=e357]:
+            - generic [ref=e358]: "What would you like to transcribe:"
+            - generic [ref=e359]:
+              - generic [ref=e360] [cursor=pointer]: Podcast
+              - generic [ref=e361] [cursor=pointer]: Interview
+              - generic [ref=e362] [cursor=pointer]: Webinar
+              - generic [ref=e363] [cursor=pointer]: Video content
+              - generic [ref=e364] [cursor=pointer]: Other
+          - generic [ref=e365]:
+            - generic [ref=e366]: What will you use the transcription for?
+            - generic [ref=e367]:
+              - generic [ref=e368] [cursor=pointer]: Social post
+              - generic [ref=e369] [cursor=pointer]: Captions
+              - generic [ref=e370] [cursor=pointer]: Key insights
+              - generic [ref=e371] [cursor=pointer]: Educational content
+              - generic [ref=e372] [cursor=pointer]: Other
+          - button "Start transcribing" [ref=e373] [cursor=pointer]
+      - generic:
+        - generic:
+          - heading "Ready!" [level=3]: Ready!
+          - generic [ref=e374]:
+            - generic [ref=e375]: Your transcripts are ready, be sure to download them before you go!
+            - button "Download" [ref=e377] [cursor=pointer]:
+              - generic [ref=e378]: Download
+            - link "Transcribe another file Black capital letter L on a white background." [ref=e379] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e380]: Transcribe another file
+              - img "Black capital letter L on a white background." [ref=e381]
+      - generic [ref=e382]:
+        - generic [ref=e383]:
+          - generic [ref=e384]: Please Wait...
+          - generic [ref=e385]: We're working on it! Transcription times can vary based on file size, content length, and how busy our servers are. Thanks for your patience!
+        - generic [ref=e386]:
+          - generic [ref=e387]: "What would you like to transcribe:"
+          - generic [ref=e388]:
+            - generic [ref=e390]: intro special2.mp4
+            - link "Copy to clipboard":
+              - /url: "#"
+              - generic: Copy to clipboard
+      - generic [ref=e397]:
+        - img [ref=e399] [cursor=pointer]
+        - generic [ref=e401]:
+          - generic [ref=e402] [cursor=pointer]:
+            - img [ref=e404]
+            - generic [ref=e406]: Explore more features for transcribing, recording, and editing with Riverside
+          - generic:
+            - generic:
+              - generic:
+                - img "Audio player with waveform, featuring a profile photo of a man named Stephen and a timestamp of 5 minutes and 10 seconds, on a dark background."
+            - generic:
+              - generic: Transcribe, record and edit your Audio or Video seamlessly with Riverside
+              - generic:
+                - generic: Starts transcribing as soon as you’re done recording or uploading, so no need to wait long
+                - generic: Record in up to 4K video and 48kHz audio
+                - generic: Add speaker labels in seconds with our AI-powered Speaker Detective.
+                - generic: Transcribe, clip, and edit your video in seconds
+              - link "Try Riverside for Free":
+                - /url: https://riverside.fm/register
+                - generic: Try Riverside for Free
+              - generic: "*A new tab will open without interrupting transcription"
+      - generic [ref=e407]:
+        - generic [ref=e408]: File type not supported. We only support MP3 and WAV files for now.
+        - img [ref=e410] [cursor=pointer]
+      - generic:
+        - generic [ref=e413]: Super accurate transcriptions in 100+ languages.
+        - generic [ref=e415]: Powered by the latest AI technology.
+        - generic [ref=e417]: Supports MP3, WAV, MP4 and MOV.
+        - generic [ref=e419]: Unlimited transcriptions for free. No sign up required.
+      - img "White digital audio waveform on a black background with varying amplitude and frequency." [ref=e420]
+    - generic [ref=e422]: Drop it!
+    - generic [ref=e424]:
+      - heading "Download files" [level=3] [ref=e426]
+      - link "Transcript TXT" [ref=e428] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e429]: Transcript
+        - generic [ref=e431]: TXT
+      - link "Captions SRT" [ref=e432] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e433]: Captions
+        - generic [ref=e435]: SRT
+      - link "Learn about file types" [ref=e436] [cursor=pointer]:
+        - /url: https://support.riverside.com/hc/en-us/articles/7748677293981-About-Transcription-Formats
+        - generic [ref=e438]: Learn about file types
+    - generic [ref=e440]:
+      - heading "Are you sure?" [level=3] [ref=e441]
+      - generic [ref=e442]: Make sure you've downloaded your transcripts before starting a new one.
+      - generic [ref=e443]:
+        - link "Cancel" [ref=e444] [cursor=pointer]:
+          - /url: "#"
+        - link "Transcribe another file" [ref=e445] [cursor=pointer]:
+          - /url: "#"

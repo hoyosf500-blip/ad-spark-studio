@@ -1,0 +1,1403 @@
+- generic [ref=e1]:
+  - generic [ref=e12]:
+    - generic [ref=e15]:
+      - link "Biblioteca de anuncios de Meta" [ref=e18] [cursor=pointer]:
+        - /url: /ads/library/?source=fb-logo
+        - generic [ref=e20]: Biblioteca de anuncios de Meta
+      - generic [ref=e22]: Biblioteca de anuncios
+      - menuitem "Informe de la biblioteca de anuncios" [ref=e24] [cursor=pointer]:
+        - generic [ref=e25]: Informe de la biblioteca de anuncios
+      - menuitem "API de la biblioteca de anuncios" [ref=e27] [cursor=pointer]:
+        - generic [ref=e28]: API de la biblioteca de anuncios
+      - menuitem "Contenido de marca" [ref=e30] [cursor=pointer]:
+        - generic [ref=e31]: Contenido de marca
+      - menuitem "Open navigation panel" [ref=e33] [cursor=pointer]
+    - generic [ref=e40]:
+      - combobox "Colombia" [ref=e44] [cursor=pointer]:
+        - generic [ref=e51]: Colombia
+      - combobox "Todos los anuncios" [ref=e62] [cursor=pointer]:
+        - generic [ref=e72]: Todos los anuncios
+      - generic [ref=e82]:
+        - generic [ref=e88]: Buscar por palabra clave o anunciante
+        - generic [ref=e94]:
+          - searchbox "Buscar por palabra clave o anunciante" [ref=e100]: Laura Recomienda
+          - button "Borrar" [ref=e102] [cursor=pointer]
+    - generic [ref=e105]:
+      - generic [ref=e107]:
+        - img "Foto del perfil de la página" [ref=e112]
+        - link "Laura Recomienda" [ref=e115] [cursor=pointer]:
+          - /url: https://facebook.com/100085463471281
+          - heading "Laura Recomienda" [level=1] [ref=e116]
+      - generic [ref=e117]:
+        - link "Anuncios" [ref=e118] [cursor=pointer]
+        - link "Información" [ref=e119] [cursor=pointer]
+    - dialog [ref=e120]:
+      - generic [ref=e121]:
+        - link [ref=e122] [cursor=pointer]:
+          - /url: /
+          - heading [level=4] [ref=e123]: Iniciar sesión
+        - menuitem [ref=e124] [cursor=pointer]
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - heading [level=4] [ref=e129]: Biblioteca de anuncios
+          - menuitem [ref=e131] [cursor=pointer]:
+            - heading [level=4] [ref=e133]: Informe de la biblioteca de anuncios
+          - menuitem [ref=e135] [cursor=pointer]:
+            - heading [level=4] [ref=e137]: API de la biblioteca de anuncios
+          - menuitem [ref=e139] [cursor=pointer]:
+            - heading [level=4] [ref=e141]: Contenido de marca
+        - separator [ref=e142]
+        - generic [ref=e143]:
+          - menuitem [ref=e145] [cursor=pointer]:
+            - heading [level=4] [ref=e147]: Estado del sistema
+          - menuitem [ref=e149] [cursor=pointer]:
+            - heading [level=4] [ref=e151]: Suscripción a novedades por correo electrónico
+          - menuitem [ref=e153] [cursor=pointer]:
+            - heading [level=4] [ref=e155]: Preguntas frecuentes
+          - menuitem [ref=e157] [cursor=pointer]:
+            - heading [level=4] [ref=e159]: Información sobre anuncios y uso de datos
+          - menuitem [ref=e161] [cursor=pointer]:
+            - heading [level=4] [ref=e163]: Privacidad
+          - menuitem [ref=e165] [cursor=pointer]:
+            - heading [level=4] [ref=e167]: Condiciones
+          - menuitem [ref=e169] [cursor=pointer]:
+            - heading [level=4] [ref=e171]: Cookies
+    - generic [ref=e172]:
+      - generic [ref=e186]:
+        - heading "~47 resultados" [level=3] [ref=e194]
+        - generic [ref=e195]:
+          - generic [ref=e203]:
+            - generic [ref=e204]:
+              - textbox "Palabra clave" [ref=e206]
+              - button "Filtros" [ref=e210] [cursor=pointer]:
+                - generic [ref=e215]: Filtros
+              - generic [ref=e217]:
+                - generic [ref=e223]: Ordenar
+                - combobox "Ordenar" [ref=e228] [cursor=pointer]:
+                  - generic [ref=e235]: Ordenar por
+            - generic [ref=e240]:
+              - generic [ref=e241]:
+                - strong [ref=e242]: Estado activo
+                - text: ": Anuncios activos"
+              - button "Eliminar" [ref=e243] [cursor=pointer]:
+                - generic [ref=e246]: Eliminar
+          - generic [ref=e250]:
+            - generic [ref=e252]:
+              - generic [ref=e254]:
+                - generic [ref=e255]:
+                  - generic [ref=e262]: Activo
+                  - generic [ref=e265]: "Identificador de la biblioteca: 1864440030961125"
+                  - generic [ref=e267]: En circulación desde el 12 mar 2025
+                  - generic [ref=e269]: Plataformas
+                  - generic [ref=e292]:
+                    - strong [ref=e293]: 4 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e296] [cursor=pointer]:
+                  - generic [ref=e299]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e302] [cursor=pointer]:
+                - generic [ref=e306]: Ver detalles del resumen
+              - separator [ref=e307]
+              - generic [ref=e312]:
+                - generic [ref=e314]:
+                  - img "Laura Recomienda" [ref=e315]
+                  - generic [ref=e317]:
+                    - link "Laura Recomienda" [ref=e318] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e322]:
+                      - strong [ref=e324]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e325]:
+                  - button "🔥Estoy encantada con mi cuchillo de dragones. Es importado, tiene un filo que nunca se acaba y es de acero inoxidable." [ref=e328]:
+                    - generic [ref=e330]: 🔥Estoy encantada con mi cuchillo de dragones. Es importado, tiene un filo que nunca se acaba y es de acero inoxidable.
+                  - group "Video player" [ref=e340]:
+                    - button "Reproducir video" [ref=e342] [cursor=pointer]
+                    - generic [ref=e344]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:20
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic:
+                    - link:
+                      - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcuchillo-labrado-a-mano-metadragones&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+            - generic [ref=e346]:
+              - generic [ref=e348]:
+                - generic [ref=e349]:
+                  - generic [ref=e356]: Activo
+                  - generic [ref=e359]: "Identificador de la biblioteca: 1818093185799449"
+                  - generic [ref=e361]: En circulación desde el 26 jul 2025
+                  - generic [ref=e363]: Plataformas
+                  - generic [ref=e386]:
+                    - strong [ref=e387]: 3 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e390] [cursor=pointer]:
+                  - generic [ref=e393]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e396] [cursor=pointer]:
+                - generic [ref=e400]: Ver detalles del resumen
+              - separator [ref=e401]
+              - generic [ref=e406]:
+                - generic [ref=e408]:
+                  - img "Laura Recomienda" [ref=e409]
+                  - generic [ref=e411]:
+                    - link "Laura Recomienda" [ref=e412] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e416]:
+                      - strong [ref=e418]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e419]:
+                  - button "🔥¡Lo más viral en TikTok ahora puede ser tuyo! Descubre nuestro enterizo levanta cola bota campana importado. ¡Moldea tu figura y luce increíble con el look del momento!" [ref=e422]:
+                    - generic [ref=e424]: 🔥¡Lo más viral en TikTok ahora puede ser tuyo! Descubre nuestro enterizo levanta cola bota campana importado. ¡Moldea tu figura y luce increíble con el look del momento!
+                  - group "Video player" [ref=e434]:
+                    - button "Reproducir video" [ref=e436] [cursor=pointer]
+                    - generic [ref=e438]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:15
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic:
+                    - link:
+                      - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fenterizo2-levanta-gluteos-importado&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+            - generic [ref=e440]:
+              - generic [ref=e442]:
+                - generic [ref=e443]:
+                  - generic [ref=e450]: Activo
+                  - generic [ref=e453]: "Identificador de la biblioteca: 2440025463142345"
+                  - generic [ref=e455]: En circulación desde el 6 mar 2026
+                  - generic [ref=e457]: Plataformas
+                - button "Abrir menú desplegable" [ref=e486] [cursor=pointer]:
+                  - generic [ref=e489]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e492] [cursor=pointer]:
+                - generic [ref=e496]: Ver detalles del anuncio
+              - separator [ref=e497]
+              - generic [ref=e502]:
+                - generic [ref=e504]:
+                  - img "Laura Recomienda" [ref=e505]
+                  - generic [ref=e507]:
+                    - link "Laura Recomienda" [ref=e508] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e512]:
+                      - strong [ref=e514]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e515]:
+                  - button "👖 Antes evitaba pantalones ajustados porque me incomodaban… este se adapta perfecto a mi cuerpo y puedo moverme libremente. ✨ ¡Comodidad real todo el día!" [ref=e518]:
+                    - generic [ref=e521]:
+                      - text: 👖 Antes evitaba pantalones ajustados porque me incomodaban… este se adapta perfecto a mi cuerpo y puedo moverme libremente.
+                      - text: ✨ ¡Comodidad real todo el día!
+                  - group "Video player" [ref=e531]:
+                    - button "Reproducir video" [ref=e533] [cursor=pointer]
+                    - generic [ref=e535]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:11
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM 🔥 El pantalón que se mueve contigo 🛒 ¡Ordénalo ahora! Más información" [ref=e537] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fpantalon-new-motion-confort-estilo-y-movimiento&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e538]:
+                      - generic [ref=e539]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e541]:
+                          - generic [ref=e542]: LABARATANGA.MYSHOPIFY.COM
+                        - button "🔥 El pantalón que se mueve contigo" [ref=e544]:
+                          - generic [ref=e545]: 🔥 El pantalón que se mueve contigo
+                        - button "🛒 ¡Ordénalo ahora!" [ref=e547]:
+                          - generic [ref=e548]: 🛒 ¡Ordénalo ahora!
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e550]:
+                        - generic [ref=e554]: Más información
+            - generic [ref=e556]:
+              - generic [ref=e558]:
+                - generic [ref=e559]:
+                  - generic [ref=e566]: Activo
+                  - generic [ref=e569]: "Identificador de la biblioteca: 1324046318823876"
+                  - generic [ref=e571]: En circulación desde el 12 mar 2025
+                  - generic [ref=e573]: Plataformas
+                  - generic [ref=e596]:
+                    - strong [ref=e597]: 4 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e600] [cursor=pointer]:
+                  - generic [ref=e603]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e606] [cursor=pointer]:
+                - generic [ref=e610]: Ver detalles del resumen
+              - separator [ref=e611]
+              - generic [ref=e616]:
+                - generic [ref=e618]:
+                  - img "Laura Recomienda" [ref=e619]
+                  - generic [ref=e621]:
+                    - link "Laura Recomienda" [ref=e622] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e626]:
+                      - strong [ref=e628]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e629]:
+                  - button "🔥Estoy encantada con mi cuchillo de dragones. Es importado, tiene un filo que nunca se acaba y es de acero inoxidable." [ref=e632]:
+                    - generic [ref=e634]: 🔥Estoy encantada con mi cuchillo de dragones. Es importado, tiene un filo que nunca se acaba y es de acero inoxidable.
+                  - group "Video player" [ref=e644]:
+                    - button "Reproducir video" [ref=e646] [cursor=pointer]
+                    - generic [ref=e648]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:17
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic:
+                    - link:
+                      - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcuchillo-labrado-a-mano-metadragones&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+            - generic [ref=e650]:
+              - generic [ref=e652]:
+                - generic [ref=e653]:
+                  - generic [ref=e660]: Activo
+                  - generic [ref=e663]: "Identificador de la biblioteca: 1420475062620852"
+                  - generic [ref=e665]: En circulación desde el 26 jul 2025
+                  - generic [ref=e667]: Plataformas
+                  - generic [ref=e690]:
+                    - strong [ref=e691]: 3 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e694] [cursor=pointer]:
+                  - generic [ref=e697]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e700] [cursor=pointer]:
+                - generic [ref=e704]: Ver detalles del resumen
+              - separator [ref=e705]
+              - generic [ref=e710]:
+                - generic [ref=e712]:
+                  - img "Laura Recomienda" [ref=e713]
+                  - generic [ref=e715]:
+                    - link "Laura Recomienda" [ref=e716] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e720]:
+                      - strong [ref=e722]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e723]:
+                  - button "🔥¡Lo más viral en TikTok ahora puede ser tuyo! Descubre nuestro enterizo levanta cola bota campana importado. ¡Moldea tu figura y luce increíble con el look del momento!" [ref=e726]:
+                    - generic [ref=e728]: 🔥¡Lo más viral en TikTok ahora puede ser tuyo! Descubre nuestro enterizo levanta cola bota campana importado. ¡Moldea tu figura y luce increíble con el look del momento!
+                  - group "Video player" [ref=e738]:
+                    - button "Reproducir video" [ref=e740] [cursor=pointer]
+                    - generic [ref=e742]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:13
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic:
+                    - link:
+                      - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fenterizo2-levanta-gluteos-importado&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+            - generic [ref=e744]:
+              - generic [ref=e746]:
+                - generic [ref=e747]:
+                  - generic [ref=e754]: Activo
+                  - generic [ref=e757]: "Identificador de la biblioteca: 1202225134840737"
+                  - generic [ref=e759]: En circulación desde el 12 mar 2025
+                  - generic [ref=e761]: Plataformas
+                  - generic [ref=e784]:
+                    - strong [ref=e785]: 4 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e788] [cursor=pointer]:
+                  - generic [ref=e791]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e794] [cursor=pointer]:
+                - generic [ref=e798]: Ver detalles del resumen
+              - separator [ref=e799]
+              - generic [ref=e804]:
+                - generic [ref=e806]:
+                  - img "Laura Recomienda" [ref=e807]
+                  - generic [ref=e809]:
+                    - link "Laura Recomienda" [ref=e810] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e814]:
+                      - strong [ref=e816]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e817]:
+                  - button "🔥Estoy encantada con mi cuchillo de dragones. Es importado, tiene un filo que nunca se acaba y es de acero inoxidable." [ref=e820]:
+                    - generic [ref=e822]: 🔥Estoy encantada con mi cuchillo de dragones. Es importado, tiene un filo que nunca se acaba y es de acero inoxidable.
+                  - group "Video player" [ref=e832]:
+                    - button "Reproducir video" [ref=e834] [cursor=pointer]
+                    - generic [ref=e836]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:12
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic:
+                    - link:
+                      - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcuchillo-labrado-a-mano-metadragones&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+            - generic [ref=e838]:
+              - generic [ref=e840]:
+                - generic [ref=e841]:
+                  - generic [ref=e848]: Activo
+                  - generic [ref=e851]: "Identificador de la biblioteca: 895782089943111"
+                  - generic [ref=e853]: En circulación desde el 12 feb 2026
+                  - generic [ref=e855]: Plataformas
+                - button "Abrir menú desplegable" [ref=e884] [cursor=pointer]:
+                  - generic [ref=e887]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e890] [cursor=pointer]:
+                - generic [ref=e894]: Ver detalles del anuncio
+              - separator [ref=e895]
+              - generic [ref=e900]:
+                - generic [ref=e902]:
+                  - img "Laura Recomienda" [ref=e903]
+                  - generic [ref=e905]:
+                    - link "Laura Recomienda" [ref=e906] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e910]:
+                      - strong [ref=e912]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e913]:
+                  - button "¡Esto no es un body común! Cuando tiro de las tiras traseras, mi cintura se transforma en una de avispa al instante. Me siento poderosa y espectacular." [ref=e916]:
+                    - generic [ref=e918]: ¡Esto no es un body común! Cuando tiro de las tiras traseras, mi cintura se transforma en una de avispa al instante. Me siento poderosa y espectacular.
+                  - group "Video player" [ref=e928]:
+                    - button "Reproducir video" [ref=e930] [cursor=pointer]
+                    - generic [ref=e932]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:21
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM Body Corset Envio gratis, paga en casa Más información" [ref=e934] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcorset-moldeador&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e935]:
+                      - generic [ref=e936]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e938]:
+                          - generic [ref=e939]: LABARATANGA.MYSHOPIFY.COM
+                        - button "Body Corset" [ref=e941]:
+                          - generic [ref=e942]: Body Corset
+                        - button "Envio gratis, paga en casa" [ref=e944]:
+                          - generic [ref=e945]: Envio gratis, paga en casa
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e947]:
+                        - generic [ref=e951]: Más información
+            - generic [ref=e953]:
+              - generic [ref=e955]:
+                - generic [ref=e956]:
+                  - generic [ref=e963]: Activo
+                  - generic [ref=e966]: "Identificador de la biblioteca: 2059173358264836"
+                  - generic [ref=e968]: En circulación desde el 6 mar 2026
+                  - generic [ref=e970]: Plataformas
+                - button "Abrir menú desplegable" [ref=e999] [cursor=pointer]:
+                  - generic [ref=e1002]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1005] [cursor=pointer]:
+                - generic [ref=e1009]: Ver detalles del anuncio
+              - separator [ref=e1010]
+              - generic [ref=e1015]:
+                - generic [ref=e1017]:
+                  - img "Laura Recomienda" [ref=e1018]
+                  - generic [ref=e1020]:
+                    - link "Laura Recomienda" [ref=e1021] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e1025]:
+                      - strong [ref=e1027]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1028]:
+                  - button "👖 Antes evitaba pantalones ajustados porque me incomodaban… este se adapta perfecto a mi cuerpo y puedo moverme libremente. ✨ ¡Comodidad real todo el día!" [ref=e1031]:
+                    - generic [ref=e1034]:
+                      - text: 👖 Antes evitaba pantalones ajustados porque me incomodaban… este se adapta perfecto a mi cuerpo y puedo moverme libremente.
+                      - text: ✨ ¡Comodidad real todo el día!
+                  - group "Video player" [ref=e1044]:
+                    - button "Reproducir video" [ref=e1046] [cursor=pointer]
+                    - generic [ref=e1048]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:12
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM 🔥 El pantalón que se mueve contigo 🛒 ¡Ordénalo ahora! Más información" [ref=e1050] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fpantalon-new-motion-confort-estilo-y-movimiento&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e1051]:
+                      - generic [ref=e1052]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e1054]:
+                          - generic [ref=e1055]: LABARATANGA.MYSHOPIFY.COM
+                        - button "🔥 El pantalón que se mueve contigo" [ref=e1057]:
+                          - generic [ref=e1058]: 🔥 El pantalón que se mueve contigo
+                        - button "🛒 ¡Ordénalo ahora!" [ref=e1060]:
+                          - generic [ref=e1061]: 🛒 ¡Ordénalo ahora!
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1063]:
+                        - generic [ref=e1067]: Más información
+            - generic [ref=e1069]:
+              - generic [ref=e1071]:
+                - generic [ref=e1072]:
+                  - generic [ref=e1079]: Activo
+                  - generic [ref=e1082]: "Identificador de la biblioteca: 1240419184126494"
+                  - generic [ref=e1084]: En circulación desde el 11 jun 2025
+                  - generic [ref=e1086]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1115] [cursor=pointer]:
+                  - generic [ref=e1118]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1121] [cursor=pointer]:
+                - generic [ref=e1125]: Ver detalles del anuncio
+              - separator [ref=e1126]
+              - generic [ref=e1131]:
+                - generic [ref=e1133]:
+                  - img "Laura Recomienda" [ref=e1134]
+                  - generic [ref=e1136]:
+                    - link "Laura Recomienda" [ref=e1137] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e1141]:
+                      - strong [ref=e1143]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1144]:
+                  - button "No sabía lo bien que podía lucir… hasta que usé este enterizo. Me moldea, me estiliza y además está súper de moda. ¡Literal, todos me preguntan dónde lo compré!" [ref=e1147]:
+                    - generic [ref=e1149]: No sabía lo bien que podía lucir… hasta que usé este enterizo. Me moldea, me estiliza y además está súper de moda. ¡Literal, todos me preguntan dónde lo compré!
+                  - group "Video player" [ref=e1159]:
+                    - button "Reproducir video" [ref=e1161] [cursor=pointer]
+                    - generic [ref=e1163]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:09
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM 🔥Enterizo Viral Envio gratis, paga en casa Obtener oferta" [ref=e1165] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fenterizo-bota-campana-viral&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e1166]:
+                      - generic [ref=e1167]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e1169]:
+                          - generic [ref=e1170]: LABARATANGA.MYSHOPIFY.COM
+                        - button "🔥Enterizo Viral" [ref=e1172]:
+                          - generic [ref=e1173]: 🔥Enterizo Viral
+                        - button "Envio gratis, paga en casa" [ref=e1175]:
+                          - generic [ref=e1176]: Envio gratis, paga en casa
+                        - generic:
+                          - button
+                      - button "Obtener oferta" [ref=e1178]:
+                        - generic [ref=e1182]: Obtener oferta
+            - generic [ref=e1184]:
+              - generic [ref=e1186]:
+                - generic [ref=e1187]:
+                  - generic [ref=e1194]: Activo
+                  - generic [ref=e1197]: "Identificador de la biblioteca: 949237407839003"
+                  - generic [ref=e1199]: En circulación desde el 11 abr 2026
+                  - generic [ref=e1201]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1230] [cursor=pointer]:
+                  - generic [ref=e1233]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1236] [cursor=pointer]:
+                - generic [ref=e1240]: Ver detalles del anuncio
+              - separator [ref=e1241]
+              - generic [ref=e1246]:
+                - generic [ref=e1248]:
+                  - img "Laura Recomienda" [ref=e1249]
+                  - generic [ref=e1251]:
+                    - link "Laura Recomienda" [ref=e1252] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e1256]:
+                      - strong [ref=e1258]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1259]:
+                  - button "✨ Desde que uso este corset, mi cintura se ve mucho más definida. Me ajusta perfecto sin incomodarme. 💖 ¡Mi figura se transforma al instante!" [ref=e1262]:
+                    - generic [ref=e1265]:
+                      - text: ✨ Desde que uso este corset, mi cintura se ve mucho más definida.
+                      - text: Me ajusta perfecto sin incomodarme.
+                      - text: 💖 ¡Mi figura se transforma al instante!
+                  - group "Video player" [ref=e1275]:
+                    - button "Reproducir video" [ref=e1277] [cursor=pointer]
+                    - generic [ref=e1279]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:11
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM 💖 Cintura definida en segundos 🛒 ¡Ordénalo ahora! Comprar" [ref=e1281] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcorset-moldeador&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e1282]:
+                      - generic [ref=e1283]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e1285]:
+                          - generic [ref=e1286]: LABARATANGA.MYSHOPIFY.COM
+                        - button "💖 Cintura definida en segundos" [ref=e1288]:
+                          - generic [ref=e1289]: 💖 Cintura definida en segundos
+                        - button "🛒 ¡Ordénalo ahora!" [ref=e1291]:
+                          - generic [ref=e1292]: 🛒 ¡Ordénalo ahora!
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1294]:
+                        - generic [ref=e1298]: Comprar
+            - generic [ref=e1300]:
+              - generic [ref=e1302]:
+                - generic [ref=e1303]:
+                  - generic [ref=e1310]: Activo
+                  - generic [ref=e1313]: "Identificador de la biblioteca: 872336019134319"
+                  - generic [ref=e1315]: En circulación desde el 6 mar 2026
+                  - generic [ref=e1317]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1346] [cursor=pointer]:
+                  - generic [ref=e1349]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1352] [cursor=pointer]:
+                - generic [ref=e1356]: Ver detalles del anuncio
+              - separator [ref=e1357]
+              - generic [ref=e1362]:
+                - generic [ref=e1364]:
+                  - img "Laura Recomienda" [ref=e1365]
+                  - generic [ref=e1367]:
+                    - link "Laura Recomienda" [ref=e1368] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e1372]:
+                      - strong [ref=e1374]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1375]:
+                  - button "👖 Antes evitaba pantalones ajustados porque me incomodaban… este se adapta perfecto a mi cuerpo y puedo moverme libremente. ✨ ¡Comodidad real todo el día!" [ref=e1378]:
+                    - generic [ref=e1381]:
+                      - text: 👖 Antes evitaba pantalones ajustados porque me incomodaban… este se adapta perfecto a mi cuerpo y puedo moverme libremente.
+                      - text: ✨ ¡Comodidad real todo el día!
+                  - group "Video player" [ref=e1391]:
+                    - button "Reproducir video" [ref=e1393] [cursor=pointer]
+                    - generic [ref=e1395]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:18
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM 🔥 El pantalón que se mueve contigo 🛒 ¡Ordénalo ahora! Más información" [ref=e1397] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fpantalon-new-motion-confort-estilo-y-movimiento&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e1398]:
+                      - generic [ref=e1399]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e1401]:
+                          - generic [ref=e1402]: LABARATANGA.MYSHOPIFY.COM
+                        - button "🔥 El pantalón que se mueve contigo" [ref=e1404]:
+                          - generic [ref=e1405]: 🔥 El pantalón que se mueve contigo
+                        - button "🛒 ¡Ordénalo ahora!" [ref=e1407]:
+                          - generic [ref=e1408]: 🛒 ¡Ordénalo ahora!
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1410]:
+                        - generic [ref=e1414]: Más información
+            - generic [ref=e1416]:
+              - generic [ref=e1418]:
+                - generic [ref=e1419]:
+                  - generic [ref=e1426]: Activo
+                  - generic [ref=e1429]: "Identificador de la biblioteca: 2145490352859035"
+                  - generic [ref=e1431]: En circulación desde el 6 mar 2026
+                  - generic [ref=e1433]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1462] [cursor=pointer]:
+                  - generic [ref=e1465]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1468] [cursor=pointer]:
+                - generic [ref=e1472]: Ver detalles del anuncio
+              - separator [ref=e1473]
+              - generic [ref=e1478]:
+                - generic [ref=e1480]:
+                  - img "Laura Recomienda" [ref=e1481]
+                  - generic [ref=e1483]:
+                    - link "Laura Recomienda" [ref=e1484] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e1488]:
+                      - strong [ref=e1490]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1491]:
+                  - button "👖 Antes evitaba pantalones ajustados porque me incomodaban… este se adapta perfecto a mi cuerpo y puedo moverme libremente. ✨ ¡Comodidad real todo el día!" [ref=e1494]:
+                    - generic [ref=e1497]:
+                      - text: 👖 Antes evitaba pantalones ajustados porque me incomodaban… este se adapta perfecto a mi cuerpo y puedo moverme libremente.
+                      - text: ✨ ¡Comodidad real todo el día!
+                  - group "Video player" [ref=e1507]:
+                    - button "Reproducir video" [ref=e1509] [cursor=pointer]
+                    - generic [ref=e1511]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:21
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM 🔥 El pantalón que se mueve contigo 🛒 ¡Ordénalo ahora! Más información" [ref=e1513] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fpantalon-new-motion-confort-estilo-y-movimiento&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e1514]:
+                      - generic [ref=e1515]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e1517]:
+                          - generic [ref=e1518]: LABARATANGA.MYSHOPIFY.COM
+                        - button "🔥 El pantalón que se mueve contigo" [ref=e1520]:
+                          - generic [ref=e1521]: 🔥 El pantalón que se mueve contigo
+                        - button "🛒 ¡Ordénalo ahora!" [ref=e1523]:
+                          - generic [ref=e1524]: 🛒 ¡Ordénalo ahora!
+                        - generic:
+                          - button
+                      - button "Más información" [ref=e1526]:
+                        - generic [ref=e1530]: Más información
+            - generic [ref=e1532]:
+              - generic [ref=e1534]:
+                - generic [ref=e1535]:
+                  - generic [ref=e1542]: Activo
+                  - generic [ref=e1545]: "Identificador de la biblioteca: 947511064699356"
+                  - generic [ref=e1547]: En circulación desde el 12 abr 2026
+                  - generic [ref=e1549]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1578] [cursor=pointer]:
+                  - generic [ref=e1581]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1584] [cursor=pointer]:
+                - generic [ref=e1588]: Ver detalles del anuncio
+              - separator [ref=e1589]
+              - generic [ref=e1594]:
+                - generic [ref=e1596]:
+                  - img "Laura Recomienda" [ref=e1597]
+                  - generic [ref=e1599]:
+                    - link "Laura Recomienda" [ref=e1600] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e1604]:
+                      - strong [ref=e1606]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1607]:
+                  - button "✨ Desde que uso este corset, mi cintura se ve mucho más definida. Me ajusta perfecto sin incomodarme. 💖 ¡Mi figura se transforma al instante!" [ref=e1610]:
+                    - generic [ref=e1613]:
+                      - text: ✨ Desde que uso este corset, mi cintura se ve mucho más definida.
+                      - text: Me ajusta perfecto sin incomodarme.
+                      - text: 💖 ¡Mi figura se transforma al instante!
+                  - group "Video player" [ref=e1623]:
+                    - button "Reproducir video" [ref=e1625] [cursor=pointer]
+                    - generic [ref=e1627]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:28
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM 💖 Cintura definida en segundos 🛒 ¡Ordénalo ahora! Comprar" [ref=e1629] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcorset-moldeador&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e1630]:
+                      - generic [ref=e1631]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e1633]:
+                          - generic [ref=e1634]: LABARATANGA.MYSHOPIFY.COM
+                        - button "💖 Cintura definida en segundos" [ref=e1636]:
+                          - generic [ref=e1637]: 💖 Cintura definida en segundos
+                        - button "🛒 ¡Ordénalo ahora!" [ref=e1639]:
+                          - generic [ref=e1640]: 🛒 ¡Ordénalo ahora!
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1642]:
+                        - generic [ref=e1646]: Comprar
+            - generic [ref=e1648]:
+              - generic [ref=e1650]:
+                - generic [ref=e1651]:
+                  - generic [ref=e1658]: Activo
+                  - generic [ref=e1661]: "Identificador de la biblioteca: 1532255681567851"
+                  - generic [ref=e1663]: En circulación desde el 11 abr 2026
+                  - generic [ref=e1665]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1694] [cursor=pointer]:
+                  - generic [ref=e1697]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1700] [cursor=pointer]:
+                - generic [ref=e1704]: Ver detalles del anuncio
+              - separator [ref=e1705]
+              - generic [ref=e1710]:
+                - generic [ref=e1712]:
+                  - img "Laura Recomienda" [ref=e1713]
+                  - generic [ref=e1715]:
+                    - link "Laura Recomienda" [ref=e1716] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e1720]:
+                      - strong [ref=e1722]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1723]:
+                  - button "✨ Desde que uso este corset, mi cintura se ve mucho más definida. Me ajusta perfecto sin incomodarme. 💖 ¡Mi figura se transforma al instante!" [ref=e1726]:
+                    - generic [ref=e1729]:
+                      - text: ✨ Desde que uso este corset, mi cintura se ve mucho más definida.
+                      - text: Me ajusta perfecto sin incomodarme.
+                      - text: 💖 ¡Mi figura se transforma al instante!
+                  - group "Video player" [ref=e1739]:
+                    - button "Reproducir video" [ref=e1741] [cursor=pointer]
+                    - generic [ref=e1743]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:14
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM 💖 Cintura definida en segundos 🛒 ¡Ordénalo ahora! Comprar" [ref=e1745] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcorset-moldeador&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e1746]:
+                      - generic [ref=e1747]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e1749]:
+                          - generic [ref=e1750]: LABARATANGA.MYSHOPIFY.COM
+                        - button "💖 Cintura definida en segundos" [ref=e1752]:
+                          - generic [ref=e1753]: 💖 Cintura definida en segundos
+                        - button "🛒 ¡Ordénalo ahora!" [ref=e1755]:
+                          - generic [ref=e1756]: 🛒 ¡Ordénalo ahora!
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1758]:
+                        - generic [ref=e1762]: Comprar
+            - generic [ref=e1764]:
+              - generic [ref=e1766]:
+                - generic [ref=e1767]:
+                  - generic [ref=e1774]: Activo
+                  - generic [ref=e1777]: "Identificador de la biblioteca: 912579281650979"
+                  - generic [ref=e1779]: En circulación desde el 19 mar 2026
+                  - generic [ref=e1781]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1805] [cursor=pointer]:
+                  - generic [ref=e1808]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1811] [cursor=pointer]:
+                - generic [ref=e1815]: Ver detalles del anuncio
+              - separator [ref=e1816]
+              - generic [ref=e1821]:
+                - generic [ref=e1823]:
+                  - img "Laura Recomienda" [ref=e1824]
+                  - generic [ref=e1826]:
+                    - link "Laura Recomienda" [ref=e1827] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e1831]:
+                      - strong [ref=e1833]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1834]:
+                  - button "🔥Estoy encantada con mi cuchillo de dragones. Es importado, tiene un filo que nunca se acaba y es de acero inoxidable." [ref=e1837]:
+                    - generic [ref=e1839]: 🔥Estoy encantada con mi cuchillo de dragones. Es importado, tiene un filo que nunca se acaba y es de acero inoxidable.
+                  - group "Video player" [ref=e1849]:
+                    - button "Reproducir video" [ref=e1851] [cursor=pointer]
+                    - generic [ref=e1853]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:12
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM Labrado a Mano👉 Envio gratis, paga en casa Comprar" [ref=e1855] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcuchillo-labrado-a-mano-metadragones&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e1856]:
+                      - generic [ref=e1857]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e1859]:
+                          - generic [ref=e1860]: LABARATANGA.MYSHOPIFY.COM
+                        - button "Labrado a Mano👉" [ref=e1862]:
+                          - generic [ref=e1863]: Labrado a Mano👉
+                        - button "Envio gratis, paga en casa" [ref=e1865]:
+                          - generic [ref=e1866]: Envio gratis, paga en casa
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1868]:
+                        - generic [ref=e1872]: Comprar
+            - generic [ref=e1874]:
+              - generic [ref=e1876]:
+                - generic [ref=e1877]:
+                  - generic [ref=e1884]: Activo
+                  - generic [ref=e1887]: "Identificador de la biblioteca: 970026365424561"
+                  - generic [ref=e1889]: En circulación desde el 12 abr 2026
+                  - generic [ref=e1891]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1920] [cursor=pointer]:
+                  - generic [ref=e1923]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1926] [cursor=pointer]:
+                - generic [ref=e1930]: Ver detalles del anuncio
+              - separator [ref=e1931]
+              - generic [ref=e1936]:
+                - generic [ref=e1938]:
+                  - img "Laura Recomienda" [ref=e1939]
+                  - generic [ref=e1941]:
+                    - link "Laura Recomienda" [ref=e1942] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e1946]:
+                      - strong [ref=e1948]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1949]:
+                  - button "✨ Desde que uso este corset, mi cintura se ve mucho más definida. Me ajusta perfecto sin incomodarme. 💖 ¡Mi figura se transforma al instante!" [ref=e1952]:
+                    - generic [ref=e1955]:
+                      - text: ✨ Desde que uso este corset, mi cintura se ve mucho más definida.
+                      - text: Me ajusta perfecto sin incomodarme.
+                      - text: 💖 ¡Mi figura se transforma al instante!
+                  - group "Video player" [ref=e1965]:
+                    - button "Reproducir video" [ref=e1967] [cursor=pointer]
+                    - generic [ref=e1969]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:20
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM 💖 Cintura definida en segundos 🛒 ¡Ordénalo ahora! Comprar" [ref=e1971] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcorset-moldeador&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e1972]:
+                      - generic [ref=e1973]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e1975]:
+                          - generic [ref=e1976]: LABARATANGA.MYSHOPIFY.COM
+                        - button "💖 Cintura definida en segundos" [ref=e1978]:
+                          - generic [ref=e1979]: 💖 Cintura definida en segundos
+                        - button "🛒 ¡Ordénalo ahora!" [ref=e1981]:
+                          - generic [ref=e1982]: 🛒 ¡Ordénalo ahora!
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1984]:
+                        - generic [ref=e1988]: Comprar
+            - generic [ref=e1990]:
+              - generic [ref=e1992]:
+                - generic [ref=e1993]:
+                  - generic [ref=e2000]: Activo
+                  - generic [ref=e2003]: "Identificador de la biblioteca: 1001544192334889"
+                  - generic [ref=e2005]: En circulación desde el 12 abr 2026
+                  - generic [ref=e2007]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2036] [cursor=pointer]:
+                  - generic [ref=e2039]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2042] [cursor=pointer]:
+                - generic [ref=e2046]: Ver detalles del anuncio
+              - separator [ref=e2047]
+              - generic [ref=e2052]:
+                - generic [ref=e2054]:
+                  - img "Laura Recomienda" [ref=e2055]
+                  - generic [ref=e2057]:
+                    - link "Laura Recomienda" [ref=e2058] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100085463471281/
+                    - generic [ref=e2062]:
+                      - strong [ref=e2064]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2065]:
+                  - button "✨ Desde que uso este corset, mi cintura se ve mucho más definida. Me ajusta perfecto sin incomodarme. 💖 ¡Mi figura se transforma al instante!" [ref=e2068]:
+                    - generic [ref=e2071]:
+                      - text: ✨ Desde que uso este corset, mi cintura se ve mucho más definida.
+                      - text: Me ajusta perfecto sin incomodarme.
+                      - text: 💖 ¡Mi figura se transforma al instante!
+                  - group "Video player" [ref=e2081]:
+                    - button "Reproducir video" [ref=e2083] [cursor=pointer]
+                    - generic [ref=e2085]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:19
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "LABARATANGA.MYSHOPIFY.COM 💖 Cintura definida en segundos 🛒 ¡Ordénalo ahora! Comprar" [ref=e2087] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcorset-moldeador&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                    - generic [ref=e2088]:
+                      - generic [ref=e2089]:
+                        - button "LABARATANGA.MYSHOPIFY.COM" [ref=e2091]:
+                          - generic [ref=e2092]: LABARATANGA.MYSHOPIFY.COM
+                        - button "💖 Cintura definida en segundos" [ref=e2094]:
+                          - generic [ref=e2095]: 💖 Cintura definida en segundos
+                        - button "🛒 ¡Ordénalo ahora!" [ref=e2097]:
+                          - generic [ref=e2098]: 🛒 ¡Ordénalo ahora!
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e2100]:
+                        - generic [ref=e2104]: Comprar
+          - button "Ver más" [ref=e2105] [cursor=pointer]:
+            - generic [ref=e2106]: Ver más
+      - generic [ref=e2109]:
+        - generic [ref=e2117]: Estado del sistema
+        - generic [ref=e2121]:
+          - list [ref=e2122]:
+            - listitem [ref=e2123]:
+              - heading "API de la biblioteca de anuncios" [level=3] [ref=e2124]:
+                - link "API de la biblioteca de anuncios" [ref=e2125] [cursor=pointer]:
+                  - /url: /ads/library/api/?source=archive-landing-page
+            - listitem [ref=e2126]:
+              - heading "Información sobre anuncios y uso de datos" [level=3] [ref=e2127]:
+                - link "Información sobre anuncios y uso de datos" [ref=e2128] [cursor=pointer]:
+                  - /url: /ads/about/?entry_product=ad_library
+            - listitem [ref=e2129]:
+              - heading "Privacidad" [level=3] [ref=e2130]:
+                - link "Privacidad" [ref=e2131] [cursor=pointer]:
+                  - /url: /privacy/center/?entry_point=privacy_basics_redirect
+            - listitem [ref=e2132]:
+              - heading "Condiciones" [level=3] [ref=e2133]:
+                - link "Condiciones" [ref=e2134] [cursor=pointer]:
+                  - /url: /policies/
+            - listitem [ref=e2135]:
+              - heading "Cookies" [level=3] [ref=e2136]:
+                - link "Cookies" [ref=e2137] [cursor=pointer]:
+                  - /url: /policies/cookies/
+          - heading "Meta © 2026 | Español" [level=3] [ref=e2139]:
+            - text: Meta © 2026 |
+            - link "Español" [ref=e2140] [cursor=pointer]:
+              - /url: /language/
+  - dialog "Vincular a anuncio" [ref=e2143]:
+    - generic [ref=e2145]:
+      - generic [ref=e2146]:
+        - heading "Vincular a anuncio" [level=3] [ref=e2149]
+        - button "Cerrar" [active] [ref=e2152] [cursor=pointer]:
+          - generic [ref=e2155]: Cerrar
+      - generic [ref=e2162]:
+        - text: Este anuncio proviene de un enlace de URL
+        - generic [ref=e2165]:
+          - generic [ref=e2167]:
+            - generic [ref=e2168]:
+              - generic [ref=e2175]: Activo
+              - generic [ref=e2178]: "Identificador de la biblioteca: 1864440030961125"
+              - generic [ref=e2180]: En circulación desde el 12 mar 2025
+              - generic [ref=e2182]: Plataformas
+            - button "Abrir menú desplegable" [ref=e2206] [cursor=pointer]:
+              - generic [ref=e2209]: Abrir menú desplegable
+          - button "Ver detalles del anuncio" [ref=e2212] [cursor=pointer]:
+            - generic [ref=e2216]: Ver detalles del anuncio
+          - separator [ref=e2217]
+          - generic [ref=e2222]:
+            - generic [ref=e2224]:
+              - img "Laura Recomienda" [ref=e2225]
+              - generic [ref=e2227]:
+                - link "Laura Recomienda" [ref=e2228] [cursor=pointer]:
+                  - /url: https://www.facebook.com/100085463471281/
+                - generic [ref=e2232]:
+                  - strong [ref=e2234]: Publicidad
+                  - generic:
+                    - strong
+            - generic [ref=e2235]:
+              - button "🔥Estoy encantada con mi cuchillo de dragones. Es importado, tiene un filo que nunca se acaba y es de acero inoxidable." [ref=e2238]:
+                - generic [ref=e2240]: 🔥Estoy encantada con mi cuchillo de dragones. Es importado, tiene un filo que nunca se acaba y es de acero inoxidable.
+              - group "Video player" [ref=e2250]:
+                - button "Reproducir video" [ref=e2252] [cursor=pointer]
+                - generic [ref=e2254]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Reproducir"
+                    - generic: 0:00 / 0:20
+                  - generic:
+                    - generic:
+                      - slider "Change Position"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Configuración"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Ver en pantalla completa"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - slider "Ajustar volumen"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Reactivar":
+                              - img
+              - link "LABARATANGA.MYSHOPIFY.COM Labrado a Mano👉 Envio gratis, paga en casa Comprar" [ref=e2256] [cursor=pointer]:
+                - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Flabaratanga.myshopify.com%2Fproducts%2Fcuchillo-labrado-a-mano-metadragones&h=AT76CNGo8ZImtOzNssl_Ht-pHrzQujQrkzvi9fCbqPgwVtClTSNyT9drdvL498HQIbAz62r9itQ76NVKkmblNilIJNh-D1ILWnmMnI7XmbkB0QS0T91irR5gV34Z_oRIShOOtirqPLAvfINLM-6YOb4qNDye5rykxm9ilg
+                - generic [ref=e2257]:
+                  - generic [ref=e2258]:
+                    - button "LABARATANGA.MYSHOPIFY.COM" [ref=e2260]:
+                      - generic [ref=e2261]: LABARATANGA.MYSHOPIFY.COM
+                    - button "Labrado a Mano👉" [ref=e2263]:
+                      - generic [ref=e2264]: Labrado a Mano👉
+                    - button "Envio gratis, paga en casa" [ref=e2266]:
+                      - generic [ref=e2267]: Envio gratis, paga en casa
+                    - generic:
+                      - button
+                  - button "Comprar" [ref=e2269]:
+                    - generic [ref=e2273]: Comprar
+      - button "Cerrar" [ref=e2276] [cursor=pointer]:
+        - generic [ref=e2280]: Cerrar

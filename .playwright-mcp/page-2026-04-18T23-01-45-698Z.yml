@@ -1,0 +1,205 @@
+- generic [active] [ref=e1]:
+  - text:   
+  - generic [ref=e325]:
+    - link "AI Transcriptions by Riverside" [ref=e327] [cursor=pointer]:
+      - /url: https://riverside.com/
+      - generic [ref=e328]: AI Transcriptions
+      - generic [ref=e329]: by Riverside
+    - generic [ref=e330]:
+      - generic [ref=e341]:
+        - heading "Before we start..." [level=3] [ref=e342]
+        - generic [ref=e344]:
+          - generic [ref=e346]:
+            - generic [ref=e348]: ad-01.mp4
+            - generic [ref=e349]:
+              - generic [ref=e350]: 0%
+              - generic [ref=e351] [cursor=pointer]: Replace
+              - img [ref=e352]
+          - generic [ref=e354]:
+            - generic [ref=e356] [cursor=pointer]: "Language: English"
+            - generic [ref=e447]:
+              - generic [ref=e449] [cursor=pointer]: english
+              - generic [ref=e451] [cursor=pointer]: spanish
+              - generic [ref=e453] [cursor=pointer]: chinese
+              - generic [ref=e455] [cursor=pointer]: french
+              - generic [ref=e457] [cursor=pointer]: dutch
+              - generic [ref=e459] [cursor=pointer]: afrikaans
+              - generic [ref=e461] [cursor=pointer]: albanian
+              - generic [ref=e463] [cursor=pointer]: amharic
+              - generic [ref=e465] [cursor=pointer]: arabic
+              - generic [ref=e467] [cursor=pointer]: armenian
+              - generic [ref=e469] [cursor=pointer]: assamese
+              - generic [ref=e471] [cursor=pointer]: azerbaijani
+              - generic [ref=e473] [cursor=pointer]: bashkir
+              - generic [ref=e475] [cursor=pointer]: basque
+              - generic [ref=e477] [cursor=pointer]: belarusian
+              - generic [ref=e479] [cursor=pointer]: bengali
+              - generic [ref=e481] [cursor=pointer]: bosnian
+              - generic [ref=e483] [cursor=pointer]: breton
+              - generic [ref=e485] [cursor=pointer]: bulgarian
+              - generic [ref=e487] [cursor=pointer]: catalan
+              - generic [ref=e489] [cursor=pointer]: croatian
+              - generic [ref=e491] [cursor=pointer]: czech
+              - generic [ref=e493] [cursor=pointer]: danish
+              - generic [ref=e495] [cursor=pointer]: estonian
+              - generic [ref=e497] [cursor=pointer]: faroese
+              - generic [ref=e499] [cursor=pointer]: finnish
+              - generic [ref=e501] [cursor=pointer]: galician
+              - generic [ref=e503] [cursor=pointer]: georgian
+              - generic [ref=e505] [cursor=pointer]: german
+              - generic [ref=e507] [cursor=pointer]: greek
+              - generic [ref=e509] [cursor=pointer]: gujarati
+              - generic [ref=e511] [cursor=pointer]: haitian creole
+              - generic [ref=e513] [cursor=pointer]: hausa
+              - generic [ref=e515] [cursor=pointer]: hawaiian
+              - generic [ref=e517] [cursor=pointer]: hebrew
+              - generic [ref=e519] [cursor=pointer]: hindi
+              - generic [ref=e521] [cursor=pointer]: hungarian
+              - generic [ref=e523] [cursor=pointer]: icelandic
+              - generic [ref=e525] [cursor=pointer]: indonesian
+              - generic [ref=e527] [cursor=pointer]: italian
+              - generic [ref=e529] [cursor=pointer]: japanese
+              - generic [ref=e531] [cursor=pointer]: javanese
+              - generic [ref=e533] [cursor=pointer]: kannada
+              - generic [ref=e535] [cursor=pointer]: kazakh
+              - generic [ref=e537] [cursor=pointer]: khmer
+              - generic [ref=e539] [cursor=pointer]: korean
+              - generic [ref=e541] [cursor=pointer]: lao
+              - generic [ref=e543] [cursor=pointer]: latin
+              - generic [ref=e545] [cursor=pointer]: latvian
+              - generic [ref=e547] [cursor=pointer]: lingala
+              - generic [ref=e549] [cursor=pointer]: lithuanian
+              - generic [ref=e551] [cursor=pointer]: luxembourgish
+              - generic [ref=e553] [cursor=pointer]: macedonian
+              - generic [ref=e555] [cursor=pointer]: malagasy
+              - generic [ref=e557] [cursor=pointer]: malay
+              - generic [ref=e559] [cursor=pointer]: malayalam
+              - generic [ref=e561] [cursor=pointer]: maltese
+              - generic [ref=e563] [cursor=pointer]: maori
+              - generic [ref=e565] [cursor=pointer]: marathi
+              - generic [ref=e567] [cursor=pointer]: mongolian
+              - generic [ref=e569] [cursor=pointer]: myanmar
+              - generic [ref=e571] [cursor=pointer]: nepali
+              - generic [ref=e573] [cursor=pointer]: norwegian
+              - generic [ref=e575] [cursor=pointer]: nynorsk
+              - generic [ref=e577] [cursor=pointer]: occitan
+              - generic [ref=e579] [cursor=pointer]: pashto
+              - generic [ref=e581] [cursor=pointer]: persian
+              - generic [ref=e583] [cursor=pointer]: polish
+              - generic [ref=e585] [cursor=pointer]: portuguese
+              - generic [ref=e587] [cursor=pointer]: punjabi
+              - generic [ref=e589] [cursor=pointer]: romanian
+              - generic [ref=e591] [cursor=pointer]: russian
+              - generic [ref=e593] [cursor=pointer]: sanskrit
+              - generic [ref=e595] [cursor=pointer]: serbian
+              - generic [ref=e597] [cursor=pointer]: shona
+              - generic [ref=e599] [cursor=pointer]: sindhi
+              - generic [ref=e601] [cursor=pointer]: sinhala
+              - generic [ref=e603] [cursor=pointer]: slovak
+              - generic [ref=e605] [cursor=pointer]: slovenian
+              - generic [ref=e607] [cursor=pointer]: somali
+              - generic [ref=e609] [cursor=pointer]: sundanese
+              - generic [ref=e611] [cursor=pointer]: swahili
+              - generic [ref=e613] [cursor=pointer]: swedish
+              - generic [ref=e615] [cursor=pointer]: tagalog
+              - generic [ref=e617] [cursor=pointer]: tajik
+              - generic [ref=e619] [cursor=pointer]: tamil
+              - generic [ref=e621] [cursor=pointer]: tatar
+              - generic [ref=e623] [cursor=pointer]: telugu
+              - generic [ref=e625] [cursor=pointer]: thai
+              - generic [ref=e627] [cursor=pointer]: tibetan
+              - generic [ref=e629] [cursor=pointer]: turkish
+              - generic [ref=e631] [cursor=pointer]: turkmen
+              - generic [ref=e633] [cursor=pointer]: ukrainian
+              - generic [ref=e635] [cursor=pointer]: urdu
+              - generic [ref=e637] [cursor=pointer]: uzbek
+              - generic [ref=e639] [cursor=pointer]: vietnamese
+              - generic [ref=e641] [cursor=pointer]: welsh
+              - generic [ref=e643] [cursor=pointer]: yiddish
+              - generic [ref=e645] [cursor=pointer]: yoruba
+          - generic [ref=e357]:
+            - generic [ref=e358]: "What would you like to transcribe:"
+            - generic [ref=e359]:
+              - generic [ref=e360] [cursor=pointer]: Podcast
+              - generic [ref=e361] [cursor=pointer]: Interview
+              - generic [ref=e362] [cursor=pointer]: Webinar
+              - generic [ref=e363] [cursor=pointer]: Video content
+              - generic [ref=e364] [cursor=pointer]: Other
+          - generic [ref=e365]:
+            - generic [ref=e366]: What will you use the transcription for?
+            - generic [ref=e367]:
+              - generic [ref=e368] [cursor=pointer]: Social post
+              - generic [ref=e369] [cursor=pointer]: Captions
+              - generic [ref=e370] [cursor=pointer]: Key insights
+              - generic [ref=e371] [cursor=pointer]: Educational content
+              - generic [ref=e372] [cursor=pointer]: Other
+          - button "Start transcribing" [ref=e373] [cursor=pointer]
+      - generic:
+        - generic:
+          - heading "Ready!" [level=3]: Ready!
+          - generic [ref=e374]:
+            - generic [ref=e375]: Your transcripts are ready, be sure to download them before you go!
+            - button "Download" [ref=e377] [cursor=pointer]:
+              - generic [ref=e378]: Download
+            - link "Transcribe another file Black capital letter L on a white background." [ref=e379] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e380]: Transcribe another file
+              - img "Black capital letter L on a white background." [ref=e381]
+      - generic [ref=e382]:
+        - generic [ref=e383]:
+          - generic [ref=e384]: Please Wait...
+          - generic [ref=e385]: We're working on it! Transcription times can vary based on file size, content length, and how busy our servers are. Thanks for your patience!
+        - generic [ref=e386]:
+          - generic [ref=e387]: "What would you like to transcribe:"
+          - generic [ref=e388]:
+            - generic [ref=e390]: ad-01.mp4
+            - link "Copy to clipboard":
+              - /url: "#"
+              - generic: Copy to clipboard
+      - generic [ref=e397]:
+        - img [ref=e399] [cursor=pointer]
+        - generic [ref=e401]:
+          - generic [ref=e402] [cursor=pointer]:
+            - img [ref=e404]
+            - generic [ref=e406]: Explore more features for transcribing, recording, and editing with Riverside
+          - generic:
+            - generic:
+              - generic:
+                - img "Audio player with waveform, featuring a profile photo of a man named Stephen and a timestamp of 5 minutes and 10 seconds, on a dark background."
+            - generic:
+              - generic: Transcribe, record and edit your Audio or Video seamlessly with Riverside
+              - generic:
+                - generic: Starts transcribing as soon as you’re done recording or uploading, so no need to wait long
+                - generic: Record in up to 4K video and 48kHz audio
+                - generic: Add speaker labels in seconds with our AI-powered Speaker Detective.
+                - generic: Transcribe, clip, and edit your video in seconds
+              - link "Try Riverside for Free":
+                - /url: https://riverside.fm/register
+                - generic: Try Riverside for Free
+              - generic: "*A new tab will open without interrupting transcription"
+      - generic [ref=e407]:
+        - generic [ref=e408]: File type not supported. We only support MP3 and WAV files for now.
+        - img [ref=e410] [cursor=pointer]
+      - img "White digital audio waveform on a black background with varying amplitude and frequency." [ref=e420]
+    - generic [ref=e422]: Drop it!
+    - generic [ref=e424]:
+      - heading "Download files" [level=3] [ref=e426]
+      - link "Transcript TXT" [ref=e428] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e429]: Transcript
+        - generic [ref=e431]: TXT
+      - link "Captions SRT" [ref=e432] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e433]: Captions
+        - generic [ref=e435]: SRT
+      - link "Learn about file types" [ref=e436] [cursor=pointer]:
+        - /url: https://support.riverside.com/hc/en-us/articles/7748677293981-About-Transcription-Formats
+        - generic [ref=e438]: Learn about file types
+    - generic [ref=e440]:
+      - heading "Are you sure?" [level=3] [ref=e441]
+      - generic [ref=e442]: Make sure you've downloaded your transcripts before starting a new one.
+      - generic [ref=e443]:
+        - link "Cancel" [ref=e444] [cursor=pointer]:
+          - /url: "#"
+        - link "Transcribe another file" [ref=e445] [cursor=pointer]:
+          - /url: "#"

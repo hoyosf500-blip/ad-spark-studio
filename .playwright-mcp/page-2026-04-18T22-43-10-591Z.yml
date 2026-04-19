@@ -1,0 +1,2536 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e12]:
+    - generic [ref=e15]:
+      - link "Biblioteca de anuncios de Meta" [ref=e18] [cursor=pointer]:
+        - /url: /ads/library/?source=fb-logo
+        - generic [ref=e20]: Biblioteca de anuncios de Meta
+      - generic [ref=e22]: Biblioteca de anuncios
+      - menuitem "Informe de la biblioteca de anuncios" [ref=e24] [cursor=pointer]:
+        - generic [ref=e25]: Informe de la biblioteca de anuncios
+      - menuitem "API de la biblioteca de anuncios" [ref=e27] [cursor=pointer]:
+        - generic [ref=e28]: API de la biblioteca de anuncios
+      - menuitem "Contenido de marca" [ref=e30] [cursor=pointer]:
+        - generic [ref=e31]: Contenido de marca
+      - menuitem "Open navigation panel" [ref=e33] [cursor=pointer]
+    - generic [ref=e40]:
+      - combobox "Colombia" [ref=e44] [cursor=pointer]:
+        - generic [ref=e51]: Colombia
+      - combobox "Todos los anuncios" [ref=e62] [cursor=pointer]:
+        - generic [ref=e72]: Todos los anuncios
+      - generic [ref=e82]:
+        - generic [ref=e88]: Buscar por palabra clave o anunciante
+        - generic [ref=e94]:
+          - searchbox "Buscar por palabra clave o anunciante" [ref=e100]: Diana Recomienda
+          - button "Borrar" [ref=e102] [cursor=pointer]
+    - generic [ref=e105]:
+      - generic [ref=e107]:
+        - img "Foto del perfil de la página" [ref=e112]
+        - link "Diana Recomienda" [ref=e115] [cursor=pointer]:
+          - /url: https://facebook.com/100091035166079
+          - heading "Diana Recomienda" [level=1] [ref=e116]
+      - generic [ref=e117]:
+        - link "Anuncios" [ref=e118] [cursor=pointer]
+        - link "Información" [ref=e119] [cursor=pointer]
+    - dialog [ref=e120]:
+      - generic [ref=e121]:
+        - link [ref=e122] [cursor=pointer]:
+          - /url: /
+          - heading [level=4] [ref=e123]: Iniciar sesión
+        - menuitem [ref=e124] [cursor=pointer]
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - heading [level=4] [ref=e129]: Biblioteca de anuncios
+          - menuitem [ref=e131] [cursor=pointer]:
+            - heading [level=4] [ref=e133]: Informe de la biblioteca de anuncios
+          - menuitem [ref=e135] [cursor=pointer]:
+            - heading [level=4] [ref=e137]: API de la biblioteca de anuncios
+          - menuitem [ref=e139] [cursor=pointer]:
+            - heading [level=4] [ref=e141]: Contenido de marca
+        - separator [ref=e142]
+        - generic [ref=e143]:
+          - menuitem [ref=e145] [cursor=pointer]:
+            - heading [level=4] [ref=e147]: Estado del sistema
+          - menuitem [ref=e149] [cursor=pointer]:
+            - heading [level=4] [ref=e151]: Suscripción a novedades por correo electrónico
+          - menuitem [ref=e153] [cursor=pointer]:
+            - heading [level=4] [ref=e155]: Preguntas frecuentes
+          - menuitem [ref=e157] [cursor=pointer]:
+            - heading [level=4] [ref=e159]: Información sobre anuncios y uso de datos
+          - menuitem [ref=e161] [cursor=pointer]:
+            - heading [level=4] [ref=e163]: Privacidad
+          - menuitem [ref=e165] [cursor=pointer]:
+            - heading [level=4] [ref=e167]: Condiciones
+          - menuitem [ref=e169] [cursor=pointer]:
+            - heading [level=4] [ref=e171]: Cookies
+    - generic [ref=e172]:
+      - generic [ref=e186]:
+        - heading "~28 resultados" [level=3] [ref=e194]
+        - generic [ref=e195]:
+          - generic [ref=e203]:
+            - generic [ref=e204]:
+              - textbox "Palabra clave" [ref=e206]
+              - button "Filtros" [ref=e210] [cursor=pointer]:
+                - generic [ref=e215]: Filtros
+              - generic [ref=e217]:
+                - generic [ref=e223]: Ordenar
+                - combobox "Ordenar" [ref=e228] [cursor=pointer]:
+                  - generic [ref=e235]: Ordenar por
+            - generic [ref=e240]:
+              - generic [ref=e241]:
+                - strong [ref=e242]: Estado activo
+                - text: ": Anuncios activos"
+              - button "Eliminar" [ref=e243] [cursor=pointer]:
+                - generic [ref=e246]: Eliminar
+          - generic [ref=e250]:
+            - generic [ref=e252]:
+              - generic [ref=e254]:
+                - generic [ref=e255]:
+                  - generic [ref=e262]: Activo
+                  - generic [ref=e265]: "Identificador de la biblioteca: 1255060015952852"
+                  - generic [ref=e267]: En circulación desde el 1 feb 2026
+                  - generic [ref=e269]: Plataformas
+                - button "Abrir menú desplegable" [ref=e298] [cursor=pointer]:
+                  - generic [ref=e301]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e304] [cursor=pointer]:
+                - generic [ref=e308]: Ver detalles del anuncio
+              - separator [ref=e309]
+              - generic [ref=e314]:
+                - generic [ref=e316]:
+                  - img "Diana Recomienda" [ref=e317]
+                  - generic [ref=e319]:
+                    - link "Diana Recomienda" [ref=e320] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e324]:
+                      - strong [ref=e326]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e327]:
+                  - button "⏰ ¡No más días con dolor! Hoy mismo puedes recuperar tu movimiento con ClearZal® Acción Rápida. ✅ Alivio inmediato y seguro ✅ Se absorbe en segundos ✅ Perfecto para quienes no paran ni un minuto 🔥 Aprovecha esta oportunidad y siente el cambio desde la primera aplicación. 👉 ¡Ordena ahora y dile adiós al dolor!" [ref=e330]:
+                    - generic [ref=e333]:
+                      - text: ⏰ ¡No más días con dolor!
+                      - text: Hoy mismo puedes recuperar tu movimiento con ClearZal® Acción Rápida.
+                      - text: ✅ Alivio inmediato y seguro
+                      - text: ✅ Se absorbe en segundos
+                      - text: ✅ Perfecto para quienes no paran ni un minuto
+                      - text: 🔥 Aprovecha esta oportunidad y siente el cambio desde la primera aplicación.
+                      - text: 👉 ¡Ordena ahora y dile adiós al dolor!
+                  - group "Video player" [ref=e344]:
+                    - button "Reproducir video" [ref=e346] [cursor=pointer]
+                    - generic [ref=e348]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:22
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM Envió Gratis🎁Paga En Casa Comprar" [ref=e350] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Ffast-acting-clear-pain-relieving-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e351]:
+                      - generic [ref=e352]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e354]:
+                          - generic [ref=e355]: CLICK-YCOMPRA.COM
+                        - button "Envió Gratis🎁Paga En Casa" [ref=e357]:
+                          - generic [ref=e358]: Envió Gratis🎁Paga En Casa
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e360]:
+                        - generic [ref=e364]: Comprar
+            - generic [ref=e366]:
+              - generic [ref=e368]:
+                - generic [ref=e369]:
+                  - generic [ref=e376]: Activo
+                  - generic [ref=e379]: "Identificador de la biblioteca: 2810575332629898"
+                  - generic [ref=e381]: En circulación desde el 25 feb 2026
+                  - generic [ref=e383]: Plataformas
+                - button "Abrir menú desplegable" [ref=e412] [cursor=pointer]:
+                  - generic [ref=e415]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e418] [cursor=pointer]:
+                - generic [ref=e422]: Ver detalles del anuncio
+              - separator [ref=e423]
+              - generic [ref=e428]:
+                - generic [ref=e430]:
+                  - img "Diana Recomienda" [ref=e431]
+                  - generic [ref=e433]:
+                    - link "Diana Recomienda" [ref=e434] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e438]:
+                      - strong [ref=e440]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e441]:
+                  - button "🦶 Tus pies hablan… aunque tú los escondas. Callos duros, piel gruesa, grietas profundas. ClearZal™️ ayuda a renovar tu piel en semanas. 🔥 Pies suaves otra vez." [ref=e444]:
+                    - generic [ref=e447]:
+                      - text: 🦶 Tus pies hablan…
+                      - text: aunque tú los escondas.
+                      - text: Callos duros, piel gruesa, grietas profundas.
+                      - text: ClearZal™️ ayuda a renovar tu piel en semanas.
+                      - text: 🔥 Pies suaves otra vez.
+                  - group "Video player" [ref=e457]:
+                    - button "Reproducir video" [ref=e459] [cursor=pointer]
+                    - generic [ref=e461]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:22
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 AGA EN CASA🏠 Comprar" [ref=e463] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Ffast-hard-skin-remover-clearzal-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e464]:
+                      - generic [ref=e465]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e467]:
+                          - generic [ref=e468]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 AGA EN CASA🏠" [ref=e470]:
+                          - generic [ref=e471]: ENVIO GRATIS🎁 AGA EN CASA🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e473]:
+                        - generic [ref=e477]: Comprar
+            - generic [ref=e479]:
+              - generic [ref=e481]:
+                - generic [ref=e482]:
+                  - generic [ref=e489]: Activo
+                  - generic [ref=e492]: "Identificador de la biblioteca: 1464987488310749"
+                  - generic [ref=e494]: En circulación desde el 13 mar 2026
+                  - generic [ref=e496]: Plataformas
+                - button "Abrir menú desplegable" [ref=e525] [cursor=pointer]:
+                  - generic [ref=e528]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e531] [cursor=pointer]:
+                - generic [ref=e535]: Ver detalles del anuncio
+              - separator [ref=e536]
+              - generic [ref=e541]:
+                - generic [ref=e543]:
+                  - img "Diana Recomienda" [ref=e544]
+                  - generic [ref=e546]:
+                    - link "Diana Recomienda" [ref=e547] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e551]:
+                      - strong [ref=e553]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e554]:
+                  - button "⚠️ En Colombia roban motos todos los días. La dejas 5 minutos… Vuelves… Y ya no está Con MotoShield Pro® tu moto avisa antes de que la toquen. 🔊 Alarma inmediata 📡 Control remoto ⚡ Instalación rápida 🔥 Mejor instalarla hoy… que lamentarlo mañana." [ref=e557]:
+                    - generic [ref=e560]:
+                      - text: ⚠️ En Colombia roban motos todos los días.
+                      - text: La dejas 5 minutos…
+                      - text: Vuelves…
+                      - text: Y ya no está
+                      - text: Con MotoShield Pro® tu moto avisa antes de que la toquen.
+                      - text: 🔊 Alarma inmediata
+                      - text: 📡 Control remoto
+                      - text: ⚡ Instalación rápida
+                      - text: 🔥 Mejor instalarla hoy…
+                      - text: que lamentarlo mañana.
+                  - group "Video player" [ref=e571]:
+                    - button "Reproducir video" [ref=e573] [cursor=pointer]
+                    - generic [ref=e575]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:40
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA 🏠 Comprar" [ref=e577] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fva-alarma-antirrobo-moto&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e578]:
+                      - generic [ref=e579]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e581]:
+                          - generic [ref=e582]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA 🏠" [ref=e584]:
+                          - generic [ref=e585]: ENVIO GRATIS🎁 PAGA EN CASA 🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e587]:
+                        - generic [ref=e591]: Comprar
+            - generic [ref=e593]:
+              - generic [ref=e595]:
+                - generic [ref=e596]:
+                  - generic [ref=e603]: Activo
+                  - generic [ref=e606]: "Identificador de la biblioteca: 855068220908586"
+                  - generic [ref=e608]: En circulación desde el 10 mar 2026
+                  - generic [ref=e610]: Plataformas
+                - button "Abrir menú desplegable" [ref=e639] [cursor=pointer]:
+                  - generic [ref=e642]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e645] [cursor=pointer]:
+                - generic [ref=e649]: Ver detalles del anuncio
+              - separator [ref=e650]
+              - generic [ref=e655]:
+                - generic [ref=e657]:
+                  - img "Diana Recomienda" [ref=e658]
+                  - generic [ref=e660]:
+                    - link "Diana Recomienda" [ref=e661] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e665]:
+                      - strong [ref=e667]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e668]:
+                  - button "😴 Hay personas que no duermen bien por el dolor del cuello. Das vueltas. No encuentras posición. Y despiertas más cansado. 💆‍♂️ RelaxPro™️ ayuda a liberar la tensión antes de dormir. 🔥 Calor relajante ✨ Masaje profundo 😌 Descanso real Dormir vuelve a ser fácil." [ref=e671]:
+                    - generic [ref=e674]:
+                      - text: 😴 Hay personas que no duermen bien por el dolor del cuello.
+                      - text: Das vueltas.
+                      - text: No encuentras posición.
+                      - text: Y despiertas más cansado.
+                      - text: 💆‍♂️ RelaxPro™️ ayuda a liberar la tensión antes de dormir.
+                      - text: 🔥 Calor relajante
+                      - text: ✨ Masaje profundo
+                      - text: 😌 Descanso real
+                      - text: Dormir vuelve a ser fácil.
+                  - group "Video player" [ref=e685]:
+                    - button "Reproducir video" [ref=e687] [cursor=pointer]
+                    - generic [ref=e689]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:49
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁PAGA EN CASA🏠 Comprar" [ref=e691] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fmasajeador-cervical-y-corporal&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e692]:
+                      - generic [ref=e693]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e695]:
+                          - generic [ref=e696]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁PAGA EN CASA🏠" [ref=e698]:
+                          - generic [ref=e699]: ENVIO GRATIS🎁PAGA EN CASA🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e701]:
+                        - generic [ref=e705]: Comprar
+            - generic [ref=e707]:
+              - generic [ref=e709]:
+                - generic [ref=e710]:
+                  - generic [ref=e717]: Activo
+                  - generic [ref=e720]: "Identificador de la biblioteca: 1137139601800385"
+                  - generic [ref=e722]: En circulación desde el 14 mar 2026
+                  - generic [ref=e724]: Plataformas
+                - button "Abrir menú desplegable" [ref=e753] [cursor=pointer]:
+                  - generic [ref=e756]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e759] [cursor=pointer]:
+                - generic [ref=e763]: Ver detalles del anuncio
+              - separator [ref=e764]
+              - generic [ref=e769]:
+                - generic [ref=e771]:
+                  - img "Diana Recomienda" [ref=e772]
+                  - generic [ref=e774]:
+                    - link "Diana Recomienda" [ref=e775] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e779]:
+                      - strong [ref=e781]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e782]:
+                  - button "⚠️ En Colombia roban motos todos los días. La dejas 5 minutos… Vuelves… Y ya no está Con MotoShield Pro® tu moto avisa antes de que la toquen. 🔊 Alarma inmediata 📡 Control remoto ⚡ Instalación rápida 🔥 Mejor instalarla hoy… que lamentarlo mañana." [ref=e785]:
+                    - generic [ref=e788]:
+                      - text: ⚠️ En Colombia roban motos todos los días.
+                      - text: La dejas 5 minutos…
+                      - text: Vuelves…
+                      - text: Y ya no está
+                      - text: Con MotoShield Pro® tu moto avisa antes de que la toquen.
+                      - text: 🔊 Alarma inmediata
+                      - text: 📡 Control remoto
+                      - text: ⚡ Instalación rápida
+                      - text: 🔥 Mejor instalarla hoy…
+                      - text: que lamentarlo mañana.
+                  - group "Video player" [ref=e799]:
+                    - button "Reproducir video" [ref=e801] [cursor=pointer]
+                    - generic [ref=e803]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:40
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA 🏠 Comprar" [ref=e805] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fva-alarma-antirrobo-moto&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e806]:
+                      - generic [ref=e807]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e809]:
+                          - generic [ref=e810]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA 🏠" [ref=e812]:
+                          - generic [ref=e813]: ENVIO GRATIS🎁 PAGA EN CASA 🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e815]:
+                        - generic [ref=e819]: Comprar
+            - generic [ref=e821]:
+              - generic [ref=e823]:
+                - generic [ref=e824]:
+                  - generic [ref=e831]: Activo
+                  - generic [ref=e834]: "Identificador de la biblioteca: 1650340326167200"
+                  - generic [ref=e836]: En circulación desde el 12 mar 2026
+                  - generic [ref=e838]: Plataformas
+                - button "Abrir menú desplegable" [ref=e867] [cursor=pointer]:
+                  - generic [ref=e870]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e873] [cursor=pointer]:
+                - generic [ref=e877]: Ver detalles del anuncio
+              - separator [ref=e878]
+              - generic [ref=e883]:
+                - generic [ref=e885]:
+                  - img "Diana Recomienda" [ref=e886]
+                  - generic [ref=e888]:
+                    - link "Diana Recomienda" [ref=e889] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e893]:
+                      - strong [ref=e895]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e896]:
+                  - button "⚠️ En Colombia roban motos todos los días. La dejas 5 minutos… Vuelves… Y ya no está Con MotoShield Pro® tu moto avisa antes de que la toquen. 🔊 Alarma inmediata 📡 Control remoto ⚡ Instalación rápida 🔥 Mejor instalarla hoy… que lamentarlo mañana." [ref=e899]:
+                    - generic [ref=e902]:
+                      - text: ⚠️ En Colombia roban motos todos los días.
+                      - text: La dejas 5 minutos…
+                      - text: Vuelves…
+                      - text: Y ya no está
+                      - text: Con MotoShield Pro® tu moto avisa antes de que la toquen.
+                      - text: 🔊 Alarma inmediata
+                      - text: 📡 Control remoto
+                      - text: ⚡ Instalación rápida
+                      - text: 🔥 Mejor instalarla hoy…
+                      - text: que lamentarlo mañana.
+                  - group "Video player" [ref=e913]:
+                    - button "Reproducir video" [ref=e915] [cursor=pointer]
+                    - generic [ref=e917]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:40
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA 🏠 Comprar" [ref=e919] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fva-alarma-antirrobo-moto&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e920]:
+                      - generic [ref=e921]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e923]:
+                          - generic [ref=e924]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA 🏠" [ref=e926]:
+                          - generic [ref=e927]: ENVIO GRATIS🎁 PAGA EN CASA 🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e929]:
+                        - generic [ref=e933]: Comprar
+            - generic [ref=e935]:
+              - generic [ref=e937]:
+                - generic [ref=e938]:
+                  - generic [ref=e945]: Activo
+                  - generic [ref=e948]: "Identificador de la biblioteca: 2118269089015145"
+                  - generic [ref=e950]: En circulación desde el 14 mar 2026
+                  - generic [ref=e952]: Plataformas
+                - button "Abrir menú desplegable" [ref=e981] [cursor=pointer]:
+                  - generic [ref=e984]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e987] [cursor=pointer]:
+                - generic [ref=e991]: Ver detalles del anuncio
+              - separator [ref=e992]
+              - generic [ref=e997]:
+                - generic [ref=e999]:
+                  - img "Diana Recomienda" [ref=e1000]
+                  - generic [ref=e1002]:
+                    - link "Diana Recomienda" [ref=e1003] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e1007]:
+                      - strong [ref=e1009]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1010]:
+                  - button "🚨 Lo peor no es que te roben… Es sentir que pudiste evitarlo Moto sola Sin alarma Sin aviso Sin protección Con MotoShield Pro® reaccionas antes. 🔊 Detecta movimiento 📡 Alarma inmediata ⚡ Seguridad total 🔥 Tu moto vale más que esto." [ref=e1013]:
+                    - generic [ref=e1016]:
+                      - text: 🚨 Lo peor no es que te roben…
+                      - text: Es sentir que pudiste evitarlo
+                      - text: Moto sola
+                      - text: Sin alarma
+                      - text: Sin aviso
+                      - text: Sin protección
+                      - text: Con MotoShield Pro® reaccionas antes.
+                      - text: 🔊 Detecta movimiento
+                      - text: 📡 Alarma inmediata
+                      - text: ⚡ Seguridad total
+                      - text: 🔥 Tu moto vale más que esto.
+                  - group "Video player" [ref=e1027]:
+                    - button "Reproducir video" [ref=e1029] [cursor=pointer]
+                    - generic [ref=e1031]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 1:08
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA 🏠 Comprar" [ref=e1033] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fva-alarma-antirrobo-moto&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e1034]:
+                      - generic [ref=e1035]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e1037]:
+                          - generic [ref=e1038]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA 🏠" [ref=e1040]:
+                          - generic [ref=e1041]: ENVIO GRATIS🎁 PAGA EN CASA 🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1043]:
+                        - generic [ref=e1047]: Comprar
+            - generic [ref=e1049]:
+              - generic [ref=e1051]:
+                - generic [ref=e1052]:
+                  - generic [ref=e1059]: Activo
+                  - generic [ref=e1062]: "Identificador de la biblioteca: 1607238623939892"
+                  - generic [ref=e1064]: En circulación desde el 25 mar 2026
+                  - generic [ref=e1066]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1095] [cursor=pointer]:
+                  - generic [ref=e1098]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1101] [cursor=pointer]:
+                - generic [ref=e1105]: Ver detalles del anuncio
+              - separator [ref=e1106]
+              - generic [ref=e1111]:
+                - generic [ref=e1113]:
+                  - img "Diana Recomienda" [ref=e1114]
+                  - generic [ref=e1116]:
+                    - link "Diana Recomienda" [ref=e1117] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e1121]:
+                      - strong [ref=e1123]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1124]:
+                  - button "😳 ¿Te da pena mostrar los pies? Callos duros Talones rajados Piel gruesa Aspereza que no se quita Sandalias ❌ Piscina ❌ Playa ❌ Andar descalzo ❌ Con ClearZal™️ Eliminador de Callos los callos se caen solos. ✔ Sin dolor ✔ Sin podólogo ✔ Sin cuchillas ✔ Sin gastar más En semanas tus pies vuelven a verse normales. 🔥 Si te da pena mostrar los pies… lo necesitas." [ref=e1127]:
+                    - generic [ref=e1130]:
+                      - text: 😳 ¿Te da pena mostrar los pies?
+                      - text: Callos duros
+                      - text: Talones rajados
+                      - text: Piel gruesa
+                      - text: Aspereza que no se quita
+                      - text: Sandalias ❌
+                      - text: Piscina ❌
+                      - text: Playa ❌
+                      - text: Andar descalzo ❌
+                      - text: Con ClearZal™️ Eliminador de Callos los callos se caen solos.
+                      - text: ✔ Sin dolor
+                      - text: ✔ Sin podólogo
+                      - text: ✔ Sin cuchillas
+                      - text: ✔ Sin gastar más
+                      - text: En semanas tus pies vuelven a verse normales.
+                      - text: 🔥 Si te da pena mostrar los pies… lo necesitas.
+                  - group "Video player" [ref=e1141]:
+                    - button "Reproducir video" [ref=e1143] [cursor=pointer]
+                    - generic [ref=e1145]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:28
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA🏠 Comprar" [ref=e1147] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Ffast-hard-skin-remover-clearzal-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e1148]:
+                      - generic [ref=e1149]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e1151]:
+                          - generic [ref=e1152]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA🏠" [ref=e1154]:
+                          - generic [ref=e1155]: ENVIO GRATIS🎁 PAGA EN CASA🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1157]:
+                        - generic [ref=e1161]: Comprar
+            - generic [ref=e1163]:
+              - generic [ref=e1165]:
+                - generic [ref=e1166]:
+                  - generic [ref=e1173]: Activo
+                  - generic [ref=e1176]: "Identificador de la biblioteca: 3377971925705194"
+                  - generic [ref=e1178]: En circulación desde el 10 mar 2026
+                  - generic [ref=e1180]: Plataformas
+                  - generic [ref=e1208]:
+                    - strong [ref=e1209]: 2 anuncios
+                    - text: usan este contenido y texto
+                - button "Abrir menú desplegable" [ref=e1212] [cursor=pointer]:
+                  - generic [ref=e1215]: Abrir menú desplegable
+              - button "Ver detalles del resumen" [ref=e1218] [cursor=pointer]:
+                - generic [ref=e1222]: Ver detalles del resumen
+              - separator [ref=e1223]
+              - generic [ref=e1228]:
+                - generic [ref=e1230]:
+                  - img "Diana Recomienda" [ref=e1231]
+                  - generic [ref=e1233]:
+                    - link "Diana Recomienda" [ref=e1234] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e1238]:
+                      - strong [ref=e1240]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1241]:
+                  - button "😳 La gente está comprando esto porque… Se carga con el sol Carga el celular varias veces Tiene linterna y brújula Y funciona cuando no hay electricidad. ⚡ SolarCharge Pro™️ La power bank que sirve cuando las otras fallan. 🔥 Perfecta para casa, carro o viajes ⚠️ Stock limitado" [ref=e1244]:
+                    - generic [ref=e1247]:
+                      - text: 😳 La gente está comprando esto porque…
+                      - text: Se carga con el sol
+                      - text: Carga el celular varias veces
+                      - text: Tiene linterna y brújula
+                      - text: Y funciona cuando no hay electricidad.
+                      - text: ⚡ SolarCharge Pro™️
+                      - text: La power bank que sirve cuando las otras fallan.
+                      - text: 🔥 Perfecta para casa, carro o viajes
+                      - text: ⚠️ Stock limitado
+                  - group "Video player" [ref=e1258]:
+                    - button "Reproducir video" [ref=e1260] [cursor=pointer]
+                    - generic [ref=e1262]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:18
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - generic:
+                    - link:
+                      - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fpower-bank-solar-10-000-mah-bagule&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+            - generic [ref=e1264]:
+              - generic [ref=e1266]:
+                - generic [ref=e1267]:
+                  - generic [ref=e1274]: Activo
+                  - generic [ref=e1277]: "Identificador de la biblioteca: 1430491478078715"
+                  - generic [ref=e1279]: En circulación desde el 12 mar 2026
+                  - generic [ref=e1281]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1310] [cursor=pointer]:
+                  - generic [ref=e1313]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1316] [cursor=pointer]:
+                - generic [ref=e1320]: Ver detalles del anuncio
+              - separator [ref=e1321]
+              - generic [ref=e1326]:
+                - generic [ref=e1328]:
+                  - img "Diana Recomienda" [ref=e1329]
+                  - generic [ref=e1331]:
+                    - link "Diana Recomienda" [ref=e1332] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e1336]:
+                      - strong [ref=e1338]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1339]:
+                  - button "⚠️ En Colombia roban motos todos los días. La dejas 5 minutos… Vuelves… Y ya no está Con MotoShield Pro® tu moto avisa antes de que la toquen. 🔊 Alarma inmediata 📡 Control remoto ⚡ Instalación rápida 🔥 Mejor instalarla hoy… que lamentarlo mañana." [ref=e1342]:
+                    - generic [ref=e1345]:
+                      - text: ⚠️ En Colombia roban motos todos los días.
+                      - text: La dejas 5 minutos…
+                      - text: Vuelves…
+                      - text: Y ya no está
+                      - text: Con MotoShield Pro® tu moto avisa antes de que la toquen.
+                      - text: 🔊 Alarma inmediata
+                      - text: 📡 Control remoto
+                      - text: ⚡ Instalación rápida
+                      - text: 🔥 Mejor instalarla hoy…
+                      - text: que lamentarlo mañana.
+                  - group "Video player" [ref=e1356]:
+                    - button "Reproducir video" [ref=e1358] [cursor=pointer]
+                    - generic [ref=e1360]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:40
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA 🏠 Comprar" [ref=e1362] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fva-alarma-antirrobo-moto&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e1363]:
+                      - generic [ref=e1364]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e1366]:
+                          - generic [ref=e1367]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA 🏠" [ref=e1369]:
+                          - generic [ref=e1370]: ENVIO GRATIS🎁 PAGA EN CASA 🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1372]:
+                        - generic [ref=e1376]: Comprar
+            - generic [ref=e1378]:
+              - generic [ref=e1380]:
+                - generic [ref=e1381]:
+                  - generic [ref=e1388]: Activo
+                  - generic [ref=e1391]: "Identificador de la biblioteca: 1754257132220112"
+                  - generic [ref=e1393]: En circulación desde el 20 mar 2026
+                  - generic [ref=e1395]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1424] [cursor=pointer]:
+                  - generic [ref=e1427]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1430] [cursor=pointer]:
+                - generic [ref=e1434]: Ver detalles del anuncio
+              - separator [ref=e1435]
+              - generic [ref=e1440]:
+                - generic [ref=e1442]:
+                  - img "Diana Recomienda" [ref=e1443]
+                  - generic [ref=e1445]:
+                    - link "Diana Recomienda" [ref=e1446] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e1450]:
+                      - strong [ref=e1452]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1453]:
+                  - button "⚠️ Mucha gente esconde los pies por culpa de los callos. Talones duros Piel agrietada Callos gruesos Pies ásperos Y da pena usar sandalias. Con ClearZal™ los callos se caen solos. 🦶 Suaviza desde la raíz 🧴 Sin dolor ⚡ Resultados visibles rápido Lo aplicas en casa… y el cambio se nota. 🔥 Tus pies también merecen verse bien." [ref=e1456]:
+                    - generic [ref=e1459]:
+                      - text: ⚠️ Mucha gente esconde los pies por culpa de los callos.
+                      - text: Talones duros
+                      - text: Piel agrietada
+                      - text: Callos gruesos
+                      - text: Pies ásperos
+                      - text: Y da pena usar sandalias.
+                      - text: Con ClearZal™ los callos se caen solos.
+                      - text: 🦶 Suaviza desde la raíz
+                      - text: 🧴 Sin dolor
+                      - text: ⚡ Resultados visibles rápido
+                      - text: Lo aplicas en casa…
+                      - text: y el cambio se nota.
+                      - text: 🔥 Tus pies también merecen verse bien.
+                  - group "Video player" [ref=e1470]:
+                    - button "Reproducir video" [ref=e1472] [cursor=pointer]
+                    - generic [ref=e1474]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:19
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA 🏠 Comprar" [ref=e1476] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Ffast-hard-skin-remover-clearzal-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e1477]:
+                      - generic [ref=e1478]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e1480]:
+                          - generic [ref=e1481]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA 🏠" [ref=e1483]:
+                          - generic [ref=e1484]: ENVIO GRATIS🎁 PAGA EN CASA 🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1486]:
+                        - generic [ref=e1490]: Comprar
+            - generic [ref=e1492]:
+              - generic [ref=e1494]:
+                - generic [ref=e1495]:
+                  - generic [ref=e1502]: Activo
+                  - generic [ref=e1505]: "Identificador de la biblioteca: 949121440976629"
+                  - generic [ref=e1507]: En circulación desde el 14 mar 2026
+                  - generic [ref=e1509]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1538] [cursor=pointer]:
+                  - generic [ref=e1541]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1544] [cursor=pointer]:
+                - generic [ref=e1548]: Ver detalles del anuncio
+              - separator [ref=e1549]
+              - generic [ref=e1554]:
+                - generic [ref=e1556]:
+                  - img "Diana Recomienda" [ref=e1557]
+                  - generic [ref=e1559]:
+                    - link "Diana Recomienda" [ref=e1560] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e1564]:
+                      - strong [ref=e1566]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1567]:
+                  - button "⚠️ En Colombia roban motos todos los días. La dejas 5 minutos… Vuelves… Y ya no está Con MotoShield Pro® tu moto avisa antes de que la toquen. 🔊 Alarma inmediata 📡 Control remoto ⚡ Instalación rápida 🔥 Mejor instalarla hoy… que lamentarlo mañana." [ref=e1570]:
+                    - generic [ref=e1573]:
+                      - text: ⚠️ En Colombia roban motos todos los días.
+                      - text: La dejas 5 minutos…
+                      - text: Vuelves…
+                      - text: Y ya no está
+                      - text: Con MotoShield Pro® tu moto avisa antes de que la toquen.
+                      - text: 🔊 Alarma inmediata
+                      - text: 📡 Control remoto
+                      - text: ⚡ Instalación rápida
+                      - text: 🔥 Mejor instalarla hoy…
+                      - text: que lamentarlo mañana.
+                  - group "Video player" [ref=e1584]:
+                    - button "Reproducir video" [ref=e1586] [cursor=pointer]
+                    - generic [ref=e1588]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:40
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA 🏠 Comprar" [ref=e1590] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fva-alarma-antirrobo-moto&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e1591]:
+                      - generic [ref=e1592]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e1594]:
+                          - generic [ref=e1595]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA 🏠" [ref=e1597]:
+                          - generic [ref=e1598]: ENVIO GRATIS🎁 PAGA EN CASA 🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1600]:
+                        - generic [ref=e1604]: Comprar
+            - generic [ref=e1606]:
+              - generic [ref=e1608]:
+                - generic [ref=e1609]:
+                  - generic [ref=e1616]: Activo
+                  - generic [ref=e1619]: "Identificador de la biblioteca: 4041855036113722"
+                  - generic [ref=e1621]: En circulación desde el 20 mar 2026
+                  - generic [ref=e1623]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1652] [cursor=pointer]:
+                  - generic [ref=e1655]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1658] [cursor=pointer]:
+                - generic [ref=e1662]: Ver detalles del anuncio
+              - separator [ref=e1663]
+              - generic [ref=e1668]:
+                - generic [ref=e1670]:
+                  - img "Diana Recomienda" [ref=e1671]
+                  - generic [ref=e1673]:
+                    - link "Diana Recomienda" [ref=e1674] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e1678]:
+                      - strong [ref=e1680]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1681]:
+                  - button "⚠️ Si tienes callos… sabes lo difícil que es quitarlos. Limas Cuchillas Cremas que no sirven Tratamientos caros Y el callo sigue ahí. Con ClearZal™ desaparece desde la raíz. 🦶 Para talones 🦶 Para dedos 🦶 Para planta 🦶 Para codos y rodillas Lo aplicas… y el callo se cae solo. 🔥 Después de probarla no vuelves atrás." [ref=e1684]:
+                    - generic [ref=e1687]:
+                      - text: ⚠️ Si tienes callos… sabes lo difícil que es quitarlos.
+                      - text: Limas
+                      - text: Cuchillas
+                      - text: Cremas que no sirven
+                      - text: Tratamientos caros
+                      - text: Y el callo sigue ahí.
+                      - text: Con ClearZal™ desaparece desde la raíz.
+                      - text: 🦶 Para talones
+                      - text: 🦶 Para dedos
+                      - text: 🦶 Para planta
+                      - text: 🦶 Para codos y rodillas
+                      - text: Lo aplicas…
+                      - text: y el callo se cae solo.
+                      - text: 🔥 Después de probarla no vuelves atrás.
+                  - group "Video player" [ref=e1698]:
+                    - button "Reproducir video" [ref=e1700] [cursor=pointer]
+                    - generic [ref=e1702]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:19
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA 🏠 Comprar" [ref=e1704] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Ffast-hard-skin-remover-clearzal-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e1705]:
+                      - generic [ref=e1706]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e1708]:
+                          - generic [ref=e1709]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA 🏠" [ref=e1711]:
+                          - generic [ref=e1712]: ENVIO GRATIS🎁 PAGA EN CASA 🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1714]:
+                        - generic [ref=e1718]: Comprar
+            - generic [ref=e1720]:
+              - generic [ref=e1722]:
+                - generic [ref=e1723]:
+                  - generic [ref=e1730]: Activo
+                  - generic [ref=e1733]: "Identificador de la biblioteca: 1486103699562197"
+                  - generic [ref=e1735]: En circulación desde el 8 abr 2026
+                  - generic [ref=e1737]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1766] [cursor=pointer]:
+                  - generic [ref=e1769]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1772] [cursor=pointer]:
+                - generic [ref=e1776]: Ver detalles del anuncio
+              - separator [ref=e1777]
+              - generic [ref=e1782]:
+                - generic [ref=e1784]:
+                  - img "Diana Recomienda" [ref=e1785]
+                  - generic [ref=e1787]:
+                    - link "Diana Recomienda" [ref=e1788] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e1792]:
+                      - strong [ref=e1794]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1795]:
+                  - button "😳 La ansiedad no siempre se ve… pero se siente. En el pecho En la mente En el cuerpo En el cansancio Y te acostumbras… pero no deberías. Neuro Estrés™ ✔ Calma natural ✔ Relajación real ✔ Sin efectos pesados ✔ Uso diario Miles ya volvieron a sentirse tranquilos. 🔥 Si tu mente no descansa… esto es para ti." [ref=e1798]:
+                    - generic [ref=e1801]:
+                      - text: 😳 La ansiedad no siempre se ve… pero se siente.
+                      - text: En el pecho
+                      - text: En la mente
+                      - text: En el cuerpo
+                      - text: En el cansancio
+                      - text: Y te acostumbras… pero no deberías.
+                      - text: Neuro Estrés™
+                      - text: ✔ Calma natural
+                      - text: ✔ Relajación real
+                      - text: ✔ Sin efectos pesados
+                      - text: ✔ Uso diario
+                      - text: Miles ya volvieron a sentirse tranquilos.
+                      - text: 🔥 Si tu mente no descansa… esto es para ti.
+                  - group "Video player" [ref=e1812]:
+                    - button "Reproducir video" [ref=e1814] [cursor=pointer]
+                    - generic [ref=e1816]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:19
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💰 Pagas en casa Comprar" [ref=e1818] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2F06i-neuro-estres&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e1819]:
+                      - generic [ref=e1820]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e1822]:
+                          - generic [ref=e1823]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💰 Pagas en casa" [ref=e1825]:
+                          - generic [ref=e1826]: 🚚 Envío gratis 💰 Pagas en casa
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1828]:
+                        - generic [ref=e1832]: Comprar
+            - generic [ref=e1834]:
+              - generic [ref=e1836]:
+                - generic [ref=e1837]:
+                  - generic [ref=e1844]: Activo
+                  - generic [ref=e1847]: "Identificador de la biblioteca: 967182729208023"
+                  - generic [ref=e1849]: En circulación desde el 25 mar 2026
+                  - generic [ref=e1851]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1880] [cursor=pointer]:
+                  - generic [ref=e1883]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e1886] [cursor=pointer]:
+                - generic [ref=e1890]: Ver detalles del anuncio
+              - separator [ref=e1891]
+              - generic [ref=e1896]:
+                - generic [ref=e1898]:
+                  - img "Diana Recomienda" [ref=e1899]
+                  - generic [ref=e1901]:
+                    - link "Diana Recomienda" [ref=e1902] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e1906]:
+                      - strong [ref=e1908]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e1909]:
+                  - button "😳 ¿Te da pena mostrar los pies? Callos duros Talones rajados Piel gruesa Aspereza que no se quita Sandalias ❌ Piscina ❌ Playa ❌ Andar descalzo ❌ Con ClearZal™️ Eliminador de Callos los callos se caen solos. ✔ Sin dolor ✔ Sin podólogo ✔ Sin cuchillas ✔ Sin gastar más En semanas tus pies vuelven a verse normales. 🔥 Si te da pena mostrar los pies… lo necesitas." [ref=e1912]:
+                    - generic [ref=e1915]:
+                      - text: 😳 ¿Te da pena mostrar los pies?
+                      - text: Callos duros
+                      - text: Talones rajados
+                      - text: Piel gruesa
+                      - text: Aspereza que no se quita
+                      - text: Sandalias ❌
+                      - text: Piscina ❌
+                      - text: Playa ❌
+                      - text: Andar descalzo ❌
+                      - text: Con ClearZal™️ Eliminador de Callos los callos se caen solos.
+                      - text: ✔ Sin dolor
+                      - text: ✔ Sin podólogo
+                      - text: ✔ Sin cuchillas
+                      - text: ✔ Sin gastar más
+                      - text: En semanas tus pies vuelven a verse normales.
+                      - text: 🔥 Si te da pena mostrar los pies… lo necesitas.
+                  - group "Video player" [ref=e1926]:
+                    - button "Reproducir video" [ref=e1928] [cursor=pointer]
+                    - generic [ref=e1930]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:28
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA🏠 Comprar" [ref=e1932] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Ffast-hard-skin-remover-clearzal-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e1933]:
+                      - generic [ref=e1934]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e1936]:
+                          - generic [ref=e1937]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA🏠" [ref=e1939]:
+                          - generic [ref=e1940]: ENVIO GRATIS🎁 PAGA EN CASA🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e1942]:
+                        - generic [ref=e1946]: Comprar
+            - generic [ref=e1948]:
+              - generic [ref=e1950]:
+                - generic [ref=e1951]:
+                  - generic [ref=e1958]: Activo
+                  - generic [ref=e1961]: "Identificador de la biblioteca: 938257705269673"
+                  - generic [ref=e1963]: En circulación desde el 14 mar 2026
+                  - generic [ref=e1965]: Plataformas
+                - button "Abrir menú desplegable" [ref=e1994] [cursor=pointer]:
+                  - generic [ref=e1997]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2000] [cursor=pointer]:
+                - generic [ref=e2004]: Ver detalles del anuncio
+              - separator [ref=e2005]
+              - generic [ref=e2010]:
+                - generic [ref=e2012]:
+                  - img "Diana Recomienda" [ref=e2013]
+                  - generic [ref=e2015]:
+                    - link "Diana Recomienda" [ref=e2016] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e2020]:
+                      - strong [ref=e2022]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2023]:
+                  - button "⚠️ Dejar la moto en la calle hoy es un riesgo. Un segundo Un descuido Un momento Y desaparece. Con MotoShield Pro® tienes protección real. 🔊 Alarma fuerte 📡 Control remoto ⚡ Fácil instalación 🔥 Muchos la compran después del robo." [ref=e2026]:
+                    - generic [ref=e2029]:
+                      - text: ⚠️ Dejar la moto en la calle hoy es un riesgo.
+                      - text: Un segundo
+                      - text: Un descuido
+                      - text: Un momento
+                      - text: Y desaparece.
+                      - text: Con MotoShield Pro® tienes protección real.
+                      - text: 🔊 Alarma fuerte
+                      - text: 📡 Control remoto
+                      - text: ⚡ Fácil instalación
+                      - text: 🔥 Muchos la compran después del robo.
+                  - group "Video player" [ref=e2040]:
+                    - button "Reproducir video" [ref=e2042] [cursor=pointer]
+                    - generic [ref=e2044]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:37
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS 🎁PAGA EN CASA🏠 Comprar" [ref=e2046] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fva-alarma-antirrobo-moto&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e2047]:
+                      - generic [ref=e2048]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e2050]:
+                          - generic [ref=e2051]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS 🎁PAGA EN CASA🏠" [ref=e2053]:
+                          - generic [ref=e2054]: ENVIO GRATIS 🎁PAGA EN CASA🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e2056]:
+                        - generic [ref=e2060]: Comprar
+            - generic [ref=e2062]:
+              - generic [ref=e2064]:
+                - generic [ref=e2065]:
+                  - generic [ref=e2072]: Activo
+                  - generic [ref=e2075]: "Identificador de la biblioteca: 1441167020629883"
+                  - generic [ref=e2077]: En circulación desde el 13 abr 2026
+                  - generic [ref=e2079]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2108] [cursor=pointer]:
+                  - generic [ref=e2111]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2114] [cursor=pointer]:
+                - generic [ref=e2118]: Ver detalles del anuncio
+              - separator [ref=e2119]
+              - generic [ref=e2124]:
+                - generic [ref=e2126]:
+                  - img "Diana Recomienda" [ref=e2127]
+                  - generic [ref=e2129]:
+                    - link "Diana Recomienda" [ref=e2130] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e2134]:
+                      - strong [ref=e2136]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2137]:
+                  - 'button "😳 Las estilistas están recomendando esto. Porque funciona. No necesitas 10 productos No necesitas horas Solo: 💧 Aplicas ⏱ Esperas 4 minutos ✨ Ves el cambio K18 está en otro nivel. 🔥 Por eso todo el mundo está hablando de esto." [ref=e2140]':
+                    - generic [ref=e2143]:
+                      - text: 😳 Las estilistas están recomendando esto.
+                      - text: Porque funciona.
+                      - text: No necesitas 10 productos
+                      - text: No necesitas horas
+                      - text: "Solo:"
+                      - text: 💧 Aplicas
+                      - text: ⏱ Esperas 4 minutos
+                      - text: ✨ Ves el cambio
+                      - text: K18 está en otro nivel.
+                      - text: 🔥 Por eso todo el mundo está hablando de esto.
+                  - group "Video player" [ref=e2154]:
+                    - button "Reproducir video" [ref=e2156] [cursor=pointer]
+                    - generic [ref=e2158]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 2:18
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💰 Pagas en casa Comprar" [ref=e2160] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fk18-repair-hair-mask-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e2161]:
+                      - generic [ref=e2162]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e2164]:
+                          - generic [ref=e2165]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💰 Pagas en casa" [ref=e2167]:
+                          - generic [ref=e2168]: 🚚 Envío gratis 💰 Pagas en casa
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e2170]:
+                        - generic [ref=e2174]: Comprar
+            - generic [ref=e2176]:
+              - generic [ref=e2178]:
+                - generic [ref=e2179]:
+                  - generic [ref=e2186]: Activo
+                  - generic [ref=e2189]: "Identificador de la biblioteca: 2197131497704890"
+                  - generic [ref=e2191]: En circulación desde el 25 mar 2026
+                  - generic [ref=e2193]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2222] [cursor=pointer]:
+                  - generic [ref=e2225]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2228] [cursor=pointer]:
+                - generic [ref=e2232]: Ver detalles del anuncio
+              - separator [ref=e2233]
+              - generic [ref=e2238]:
+                - generic [ref=e2240]:
+                  - img "Diana Recomienda" [ref=e2241]
+                  - generic [ref=e2243]:
+                    - link "Diana Recomienda" [ref=e2244] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e2248]:
+                      - strong [ref=e2250]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2251]:
+                  - 'button "⚠️ Si te duelen los pies al caminar, revisa tus talones. Callos gruesos Piel dura Talones partidos Rozaduras Cada paso duele. Con ClearZal™️ eliminas el callo desde la raíz. ✔ Suaviza ✔ Renueva la piel ✔ Hidrata ✔ Hace que se desprenda solo Sirve para: Pies Codos Rodillas Manos 🔥 Caminar sin dolor sí es posible." [ref=e2254]':
+                    - generic [ref=e2257]:
+                      - text: ⚠️ Si te duelen los pies al caminar, revisa tus talones.
+                      - text: Callos gruesos
+                      - text: Piel dura
+                      - text: Talones partidos
+                      - text: Rozaduras
+                      - text: Cada paso duele.
+                      - text: Con ClearZal™️ eliminas el callo desde la raíz.
+                      - text: ✔ Suaviza
+                      - text: ✔ Renueva la piel
+                      - text: ✔ Hidrata
+                      - text: ✔ Hace que se desprenda solo
+                      - text: "Sirve para:"
+                      - text: Pies
+                      - text: Codos
+                      - text: Rodillas
+                      - text: Manos
+                      - text: 🔥 Caminar sin dolor sí es posible.
+                  - group "Video player" [ref=e2268]:
+                    - button "Reproducir video" [ref=e2270] [cursor=pointer]
+                    - generic [ref=e2272]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:23
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA🏠 Comprar" [ref=e2274] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Ffast-hard-skin-remover-clearzal-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e2275]:
+                      - generic [ref=e2276]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e2278]:
+                          - generic [ref=e2279]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA🏠" [ref=e2281]:
+                          - generic [ref=e2282]: ENVIO GRATIS🎁 PAGA EN CASA🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e2284]:
+                        - generic [ref=e2288]: Comprar
+            - generic [ref=e2290]:
+              - generic [ref=e2292]:
+                - generic [ref=e2293]:
+                  - generic [ref=e2300]: Activo
+                  - generic [ref=e2303]: "Identificador de la biblioteca: 802113855895041"
+                  - generic [ref=e2305]: En circulación desde el 14 abr 2026
+                  - generic [ref=e2307]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2336] [cursor=pointer]:
+                  - generic [ref=e2339]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2342] [cursor=pointer]:
+                - generic [ref=e2346]: Ver detalles del anuncio
+              - separator [ref=e2347]
+              - generic [ref=e2352]:
+                - generic [ref=e2354]:
+                  - img "Diana Recomienda" [ref=e2355]
+                  - generic [ref=e2357]:
+                    - link "Diana Recomienda" [ref=e2358] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e2362]:
+                      - strong [ref=e2364]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2365]:
+                  - button "🚨 Este producto está salvando cabellos destruidos en 4 minutos. No cremas. No mascarillas normales. No tratamientos largos. 4 minutos. Sin enjuagar. K18 Mascarilla Molecular® ✔ Repara desde adentro ✔ Reduce quiebre ✔ Devuelve suavidad 🔥 Si tu cabello está dañado… esto es para ti." [ref=e2368]:
+                    - generic [ref=e2371]:
+                      - text: 🚨 Este producto está salvando cabellos destruidos en 4 minutos.
+                      - text: No cremas.
+                      - text: No mascarillas normales.
+                      - text: No tratamientos largos.
+                      - text: 4 minutos. Sin enjuagar.
+                      - text: K18 Mascarilla Molecular®
+                      - text: ✔ Repara desde adentro
+                      - text: ✔ Reduce quiebre
+                      - text: ✔ Devuelve suavidad
+                      - text: 🔥 Si tu cabello está dañado… esto es para ti.
+                  - group "Video player" [ref=e2382]:
+                    - button "Reproducir video" [ref=e2384] [cursor=pointer]
+                    - generic [ref=e2386]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:15
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💰 Pagas en casa Comprar" [ref=e2388] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fk18-repair-hair-mask-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e2389]:
+                      - generic [ref=e2390]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e2392]:
+                          - generic [ref=e2393]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💰 Pagas en casa" [ref=e2395]:
+                          - generic [ref=e2396]: 🚚 Envío gratis 💰 Pagas en casa
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e2398]:
+                        - generic [ref=e2402]: Comprar
+            - generic [ref=e2404]:
+              - generic [ref=e2406]:
+                - generic [ref=e2407]:
+                  - generic [ref=e2414]: Activo
+                  - generic [ref=e2417]: "Identificador de la biblioteca: 4056522804638186"
+                  - generic [ref=e2419]: En circulación desde el 25 mar 2026
+                  - generic [ref=e2421]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2450] [cursor=pointer]:
+                  - generic [ref=e2453]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2456] [cursor=pointer]:
+                - generic [ref=e2460]: Ver detalles del anuncio
+              - separator [ref=e2461]
+              - generic [ref=e2466]:
+                - generic [ref=e2468]:
+                  - img "Diana Recomienda" [ref=e2469]
+                  - generic [ref=e2471]:
+                    - link "Diana Recomienda" [ref=e2472] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e2476]:
+                      - strong [ref=e2478]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2479]:
+                  - 'button "⚠️ Si te duelen los pies al caminar, revisa tus talones. Callos gruesos Piel dura Talones partidos Rozaduras Cada paso duele. Con ClearZal™️ eliminas el callo desde la raíz. ✔ Suaviza ✔ Renueva la piel ✔ Hidrata ✔ Hace que se desprenda solo Sirve para: Pies Codos Rodillas Manos 🔥 Caminar sin dolor sí es posible." [ref=e2482]':
+                    - generic [ref=e2485]:
+                      - text: ⚠️ Si te duelen los pies al caminar, revisa tus talones.
+                      - text: Callos gruesos
+                      - text: Piel dura
+                      - text: Talones partidos
+                      - text: Rozaduras
+                      - text: Cada paso duele.
+                      - text: Con ClearZal™️ eliminas el callo desde la raíz.
+                      - text: ✔ Suaviza
+                      - text: ✔ Renueva la piel
+                      - text: ✔ Hidrata
+                      - text: ✔ Hace que se desprenda solo
+                      - text: "Sirve para:"
+                      - text: Pies
+                      - text: Codos
+                      - text: Rodillas
+                      - text: Manos
+                      - text: 🔥 Caminar sin dolor sí es posible.
+                  - group "Video player" [ref=e2496]:
+                    - button "Reproducir video" [ref=e2498] [cursor=pointer]
+                    - generic [ref=e2500]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:23
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM ENVIO GRATIS🎁 PAGA EN CASA🏠 Comprar" [ref=e2502] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Ffast-hard-skin-remover-clearzal-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e2503]:
+                      - generic [ref=e2504]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e2506]:
+                          - generic [ref=e2507]: CLICK-YCOMPRA.COM
+                        - button "ENVIO GRATIS🎁 PAGA EN CASA🏠" [ref=e2509]:
+                          - generic [ref=e2510]: ENVIO GRATIS🎁 PAGA EN CASA🏠
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e2512]:
+                        - generic [ref=e2516]: Comprar
+            - generic [ref=e2518]:
+              - generic [ref=e2520]:
+                - generic [ref=e2521]:
+                  - generic [ref=e2528]: Activo
+                  - generic [ref=e2531]: "Identificador de la biblioteca: 897782966550209"
+                  - generic [ref=e2533]: En circulación desde el 15 abr 2026
+                  - generic [ref=e2535]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2564] [cursor=pointer]:
+                  - generic [ref=e2567]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2570] [cursor=pointer]:
+                - generic [ref=e2574]: Ver detalles del anuncio
+              - separator [ref=e2575]
+              - generic [ref=e2580]:
+                - generic [ref=e2582]:
+                  - img "Diana Recomienda" [ref=e2583]
+                  - generic [ref=e2585]:
+                    - link "Diana Recomienda" [ref=e2586] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e2590]:
+                      - strong [ref=e2592]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2593]:
+                  - button "😣 ¿Te acuestas cansado… pero no logras dormir? Das vueltas Piensas demasiado Te despiertas en la madrugada Y amaneces peor Con LullaBites® duermes profundo de forma natural. 🌙 Sin pastillas 🌿 Sin melatonina 💤 Sin mareos al despertar Y hoy… 🎁 PAGUE 1 · LLEVE 2 Sí… dos frascos por el precio de uno. 🚚 Envío gratis 💰 Pago al recibir 🔥 Dormir bien no puede esperar más." [ref=e2596]:
+                    - generic [ref=e2599]:
+                      - text: 😣 ¿Te acuestas cansado… pero no logras dormir?
+                      - text: Das vueltas
+                      - text: Piensas demasiado
+                      - text: Te despiertas en la madrugada
+                      - text: Y amaneces peor
+                      - text: Con LullaBites® duermes profundo de forma natural.
+                      - text: 🌙 Sin pastillas
+                      - text: 🌿 Sin melatonina
+                      - text: 💤 Sin mareos al despertar
+                      - text: Y hoy…
+                      - text: 🎁 PAGUE 1 · LLEVE 2
+                      - text: Sí… dos frascos por el precio de uno.
+                      - text: 🚚 Envío gratis
+                      - text: 💰 Pago al recibir
+                      - text: 🔥 Dormir bien no puede esperar más.
+                  - group "Video player" [ref=e2610]:
+                    - button "Reproducir video" [ref=e2612] [cursor=pointer]
+                    - generic [ref=e2614]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:47
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💰 Pago al recibir Comprar" [ref=e2616] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Flullabites-gummies&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e2617]:
+                      - generic [ref=e2618]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e2620]:
+                          - generic [ref=e2621]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💰 Pago al recibir" [ref=e2623]:
+                          - generic [ref=e2624]: 🚚 Envío gratis 💰 Pago al recibir
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e2626]:
+                        - generic [ref=e2630]: Comprar
+            - generic [ref=e2632]:
+              - generic [ref=e2634]:
+                - generic [ref=e2635]:
+                  - generic [ref=e2642]: Activo
+                  - generic [ref=e2645]: "Identificador de la biblioteca: 1278799717157149"
+                  - generic [ref=e2647]: En circulación desde el 13 abr 2026
+                  - generic [ref=e2649]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2678] [cursor=pointer]:
+                  - generic [ref=e2681]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2684] [cursor=pointer]:
+                - generic [ref=e2688]: Ver detalles del anuncio
+              - separator [ref=e2689]
+              - generic [ref=e2694]:
+                - generic [ref=e2696]:
+                  - img "Diana Recomienda" [ref=e2697]
+                  - generic [ref=e2699]:
+                    - link "Diana Recomienda" [ref=e2700] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e2704]:
+                      - strong [ref=e2706]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2707]:
+                  - button "💔 No es solo cabello… es cómo te sientes. Cuando no te gusta cómo se ve Cuando lo sientes débil Cuando no tiene vida Todo cambia. Con K18 Mascarilla Molecular® ✔ Cabello suave ✔ Más fuerte ✔ Más sano ✔ Más bonito 🔥 Te miras… y vuelves a gustarte." [ref=e2710]:
+                    - generic [ref=e2713]:
+                      - text: 💔 No es solo cabello… es cómo te sientes.
+                      - text: Cuando no te gusta cómo se ve
+                      - text: Cuando lo sientes débil
+                      - text: Cuando no tiene vida
+                      - text: Todo cambia.
+                      - text: Con K18 Mascarilla Molecular®
+                      - text: ✔ Cabello suave
+                      - text: ✔ Más fuerte
+                      - text: ✔ Más sano
+                      - text: ✔ Más bonito
+                      - text: 🔥 Te miras… y vuelves a gustarte.
+                  - group "Video player" [ref=e2724]:
+                    - button "Reproducir video" [ref=e2726] [cursor=pointer]
+                    - generic [ref=e2728]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:11
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💰 Pagas en casa Comprar" [ref=e2730] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fk18-repair-hair-mask-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e2731]:
+                      - generic [ref=e2732]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e2734]:
+                          - generic [ref=e2735]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💰 Pagas en casa" [ref=e2737]:
+                          - generic [ref=e2738]: 🚚 Envío gratis 💰 Pagas en casa
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e2740]:
+                        - generic [ref=e2744]: Comprar
+            - generic [ref=e2746]:
+              - generic [ref=e2748]:
+                - generic [ref=e2749]:
+                  - generic [ref=e2756]: Activo
+                  - generic [ref=e2759]: "Identificador de la biblioteca: 2458011308049973"
+                  - generic [ref=e2761]: En circulación desde el 16 abr 2026
+                  - generic [ref=e2763]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2792] [cursor=pointer]:
+                  - generic [ref=e2795]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2798] [cursor=pointer]:
+                - generic [ref=e2802]: Ver detalles del anuncio
+              - separator [ref=e2803]
+              - generic [ref=e2808]:
+                - generic [ref=e2810]:
+                  - img "Diana Recomienda" [ref=e2811]
+                  - generic [ref=e2813]:
+                    - link "Diana Recomienda" [ref=e2814] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e2818]:
+                      - strong [ref=e2820]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2821]:
+                  - button "😣 ¿Comes… y quedas inflado como globo? Pesadez Gases Barriga dura Incomodidad todo el día Y crees que es normal. No lo es. Con Bloom Greens® limpias tu cuerpo desde adentro. 🌿 Natural 💨 Menos gases ✨ Abdomen ligero ⚡ Más energía 🔥 Si te sientes pesado… esto es para ti." [ref=e2824]:
+                    - generic [ref=e2827]:
+                      - text: 😣 ¿Comes… y quedas inflado como globo?
+                      - text: Pesadez
+                      - text: Gases
+                      - text: Barriga dura
+                      - text: Incomodidad todo el día
+                      - text: Y crees que es normal.
+                      - text: No lo es.
+                      - text: Con Bloom Greens® limpias tu cuerpo desde adentro.
+                      - text: 🌿 Natural
+                      - text: 💨 Menos gases
+                      - text: ✨ Abdomen ligero
+                      - text: ⚡ Más energía
+                      - text: 🔥 Si te sientes pesado… esto es para ti.
+                  - group "Video player" [ref=e2838]:
+                    - button "Reproducir video" [ref=e2840] [cursor=pointer]
+                    - generic [ref=e2842]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:53
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💳 Pago al recibir Comprar" [ref=e2844] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fbloom&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e2845]:
+                      - generic [ref=e2846]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e2848]:
+                          - generic [ref=e2849]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💳 Pago al recibir" [ref=e2851]:
+                          - generic [ref=e2852]: 🚚 Envío gratis 💳 Pago al recibir
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e2854]:
+                        - generic [ref=e2858]: Comprar
+            - generic [ref=e2860]:
+              - generic [ref=e2862]:
+                - generic [ref=e2863]:
+                  - generic [ref=e2870]: Activo
+                  - generic [ref=e2873]: "Identificador de la biblioteca: 983483990812470"
+                  - generic [ref=e2875]: En circulación desde el 17 abr 2026
+                  - generic [ref=e2877]: Plataformas
+                - button "Abrir menú desplegable" [ref=e2906] [cursor=pointer]:
+                  - generic [ref=e2909]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e2912] [cursor=pointer]:
+                - generic [ref=e2916]: Ver detalles del anuncio
+              - separator [ref=e2917]
+              - generic [ref=e2922]:
+                - generic [ref=e2924]:
+                  - img "Diana Recomienda" [ref=e2925]
+                  - generic [ref=e2927]:
+                    - link "Diana Recomienda" [ref=e2928] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e2932]:
+                      - strong [ref=e2934]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e2935]:
+                  - button "😣 Ese dolor en el cuello no apareció de la nada. Dormir mal Mala postura Horas sentado Conducir mucho Todo se acumula. SnoreFix corrige y alivia desde los primeros usos. 💥 Menos tensión 💥 Mejor postura 💥 Más comodidad 💥 Mejor sueño 🔥 Tu cuello lleva tiempo pidiendo esto." [ref=e2938]:
+                    - generic [ref=e2941]:
+                      - text: 😣 Ese dolor en el cuello no apareció de la nada.
+                      - text: Dormir mal
+                      - text: Mala postura
+                      - text: Horas sentado
+                      - text: Conducir mucho
+                      - text: Todo se acumula.
+                      - text: SnoreFix corrige y alivia desde los primeros usos.
+                      - text: 💥 Menos tensión
+                      - text: 💥 Mejor postura
+                      - text: 💥 Más comodidad
+                      - text: 💥 Mejor sueño
+                      - text: 🔥 Tu cuello lleva tiempo pidiendo esto.
+                  - group "Video player" [ref=e2952]:
+                    - button "Reproducir video" [ref=e2954] [cursor=pointer]
+                    - generic [ref=e2956]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:42
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💳 Pago al recibir Comprar" [ref=e2958] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Falmohadilla-cervical&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e2959]:
+                      - generic [ref=e2960]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e2962]:
+                          - generic [ref=e2963]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💳 Pago al recibir" [ref=e2965]:
+                          - generic [ref=e2966]: 🚚 Envío gratis 💳 Pago al recibir
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e2968]:
+                        - generic [ref=e2972]: Comprar
+            - generic [ref=e2974]:
+              - generic [ref=e2976]:
+                - generic [ref=e2977]:
+                  - generic [ref=e2984]: Activo
+                  - generic [ref=e2987]: "Identificador de la biblioteca: 1485513983253357"
+                  - generic [ref=e2989]: En circulación desde el 17 abr 2026
+                  - generic [ref=e2991]: Plataformas
+                - button "Abrir menú desplegable" [ref=e3020] [cursor=pointer]:
+                  - generic [ref=e3023]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e3026] [cursor=pointer]:
+                - generic [ref=e3030]: Ver detalles del anuncio
+              - separator [ref=e3031]
+              - generic [ref=e3036]:
+                - generic [ref=e3038]:
+                  - img "Diana Recomienda" [ref=e3039]
+                  - generic [ref=e3041]:
+                    - link "Diana Recomienda" [ref=e3042] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e3046]:
+                      - strong [ref=e3048]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e3049]:
+                  - button "😣 Ese dolor en el cuello no apareció de la nada. Dormir mal Mala postura Horas sentado Conducir mucho Todo se acumula. SnoreFix corrige y alivia desde los primeros usos. 💥 Menos tensión 💥 Mejor postura 💥 Más comodidad 💥 Mejor sueño 🔥 Tu cuello lleva tiempo pidiendo esto." [ref=e3052]:
+                    - generic [ref=e3055]:
+                      - text: 😣 Ese dolor en el cuello no apareció de la nada.
+                      - text: Dormir mal
+                      - text: Mala postura
+                      - text: Horas sentado
+                      - text: Conducir mucho
+                      - text: Todo se acumula.
+                      - text: SnoreFix corrige y alivia desde los primeros usos.
+                      - text: 💥 Menos tensión
+                      - text: 💥 Mejor postura
+                      - text: 💥 Más comodidad
+                      - text: 💥 Mejor sueño
+                      - text: 🔥 Tu cuello lleva tiempo pidiendo esto.
+                  - group "Video player" [ref=e3066]:
+                    - button "Reproducir video" [ref=e3068] [cursor=pointer]
+                    - generic [ref=e3070]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:42
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💳 Pago al recibir Comprar" [ref=e3072] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Falmohadilla-cervical&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e3073]:
+                      - generic [ref=e3074]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e3076]:
+                          - generic [ref=e3077]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💳 Pago al recibir" [ref=e3079]:
+                          - generic [ref=e3080]: 🚚 Envío gratis 💳 Pago al recibir
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e3082]:
+                        - generic [ref=e3086]: Comprar
+            - generic [ref=e3088]:
+              - generic [ref=e3090]:
+                - generic [ref=e3091]:
+                  - generic [ref=e3098]: Activo
+                  - generic [ref=e3101]: "Identificador de la biblioteca: 970725732120600"
+                  - generic [ref=e3103]: En circulación desde el 17 abr 2026
+                  - generic [ref=e3105]: Plataformas
+                - button "Abrir menú desplegable" [ref=e3134] [cursor=pointer]:
+                  - generic [ref=e3137]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e3140] [cursor=pointer]:
+                - generic [ref=e3144]: Ver detalles del anuncio
+              - separator [ref=e3145]
+              - generic [ref=e3150]:
+                - generic [ref=e3152]:
+                  - img "Diana Recomienda" [ref=e3153]
+                  - generic [ref=e3155]:
+                    - link "Diana Recomienda" [ref=e3156] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e3160]:
+                      - strong [ref=e3162]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e3163]:
+                  - button "😴 El problema no es dormir… es descansar mal. Ronquidos Despertares constantes Cansancio al amanecer Dolor de cuello Y al otro día… vuelves roto. Con SnoreFix recuperas tus noches. ✔ Reduce ronquidos ✔ Mejora postura al dormir ✔ Alivia tensión cervical ✔ Más descanso real 🚚 Envío gratis 💳 Pago al recibir 🔥 Si amaneces cansado, esto es para ti." [ref=e3166]:
+                    - generic [ref=e3169]:
+                      - text: 😴 El problema no es dormir…
+                      - text: es descansar mal.
+                      - text: Ronquidos
+                      - text: Despertares constantes
+                      - text: Cansancio al amanecer
+                      - text: Dolor de cuello
+                      - text: Y al otro día… vuelves roto.
+                      - text: Con SnoreFix recuperas tus noches.
+                      - text: ✔ Reduce ronquidos
+                      - text: ✔ Mejora postura al dormir
+                      - text: ✔ Alivia tensión cervical
+                      - text: ✔ Más descanso real
+                      - text: 🚚 Envío gratis
+                      - text: 💳 Pago al recibir
+                      - text: 🔥 Si amaneces cansado, esto es para ti.
+                  - group "Video player" [ref=e3180]:
+                    - button "Reproducir video" [ref=e3182] [cursor=pointer]
+                    - generic [ref=e3184]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 1:05
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💳 Pago al recibir Comprar" [ref=e3186] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Falmohadilla-cervical&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e3187]:
+                      - generic [ref=e3188]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e3190]:
+                          - generic [ref=e3191]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💳 Pago al recibir" [ref=e3193]:
+                          - generic [ref=e3194]: 🚚 Envío gratis 💳 Pago al recibir
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e3196]:
+                        - generic [ref=e3200]: Comprar
+            - generic [ref=e3202]:
+              - generic [ref=e3204]:
+                - generic [ref=e3205]:
+                  - generic [ref=e3212]: Activo
+                  - generic [ref=e3215]: "Identificador de la biblioteca: 1339726451409007"
+                  - generic [ref=e3217]: En circulación desde el 17 abr 2026
+                  - generic [ref=e3219]: Plataformas
+                - button "Abrir menú desplegable" [ref=e3248] [cursor=pointer]:
+                  - generic [ref=e3251]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e3254] [cursor=pointer]:
+                - generic [ref=e3258]: Ver detalles del anuncio
+              - separator [ref=e3259]
+              - generic [ref=e3264]:
+                - generic [ref=e3266]:
+                  - img "Diana Recomienda" [ref=e3267]
+                  - generic [ref=e3269]:
+                    - link "Diana Recomienda" [ref=e3270] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e3274]:
+                      - strong [ref=e3276]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e3277]:
+                  - button "😣 Ese dolor en el cuello no apareció de la nada. Dormir mal Mala postura Horas sentado Conducir mucho Todo se acumula. SnoreFix corrige y alivia desde los primeros usos. 💥 Menos tensión 💥 Mejor postura 💥 Más comodidad 💥 Mejor sueño 🔥 Tu cuello lleva tiempo pidiendo esto." [ref=e3280]:
+                    - generic [ref=e3283]:
+                      - text: 😣 Ese dolor en el cuello no apareció de la nada.
+                      - text: Dormir mal
+                      - text: Mala postura
+                      - text: Horas sentado
+                      - text: Conducir mucho
+                      - text: Todo se acumula.
+                      - text: SnoreFix corrige y alivia desde los primeros usos.
+                      - text: 💥 Menos tensión
+                      - text: 💥 Mejor postura
+                      - text: 💥 Más comodidad
+                      - text: 💥 Mejor sueño
+                      - text: 🔥 Tu cuello lleva tiempo pidiendo esto.
+                  - group "Video player" [ref=e3294]:
+                    - button "Reproducir video" [ref=e3296] [cursor=pointer]
+                    - generic [ref=e3298]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:42
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💳 Pago al recibir Comprar" [ref=e3300] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Falmohadilla-cervical&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e3301]:
+                      - generic [ref=e3302]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e3304]:
+                          - generic [ref=e3305]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💳 Pago al recibir" [ref=e3307]:
+                          - generic [ref=e3308]: 🚚 Envío gratis 💳 Pago al recibir
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e3310]:
+                        - generic [ref=e3314]: Comprar
+            - generic [ref=e3316]:
+              - generic [ref=e3318]:
+                - generic [ref=e3319]:
+                  - generic [ref=e3326]: Activo
+                  - generic [ref=e3329]: "Identificador de la biblioteca: 1483016633487236"
+                  - generic [ref=e3331]: En circulación desde el 13 abr 2026
+                  - generic [ref=e3333]: Plataformas
+                - button "Abrir menú desplegable" [ref=e3362] [cursor=pointer]:
+                  - generic [ref=e3365]: Abrir menú desplegable
+              - button "Ver detalles del anuncio" [ref=e3368] [cursor=pointer]:
+                - generic [ref=e3372]: Ver detalles del anuncio
+              - separator [ref=e3373]
+              - generic [ref=e3378]:
+                - generic [ref=e3380]:
+                  - img "Diana Recomienda" [ref=e3381]
+                  - generic [ref=e3383]:
+                    - link "Diana Recomienda" [ref=e3384] [cursor=pointer]:
+                      - /url: https://www.facebook.com/100091035166079/
+                    - generic [ref=e3388]:
+                      - strong [ref=e3390]: Publicidad
+                      - generic:
+                        - strong
+                - generic [ref=e3391]:
+                  - button "😣 Si te has hecho decoloración… sabes de qué hablo. Cabello seco Puntas abiertas Textura como paja Sin brillo Y nada lo arregla. Hasta que pruebas K18. 💥 Repara desde el interior 💥 Resultado desde la primera vez 💥 Solo 4 minutos 🔥 No es maquillaje… es reparación real." [ref=e3394]:
+                    - generic [ref=e3397]:
+                      - text: 😣 Si te has hecho decoloración… sabes de qué hablo.
+                      - text: Cabello seco
+                      - text: Puntas abiertas
+                      - text: Textura como paja
+                      - text: Sin brillo
+                      - text: Y nada lo arregla.
+                      - text: Hasta que pruebas K18.
+                      - text: 💥 Repara desde el interior
+                      - text: 💥 Resultado desde la primera vez
+                      - text: 💥 Solo 4 minutos
+                      - text: 🔥 No es maquillaje… es reparación real.
+                  - group "Video player" [ref=e3408]:
+                    - button "Reproducir video" [ref=e3410] [cursor=pointer]
+                    - generic [ref=e3412]:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Reproducir"
+                        - generic: 0:00 / 0:16
+                      - generic:
+                        - generic:
+                          - slider "Change Position"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Configuración"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Ver en pantalla completa"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - slider "Ajustar volumen"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - button "Reactivar":
+                                  - img
+                  - link "CLICK-YCOMPRA.COM 🚚 Envío gratis 💰 Pagas en casa Comprar" [ref=e3414] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Fk18-repair-hair-mask-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                    - generic [ref=e3415]:
+                      - generic [ref=e3416]:
+                        - button "CLICK-YCOMPRA.COM" [ref=e3418]:
+                          - generic [ref=e3419]: CLICK-YCOMPRA.COM
+                        - button "🚚 Envío gratis 💰 Pagas en casa" [ref=e3421]:
+                          - generic [ref=e3422]: 🚚 Envío gratis 💰 Pagas en casa
+                        - generic:
+                          - button
+                        - generic:
+                          - button
+                      - button "Comprar" [ref=e3424]:
+                        - generic [ref=e3428]: Comprar
+      - generic [ref=e3430]:
+        - generic [ref=e3438]: Estado del sistema
+        - generic [ref=e3442]:
+          - list [ref=e3443]:
+            - listitem [ref=e3444]:
+              - heading "API de la biblioteca de anuncios" [level=3] [ref=e3445]:
+                - link "API de la biblioteca de anuncios" [ref=e3446] [cursor=pointer]:
+                  - /url: /ads/library/api/?source=archive-landing-page
+            - listitem [ref=e3447]:
+              - heading "Información sobre anuncios y uso de datos" [level=3] [ref=e3448]:
+                - link "Información sobre anuncios y uso de datos" [ref=e3449] [cursor=pointer]:
+                  - /url: /ads/about/?entry_product=ad_library
+            - listitem [ref=e3450]:
+              - heading "Privacidad" [level=3] [ref=e3451]:
+                - link "Privacidad" [ref=e3452] [cursor=pointer]:
+                  - /url: /privacy/center/?entry_point=privacy_basics_redirect
+            - listitem [ref=e3453]:
+              - heading "Condiciones" [level=3] [ref=e3454]:
+                - link "Condiciones" [ref=e3455] [cursor=pointer]:
+                  - /url: /policies/
+            - listitem [ref=e3456]:
+              - heading "Cookies" [level=3] [ref=e3457]:
+                - link "Cookies" [ref=e3458] [cursor=pointer]:
+                  - /url: /policies/cookies/
+          - heading "Meta © 2026 | Español" [level=3] [ref=e3460]:
+            - text: Meta © 2026 |
+            - link "Español" [ref=e3461] [cursor=pointer]:
+              - /url: /language/
+  - dialog "Vincular a anuncio" [ref=e3464]:
+    - generic [ref=e3466]:
+      - generic [ref=e3467]:
+        - heading "Vincular a anuncio" [level=3] [ref=e3470]
+        - button "Cerrar" [ref=e3473] [cursor=pointer]:
+          - generic [ref=e3476]: Cerrar
+      - generic [ref=e3483]:
+        - text: Este anuncio proviene de un enlace de URL
+        - generic [ref=e3486]:
+          - generic [ref=e3488]:
+            - generic [ref=e3489]:
+              - generic [ref=e3496]: Activo
+              - generic [ref=e3499]: "Identificador de la biblioteca: 1255060015952852"
+              - generic [ref=e3501]: En circulación desde el 1 feb 2026
+              - generic [ref=e3503]: Plataformas
+            - button "Abrir menú desplegable" [ref=e3532] [cursor=pointer]:
+              - generic [ref=e3535]: Abrir menú desplegable
+          - button "Ver detalles del anuncio" [ref=e3538] [cursor=pointer]:
+            - generic [ref=e3542]: Ver detalles del anuncio
+          - separator [ref=e3543]
+          - generic [ref=e3548]:
+            - generic [ref=e3550]:
+              - img "Diana Recomienda" [ref=e3551]
+              - generic [ref=e3553]:
+                - link "Diana Recomienda" [ref=e3554] [cursor=pointer]:
+                  - /url: https://www.facebook.com/100091035166079/
+                - generic [ref=e3558]:
+                  - strong [ref=e3560]: Publicidad
+                  - generic:
+                    - strong
+            - generic [ref=e3561]:
+              - button "⏰ ¡No más días con dolor! Hoy mismo puedes recuperar tu movimiento con ClearZal® Acción Rápida. ✅ Alivio inmediato y seguro ✅ Se absorbe en segundos ✅ Perfecto para quienes no paran ni un minuto 🔥 Aprovecha esta oportunidad y siente el cambio desde la primera aplicación. 👉 ¡Ordena ahora y dile adiós al dolor!" [ref=e3564]:
+                - generic [ref=e3567]:
+                  - text: ⏰ ¡No más días con dolor!
+                  - text: Hoy mismo puedes recuperar tu movimiento con ClearZal® Acción Rápida.
+                  - text: ✅ Alivio inmediato y seguro
+                  - text: ✅ Se absorbe en segundos
+                  - text: ✅ Perfecto para quienes no paran ni un minuto
+                  - text: 🔥 Aprovecha esta oportunidad y siente el cambio desde la primera aplicación.
+                  - text: 👉 ¡Ordena ahora y dile adiós al dolor!
+              - group "Video player" [ref=e3578]:
+                - generic [ref=e3579]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Pausar"
+                    - generic: 0:04 / 0:22
+                  - generic:
+                    - generic:
+                      - slider "Change Position"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Configuración"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button "Ver en pantalla completa"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - slider "Ajustar volumen"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Silenciar":
+                              - img
+              - link "CLICK-YCOMPRA.COM Envió Gratis🎁Paga En Casa Comprar" [ref=e3581] [cursor=pointer]:
+                - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fclick-ycompra.com%2Fproducts%2Ffast-acting-clear-pain-relieving-60ml&h=AT4SJg2ONGocsmc9kZN4n2D5EiHkW4nTHaIOKZ679bCWwgSEo-XNqjzg199bxzpLjxJFKyBiR4NWo4GvqGTz9bE1we9qgtvXqPrMLCtBdpgAbFEzdjSn1n9xszgIMUP1z0UTQ92J6iI63w6KZukNHuaHt7AQXnXpVUt8Dw
+                - generic [ref=e3582]:
+                  - generic [ref=e3583]:
+                    - button "CLICK-YCOMPRA.COM" [ref=e3585]:
+                      - generic [ref=e3586]: CLICK-YCOMPRA.COM
+                    - button "Envió Gratis🎁Paga En Casa" [ref=e3588]:
+                      - generic [ref=e3589]: Envió Gratis🎁Paga En Casa
+                    - generic:
+                      - button
+                    - generic:
+                      - button
+                  - button "Comprar" [ref=e3591]:
+                    - generic [ref=e3595]: Comprar
+      - button "Cerrar" [ref=e3598] [cursor=pointer]:
+        - generic [ref=e3602]: Cerrar

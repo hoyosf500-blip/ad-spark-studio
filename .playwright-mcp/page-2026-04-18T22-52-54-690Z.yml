@@ -1,0 +1,342 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic:
+      - link "Skip to main content":
+        - /url: "#main"
+    - generic [ref=e5]:
+      - link "home" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img "Riverside" [ref=e7]
+      - text:  
+      - button "menu" [ref=e8] [cursor=pointer]
+  - generic [ref=e9]:
+    - generic [ref=e11]:
+      - heading "Audio & Video Transcription. Powered by AI." [level=1] [ref=e12]
+      - generic [ref=e13]:
+        - text: Transcribe audio & video to text with
+        - strong [ref=e14]:
+          - text: 99% accuracy.
+          - text: ‍
+        - text: Available in 100+ languages and free of charge.
+      - link "Transcribe now" [ref=e15] [cursor=pointer]:
+        - /url: "#"
+    - generic [ref=e18]:
+      - group "1 / 6" [ref=e19]
+      - group "2 / 6" [ref=e20]
+      - group "3 / 6" [ref=e21]
+      - group "4 / 6" [ref=e22]
+      - group "5 / 6" [ref=e23]
+      - group "6 / 6" [ref=e24]
+      - group "1 / 6" [ref=e25]
+      - group "2 / 6" [ref=e26]
+      - group "3 / 6" [ref=e27]
+      - group "4 / 6" [ref=e28]
+      - group "5 / 6" [ref=e29]
+      - group "6 / 6" [ref=e30]
+      - group "1 / 6" [ref=e31]
+      - group "2 / 6" [ref=e32]
+      - group "3 / 6" [ref=e33]
+      - group "4 / 6" [ref=e34]
+      - group "5 / 6" [ref=e35]
+      - group "6 / 6" [ref=e36]
+  - generic [ref=e40]:
+    - heading "We give you our word." [level=3] [ref=e41]
+    - generic [ref=e42]: Use our AI transcriber as much as you want. Or, you can record and upload directly in our online studio and have your transcriptions done automatically. Then, use the transcript to edit, caption, customize, and clip your recording.
+    - generic [ref=e43]:
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - heading "Writes on the mark." [level=3] [ref=e46]
+          - generic [ref=e47]: Harness AI to convert your audio to text with almost absolute accuracy, word for word, to the last syllable, idiom, and nuance. If it got something wrong, simply click to fix it.
+        - img "Audio player interface showing a waveform, play button, and a profile photo of a man labeled Stephen with timestamp 05:10." [ref=e50]
+      - generic [ref=e51]:
+        - 'img "Dark-themed chat interface showing a message from Stephen about Riverside, surrounded by language labels: Français, English, Espagnol, Deutsch, and Português." [ref=e52]'
+        - generic [ref=e53]:
+          - heading "Native in 100+ languages." [level=3] [ref=e54]
+          - generic [ref=e55]: Automatic transcriptions in 100 different languages and idioms, multiplied by any accent or regional particulars you throw at it.
+      - generic [ref=e57]:
+        - heading "Fast & gratuitous." [level=3] [ref=e58]
+        - generic [ref=e59]: Starts transcribing as soon as you’re done recording or uploading, so no need to wait long. And it’s included in all our pro and business plans.
+  - generic [ref=e62]:
+    - generic [ref=e63]:
+      - strong [ref=e64]: Start creating with Riverside.
+      - text: Go from concept to content, all in one place.
+    - link "Get started" [ref=e65] [cursor=pointer]:
+      - /url: https://riverside.com/start
+  - generic [ref=e68]:
+    - heading "Goes beyond words." [level=3] [ref=e69]
+    - generic [ref=e70]:
+      - text: Riverside lets you record anyone, anywhere in high-quality, then transcribes your recording, with speaker detection and all.
+      - text: And that’s not even all it can do.
+    - generic:
+      - img "Video call interface showing a woman and a man speaking, with controls and an audio waveform below."
+    - generic [ref=e71]:
+      - generic [ref=e72]:
+        - heading "Record" [level=3] [ref=e73]
+        - generic [ref=e75]: Record in up to 4K with crystal clear audio regardless of the quality of you or your guest’s internet connection.
+      - generic [ref=e76]:
+        - heading "Transcribe" [level=3] [ref=e77]
+        - generic [ref=e79]: Once you’re done, AI will start transcribing automatically, showing you exactly who said what.
+      - generic [ref=e80]:
+        - heading "Edit" [level=3] [ref=e81]
+        - generic [ref=e83]: You’re all set to edit your recording from the waveform, or right from the transcript, by deleting words, sentences, and paragraphs.
+  - generic [ref=e85]:
+    - heading "Frequently Asked Questions" [level=2] [ref=e87]
+    - generic [ref=e89]:
+      - generic [ref=e90] [cursor=pointer]:
+        - heading "How accurate is Riverside's transcription service?" [level=3] [ref=e91]:
+          - button "How accurate is Riverside's transcription service?" [expanded] [ref=e92]:
+            - generic [ref=e93]: How accurate is Riverside's transcription service?
+        - region "How accurate is Riverside's transcription service?" [ref=e97]:
+          - generic [ref=e98]:
+            - text: Riverside's transcription service is up to 99% accurate. It uses advanced speech-recognition technology trained on multilingual data to recognize accents and dialects with near-human precision.
+            - text: When you use the
+            - link "Riverside recorder" [ref=e99]:
+              - /url: https://riverside.com/recording
+            - text: ", the platform captures high-quality, uncompressed audio, which further improves transcription accuracy."
+      - heading "What formats can I download my transcripts in?" [level=3] [ref=e101] [cursor=pointer]:
+        - button "What formats can I download my transcripts in?" [ref=e102]:
+          - generic [ref=e103]: What formats can I download my transcripts in?
+      - heading "How long does it take to transcribe a recording?" [level=3] [ref=e108] [cursor=pointer]:
+        - button "How long does it take to transcribe a recording?" [ref=e109]:
+          - generic [ref=e110]: How long does it take to transcribe a recording?
+      - heading "What are the pricing plans for Riverside's transcription services?" [level=3] [ref=e115] [cursor=pointer]:
+        - button "What are the pricing plans for Riverside's transcription services?" [ref=e116]:
+          - generic [ref=e117]: What are the pricing plans for Riverside's transcription services?
+      - heading "How does Riverside handle different accents in transcription?" [level=3] [ref=e122] [cursor=pointer]:
+        - button "How does Riverside handle different accents in transcription?" [ref=e123]:
+          - generic [ref=e124]: How does Riverside handle different accents in transcription?
+      - heading "Are there any additional features for editing transcripts?" [level=3] [ref=e129] [cursor=pointer]:
+        - button "Are there any additional features for editing transcripts?" [ref=e130]:
+          - generic [ref=e131]: Are there any additional features for editing transcripts?
+      - heading "How does speaker detection work in Riverside's transcription?" [level=3] [ref=e136] [cursor=pointer]:
+        - button "How does speaker detection work in Riverside's transcription?" [ref=e137]:
+          - generic [ref=e138]: How does speaker detection work in Riverside's transcription?
+  - generic [ref=e144]:
+    - heading "Start creating with Riverside" [level=2] [ref=e145]
+    - link "Get started" [ref=e146] [cursor=pointer]:
+      - /url: https://riverside.com/start
+  - generic [ref=e148]:
+    - generic [ref=e150]:
+      - link "Riverside" [ref=e151] [cursor=pointer]:
+        - /url: /
+        - img "Riverside"
+      - generic [ref=e152]:
+        - generic [ref=e153]:
+          - heading "Company" [level=2] [ref=e154]
+          - generic [ref=e155]:
+            - link "About us" [ref=e156] [cursor=pointer]:
+              - /url: /about
+            - link "Careers" [ref=e157] [cursor=pointer]:
+              - /url: https://careers.riverside.com/
+            - link "Partners" [ref=e158] [cursor=pointer]:
+              - /url: /partners
+            - link "Affiliate Program" [ref=e159] [cursor=pointer]:
+              - /url: /affiliate-program
+            - link "Creator Partnerships" [ref=e160] [cursor=pointer]:
+              - /url: /creator-partnerships
+        - generic [ref=e161]:
+          - heading "Product" [level=2] [ref=e162]
+          - generic [ref=e163]:
+            - link "Why Riverside" [ref=e164] [cursor=pointer]:
+              - /url: /why-riverside
+            - link "Pricing" [ref=e165] [cursor=pointer]:
+              - /url: /pricing
+            - link "For Business" [ref=e166] [cursor=pointer]:
+              - /url: /business
+            - link "Mac App" [ref=e167] [cursor=pointer]:
+              - /url: /mac-app
+            - link "Mobile Apps" [ref=e168] [cursor=pointer]:
+              - /url: /mobile
+            - link "FAQ" [ref=e169] [cursor=pointer]:
+              - /url: /faq
+            - link "Support" [ref=e170] [cursor=pointer]:
+              - /url: "#"
+        - generic [ref=e171]:
+          - heading "Features" [level=2] [ref=e172]
+          - generic [ref=e173]:
+            - link "Recording" [ref=e174] [cursor=pointer]:
+              - /url: /recording
+            - link "Livestream" [ref=e175] [cursor=pointer]:
+              - /url: /livestream
+            - link "Editor" [ref=e176] [cursor=pointer]:
+              - /url: /video-editor
+            - link "Hosting" [ref=e177] [cursor=pointer]:
+              - /url: /podcast-hosting
+            - link "AI Co-Creator" [ref=e178] [cursor=pointer]:
+              - /url: /co-creator
+            - link "Magic clips" [ref=e179] [cursor=pointer]:
+              - /url: /magic-clips
+            - link "Transcriptions" [ref=e180] [cursor=pointer]:
+              - /url: /transcription
+            - link "Captions" [ref=e181] [cursor=pointer]:
+              - /url: /captions
+            - link "Magic Audio" [ref=e182] [cursor=pointer]:
+              - /url: /magic-audio
+            - link "AI Show Notes" [ref=e183] [cursor=pointer]:
+              - /url: /show-notes
+            - link "Teleprompter" [ref=e184] [cursor=pointer]:
+              - /url: /teleprompter
+            - link "Async Recording" [ref=e185] [cursor=pointer]:
+              - /url: /async-recording
+            - link "Media Board" [ref=e186] [cursor=pointer]:
+              - /url: /mediaboard
+            - link "Clean Up" [ref=e187] [cursor=pointer]:
+              - /url: /clean-up-speech
+            - link "Overlays" [ref=e188] [cursor=pointer]:
+              - /url: /overlays
+            - link "Studio Branding" [ref=e189] [cursor=pointer]:
+              - /url: /studio-branding
+            - link "AI Translation" [ref=e190] [cursor=pointer]:
+              - /url: /ai-translation
+            - link "Arrow Icon All AI Features" [ref=e191] [cursor=pointer]:
+              - /url: /ai
+              - img "Arrow Icon"
+              - strong [ref=e193]: All AI Features
+        - generic [ref=e194]:
+          - heading "Use Cases" [level=2] [ref=e195]
+          - generic [ref=e196]:
+            - link "Video Marketing" [ref=e197] [cursor=pointer]:
+              - /url: /use-cases/video-marketing
+            - link "Tutorial Videos" [ref=e198] [cursor=pointer]:
+              - /url: /use-cases/tutorial-videos
+            - link "Virtual Events" [ref=e199] [cursor=pointer]:
+              - /url: /use-cases/virtual-events
+            - link "Podcasts" [ref=e200] [cursor=pointer]:
+              - /url: /use-cases/podcasting
+            - link "Learning & Development" [ref=e201] [cursor=pointer]:
+              - /url: /use-cases/learning-development
+            - link "Internal Communications" [ref=e202] [cursor=pointer]:
+              - /url: /use-cases/internal-communications
+            - link "Webinars" [ref=e203] [cursor=pointer]:
+              - /url: /use-cases/webinars
+            - link "Customer Testimonials" [ref=e204] [cursor=pointer]:
+              - /url: /use-cases/video-testimonial-software
+            - link "Virtual Conferences" [ref=e205] [cursor=pointer]:
+              - /url: /use-cases/virtual-conferences
+            - link "Live Show" [ref=e206] [cursor=pointer]:
+              - /url: /use-cases/live-podcast-software
+            - link "Split-Screen Video" [ref=e207] [cursor=pointer]:
+              - /url: /use-cases/split-screen-video
+        - generic [ref=e208]:
+          - generic:
+            - heading "Tools" [level=2]
+          - generic [ref=e209]:
+            - link "Podcast Maker" [ref=e210] [cursor=pointer]:
+              - /url: https://riverside.com/tools/podcast-maker
+            - link "Podcast Recorder" [ref=e211] [cursor=pointer]:
+              - /url: https://riverside.com/tools/podcast-recorder
+            - link "Live Podcast" [ref=e212] [cursor=pointer]:
+              - /url: https://riverside.com/tools/live-podcast
+            - link "YouTube Video Maker" [ref=e213] [cursor=pointer]:
+              - /url: https://riverside.com/tools/youtube-video-maker
+            - link "Screen Recorder" [ref=e214] [cursor=pointer]:
+              - /url: /recording/screen-recorder
+            - link "Video Compressor" [ref=e215] [cursor=pointer]:
+              - /url: https://riverside.com/video-compressor
+            - link "WAV to MP3" [ref=e216] [cursor=pointer]:
+              - /url: /wav-to-mp3
+            - link "Podcast Name Generator" [ref=e217] [cursor=pointer]:
+              - /url: /podcast-name-generator
+            - link "YouTube Name Generator" [ref=e218] [cursor=pointer]:
+              - /url: /youtube-name-generator
+            - link "Mic Test" [ref=e219] [cursor=pointer]:
+              - /url: /mic-test
+            - link "Webcam Test" [ref=e220] [cursor=pointer]:
+              - /url: /webcam-test
+            - link "YouTube Transcript Generator" [ref=e221] [cursor=pointer]:
+              - /url: /tools/youtube-transcript-generator
+            - link "Top Podcast Charts" [ref=e222] [cursor=pointer]:
+              - /url: /top-podcasts
+            - link "Free Podcast Music" [ref=e223] [cursor=pointer]:
+              - /url: /free-podcast-music
+            - link "All Tools" [ref=e224] [cursor=pointer]:
+              - /url: /tools
+              - generic [ref=e225]: All Tools
+        - generic [ref=e226]:
+          - heading "Solutions" [level=2] [ref=e227]
+          - link "Podcasters" [ref=e228] [cursor=pointer]:
+            - /url: /solutions/podcasters
+          - link "Producers" [ref=e229] [cursor=pointer]:
+            - /url: /solutions/producers
+          - link "Marketers" [ref=e230] [cursor=pointer]:
+            - /url: /solutions/marketers
+        - generic [ref=e231]:
+          - heading "Resources" [level=2] [ref=e232]
+          - generic [ref=e233]:
+            - link "Riverside University" [ref=e234] [cursor=pointer]:
+              - /url: /university
+            - link "Recorded on Riverside" [ref=e235] [cursor=pointer]:
+              - /url: /recorded-on-riverside
+            - link "Help Center" [ref=e236] [cursor=pointer]:
+              - /url: https://support.riverside.com/hc/en-us
+            - link "Case Studies" [ref=e237] [cursor=pointer]:
+              - /url: /case-studies
+            - link "Blog" [ref=e238] [cursor=pointer]:
+              - /url: /blog
+            - link "Creators Newsletter" [ref=e239] [cursor=pointer]:
+              - /url: /creators-newsletter-registration
+            - link "Masterclass" [ref=e240] [cursor=pointer]:
+              - /url: /masterclass/master-the-art-of-podcasting
+            - link "Community Hub" [ref=e241] [cursor=pointer]:
+              - /url: /community
+            - link "Video Editing Glossary" [ref=e242] [cursor=pointer]:
+              - /url: /video-editor/video-editing-glossary
+      - generic [ref=e243]:
+        - generic [ref=e246]:
+          - link "Download on the App Store Icon" [ref=e247] [cursor=pointer]:
+            - /url: https://apps.apple.com/us/app/riverside-fm/id1554443872
+            - img "Download on the App Store Icon"
+          - link "Get it on Google Play" [ref=e248] [cursor=pointer]:
+            - /url: https://play.google.com/store/apps/details?id=riverside.fm
+            - img "Get it on Google Play"
+          - img "AICPA SOC certification" [ref=e249]
+        - generic [ref=e250]:
+          - generic [ref=e251]:
+            - img "Podcast icon" [ref=e252]
+            - paragraph [ref=e253]: Podcast guides
+          - list [ref=e255]:
+            - listitem [ref=e256]:
+              - 'link "How to Start a Podcast: Step-by-Step Guide & Free Checklist" [ref=e257] [cursor=pointer]':
+                - /url: /blog/how-to-start-a-podcast
+            - listitem [ref=e258]:
+              - 'link "How to Start a Podcast on YouTube: 6 Steps [2026]" [ref=e259] [cursor=pointer]':
+                - /url: /blog/how-to-start-a-podcast-on-youtube
+            - listitem [ref=e260]:
+              - 'link "How to Record A Podcast Remotely: 4 Methods & Free Checklists" [ref=e261] [cursor=pointer]':
+                - /url: /blog/how-to-record-a-podcast-remotely
+            - listitem [ref=e262]:
+              - 'link "Video Podcast Software: Top Tools to Record, Edit & Publish" [ref=e263] [cursor=pointer]':
+                - /url: /blog/video-podcast-software
+        - generic [ref=e264]:
+          - link "Visit us on Facebook" [ref=e265] [cursor=pointer]:
+            - /url: https://www.facebook.com/riversidedotfm
+            - img "Facebook icon" [ref=e266]
+          - link "Visit us on Youtube" [ref=e267] [cursor=pointer]:
+            - /url: https://www.youtube.com/channel/UCOaG4tMpmIQaLXYe063SZlw?sub_confirmation=1
+            - img "Youtube icon" [ref=e268]
+          - link "Visit us on X" [ref=e269] [cursor=pointer]:
+            - /url: https://x.com/intent/user?screen_name=RiversidedotFM
+            - img "X (twitter) icon" [ref=e270]
+          - link "Visit us on LinkedIn" [ref=e271] [cursor=pointer]:
+            - /url: https://www.linkedin.com/company/riverside-fm/
+            - img "Linkedin icon" [ref=e272]
+          - link "Visit us on Instagram" [ref=e273] [cursor=pointer]:
+            - /url: https://www.instagram.com/riverside.fm/
+            - img "Instagram icon" [ref=e274]
+          - link "Visit us on Tiktok" [ref=e275] [cursor=pointer]:
+            - /url: https://www.tiktok.com/@riverside.fm
+            - img "Tiktok" [ref=e276]
+    - generic [ref=e277]:
+      - generic [ref=e278]:
+        - paragraph [ref=e279]: © 2026 RiversideFM, Inc.
+        - button "English" [ref=e284] [cursor=pointer]:
+          - generic [ref=e285]: 
+          - generic [ref=e286]: English
+          - img [ref=e288]
+      - generic [ref=e292]:
+        - link "Terms" [ref=e293] [cursor=pointer]:
+          - /url: /terms-conditions
+        - link "Privacy" [ref=e294] [cursor=pointer]:
+          - /url: /privacy-policy
+        - link "Cookies" [ref=e295] [cursor=pointer]:
+          - /url: /cookies
