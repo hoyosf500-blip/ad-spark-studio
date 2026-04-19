@@ -612,16 +612,17 @@ export function VariationsPanel() {
                 className="h-9 text-sm md:col-span-2"
               />
               <div className="md:col-span-2">
-                <Label className="text-xs">Idea / brief creativo (opcional)</Label>
+                <Label className="text-xs">Idea creativa (opcional)</Label>
                 <Textarea
                   value={creativeBrief}
                   onChange={(e) => setCreativeBrief(e.target.value)}
-                  placeholder="Ej: mujer bailando con buen hook sosteniendo un termo, música alegre, gym al fondo"
+                  placeholder="Ej: mujer al amanecer en el gym, cara de alivio tras sentir el efecto. Tono vulnerable, setting real, corte ritmo alto."
                   rows={3}
                   className="text-sm"
                 />
                 <p className="text-[11px] text-muted-foreground mt-1">
-                  Descríbelo como si hablaras con un creativo. Claude lo expande con los playbooks de hook viral.
+                  Decí el <strong>tono, setting, personaje y emoción</strong> que querés. Claude los respeta.
+                  No escribas dosis, precio ni claims — esos salen del producto y del análisis del video.
                 </p>
               </div>
             </div>

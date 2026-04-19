@@ -63,14 +63,6 @@ export const Route = createFileRoute("/api/anthropic-generate")({
             ? " CLON: replicate the original structure beat-by-beat and keep the transcription WORD-FOR-WORD in the SCRIPT sections (Spanish, zero paraphrasing)."
             : " NOT a clone: create a fresh script inspired by the analysis — do NOT copy the original transcription verbatim, only reuse it for insight.");
         content.push({ type: "text", text: header });
-        if (body.creativeBrief?.trim()) {
-          content.push({
-            type: "text",
-            text:
-              `\n\n=== BRIEF CREATIVO DEL CLIENTE (semilla en lenguaje natural — expandila usando los playbooks de hook viral abajo y la estructura de escenas. NO la copies literal; interpretala como dirección creativa.) ===\n` +
-              body.creativeBrief.trim(),
-          });
-        }
         if (!isClone) {
           content.push({ type: "text", text: `\n\n${WINNING_PREAMBLE}` });
         }
@@ -106,6 +98,20 @@ export const Route = createFileRoute("/api/anthropic-generate")({
             content.push({ type: "text", text: `\nframe @ ${f.time.toFixed(1)}s:` });
             content.push({ type: "image", source: { type: "base64", media_type: mediaType, data: b64 } });
           }
+        }
+        if (body.creativeBrief?.trim()) {
+          content.push({
+            type: "text",
+            text:
+              `\n\n=== IDEA CREATIVA DEL USUARIO ===\n` +
+              body.creativeBrief.trim() +
+              `\n\nCONTRATO (leé esto antes de escribir):\n` +
+              `- La IDEA CREATIVA dicta SOLO: tono, setting/locación, emoción del personaje, ritmo, decisiones estéticas.\n` +
+              `- La IDEA CREATIVA NO dicta: nombre del producto, componente, dosis, precio, testimonios, claims médicos, datos demográficos específicos.\n` +
+              `- Si la IDEA contradice PRODUCT INFO, ANALYSIS o TRANSCRIPTION, prevalecen los datos reales sin excepción.\n` +
+              `- Si la IDEA menciona un dato concreto (ej. "el producto cura X", "cuesta Y") y ese dato NO aparece en PRODUCT INFO o ANALYSIS, IGNORALO — no lo metas en el guion.\n` +
+              `- Interpretá la IDEA como la voz del cliente diciéndote "así lo veo en mi cabeza", no como fuente de verdad sobre el producto.`,
+          });
         }
 
         const MAX_TOKENS = 32000;
