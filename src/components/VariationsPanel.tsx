@@ -135,6 +135,17 @@ export function VariationsPanel() {
     })),
   );
   const [running, setRunning] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(
+    () => new Set(VARIATIONS.map((v) => v.type)),
+  );
+  const toggleSelected = (type: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(type)) next.delete(type);
+      else next.add(type);
+      return next;
+    });
+  };
   const tickRef = useRef<number | null>(null);
 
   // Live timer ticker
@@ -368,13 +379,30 @@ export function VariationsPanel() {
   const generateAll = async () => {
     if (!analysis) { toast.error("Genera el análisis primero"); return; }
     if (!projectId) { toast.error("Falta el proyecto"); return; }
+    const toRun = VARIATIONS.filter((v) => selected.has(v.type));
+    if (toRun.length === 0) { toast.error("Seleccioná al menos una variación"); return; }
     setRunning(true);
+    let ok = 0;
+    let failed = 0;
+    let aborted = false;
     try {
-      for (let i = 0; i < VARIATIONS.length; i++) {
-        const v = VARIATIONS[i];
-        await runOneVariation(v.type, v.label);
+      for (const v of toRun) {
+        try {
+          await runOneVariation(v.type, v.label);
+          ok++;
+        } catch (e) {
+          failed++;
+          if (e instanceof Error && e.message === "cap_exceeded") {
+            aborted = true;
+            toast.error("Tope diario alcanzado — batch detenido");
+            break;
+          }
+        }
       }
-      toast.success("6 variaciones completadas");
+      if (!aborted) {
+        if (failed === 0) toast.success(`${ok} variaciones completadas`);
+        else toast.warning(`${ok}/${toRun.length} completadas · ${failed} con error`);
+      }
     } finally {
       setRunning(false);
     }
@@ -422,7 +450,14 @@ export function VariationsPanel() {
           variationId,
         }),
       });
-      if (await handleCapResponse(res)) return;
+      if (await handleCapResponse(res)) {
+        setVariations((prev) =>
+          prev.map((v) => v.type === type
+            ? { ...v, status: "error", error: "Tope diario alcanzado" }
+            : v),
+        );
+        throw new Error("cap_exceeded");
+      }
       if (!res.ok || !res.body) throw new Error(`stream HTTP ${res.status}`);
 
       const reader = res.body.getReader();
@@ -507,6 +542,7 @@ export function VariationsPanel() {
           ? { ...v, status: "error", error: e instanceof Error ? e.message : String(e) }
           : v),
       );
+      throw e;
     }
   };
 
@@ -699,9 +735,16 @@ export function VariationsPanel() {
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <h2 className="font-mono-display text-lg font-bold">Análisis de Claude</h2>
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                <Badge variant="outline" className="border-success/40 text-success">
-                  <CheckCircle2 className="h-3 w-3 mr-1" /> listo
-                </Badge>
+                {analyzing ? (
+                  <Badge variant="outline" className="border-primary/40 text-primary">
+                    <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                    streaming…
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="border-success/40 text-success">
+                    <CheckCircle2 className="h-3 w-3 mr-1" /> listo
+                  </Badge>
+                )}
                 <span>${Number(analysisCost ?? 0).toFixed(4)} USD</span>
                 <CopyBtn text={analysis} />
               </div>
@@ -715,17 +758,43 @@ export function VariationsPanel() {
         {/* Step 3 — Generar variaciones */}
         {analysis && (
           <Card className="p-5 space-y-4">
-            <div className="flex items-center justify-between gap-4">
-              <div>
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div className="min-w-0">
                 <h2 className="font-mono-display text-lg font-bold">Variaciones</h2>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Podés generar las 6 de una o hacer clic en "Generar solo esta" en cada tarjeta.
+                  Marcá cuáles querés generar y tocá el botón. O usá "Generar solo esta" en cada tarjeta.
                 </p>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {VARIATIONS.map((vdef) => {
+                    const isOn = selected.has(vdef.type);
+                    return (
+                      <button
+                        key={vdef.type}
+                        type="button"
+                        onClick={() => toggleSelected(vdef.type)}
+                        className={[
+                          "flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-mono-display transition-colors",
+                          isOn
+                            ? "border-primary bg-primary/15 text-primary"
+                            : "border-border bg-background text-muted-foreground hover:border-primary/40",
+                        ].join(" ")}
+                      >
+                        <span>{vdef.emoji}</span>
+                        <span>{vdef.label}</span>
+                        {isOn ? <CheckCircle2 className="h-3 w-3" /> : null}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-              <Button onClick={generateAll} disabled={running}
-                className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+              <Button onClick={generateAll} disabled={running || selected.size === 0}
+                className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 shrink-0">
                 {running ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
-                {running ? "Generando…" : "⚡ Generar las 6"}
+                {running
+                  ? "Generando…"
+                  : selected.size === VARIATIONS.length
+                    ? `⚡ Generar las ${VARIATIONS.length}`
+                    : `⚡ Generar ${selected.size}`}
               </Button>
             </div>
 
@@ -947,28 +1016,34 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
   const [loadingPrompts, setLoadingPrompts] = useState(false);
 
   // Resolve the scene DB id (created during persist) by variation_id + order_idx.
-  // If prompts already exist in DB, hydrate them so we don't re-generate.
+  // Row is inserted AFTER setVariations fires, so retry briefly until it shows up.
   useEffect(() => {
     let cancelled = false;
-    (async () => {
-      if (!variationId) return;
+    let tries = 0;
+    const tryFetch = async (): Promise<void> => {
+      if (!variationId || cancelled) return;
       const { data } = await supabase
         .from("variation_scenes")
         .select("id, prompt_nano_banana, prompt_seedream, prompt_kling, prompt_seedance")
         .eq("variation_id", variationId)
         .eq("order_idx", s.orderIdx)
         .maybeSingle();
-      if (cancelled || !data) return;
-      setSceneDbId(data.id);
-      if (data.prompt_nano_banana && data.prompt_seedream && data.prompt_kling && data.prompt_seedance) {
-        setPrompts({
-          nano_banana: data.prompt_nano_banana,
-          seedream: data.prompt_seedream,
-          kling: data.prompt_kling,
-          seedance: data.prompt_seedance,
-        });
+      if (cancelled) return;
+      if (data) {
+        setSceneDbId(data.id);
+        if (data.prompt_nano_banana && data.prompt_seedream && data.prompt_kling && data.prompt_seedance) {
+          setPrompts({
+            nano_banana: data.prompt_nano_banana,
+            seedream: data.prompt_seedream,
+            kling: data.prompt_kling,
+            seedance: data.prompt_seedance,
+          });
+        }
+      } else if (tries++ < 8) {
+        setTimeout(() => { if (!cancelled) void tryFetch(); }, 500);
       }
-    })();
+    };
+    void tryFetch();
     return () => { cancelled = true; };
   }, [variationId, s.orderIdx]);
 

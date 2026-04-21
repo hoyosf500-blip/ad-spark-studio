@@ -1,5 +1,8 @@
-// Parse Claude's variation output into discrete scenes using ▬ separators
-// and extract script (ES), image prompt (EN), animation prompt (EN), tool, etc.
+// Parse Claude's variation output into discrete scenes.
+// SCENE_FORMAT uses "═══ ESCENA N — NAME (t1s–t2s) ═══" as scene wrappers and
+// emoji-prefixed labels like "🖼️ IMAGE PROMPT (copy to Nano Banana Pro):".
+// The parser splits on section headers and tolerates emoji/arrow prefixes and
+// parenthesized hints between the label and its colon.
 
 export type ParsedScene = {
   orderIdx: number;
@@ -14,44 +17,27 @@ export type ParsedScene = {
   timeEndSec: number | null;
 };
 
-const SEPARATOR = /[▬─━]{6,}/u; // tolerant: ▬ or ─ or ━ repeated
+const SCENE_HEADER = /^═{3,}\s*(?:ESCENA|SCENE)\b/im;
 
 export function parseScenes(text: string): ParsedScene[] {
   if (!text || !text.trim()) return [];
-  const blocks = text
-    .split(SEPARATOR)
-    .map((b) => b.trim())
-    .filter((b) => b.length > 0);
-
+  // Split into sections by ═══-wrapped headers; keep only the ones that are scenes.
+  const parts = text.split(/(?=^═{3,}\s*[A-ZÁÉÍÓÚÑ])/m);
   const scenes: ParsedScene[] = [];
   let idx = 0;
-  for (const block of blocks) {
-    // Skip blocks that look like section preamble without a SCENE header
-    if (!/ESCENA|SCENE/i.test(block)) continue;
-
+  for (const block of parts) {
+    if (!SCENE_HEADER.test(block)) continue;
     const title = extractTitle(block);
     const { start, end } = extractTimeRange(title);
-
     scenes.push({
       orderIdx: idx++,
       title: title || `Escena ${idx}`,
-      scriptEs: extractField(block, ["script (es)", "script es", "script", "diálogo", "dialogo"]),
-      imagePromptEn: extractField(block, [
-        "image prompt (en)",
-        "image prompt en",
-        "image prompt",
-        "qwen prompt",
-      ]),
-      animationPromptEn: extractField(block, [
-        "animation prompt (en)",
-        "animation prompt en",
-        "animation prompt",
-        "wan prompt",
-        "video prompt",
-      ]),
-      toolRecommended: extractField(block, ["tool", "herramienta", "tool recommended"]),
-      attachNote: extractField(block, ["attach note", "attach", "nota adjunto"]),
-      screenText: extractField(block, ["screen text", "texto pantalla", "overlay text"]),
+      scriptEs: extractField(block, ["script"]),
+      imagePromptEn: extractField(block, ["image prompt"]),
+      animationPromptEn: extractField(block, ["animation prompt"]),
+      toolRecommended: extractField(block, ["tool", "herramienta"]),
+      attachNote: extractField(block, ["attach", "nota adjunto"]),
+      screenText: extractField(block, ["screen text", "texto pantalla"]),
       timeStartSec: start,
       timeEndSec: end,
     });
@@ -61,41 +47,47 @@ export function parseScenes(text: string): ParsedScene[] {
 
 function extractTitle(block: string): string {
   const firstLine = block.split("\n").find((l) => l.trim().length > 0) ?? "";
-  return firstLine.replace(/^[#*\s]+/, "").trim();
+  return firstLine
+    .replace(/^═+/, "")
+    .replace(/═+$/, "")
+    .replace(/^[#*\s]+/, "")
+    .trim();
 }
 
 function extractTimeRange(title: string): { start: number | null; end: number | null } {
-  // matches "(0-3s)" or "(3-7s)" or "0-3s"
   const m = /(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s*s/i.exec(title);
   if (!m) return { start: null, end: null };
   return { start: Number(m[1]), end: Number(m[2]) };
 }
 
+// Tolerant label matcher: allows emoji/arrow prefix and parenthesized hint
+// between the label and its colon (e.g. "🖼️ IMAGE PROMPT (copy to Nano Banana Pro):").
 function extractField(block: string, labels: string[]): string {
   const lines = block.split("\n");
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     for (const label of labels) {
-      const re = new RegExp(`^[\\s>*\\-]*\\**\\s*${escapeRe(label)}\\s*\\**\\s*[:：]`, "i");
-      if (re.test(line)) {
-        // Capture until next labelled line or blank-line break
-        const after = line.replace(re, "").trim();
-        const parts: string[] = [];
-        if (after) parts.push(after);
-        for (let j = i + 1; j < lines.length; j++) {
-          const next = lines[j];
-          if (looksLikeAnotherLabel(next) || /^\s*$/.test(next)) break;
-          parts.push(next.trim());
-        }
-        return parts.join(" ").replace(/\s+/g, " ").trim();
+      const re = new RegExp(
+        `^[^A-Za-zÁÉÍÓÚÑáéíóúñ]*${escapeRe(label)}\\b[^:\\n]*[:：]`,
+        "i",
+      );
+      if (!re.test(line)) continue;
+      const after = line.replace(re, "").trim();
+      const parts: string[] = [];
+      if (after) parts.push(after);
+      for (let j = i + 1; j < lines.length; j++) {
+        const next = lines[j];
+        if (/^═{3,}/.test(next) || /^\s*$/.test(next) || looksLikeAnotherLabel(next)) break;
+        parts.push(next.trim());
       }
+      return parts.join(" ").replace(/\s+/g, " ").trim();
     }
   }
   return "";
 }
 
 function looksLikeAnotherLabel(line: string): boolean {
-  return /^[\s>*\-]*\**\s*[A-Za-zÁÉÍÓÚÑáéíóúñ\s()]+[:：]/.test(line);
+  return /^[^A-Za-zÁÉÍÓÚÑáéíóúñ]*[A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑáéíóúñ\s()/\-.0-9]*[:：]/.test(line);
 }
 
 function escapeRe(s: string) {
