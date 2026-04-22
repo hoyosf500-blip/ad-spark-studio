@@ -83,13 +83,24 @@ type VariationState = {
   status: "idle" | "running" | "done" | "error" | "truncated";
   text: string;
   scenes: ParsedScene[];
-  startMs: number | null;
-  elapsedSec: number | null;
   costUsd: number;
   error?: string;
   variationId?: string;
   validation?: ScriptValidation | null;
 };
+
+// Estimates % of a generation by counting scene markers in the streaming text.
+// 6 scenes is the typical target for a full variation.
+function progressPct(v: VariationState): number {
+  if (v.status === "done") return 100;
+  if (v.status === "error") return 0;
+  if (v.status !== "running" && v.status !== "truncated") return 0;
+  const matches = v.text.match(/═{3,}\s*(ESCENA|SCENE)\b/gi) ?? [];
+  const scenesDetected = matches.length;
+  const EXPECTED_SCENES = 6;
+  const pct = Math.round((scenesDetected / EXPECTED_SCENES) * 100);
+  return Math.max(1, Math.min(99, pct));
+}
 
 const DEFAULT_MODEL = "claude-sonnet-4-5-20250929";
 
@@ -131,7 +142,7 @@ export function VariationsPanel() {
   const [variations, setVariations] = useState<VariationState[]>(
     VARIATIONS.map((v) => ({
       type: v.type, label: v.label, emoji: v.emoji,
-      status: "idle", text: "", scenes: [], startMs: null, elapsedSec: null, costUsd: 0,
+      status: "idle", text: "", scenes: [], costUsd: 0,
     })),
   );
   const [running, setRunning] = useState(false);
@@ -146,22 +157,6 @@ export function VariationsPanel() {
       return next;
     });
   };
-  const tickRef = useRef<number | null>(null);
-
-  // Live timer ticker
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      setVariations((prev) =>
-        prev.map((v) =>
-          v.status === "running" && v.startMs
-            ? { ...v, elapsedSec: Math.round((Date.now() - v.startMs) / 1000) }
-            : v,
-        ),
-      );
-    }, 500);
-    tickRef.current = id;
-    return () => window.clearInterval(id);
-  }, []);
 
   // Resolve the workspace to use: prefer active from context, else create personal
   const ensureWorkspace = useCallback(async () => {
@@ -208,7 +203,7 @@ export function VariationsPanel() {
     setFile(f);
     setFrames([]); setAnalysis(""); setAnalysisCost(0); setProjectId(null);
     setSourceVideoId(null); setVideoUrl(null);
-    setVariations((prev) => prev.map((v) => ({ ...v, status: "idle", text: "", scenes: [], elapsedSec: null, costUsd: 0 })));
+    setVariations((prev) => prev.map((v) => ({ ...v, status: "idle", text: "", scenes: [], costUsd: 0 })));
 
     setExtracting(true); setExtractProgress({ done: 0, total: 0 });
     try {
@@ -410,10 +405,9 @@ export function VariationsPanel() {
 
   const runOneVariation = async (type: string, label: string) => {
     if (!projectId || !workspaceId) return;
-    const startMs = Date.now();
     setVariations((prev) =>
       prev.map((v) => v.type === type
-        ? { ...v, status: "running", text: "", scenes: [], startMs, elapsedSec: 0, error: undefined, costUsd: 0 }
+        ? { ...v, status: "running", text: "", scenes: [], error: undefined, costUsd: 0 }
         : v),
     );
 
@@ -497,11 +491,10 @@ export function VariationsPanel() {
       }
 
       const scenes = parseScenes(full);
-      const elapsed = Math.round((Date.now() - startMs) / 1000);
 
       setVariations((prev) =>
         prev.map((v) => v.type === type
-          ? { ...v, status: truncated ? "truncated" : "done", text: full, scenes, elapsedSec: elapsed, costUsd: cost, variationId, validation }
+          ? { ...v, status: truncated ? "truncated" : "done", text: full, scenes, costUsd: cost, variationId, validation }
           : v),
       );
 
@@ -511,7 +504,6 @@ export function VariationsPanel() {
           full_text: full,
           script: full.slice(0, 4000),
           is_truncated: truncated,
-          elapsed_seconds: elapsed,
         }).eq("id", variationId);
         if (scenes.length > 0) {
           await supabase.from("variation_scenes").insert(
@@ -997,8 +989,7 @@ function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId, running, o
 }
 
 type HiggsfieldPrompts = {
-  nano_banana: string;
-  seedream: string;
+  image_prompt: string;
   kling: string;
   seedance: string;
 };
@@ -1031,10 +1022,9 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
       if (cancelled) return;
       if (data) {
         setSceneDbId(data.id);
-        if (data.prompt_nano_banana && data.prompt_seedream && data.prompt_kling && data.prompt_seedance) {
+        if (data.prompt_nano_banana && data.prompt_kling && data.prompt_seedance) {
           setPrompts({
-            nano_banana: data.prompt_nano_banana,
-            seedream: data.prompt_seedream,
+            image_prompt: data.prompt_nano_banana,
             kling: data.prompt_kling,
             seedance: data.prompt_seedance,
           });
@@ -1131,31 +1121,23 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
         </div>
 
         {prompts && (
-          <Tabs defaultValue="nano_banana" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 h-8">
-              <TabsTrigger value="nano_banana" className="text-[10px] py-1">Nano Banana</TabsTrigger>
-              <TabsTrigger value="seedream" className="text-[10px] py-1">Seedream 4</TabsTrigger>
+          <Tabs defaultValue="image_prompt" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 h-8">
+              <TabsTrigger value="image_prompt" className="text-[10px] py-1">Imagen (Nano Banana / Seedream)</TabsTrigger>
               <TabsTrigger value="kling" className="text-[10px] py-1">Kling 2.5</TabsTrigger>
               <TabsTrigger value="seedance" className="text-[10px] py-1">Seedance 2.0</TabsTrigger>
             </TabsList>
-            <TabsContent value="nano_banana" className="mt-2">
+            <TabsContent value="image_prompt" className="mt-2">
               <HiggsPromptBlock
-                label="Imagen · conversacional"
-                hint="Pegalo en Nano Banana Pro (Higgsfield). Natural language, una sola toma."
-                text={prompts.nano_banana}
-              />
-            </TabsContent>
-            <TabsContent value="seedream" className="mt-2">
-              <HiggsPromptBlock
-                label="Imagen · structured photoreal"
-                hint="Pegalo en Seedream 4 (Higgsfield). Tags separados por coma."
-                text={prompts.seedream}
+                label="Prompt imagen (Nano Banana Pro / Seedream 4.5)"
+                hint="Pegalo igual en Nano Banana Pro o Seedream 4.5 dentro de Higgsfield."
+                text={prompts.image_prompt}
               />
             </TabsContent>
             <TabsContent value="kling" className="mt-2">
               <HiggsPromptBlock
                 label="Video · motion-from-reference"
-                hint="Adjuntá la imagen (Nano Banana o Seedream) como primer frame en Kling 2.5 Turbo. Este prompt describe sólo el movimiento."
+                hint="Adjuntá la imagen generada como primer frame en Kling 2.5 Turbo. Este prompt describe sólo el movimiento."
                 text={prompts.kling}
               />
             </TabsContent>
@@ -1207,16 +1189,16 @@ function StatusPill({ v }: { v: VariationState }) {
     return (
       <Badge variant="outline" className="border-primary/40 text-primary text-[10px]">
         <Loader2 className="h-2.5 w-2.5 mr-1 animate-spin" />
-        {v.elapsedSec ?? 0}s
+        {progressPct(v)}%
       </Badge>
     );
   }
   if (v.status === "error") return <Badge variant="outline" className="border-destructive/40 text-destructive text-[10px]">error</Badge>;
-  if (v.status === "truncated") return <Badge variant="outline" className="border-warning/40 text-warning text-[10px]">truncado · {v.elapsedSec}s · ${Number(v.costUsd ?? 0).toFixed(4)}</Badge>;
+  if (v.status === "truncated") return <Badge variant="outline" className="border-warning/40 text-warning text-[10px]">truncado · {progressPct(v)}% · ${Number(v.costUsd ?? 0).toFixed(4)}</Badge>;
   return (
     <Badge variant="outline" className="border-success/40 text-success text-[10px]">
       <Wand2 className="h-2.5 w-2.5 mr-1" />
-      {v.elapsedSec}s · ${Number(v.costUsd ?? 0).toFixed(4)}
+      ${Number(v.costUsd ?? 0).toFixed(4)}
     </Badge>
   );
 }
