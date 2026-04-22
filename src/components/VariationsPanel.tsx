@@ -478,7 +478,14 @@ export function VariationsPanel() {
   };
 
   const runOneVariation = async (type: string, label: string) => {
-    if (!projectId || !workspaceId) return;
+    if (!workspaceId) {
+      toast.error("Falta el workspace");
+      return;
+    }
+    if (!projectId) {
+      toast.error("Falta el proyecto. Vuelve a hacer click en 'Analizar video'.");
+      return;
+    }
     setVariations((prev) =>
       prev.map((v) => v.type === type
         ? { ...v, status: "running", text: "", scenes: [], error: undefined, costUsd: 0 }
