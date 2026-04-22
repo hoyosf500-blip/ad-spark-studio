@@ -1022,10 +1022,9 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
       if (cancelled) return;
       if (data) {
         setSceneDbId(data.id);
-        if (data.prompt_nano_banana && data.prompt_seedream && data.prompt_kling && data.prompt_seedance) {
+        if (data.prompt_nano_banana && data.prompt_kling && data.prompt_seedance) {
           setPrompts({
-            nano_banana: data.prompt_nano_banana,
-            seedream: data.prompt_seedream,
+            image_prompt: data.prompt_nano_banana,
             kling: data.prompt_kling,
             seedance: data.prompt_seedance,
           });
