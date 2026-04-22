@@ -832,14 +832,22 @@ export function VariationsPanel() {
               <h2 className="font-mono-display text-lg font-bold">Análisis de Claude</h2>
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 {analyzing ? (
-                  <Badge variant="outline" className="border-primary/40 text-primary gap-2">
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                    <span>
+                  <div className="flex items-center gap-2 min-w-[200px]">
+                    <Loader2 className="h-3 w-3 animate-spin text-primary" />
+                    <Progress
+                      value={
+                        analysis.length === 0
+                          ? 2
+                          : Math.min(95, Math.round((analysis.length / 22000) * 100))
+                      }
+                      className="h-2 w-32"
+                    />
+                    <span className="font-mono-display text-[11px] text-primary whitespace-nowrap">
                       {analysis.length === 0
-                        ? `Esperando respuesta… ${analysisElapsed}s`
-                        : `${analysis.length.toLocaleString()} chars · ${analysisElapsed}s`}
+                        ? `${analysisElapsed}s`
+                        : `${Math.min(95, Math.round((analysis.length / 22000) * 100))}% · ${analysisElapsed}s`}
                     </span>
-                  </Badge>
+                  </div>
                 ) : (
                   <Badge variant="outline" className="border-success/40 text-success">
                     <CheckCircle2 className="h-3 w-3 mr-1" /> listo
