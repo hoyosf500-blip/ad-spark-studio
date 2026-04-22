@@ -32,6 +32,7 @@ Este proyecto se construye 90% con Lovable. El rol de Claude Code aquí es:
 - **Deploy:** Cloudflare Workers via `@cloudflare/vite-plugin` + `wrangler.jsonc`
 - **Backend:** Supabase (Postgres + Auth + Storage + Realtime) — Lovable Cloud
 - **APIs externas:** Anthropic Claude (Sonnet 4.5, Haiku 4.5). La generación de imagen/video se externalizó a Higgsfield.ai — la app solo produce prompts optimizados (Nano Banana Pro, Seedream 4, Kling 2.5 Turbo, Seedance 2.0) que el usuario pega manualmente en Higgsfield.
+- OpenAI Whisper (whisper-1): transcripción de audio del video fuente. Endpoint `api.transcribe-audio.ts`, costo $0.006/min, sin prompt sesgador para no inventar palabras.
 
 ## Constraints críticos
 
