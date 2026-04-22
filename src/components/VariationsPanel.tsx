@@ -63,28 +63,20 @@ function StepperNav({ current }: { current: StepId }) {
   );
 }
 
-// Smart sampling: cap at TARGET_FRAMES evenly distributed across the duration.
-// Always keeps first + last frame, fills the middle uniformly. Prior approach
-// (send all 60 frames) cost ~$0.45 per variation in image tokens — capping to
-// 12 reduces image-token cost by 80% while keeping enough density for Claude to
-// describe scenes (typical ad has 4-6 scenes, so ~2 frames per scene). Combined
-// with prompt caching this drops per-project cost from ~$5 to ~$1.60.
-const TARGET_FRAMES = 12;
-
+// Send ALL extracted frames to Sonnet so each scene prompt anchors to its
+// matching reference frame. Frames are already capped to MAX_FRAMES=60 by the
+// extractor (1fps, 1024x1820), so input size stays bounded. With prompt caching
+// active in api.anthropic-generate, the 6 variation calls share the frame
+// payload (cache write on call 1 at 1.25x, cache read on calls 2-6 at 0.10x),
+// so full-fidelity sampling no longer costs ~$0.45 per variation in image
+// tokens — it costs ~$0.62 once and ~$0.05 per subsequent variation.
+// Sampling down to 12 frames was tested but rejected: user prefers quality over
+// the marginal $0.15/project savings.
 function pickReferenceFrames(
   _type: string,
   frames: ExtractedFrame[],
 ): Array<{ time: number; dataUrl: string }> {
-  if (frames.length <= TARGET_FRAMES) {
-    return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
-  }
-  const picked: ExtractedFrame[] = [frames[0]];
-  const step = (frames.length - 1) / (TARGET_FRAMES - 1);
-  for (let i = 1; i < TARGET_FRAMES - 1; i++) {
-    picked.push(frames[Math.round(i * step)]);
-  }
-  picked.push(frames[frames.length - 1]);
-  return picked.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
+  return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
 }
 
 type VariationState = {
