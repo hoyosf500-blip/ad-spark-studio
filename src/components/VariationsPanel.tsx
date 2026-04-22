@@ -197,6 +197,39 @@ export function VariationsPanel() {
   }, [activeWorkspaceId, workspaceId]);
 
   // ─── upload + frame extraction ────────────────────────────────────
+  const transcribeAudio = async (f: File, durationSec: number, ws: string | null) => {
+    setTranscribing(true);
+    try {
+      const session = (await supabase.auth.getSession()).data.session;
+      const token = session?.access_token;
+      if (!token) throw new Error("No auth");
+      const fd = new FormData();
+      fd.append("file", f);
+      if (ws) fd.append("workspaceId", ws);
+      fd.append("durationSec", String(durationSec));
+      const res = await fetch("/api/transcribe-audio", {
+        method: "POST",
+        headers: { authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      if (await handleCapResponse(res)) return;
+      if (!res.ok) {
+        const t = await res.text();
+        toast.error(`Transcripción falló: ${t.slice(0, 200)}`);
+        return;
+      }
+      const { text } = (await res.json()) as { text: string };
+      if (text?.trim()) {
+        setTranscription(text.trim());
+        toast.success("Transcripción lista");
+      }
+    } catch (e) {
+      toast.error(`Transcripción falló: ${e instanceof Error ? e.message : String(e)}`);
+    } finally {
+      setTranscribing(false);
+    }
+  };
+
   const onPickVideo = async (f: File | null) => {
     if (!f) return;
     if (!f.type.startsWith("video/")) {
@@ -205,7 +238,7 @@ export function VariationsPanel() {
     }
     setFile(f);
     setFrames([]); setAnalysis(""); setAnalysisCost(0); setProjectId(null);
-    setSourceVideoId(null); setVideoUrl(null);
+    setSourceVideoId(null); setVideoUrl(null); setTranscription("");
     setVariations((prev) => prev.map((v) => ({ ...v, status: "idle", text: "", scenes: [], costUsd: 0 })));
 
     setExtracting(true); setExtractProgress({ done: 0, total: 0 });
@@ -216,6 +249,9 @@ export function VariationsPanel() {
       );
       setFrames(frames); setDuration(durationSec); setVideoUrl(videoUrl);
       toast.success(`${frames.length} frames extraídos a 1fps`);
+
+      // Whisper transcription in parallel with the upload below
+      void transcribeAudio(f, durationSec, ws);
 
       // Upload to storage + create source_videos row (best-effort, non-blocking)
       if (ws && user) {
