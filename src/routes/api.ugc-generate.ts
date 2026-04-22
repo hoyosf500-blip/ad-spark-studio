@@ -120,6 +120,24 @@ export const Route = createFileRoute("/api/ugc-generate")({
         if (!body.workspaceId || !body.style || (!viralNoAnalysis && !body.analysisText)) {
           return new Response("Missing fields: workspaceId, style, analysisText (analysisText optional only for ugc-viral)", { status: 400 });
         }
+
+        // Service-role client: used for (1) workspace-membership check before spending tokens,
+        // and (2) inserting the ugc_generations row after the stream completes. The RLS policy
+        // ug_ins requires is_ws_member(auth.uid(), workspace_id); service-role bypasses RLS,
+        // so we enforce membership manually here.
+        const admin = createClient<Database>(
+          process.env.SUPABASE_URL!,
+          process.env.SUPABASE_SERVICE_ROLE_KEY!,
+          { auth: { persistSession: false } },
+        );
+        const { data: membership } = await admin
+          .from("workspace_members")
+          .select("user_id")
+          .eq("user_id", userId)
+          .eq("workspace_id", body.workspaceId)
+          .maybeSingle();
+        if (!membership) return new Response("Forbidden: not a workspace member", { status: 403 });
+
         const model = body.model || "claude-sonnet-4-5-20250929";
         const videoModel = body.videoModel || "wan2.6-i2v";
         const targetModelLabel =
@@ -245,12 +263,7 @@ export const Route = createFileRoute("/api/ugc-generate")({
               const parsed = parseUgcOutput(fullText);
               const validation = checkScript(fullText);
 
-              // Persist row
-              const admin = createClient<Database>(
-                process.env.SUPABASE_URL!,
-                process.env.SUPABASE_SERVICE_ROLE_KEY!,
-                { auth: { persistSession: false } },
-              );
+              // Persist row (admin client is shared with the membership check above).
               const { data: row } = await admin
                 .from("ugc_generations")
                 .insert({
