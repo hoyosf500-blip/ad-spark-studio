@@ -989,8 +989,7 @@ function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId, running, o
 }
 
 type HiggsfieldPrompts = {
-  nano_banana: string;
-  seedream: string;
+  image_prompt: string;
   kling: string;
   seedance: string;
 };
@@ -1199,16 +1198,16 @@ function StatusPill({ v }: { v: VariationState }) {
     return (
       <Badge variant="outline" className="border-primary/40 text-primary text-[10px]">
         <Loader2 className="h-2.5 w-2.5 mr-1 animate-spin" />
-        {v.elapsedSec ?? 0}s
+        {progressPct(v)}%
       </Badge>
     );
   }
   if (v.status === "error") return <Badge variant="outline" className="border-destructive/40 text-destructive text-[10px]">error</Badge>;
-  if (v.status === "truncated") return <Badge variant="outline" className="border-warning/40 text-warning text-[10px]">truncado · {v.elapsedSec}s · ${Number(v.costUsd ?? 0).toFixed(4)}</Badge>;
+  if (v.status === "truncated") return <Badge variant="outline" className="border-warning/40 text-warning text-[10px]">truncado · {progressPct(v)}% · ${Number(v.costUsd ?? 0).toFixed(4)}</Badge>;
   return (
     <Badge variant="outline" className="border-success/40 text-success text-[10px]">
       <Wand2 className="h-2.5 w-2.5 mr-1" />
-      {v.elapsedSec}s · ${Number(v.costUsd ?? 0).toFixed(4)}
+      ${Number(v.costUsd ?? 0).toFixed(4)}
     </Badge>
   );
 }
