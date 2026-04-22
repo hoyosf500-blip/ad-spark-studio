@@ -55,7 +55,15 @@ function extractTitle(block: string): string {
 }
 
 function extractTimeRange(title: string): { start: number | null; end: number | null } {
-  const m = /(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s*s/i.exec(title);
+  // Accept all formats Claude emits:
+  //   "0-1s"       (one trailing s)
+  //   "0s-1s"      (s after both numbers — most common from SCENE_FORMAT template)
+  //   "0.0s–1.0s"  (en-dash)
+  //   "0s — 1s"    (em-dash with spaces)
+  // The optional `s?` after the first number is the fix: without it the parser
+  // returned {null, null} for `NUMBERs-NUMBERs`, which hid the reference-frame
+  // thumbnail in SceneRow and broke the grid layout.
+  const m = /(\d+(?:\.\d+)?)\s*s?\s*[-–—]\s*(\d+(?:\.\d+)?)\s*s?/i.exec(title);
   if (!m) return { start: null, end: null };
   return { start: Number(m[1]), end: Number(m[2]) };
 }

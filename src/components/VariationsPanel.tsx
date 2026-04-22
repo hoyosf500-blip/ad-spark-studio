@@ -143,6 +143,18 @@ export function VariationsPanel() {
   const [analysisCost, setAnalysisCost] = useState(0);
   const [analysisStartedAt, setAnalysisStartedAt] = useState<number | null>(null);
   const [analysisElapsed, setAnalysisElapsed] = useState(0);
+  // Acumulado de costo de prompts Higgsfield (Haiku 4.5) por escena.
+  // Se incrementa solo cuando una llamada NO viene del cache servidor.
+  const [promptsCost, setPromptsCost] = useState(0);
+  const addPromptsCost = useCallback((c: number) => {
+    if (!Number.isFinite(c) || c <= 0) return;
+    setPromptsCost((prev) => prev + c);
+  }, []);
+  // Whisper se cobra por cada subida de video (no se cachea).
+  const [whisperCost, setWhisperCost] = useState(0);
+  // Auto-detect: el usuario puede dispararlo más de una vez por proyecto si
+  // cambia la foto, así que acumulamos en lugar de reemplazar.
+  const [detectCost, setDetectCost] = useState(0);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [sourceVideoId, setSourceVideoId] = useState<string | null>(null);
   const [workspaceId, setWorkspaceId] = useState<string | null>(null);
@@ -162,6 +174,26 @@ export function VariationsPanel() {
     })),
   );
   const [running, setRunning] = useState(false);
+
+  // Costo total del proyecto = Whisper + detect + análisis + 6 variaciones + prompts.
+  const variationsCostSum = useMemo(
+    () => variations.reduce((s, v) => s + (Number(v.costUsd) || 0), 0),
+    [variations],
+  );
+  const projectTotalCost = useMemo(
+    () =>
+      (Number(whisperCost) || 0) +
+      (Number(detectCost) || 0) +
+      (Number(analysisCost) || 0) +
+      variationsCostSum +
+      (Number(promptsCost) || 0),
+    [whisperCost, detectCost, analysisCost, variationsCostSum, promptsCost],
+  );
+  const variationsDoneCount = useMemo(
+    () => variations.filter((v) => v.status === "done" || v.status === "truncated").length,
+    [variations],
+  );
+
   const [selected, setSelected] = useState<Set<string>>(
     () => new Set(VARIATIONS.map((v) => v.type)),
   );
@@ -231,10 +263,13 @@ export function VariationsPanel() {
         toast.error(`Transcripción falló: ${t.slice(0, 200)}`);
         return;
       }
-      const { text } = (await res.json()) as { text: string };
+      const { text, costUsd } = (await res.json()) as { text: string; costUsd?: number };
+      if (Number.isFinite(costUsd) && (costUsd ?? 0) > 0) {
+        setWhisperCost(Number(costUsd));
+      }
       if (text?.trim()) {
         setTranscription(text.trim());
-        toast.success("Transcripción lista");
+        toast.success(`Transcripción lista · $${Number(costUsd ?? 0).toFixed(4)} USD`);
       }
     } catch (e) {
       toast.error(`Transcripción falló: ${e instanceof Error ? e.message : String(e)}`);
@@ -252,6 +287,7 @@ export function VariationsPanel() {
     setFile(f);
     setFrames([]); setAnalysis(""); setAnalysisCost(0); setProjectId(null);
     setSourceVideoId(null); setVideoUrl(null); setTranscription("");
+    setPromptsCost(0); setWhisperCost(0); setDetectCost(0);
     setVariations((prev) => prev.map((v) => ({ ...v, status: "idle", text: "", scenes: [], costUsd: 0 })));
 
     setExtracting(true); setExtractProgress({ done: 0, total: 0 });
@@ -322,7 +358,9 @@ export function VariationsPanel() {
       if (data.oneLiner) setProductOneLiner(data.oneLiner);
       if (data.price) setProductPrice(data.price);
       if (data.audience) setProductAudience(data.audience);
-      toast.success(`Detectado · $${Number(data.costUsd ?? 0).toFixed(4)}`);
+      const dc = Number(data.costUsd ?? 0);
+      if (Number.isFinite(dc) && dc > 0) setDetectCost((prev) => prev + dc);
+      toast.success(`Detectado · $${dc.toFixed(4)}`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Error detectando producto");
     } finally {
@@ -869,6 +907,47 @@ export function VariationsPanel() {
           </Card>
         )}
 
+        {/* Costo del proyecto — desglose en vivo */}
+        {(analysis || projectTotalCost > 0) && (
+          <Card className="p-4 bg-card/60">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                <span className="font-mono-display text-xs uppercase tracking-wider text-muted-foreground">
+                  Costo del proyecto
+                </span>
+              </div>
+              <div className="font-mono-display text-lg font-bold text-primary">
+                ${projectTotalCost.toFixed(4)} USD
+              </div>
+            </div>
+            <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-[11px] font-mono-display">
+              <div className="rounded-md border border-border bg-background p-2">
+                <div className="text-muted-foreground uppercase tracking-wider text-[9px]">Whisper</div>
+                <div className="text-foreground mt-0.5">${whisperCost.toFixed(4)}</div>
+              </div>
+              <div className="rounded-md border border-border bg-background p-2">
+                <div className="text-muted-foreground uppercase tracking-wider text-[9px]">Detect producto</div>
+                <div className="text-foreground mt-0.5">${detectCost.toFixed(4)}</div>
+              </div>
+              <div className="rounded-md border border-border bg-background p-2">
+                <div className="text-muted-foreground uppercase tracking-wider text-[9px]">Análisis</div>
+                <div className="text-foreground mt-0.5">${Number(analysisCost ?? 0).toFixed(4)}</div>
+              </div>
+              <div className="rounded-md border border-border bg-background p-2">
+                <div className="text-muted-foreground uppercase tracking-wider text-[9px]">
+                  Variaciones ({variationsDoneCount}/{variations.length})
+                </div>
+                <div className="text-foreground mt-0.5">${variationsCostSum.toFixed(4)}</div>
+              </div>
+              <div className="rounded-md border border-border bg-background p-2">
+                <div className="text-muted-foreground uppercase tracking-wider text-[9px]">Prompts Higgsfield</div>
+                <div className="text-foreground mt-0.5">${promptsCost.toFixed(4)}</div>
+              </div>
+            </div>
+          </Card>
+        )}
+
         {/* Step 3 — Generar variaciones */}
         {analysis && (
           <Card className="p-5 space-y-4">
@@ -922,6 +1001,7 @@ export function VariationsPanel() {
                   workspaceId={workspaceId}
                   running={running}
                   onGenerate={() => runOneVariation(v.type, v.label)}
+                  onPromptsCost={addPromptsCost}
                 />
               ))}
             </div>
@@ -1043,10 +1123,11 @@ function CopyBtn({ text, label = "Copiar" }: { text: string; label?: string }) {
   );
 }
 
-function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId, running, onGenerate }: {
+function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId, running, onGenerate, onPromptsCost }: {
   v: VariationState; frames: ExtractedFrame[]; videoUrl: string | null; workspaceId: string | null;
   running?: boolean;
   onGenerate?: () => void | Promise<void>;
+  onPromptsCost?: (c: number) => void;
 }) {
   return (
     <div className="rounded-xl border border-border bg-background overflow-hidden">
@@ -1112,6 +1193,7 @@ function VariationCard({ v, frames, videoUrl: _videoUrl, workspaceId, running, o
               workspaceId={workspaceId}
               variationType={v.type}
               variationId={v.variationId}
+              onPromptsCost={onPromptsCost}
             />
           ))}
           {onGenerate && (
@@ -1140,12 +1222,13 @@ type HiggsfieldPrompts = {
   seedance: string;
 };
 
-function SceneRow({ s, frames, workspaceId, variationId }: {
+function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   s: ParsedScene;
   frames: ExtractedFrame[];
   workspaceId: string | null;
   variationType: string;
   variationId?: string;
+  onPromptsCost?: (c: number) => void;
 }) {
   const [sceneDbId, setSceneDbId] = useState<string | null>(null);
   const [assignedFrameTime, setAssignedFrameTime] = useState<number | null>(null);
@@ -1225,6 +1308,11 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
         prompts: HiggsfieldPrompts;
       };
       setPrompts(j.prompts);
+      // Solo acumular en el total del proyecto cuando NO viene del cache:
+      // un hit cacheado cuesta $0 real (ya se pagó antes y se logueó allí).
+      if (!j.cached && Number(j.costUsd) > 0) {
+        onPromptsCost?.(Number(j.costUsd));
+      }
       toast.success(
         j.cached
           ? "Prompts recuperados del caché"
@@ -1245,27 +1333,39 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
           <Badge variant="outline" className="text-[10px]">{s.toolRecommended}</Badge>
         )}
       </div>
-      <div className="grid sm:grid-cols-[80px_1fr] gap-3 items-start">
+      {/* Flex layout: frame fijo 80px a la izquierda si existe; si no, el
+          contenido ocupa el ancho completo. El grid 2-col anterior dejaba una
+          columna fantasma de 80px cuando no había refFrameUrl y empujaba todo
+          el texto a una columna ultra-angosta. */}
+      <div className="flex gap-3 items-start flex-wrap sm:flex-nowrap">
         {s.timeStartSec != null && refFrameUrl && (
-          <img src={refFrameUrl} alt={`ref ${s.timeStartSec}s`}
-            className="w-20 h-auto rounded border border-border" />
+          <img
+            src={refFrameUrl}
+            alt={`ref ${s.timeStartSec}s`}
+            className="w-20 h-auto rounded border border-border shrink-0"
+          />
         )}
-        <div className="space-y-2 min-w-0">
+        <div className="space-y-2 min-w-0 flex-1">
           <PromptField label="Script (ES)" text={s.scriptEs} />
-          <PromptField label="Image prompt (EN)" text={s.imagePromptEn} mono />
-          <PromptField label="Animation prompt (EN)" text={s.animationPromptEn} mono />
           {s.screenText && <PromptField label="Screen text" text={s.screenText} />}
           {s.attachNote && <PromptField label="Attach note" text={s.attachNote} />}
+          {/* Los prompts RAW del script (image/animation en inglés) NO se
+              muestran: son input interno para el generador Haiku que produce
+              los prompts optimizados y capped en el bloque Higgsfield de abajo.
+              Ver el prompt raw confundía al usuario — intentaba pegarlo en
+              Seedream (que tiene cap de 3000 chars) y no funcionaba. */}
         </div>
       </div>
 
-      {/* Higgsfield Prompts block */}
-      <div className="mt-3 rounded-md border border-border bg-card/50 p-3 space-y-2">
+      {/* Higgsfield Prompts block — bordeado con color primario para que sea
+          el ancla visual obvia: acá salen los prompts capped a 2500 chars
+          listos para pegar en Higgsfield.ai. */}
+      <div className="mt-3 rounded-md border-2 border-primary/40 bg-primary/5 p-3 space-y-2">
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-3 w-3 text-primary" />
-            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-              Higgsfield prompts · Nano Banana Pro · Seedream 4 · Kling 2.5 Turbo · Seedance 2.0
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <span className="text-[11px] uppercase tracking-wider font-bold text-primary">
+              Prompts para Higgsfield (listos para pegar)
             </span>
           </div>
           <Button
@@ -1278,6 +1378,11 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
             {prompts ? "Regenerar prompts" : "Generar prompts (~$0.003)"}
           </Button>
         </div>
+        {!prompts && !loadingPrompts && (
+          <div className="text-[11px] text-muted-foreground leading-relaxed">
+            Tocá <span className="text-primary font-bold">"Generar prompts"</span> para obtener las versiones optimizadas de Nano Banana Pro, Seedream 4, Kling 2.5 Turbo y Seedance 2.0 — ya vienen dentro del límite de 2500 caracteres de Higgsfield.
+          </div>
+        )}
 
         {prompts && (
           <Tabs defaultValue="image_prompt" className="w-full">

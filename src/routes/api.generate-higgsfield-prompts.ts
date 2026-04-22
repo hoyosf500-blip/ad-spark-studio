@@ -230,7 +230,7 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           },
           body: JSON.stringify({
             model,
-            max_tokens: 1200,
+            max_tokens: 3000,
             system: SYS,
             messages: [{ role: "user", content: userContent }],
           }),
