@@ -18,6 +18,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiUgcGenerateRouteImport } from './routes/api.ugc-generate'
+import { Route as ApiTranscribeAudioRouteImport } from './routes/api.transcribe-audio'
 import { Route as ApiGenerateHiggsfieldPromptsRouteImport } from './routes/api.generate-higgsfield-prompts'
 import { Route as ApiDetectProductRouteImport } from './routes/api.detect-product'
 import { Route as ApiAnthropicGenerateRouteImport } from './routes/api.anthropic-generate'
@@ -68,6 +69,11 @@ const ApiUgcGenerateRoute = ApiUgcGenerateRouteImport.update({
   path: '/api/ugc-generate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTranscribeAudioRoute = ApiTranscribeAudioRouteImport.update({
+  id: '/api/transcribe-audio',
+  path: '/api/transcribe-audio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiGenerateHiggsfieldPromptsRoute =
   ApiGenerateHiggsfieldPromptsRouteImport.update({
     id: '/api/generate-higgsfield-prompts',
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/detect-product': typeof ApiDetectProductRoute
   '/api/generate-higgsfield-prompts': typeof ApiGenerateHiggsfieldPromptsRoute
+  '/api/transcribe-audio': typeof ApiTranscribeAudioRoute
   '/api/ugc-generate': typeof ApiUgcGenerateRoute
 }
 export interface FileRoutesByTo {
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/detect-product': typeof ApiDetectProductRoute
   '/api/generate-higgsfield-prompts': typeof ApiGenerateHiggsfieldPromptsRoute
+  '/api/transcribe-audio': typeof ApiTranscribeAudioRoute
   '/api/ugc-generate': typeof ApiUgcGenerateRoute
 }
 export interface FileRoutesById {
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
   '/api/detect-product': typeof ApiDetectProductRoute
   '/api/generate-higgsfield-prompts': typeof ApiGenerateHiggsfieldPromptsRoute
+  '/api/transcribe-audio': typeof ApiTranscribeAudioRoute
   '/api/ugc-generate': typeof ApiUgcGenerateRoute
 }
 export interface FileRouteTypes {
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/api/anthropic-generate'
     | '/api/detect-product'
     | '/api/generate-higgsfield-prompts'
+    | '/api/transcribe-audio'
     | '/api/ugc-generate'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/api/anthropic-generate'
     | '/api/detect-product'
     | '/api/generate-higgsfield-prompts'
+    | '/api/transcribe-audio'
     | '/api/ugc-generate'
   id:
     | '__root__'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/api/anthropic-generate'
     | '/api/detect-product'
     | '/api/generate-higgsfield-prompts'
+    | '/api/transcribe-audio'
     | '/api/ugc-generate'
   fileRoutesById: FileRoutesById
 }
@@ -197,6 +209,7 @@ export interface RootRouteChildren {
   ApiAnthropicGenerateRoute: typeof ApiAnthropicGenerateRoute
   ApiDetectProductRoute: typeof ApiDetectProductRoute
   ApiGenerateHiggsfieldPromptsRoute: typeof ApiGenerateHiggsfieldPromptsRoute
+  ApiTranscribeAudioRoute: typeof ApiTranscribeAudioRoute
   ApiUgcGenerateRoute: typeof ApiUgcGenerateRoute
 }
 
@@ -265,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiUgcGenerateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/transcribe-audio': {
+      id: '/api/transcribe-audio'
+      path: '/api/transcribe-audio'
+      fullPath: '/api/transcribe-audio'
+      preLoaderRoute: typeof ApiTranscribeAudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/generate-higgsfield-prompts': {
       id: '/api/generate-higgsfield-prompts'
       path: '/api/generate-higgsfield-prompts'
@@ -309,6 +329,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAnthropicGenerateRoute: ApiAnthropicGenerateRoute,
   ApiDetectProductRoute: ApiDetectProductRoute,
   ApiGenerateHiggsfieldPromptsRoute: ApiGenerateHiggsfieldPromptsRoute,
+  ApiTranscribeAudioRoute: ApiTranscribeAudioRoute,
   ApiUgcGenerateRoute: ApiUgcGenerateRoute,
 }
 export const routeTree = rootRouteImport

@@ -120,6 +120,7 @@ export function VariationsPanel() {
 
   const [productPhoto, setProductPhoto] = useState<string | null>(null);
   const [transcription, setTranscription] = useState("");
+  const [transcribing, setTranscribing] = useState(false);
 
   // Product data (B2) — fed as productInfo to /api/anthropic-analyze and /api/anthropic-generate
   const [productName, setProductName] = useState("");
@@ -197,6 +198,39 @@ export function VariationsPanel() {
   }, [activeWorkspaceId, workspaceId]);
 
   // ─── upload + frame extraction ────────────────────────────────────
+  const transcribeAudio = async (f: File, durationSec: number, ws: string | null) => {
+    setTranscribing(true);
+    try {
+      const session = (await supabase.auth.getSession()).data.session;
+      const token = session?.access_token;
+      if (!token) throw new Error("No auth");
+      const fd = new FormData();
+      fd.append("file", f);
+      if (ws) fd.append("workspaceId", ws);
+      fd.append("durationSec", String(durationSec));
+      const res = await fetch("/api/transcribe-audio", {
+        method: "POST",
+        headers: { authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      if (await handleCapResponse(res)) return;
+      if (!res.ok) {
+        const t = await res.text();
+        toast.error(`Transcripción falló: ${t.slice(0, 200)}`);
+        return;
+      }
+      const { text } = (await res.json()) as { text: string };
+      if (text?.trim()) {
+        setTranscription(text.trim());
+        toast.success("Transcripción lista");
+      }
+    } catch (e) {
+      toast.error(`Transcripción falló: ${e instanceof Error ? e.message : String(e)}`);
+    } finally {
+      setTranscribing(false);
+    }
+  };
+
   const onPickVideo = async (f: File | null) => {
     if (!f) return;
     if (!f.type.startsWith("video/")) {
@@ -205,7 +239,7 @@ export function VariationsPanel() {
     }
     setFile(f);
     setFrames([]); setAnalysis(""); setAnalysisCost(0); setProjectId(null);
-    setSourceVideoId(null); setVideoUrl(null);
+    setSourceVideoId(null); setVideoUrl(null); setTranscription("");
     setVariations((prev) => prev.map((v) => ({ ...v, status: "idle", text: "", scenes: [], costUsd: 0 })));
 
     setExtracting(true); setExtractProgress({ done: 0, total: 0 });
@@ -216,6 +250,9 @@ export function VariationsPanel() {
       );
       setFrames(frames); setDuration(durationSec); setVideoUrl(videoUrl);
       toast.success(`${frames.length} frames extraídos a 1fps`);
+
+      // Whisper transcription in parallel with the upload below
+      void transcribeAudio(f, durationSec, ws);
 
       // Upload to storage + create source_videos row (best-effort, non-blocking)
       if (ws && user) {
@@ -343,17 +380,13 @@ export function VariationsPanel() {
 
       setAnalysis(full);
       setAnalysisCost(cost);
-      if (!transcription.trim()) {
-        const auto = extractAutoTranscription(full);
-        if (auto) setTranscription(auto);
-      }
       // persist project
       if (ws && user) {
         const { data: pr } = await supabase.from("projects").insert({
           workspace_id: ws,
           name: file?.name ?? "Untitled project",
           status: "analyzed",
-          transcription: transcription.trim() || extractAutoTranscription(full) || null,
+          transcription: transcription.trim() || null,
           analysis_text: full,
           frames_metadata: frames.map((f) => ({ time: f.time, w: f.width, h: f.height })),
         }).select("id").single();
@@ -361,7 +394,7 @@ export function VariationsPanel() {
         if (sourceVideoId) {
           await supabase.from("source_videos").update({
             analysis_text: full,
-            transcription: transcription.trim() || extractAutoTranscription(full) || null,
+            transcription: transcription.trim() || null,
           }).eq("id", sourceVideoId);
         }
       }
@@ -672,14 +705,17 @@ export function VariationsPanel() {
               </div>
             </div>
             <Textarea
-              placeholder='Ejemplo: "le duele aquí, podría ser una hernia discal..."'
+              placeholder={transcribing ? "Transcribiendo audio…" : "Se llena automáticamente al cargar el video. Puedes editarla."}
               value={transcription}
               onChange={(e) => setTranscription(e.target.value)}
               rows={3}
               className="text-sm bg-background/60"
+              disabled={transcribing}
             />
             <div className="text-[10px] text-muted-foreground">
-              Opcional — si la dejas vacía, Claude intenta transcribir de los frames.
+              {transcribing
+                ? "Whisper está extrayendo el audio exacto del video…"
+                : "Generada con Whisper a partir del audio real del video. Edítala si hay errores."}
             </div>
           </div>
 
@@ -825,11 +861,6 @@ function pickFrameAt(frames: ExtractedFrame[], timeSec: number | null): string |
   return best.dataUrl;
 }
 
-function extractAutoTranscription(text: string): string | null {
-  const m = /TRANSCRIP[CSI]ON[^\n]*\n([\s\S]*?)(?:\n\n|$)/i.exec(text);
-  if (m && m[1].trim().length > 5) return m[1].trim().slice(0, 4000);
-  return null;
-}
 
 function BigFilePicker({ icon: Icon, emoji, label, accept, onFile, current, onClear, disabled, previewUrl, previewKind }: {
   icon: typeof Upload; emoji: string; label: string; accept: string; current: string | null;
