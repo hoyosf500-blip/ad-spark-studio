@@ -861,11 +861,6 @@ function pickFrameAt(frames: ExtractedFrame[], timeSec: number | null): string |
   return best.dataUrl;
 }
 
-function extractAutoTranscription(text: string): string | null {
-  const m = /TRANSCRIP[CSI]ON[^\n]*\n([\s\S]*?)(?:\n\n|$)/i.exec(text);
-  if (m && m[1].trim().length > 5) return m[1].trim().slice(0, 4000);
-  return null;
-}
 
 function BigFilePicker({ icon: Icon, emoji, label, accept, onFile, current, onClear, disabled, previewUrl, previewKind }: {
   icon: typeof Upload; emoji: string; label: string; accept: string; current: string | null;
