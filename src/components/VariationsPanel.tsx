@@ -63,19 +63,28 @@ function StepperNav({ current }: { current: StepId }) {
   );
 }
 
-// Send ALL extracted frames to Sonnet so each scene prompt anchors to its
-// matching reference frame. Frames are already capped to MAX_FRAMES=60 by the
-// extractor (1fps, 1024x1820), so input size stays bounded. Previously non-clon
-// variations only got 5 sampled frames (first, 25%, 50%, 75%, last), causing
-// scenes that fell between samples to be described from the text analysis alone
-// — this lost device/tool fidelity (e.g. metal Gua Sha massager + exploded
-// vertebra cutaway became "red marker pen + sparkles" because the matching
-// frame was not sampled).
+// Smart sampling: cap at TARGET_FRAMES evenly distributed across the duration.
+// Always keeps first + last frame, fills the middle uniformly. Prior approach
+// (send all 60 frames) cost ~$0.45 per variation in image tokens — capping to
+// 12 reduces image-token cost by 80% while keeping enough density for Claude to
+// describe scenes (typical ad has 4-6 scenes, so ~2 frames per scene). Combined
+// with prompt caching this drops per-project cost from ~$5 to ~$1.60.
+const TARGET_FRAMES = 12;
+
 function pickReferenceFrames(
   _type: string,
   frames: ExtractedFrame[],
 ): Array<{ time: number; dataUrl: string }> {
-  return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
+  if (frames.length <= TARGET_FRAMES) {
+    return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
+  }
+  const picked: ExtractedFrame[] = [frames[0]];
+  const step = (frames.length - 1) / (TARGET_FRAMES - 1);
+  for (let i = 1; i < TARGET_FRAMES - 1; i++) {
+    picked.push(frames[Math.round(i * step)]);
+  }
+  picked.push(frames[frames.length - 1]);
+  return picked.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
 }
 
 type VariationState = {

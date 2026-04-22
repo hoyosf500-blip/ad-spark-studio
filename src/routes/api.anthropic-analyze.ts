@@ -89,6 +89,7 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
         const MAX_CONTINUATIONS = 1;
 
         let fullText = "", inputTokens = 0, outputTokens = 0;
+        let cacheCreateTokens = 0, cacheReadTokens = 0;
         let stopReason: string | null = null;
         const dec = new TextDecoder();
         const enc = new TextEncoder();
@@ -109,7 +110,15 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
                   },
                   body: JSON.stringify({
                     model, max_tokens: maxTokens, stream: true,
-                    system: SYS_ANALYZE,
+                    // Cache the system prompt — saves ~$0.01 per re-analysis when
+                    // the user retries within 5 min (Anthropic ephemeral cache TTL).
+                    system: [
+                      {
+                        type: "text",
+                        text: SYS_ANALYZE,
+                        cache_control: { type: "ephemeral" },
+                      },
+                    ],
                     messages,
                   }),
                 });
@@ -126,6 +135,7 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
                 let attemptText = "";
                 let attemptStop: string | null = null;
                 let attemptIn = 0, attemptOut = 0;
+                let attemptCacheCreate = 0, attemptCacheRead = 0;
                 for (;;) {
                   const { value, done } = await reader.read();
                   if (done) break;
@@ -139,7 +149,14 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
                       const evt = JSON.parse(dl.slice(6).trim()) as {
                         type: string;
                         delta?: { type?: string; text?: string; stop_reason?: string };
-                        message?: { usage?: { input_tokens?: number; output_tokens?: number } };
+                        message?: {
+                          usage?: {
+                            input_tokens?: number;
+                            output_tokens?: number;
+                            cache_creation_input_tokens?: number;
+                            cache_read_input_tokens?: number;
+                          };
+                        };
                         usage?: { input_tokens?: number; output_tokens?: number };
                       };
                       if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
@@ -149,6 +166,10 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
                         controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: t })}\n\n`));
                       } else if (evt.type === "message_start") {
                         attemptIn = evt.message?.usage?.input_tokens ?? attemptIn;
+                        attemptCacheCreate =
+                          evt.message?.usage?.cache_creation_input_tokens ?? attemptCacheCreate;
+                        attemptCacheRead =
+                          evt.message?.usage?.cache_read_input_tokens ?? attemptCacheRead;
                       } else if (evt.type === "message_delta") {
                         if (evt.delta?.stop_reason) attemptStop = evt.delta.stop_reason;
                         if (evt.usage?.output_tokens) attemptOut = evt.usage.output_tokens;
@@ -159,6 +180,8 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
                 }
                 inputTokens += attemptIn;
                 outputTokens += attemptOut;
+                cacheCreateTokens += attemptCacheCreate;
+                cacheReadTokens += attemptCacheRead;
                 stopReason = attemptStop;
 
                 if (attemptStop !== "max_tokens" || attempt >= MAX_CONTINUATIONS || !attemptText) break;
@@ -174,6 +197,7 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
                 workspaceId: body.workspaceId ?? null,
                 model, operation: "claude_analysis",
                 inputTokens, outputTokens,
+                cacheCreateTokens, cacheReadTokens,
                 metadata: {
                   frames: body.frames.length,
                   hasProductPhoto: !!body.productPhoto,

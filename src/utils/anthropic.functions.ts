@@ -17,9 +17,22 @@ export function priceFor(model: string) {
   return PRICING[model] ?? PRICING["claude-sonnet-4-6"];
 }
 
-export function calcCost(model: string, input: number, output: number) {
+// Anthropic prompt caching: cache writes cost 1.25x input price, cache reads cost 0.10x.
+// Regular input (non-cached) costs 1.0x. Output unchanged.
+// Pass cacheCreate / cacheRead = 0 (or omit) when caching is not used.
+export function calcCost(
+  model: string,
+  input: number,
+  output: number,
+  cacheCreate: number = 0,
+  cacheRead: number = 0,
+) {
   const p = priceFor(model);
-  return (input * p.input + output * p.output) / 1_000_000;
+  const inputCost =
+    input * p.input +
+    cacheCreate * p.input * 1.25 +
+    cacheRead * p.input * 0.10;
+  return (inputCost + output * p.output) / 1_000_000;
 }
 
 function adminClient() {
@@ -35,10 +48,26 @@ export async function logUsage(opts: {
   operation: string;
   inputTokens: number;
   outputTokens: number;
+  cacheCreateTokens?: number;
+  cacheReadTokens?: number;
   metadata?: Record<string, unknown>;
 }) {
-  const cost = calcCost(opts.model, opts.inputTokens, opts.outputTokens);
+  const cacheCreate = opts.cacheCreateTokens ?? 0;
+  const cacheRead = opts.cacheReadTokens ?? 0;
+  const cost = calcCost(
+    opts.model,
+    opts.inputTokens,
+    opts.outputTokens,
+    cacheCreate,
+    cacheRead,
+  );
   const sb = adminClient();
+  // Embed cache token counts in metadata for visibility (api_usage table has no
+  // dedicated cache columns yet — adding them would require a migration).
+  const cacheMeta =
+    cacheCreate || cacheRead
+      ? { cache_create_tokens: cacheCreate, cache_read_tokens: cacheRead }
+      : {};
   const row = {
     user_id: opts.userId,
     workspace_id: opts.workspaceId ?? null,
@@ -48,7 +77,7 @@ export async function logUsage(opts: {
     input_tokens: opts.inputTokens,
     output_tokens: opts.outputTokens,
     cost_usd: cost,
-    metadata: opts.metadata ?? {},
+    metadata: { ...(opts.metadata ?? {}), ...cacheMeta },
   };
   await sb.from("api_usage").insert(row as never);
   return cost;

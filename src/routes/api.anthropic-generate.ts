@@ -9,9 +9,14 @@ import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
 type FrameInput = { time: number; dataUrl: string };
+type CacheControl = { type: "ephemeral" };
 type ContentBlock =
-  | { type: "text"; text: string }
-  | { type: "image"; source: { type: "base64"; media_type: string; data: string } };
+  | { type: "text"; text: string; cache_control?: CacheControl }
+  | {
+      type: "image";
+      source: { type: "base64"; media_type: string; data: string };
+      cache_control?: CacheControl;
+    };
 
 export const Route = createFileRoute("/api/anthropic-generate")({
   server: {
@@ -55,52 +60,93 @@ export const Route = createFileRoute("/api/anthropic-generate")({
 
         const model = body.model || "claude-sonnet-4-5-20250929";
         const isClone = body.variationType === "clon";
-        const content: ContentBlock[] = [];
-        const header =
-          `Generate the full ad script for variation type: **${body.variationType}** ` +
-          `(label: "${body.variationLabel}"). Use the analysis below as the canonical source.` +
-          (isClone
-            ? " CLON: replicate the original structure beat-by-beat and keep the transcription WORD-FOR-WORD in the SCRIPT sections (Spanish, zero paraphrasing)."
-            : " NOT a clone: create a fresh script inspired by the analysis — do NOT copy the original transcription verbatim, only reuse it for insight.");
-        content.push({ type: "text", text: header });
-        if (!isClone) {
-          content.push({ type: "text", text: `\n\n${WINNING_PREAMBLE}` });
-        }
-        const playbook = HOOK_PLAYBOOKS[body.variationType];
-        if (playbook) {
-          content.push({ type: "text", text: `\n\n${playbook}` });
-        }
-        content.push({ type: "text", text: `\n\n=== SCENE FORMAT (MANDATORY) ===\n${SCENE_FORMAT}` });
-        content.push({ type: "text", text: `\n\n=== ANALYSIS ===\n${body.analysis}` });
+
+        // === SHARED PREFIX ===
+        // This block is IDENTICAL across the 6 variation calls for the same video.
+        // We mark the LAST shared block with cache_control: ephemeral so Anthropic
+        // caches everything up to (and including) that point. The first variation
+        // pays cache_creation cost (1.25x input price); the next 5 pay cache_read
+        // (0.10x input price) instead of full price. With ~150k tokens of frames+
+        // analysis shared, this drops per-project input cost by ~65%.
+        // Cache lifetime: 5 min (Anthropic ephemeral TTL) — fits comfortably inside
+        // a typical multi-variation generation run.
+        const sharedContent: ContentBlock[] = [];
+        sharedContent.push({
+          type: "text",
+          text: `=== SCENE FORMAT (MANDATORY) ===\n${SCENE_FORMAT}`,
+        });
+        sharedContent.push({
+          type: "text",
+          text: `\n\n=== ANALYSIS ===\n${body.analysis}`,
+        });
         if (body.transcription?.trim()) {
-          content.push({
+          // Label kept neutral so the prefix matches across clon and non-clon
+          // variations (the per-variation directive is set in the suffix below).
+          sharedContent.push({
             type: "text",
-            text: isClone
-              ? `\n\n=== TRANSCRIPTION (use WORD-FOR-WORD across the SCRIPT fields) ===\n${body.transcription.trim()}`
-              : `\n\n=== TRANSCRIPTION (reference only — do NOT copy verbatim) ===\n${body.transcription.trim()}`,
+            text: `\n\n=== TRANSCRIPTION (raw) ===\n${body.transcription.trim()}`,
           });
         }
         if (body.productPhoto) {
           const { mediaType, b64 } = dataUrlToBase64(body.productPhoto);
-          content.push({ type: "text", text: "\n\n=== PRODUCT PHOTO ===" });
-          content.push({ type: "image", source: { type: "base64", media_type: mediaType, data: b64 } });
+          sharedContent.push({ type: "text", text: "\n\n=== PRODUCT PHOTO ===" });
+          sharedContent.push({
+            type: "image",
+            source: { type: "base64", media_type: mediaType, data: b64 },
+          });
         }
         if (body.productInfo?.trim()) {
-          content.push({
+          sharedContent.push({
             type: "text",
             text: `\n\n=== PRODUCT INFO (keep the product name verbatim in SCREEN TEXT and CTA beats; match price + audience when writing the hook) ===\n${body.productInfo.trim()}`,
           });
         }
         if (body.referenceFrames?.length) {
-          content.push({ type: "text", text: `\n\n=== REFERENCE FRAMES (${body.referenceFrames.length}) ===` });
+          sharedContent.push({
+            type: "text",
+            text: `\n\n=== REFERENCE FRAMES (${body.referenceFrames.length}) ===`,
+          });
           for (const f of body.referenceFrames) {
             const { mediaType, b64 } = dataUrlToBase64(f.dataUrl);
-            content.push({ type: "text", text: `\nframe @ ${f.time.toFixed(1)}s:` });
-            content.push({ type: "image", source: { type: "base64", media_type: mediaType, data: b64 } });
+            sharedContent.push({ type: "text", text: `\nframe @ ${f.time.toFixed(1)}s:` });
+            sharedContent.push({
+              type: "image",
+              source: { type: "base64", media_type: mediaType, data: b64 },
+            });
           }
         }
+        // Mark the END of the shared prefix as the cache breakpoint.
+        if (sharedContent.length > 0) {
+          const last = sharedContent[sharedContent.length - 1];
+          last.cache_control = { type: "ephemeral" };
+        }
+
+        // === VARIATION-SPECIFIC SUFFIX ===
+        // This part differs per variation (header + playbook + creative brief)
+        // so it lives after the cache breakpoint and is paid full price each call.
+        const variationContent: ContentBlock[] = [];
+        const transcriptionDirective = body.transcription?.trim()
+          ? isClone
+            ? " The TRANSCRIPTION above is the CANONICAL voice-over: copy it WORD-FOR-WORD across the SCRIPT fields, Spanish, zero paraphrasing."
+            : " The TRANSCRIPTION above is REFERENCE ONLY — do NOT copy verbatim, only reuse it for insight."
+          : "";
+        const header =
+          `\n\nNow generate the full ad script for variation type: **${body.variationType}** ` +
+          `(label: "${body.variationLabel}"). Use the analysis above as the canonical source.` +
+          (isClone
+            ? " CLON: replicate the original structure beat-by-beat."
+            : " NOT a clone: create a fresh script inspired by the analysis.") +
+          transcriptionDirective;
+        variationContent.push({ type: "text", text: header });
+        if (!isClone) {
+          variationContent.push({ type: "text", text: `\n\n${WINNING_PREAMBLE}` });
+        }
+        const playbook = HOOK_PLAYBOOKS[body.variationType];
+        if (playbook) {
+          variationContent.push({ type: "text", text: `\n\n${playbook}` });
+        }
         if (body.creativeBrief?.trim()) {
-          content.push({
+          variationContent.push({
             type: "text",
             text:
               `\n\n=== IDEA CREATIVA DEL USUARIO ===\n` +
@@ -114,10 +160,13 @@ export const Route = createFileRoute("/api/anthropic-generate")({
           });
         }
 
+        const content: ContentBlock[] = [...sharedContent, ...variationContent];
+
         const MAX_TOKENS = 32000;
         const MAX_CONTINUATIONS = 2;
 
         let fullText = "", inputTokens = 0, outputTokens = 0;
+        let cacheCreateTokens = 0, cacheReadTokens = 0;
         let stopReason: string | null = null;
         const dec = new TextDecoder();
         const enc = new TextEncoder();
@@ -138,7 +187,16 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                   },
                   body: JSON.stringify({
                     model, max_tokens: MAX_TOKENS, stream: true,
-                    system: SYS_GENERATE,
+                    // Cache the system prompt + the shared user prefix (analysis,
+                    // frames, product info — last block carries cache_control above).
+                    // First variation pays cache write (1.25x); next 5 read at 0.10x.
+                    system: [
+                      {
+                        type: "text",
+                        text: SYS_GENERATE,
+                        cache_control: { type: "ephemeral" },
+                      },
+                    ],
                     messages,
                   }),
                 });
@@ -155,6 +213,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                 let attemptText = "";
                 let attemptStop: string | null = null;
                 let attemptIn = 0, attemptOut = 0;
+                let attemptCacheCreate = 0, attemptCacheRead = 0;
                 for (;;) {
                   const { value, done } = await reader.read();
                   if (done) break;
@@ -168,7 +227,14 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                       const evt = JSON.parse(dl.slice(6).trim()) as {
                         type: string;
                         delta?: { type?: string; text?: string; stop_reason?: string };
-                        message?: { usage?: { input_tokens?: number; output_tokens?: number } };
+                        message?: {
+                          usage?: {
+                            input_tokens?: number;
+                            output_tokens?: number;
+                            cache_creation_input_tokens?: number;
+                            cache_read_input_tokens?: number;
+                          };
+                        };
                         usage?: { input_tokens?: number; output_tokens?: number };
                       };
                       if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
@@ -178,6 +244,10 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                         controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: t })}\n\n`));
                       } else if (evt.type === "message_start") {
                         attemptIn = evt.message?.usage?.input_tokens ?? attemptIn;
+                        attemptCacheCreate =
+                          evt.message?.usage?.cache_creation_input_tokens ?? attemptCacheCreate;
+                        attemptCacheRead =
+                          evt.message?.usage?.cache_read_input_tokens ?? attemptCacheRead;
                       } else if (evt.type === "message_delta") {
                         if (evt.delta?.stop_reason) attemptStop = evt.delta.stop_reason;
                         if (evt.usage?.output_tokens) attemptOut = evt.usage.output_tokens;
@@ -188,6 +258,8 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                 }
                 inputTokens += attemptIn;
                 outputTokens += attemptOut;
+                cacheCreateTokens += attemptCacheCreate;
+                cacheReadTokens += attemptCacheRead;
                 stopReason = attemptStop;
 
                 if (attemptStop !== "max_tokens" || attempt >= MAX_CONTINUATIONS || !attemptText) break;
@@ -205,6 +277,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                 workspaceId: body.workspaceId ?? null,
                 model, operation: "claude_variation",
                 inputTokens, outputTokens,
+                cacheCreateTokens, cacheReadTokens,
                 metadata: {
                   variationType: body.variationType,
                   variationLabel: body.variationLabel,
