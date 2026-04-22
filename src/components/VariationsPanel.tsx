@@ -139,9 +139,19 @@ export function VariationsPanel() {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState("");
   const [analysisCost, setAnalysisCost] = useState(0);
+  const [analysisStartedAt, setAnalysisStartedAt] = useState<number | null>(null);
+  const [analysisElapsed, setAnalysisElapsed] = useState(0);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [sourceVideoId, setSourceVideoId] = useState<string | null>(null);
   const [workspaceId, setWorkspaceId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (analysisStartedAt === null) return;
+    const id = setInterval(() => {
+      setAnalysisElapsed(Math.floor((Date.now() - analysisStartedAt) / 1000));
+    }, 500);
+    return () => clearInterval(id);
+  }, [analysisStartedAt]);
 
   const [variations, setVariations] = useState<VariationState[]>(
     VARIATIONS.map((v) => ({
@@ -322,6 +332,8 @@ export function VariationsPanel() {
   const runAnalysis = async () => {
     if (frames.length === 0) { toast.error("Sube un video primero"); return; }
     setAnalyzing(true); setAnalysis(""); setAnalysisCost(0);
+    setAnalysisStartedAt(Date.now());
+    setAnalysisElapsed(0);
     try {
       const ws = await ensureWorkspace();
       const session = (await supabase.auth.getSession()).data.session;
@@ -351,38 +363,52 @@ export function VariationsPanel() {
       let buf = "";
       let full = "";
       let cost = 0;
-      for (;;) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buf += dec.decode(value, { stream: true });
-        let i;
-        while ((i = buf.indexOf("\n\n")) !== -1) {
-          const chunk = buf.slice(0, i); buf = buf.slice(i + 2);
-          const dataLine = chunk.split("\n").find((l) => l.startsWith("data: "));
-          if (!dataLine) continue;
-          try {
-            const ev = JSON.parse(dataLine.slice(6).trim()) as
-              | { type: "text"; text: string }
-              | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean }
-              | { type: "error"; error: string };
-            if (ev.type === "text") {
-              full += ev.text;
-              setAnalysis(full);
-            } else if (ev.type === "done") {
-              full = ev.fullText || full;
-              cost = ev.costUsd;
-            } else if (ev.type === "error") {
-              throw new Error(ev.error);
-            }
-          } catch { /* skip */ }
+      let streamCutEarly = false;
+
+      try {
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          let i;
+          while ((i = buf.indexOf("\n\n")) !== -1) {
+            const chunk = buf.slice(0, i); buf = buf.slice(i + 2);
+            const dataLine = chunk.split("\n").find((l) => l.startsWith("data: "));
+            if (!dataLine) continue;
+            try {
+              const ev = JSON.parse(dataLine.slice(6).trim()) as
+                | { type: "text"; text: string }
+                | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean }
+                | { type: "error"; error: string };
+              if (ev.type === "text") {
+                full += ev.text;
+                setAnalysis(full);
+              } else if (ev.type === "done") {
+                full = ev.fullText || full;
+                cost = ev.costUsd;
+              } else if (ev.type === "error") {
+                throw new Error(ev.error);
+              }
+            } catch { /* skip malformed event */ }
+          }
         }
+      } catch (streamErr) {
+        // CRÍTICO: si ya tenemos texto sustancial, NO descartamos el trabajo.
+        // El stream se cortó antes del evento "done" pero el análisis vino completo.
+        if (!full || full.length < 200) throw streamErr;
+        streamCutEarly = true;
+        console.warn(
+          `[runAnalysis] Stream cortado tras ${full.length} chars — persistiendo igual:`,
+          streamErr,
+        );
       }
 
       setAnalysis(full);
       setAnalysisCost(cost);
-      // persist project
-      if (ws && user) {
-        const { data: pr } = await supabase.from("projects").insert({
+
+      // Persistir SIEMPRE que tengamos texto, aunque el done no haya llegado.
+      if (ws && user && full.length > 200) {
+        const { data: pr, error: prErr } = await supabase.from("projects").insert({
           workspace_id: ws,
           name: file?.name ?? "Untitled project",
           status: "analyzed",
@@ -390,7 +416,13 @@ export function VariationsPanel() {
           analysis_text: full,
           frames_metadata: frames.map((f) => ({ time: f.time, w: f.width, h: f.height })),
         }).select("id").single();
-        if (pr) setProjectId(pr.id);
+
+        if (prErr) {
+          toast.error(`No se pudo guardar el proyecto: ${prErr.message}`);
+        } else if (pr) {
+          setProjectId(pr.id);
+        }
+
         if (sourceVideoId) {
           await supabase.from("source_videos").update({
             analysis_text: full,
@@ -398,11 +430,17 @@ export function VariationsPanel() {
           }).eq("id", sourceVideoId);
         }
       }
-      toast.success(`Análisis listo. Costo: $${Number(cost ?? 0).toFixed(4)}`);
+
+      if (streamCutEarly) {
+        toast.warning("Conexión cortada al final, pero el análisis se guardó completo");
+      } else {
+        toast.success(`Análisis listo. Costo: $${Number(cost ?? 0).toFixed(4)}`);
+      }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Error en análisis");
     } finally {
       setAnalyzing(false);
+      setAnalysisStartedAt(null);
     }
   };
 
@@ -440,7 +478,14 @@ export function VariationsPanel() {
   };
 
   const runOneVariation = async (type: string, label: string) => {
-    if (!projectId || !workspaceId) return;
+    if (!workspaceId) {
+      toast.error("Falta el workspace");
+      return;
+    }
+    if (!projectId) {
+      toast.error("Falta el proyecto. Vuelve a hacer click en 'Analizar video'.");
+      return;
+    }
     setVariations((prev) =>
       prev.map((v) => v.type === type
         ? { ...v, status: "running", text: "", scenes: [], error: undefined, costUsd: 0 }
@@ -761,15 +806,19 @@ export function VariationsPanel() {
         </Card>
 
         {/* Step 2 — Análisis resultado */}
-        {analysis && (
+        {(analyzing || analysis) && (
           <Card className="p-5 space-y-3">
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <h2 className="font-mono-display text-lg font-bold">Análisis de Claude</h2>
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 {analyzing ? (
-                  <Badge variant="outline" className="border-primary/40 text-primary">
-                    <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                    streaming…
+                  <Badge variant="outline" className="border-primary/40 text-primary gap-2">
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    <span>
+                      {analysis.length === 0
+                        ? `Esperando respuesta… ${analysisElapsed}s`
+                        : `${analysis.length.toLocaleString()} chars · ${analysisElapsed}s`}
+                    </span>
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="border-success/40 text-success">
@@ -777,12 +826,18 @@ export function VariationsPanel() {
                   </Badge>
                 )}
                 <span>${Number(analysisCost ?? 0).toFixed(4)} USD</span>
-                <CopyBtn text={analysis} />
+                {analysis && <CopyBtn text={analysis} />}
               </div>
             </div>
-            <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed">
-              {analysis}
-            </pre>
+            {analysis ? (
+              <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed">
+                {analysis}
+              </pre>
+            ) : (
+              <div className="rounded-md border border-dashed border-border bg-background/50 p-6 text-center text-xs text-muted-foreground">
+                Claude está leyendo los {frames.length} frames… esto suele tardar 20-60 segundos.
+              </div>
+            )}
           </Card>
         )}
 
