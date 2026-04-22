@@ -16,9 +16,11 @@ import { extractFrames, fileToDataUrl, type ExtractedFrame } from "@/lib/frame-e
 import { parseScenes, type ParsedScene } from "@/lib/scene-parser";
 import { VARIATIONS } from "@/lib/variation-defs";
 import { handleCapResponse } from "@/lib/handle-cap";
+import { capImagePromptClient } from "@/lib/cap-prompt";
 import type { ScriptValidation } from "@/lib/winning-framework";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { Progress } from "@/components/ui/progress";
 
 type StepId = 0 | 1 | 2 | 3;
 const STEPS: ReadonlyArray<{ id: StepId; label: string }> = [
@@ -102,7 +104,7 @@ function progressPct(v: VariationState): number {
   const scenesDetected = matches.length;
   const EXPECTED_SCENES = 6;
   const pct = Math.round((scenesDetected / EXPECTED_SCENES) * 100);
-  return Math.max(1, Math.min(99, pct));
+  return Math.max(1, Math.min(95, pct));
 }
 
 const DEFAULT_MODEL = "claude-sonnet-4-5-20250929";
@@ -542,33 +544,46 @@ export function VariationsPanel() {
       let cost = 0;
       let truncated = false;
       let validation: ScriptValidation | null = null;
-      for (;;) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buf += dec.decode(value, { stream: true });
-        let i;
-        while ((i = buf.indexOf("\n\n")) !== -1) {
-          const chunk = buf.slice(0, i); buf = buf.slice(i + 2);
-          const dataLine = chunk.split("\n").find((l) => l.startsWith("data: "));
-          if (!dataLine) continue;
-          try {
-            const ev = JSON.parse(dataLine.slice(6).trim()) as
-              | { type: "text"; text: string }
-              | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean; validation?: ScriptValidation | null }
-              | { type: "error"; error: string };
-            if (ev.type === "text") {
-              full += ev.text;
-              setVariations((prev) =>
-                prev.map((v) => v.type === type ? { ...v, text: full } : v),
-              );
-            } else if (ev.type === "done") {
-              full = ev.fullText || full; cost = ev.costUsd; truncated = ev.isTruncated;
-              validation = ev.validation ?? null;
-            } else if (ev.type === "error") {
-              throw new Error(ev.error);
-            }
-          } catch { /* skip */ }
+      let streamCutEarly = false;
+
+      try {
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          let i;
+          while ((i = buf.indexOf("\n\n")) !== -1) {
+            const chunk = buf.slice(0, i); buf = buf.slice(i + 2);
+            const dataLine = chunk.split("\n").find((l) => l.startsWith("data: "));
+            if (!dataLine) continue;
+            try {
+              const ev = JSON.parse(dataLine.slice(6).trim()) as
+                | { type: "text"; text: string }
+                | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean; validation?: ScriptValidation | null }
+                | { type: "error"; error: string };
+              if (ev.type === "text") {
+                full += ev.text;
+                setVariations((prev) =>
+                  prev.map((v) => v.type === type ? { ...v, text: full } : v),
+                );
+              } else if (ev.type === "done") {
+                full = ev.fullText || full; cost = ev.costUsd; truncated = ev.isTruncated;
+                validation = ev.validation ?? null;
+              } else if (ev.type === "error") {
+                throw new Error(ev.error);
+              }
+            } catch { /* skip malformed event */ }
+          }
         }
+      } catch (streamErr) {
+        // Si ya tenemos al menos 3 escenas, no descartamos el trabajo.
+        const sceneCount = (full.match(/═{3,}\s*(ESCENA|SCENE)\b/gi) ?? []).length;
+        if (sceneCount < 3) throw streamErr;
+        streamCutEarly = true;
+        console.warn(
+          `[runOneVariation:${type}] Stream cortado tras ${sceneCount} escenas — persistiendo igual:`,
+          streamErr,
+        );
       }
 
       const scenes = parseScenes(full);
@@ -579,6 +594,10 @@ export function VariationsPanel() {
           : v),
       );
 
+      if (streamCutEarly) {
+        toast.warning(`${label}: conexión cortada, pero ${scenes.length} escenas se guardaron`);
+      }
+
       // persist
       if (variationId) {
         await supabase.from("variations").update({
@@ -587,8 +606,9 @@ export function VariationsPanel() {
           is_truncated: truncated,
         }).eq("id", variationId);
         if (scenes.length > 0) {
+          const frameAssignments = assignUniqueFrames(scenes, frames);
           await supabase.from("variation_scenes").insert(
-            scenes.map((s) => ({
+            scenes.map((s, idx) => ({
               workspace_id: workspaceId,
               variation_id: variationId,
               scene_index: s.orderIdx,
@@ -603,8 +623,8 @@ export function VariationsPanel() {
               tool_recommended: s.toolRecommended,
               attach_note: s.attachNote,
               screen_text: s.screenText,
-              reference_frame_time_sec: s.timeStartSec,
-              reference_frame_url: pickFrameAt(frames, s.timeStartSec),
+              reference_frame_time_sec: frameAssignments[idx]?.time ?? s.timeStartSec,
+              reference_frame_url: frameAssignments[idx]?.dataUrl ?? null,
             })),
           );
         }
@@ -916,6 +936,35 @@ function pickFrameAt(frames: ExtractedFrame[], timeSec: number | null): string |
   return best.dataUrl;
 }
 
+// Greedy unique-frame assignment: for each scene (in order), pick the closest
+// unused frame to its timeStartSec. Guarantees no two scenes get the same frame
+// when frames.length >= scenes.length. When scenes outnumber frames, we wrap.
+function assignUniqueFrames(
+  scenes: ParsedScene[],
+  frames: ExtractedFrame[],
+): Array<{ time: number; dataUrl: string } | null> {
+  if (frames.length === 0) return scenes.map(() => null);
+  const used = new Set<number>();
+  const out: Array<{ time: number; dataUrl: string } | null> = [];
+  for (const s of scenes) {
+    const target = s.timeStartSec ?? 0;
+    let bestIdx = -1;
+    let bestDelta = Infinity;
+    for (let i = 0; i < frames.length; i++) {
+      if (used.has(i)) continue;
+      const d = Math.abs(frames[i].time - target);
+      if (d < bestDelta) { bestDelta = d; bestIdx = i; }
+    }
+    if (bestIdx === -1) {
+      out.push({ time: frames[0].time, dataUrl: frames[0].dataUrl });
+    } else {
+      used.add(bestIdx);
+      out.push({ time: frames[bestIdx].time, dataUrl: frames[bestIdx].dataUrl });
+    }
+  }
+  return out;
+}
+
 
 function BigFilePicker({ icon: Icon, emoji, label, accept, onFile, current, onClear, disabled, previewUrl, previewKind }: {
   icon: typeof Upload; emoji: string; label: string; accept: string; current: string | null;
@@ -1113,9 +1162,9 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
         setSceneDbId(data.id);
         if (data.prompt_nano_banana && data.prompt_kling && data.prompt_seedance) {
           setPrompts({
-            image_prompt: data.prompt_nano_banana,
-            kling: data.prompt_kling,
-            seedance: data.prompt_seedance,
+            image_prompt: capImagePromptClient(data.prompt_nano_banana),
+            kling: data.prompt_kling ?? "",
+            seedance: data.prompt_seedance ?? "",
           });
         }
       } else if (tries++ < 8) {
