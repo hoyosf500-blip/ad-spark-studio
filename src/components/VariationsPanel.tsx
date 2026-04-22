@@ -806,15 +806,19 @@ export function VariationsPanel() {
         </Card>
 
         {/* Step 2 — Análisis resultado */}
-        {analysis && (
+        {(analyzing || analysis) && (
           <Card className="p-5 space-y-3">
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <h2 className="font-mono-display text-lg font-bold">Análisis de Claude</h2>
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 {analyzing ? (
-                  <Badge variant="outline" className="border-primary/40 text-primary">
-                    <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                    streaming…
+                  <Badge variant="outline" className="border-primary/40 text-primary gap-2">
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    <span>
+                      {analysis.length === 0
+                        ? `Esperando respuesta… ${analysisElapsed}s`
+                        : `${analysis.length.toLocaleString()} chars · ${analysisElapsed}s`}
+                    </span>
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="border-success/40 text-success">
@@ -822,12 +826,18 @@ export function VariationsPanel() {
                   </Badge>
                 )}
                 <span>${Number(analysisCost ?? 0).toFixed(4)} USD</span>
-                <CopyBtn text={analysis} />
+                {analysis && <CopyBtn text={analysis} />}
               </div>
             </div>
-            <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed">
-              {analysis}
-            </pre>
+            {analysis ? (
+              <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed">
+                {analysis}
+              </pre>
+            ) : (
+              <div className="rounded-md border border-dashed border-border bg-background/50 p-6 text-center text-xs text-muted-foreground">
+                Claude está leyendo los {frames.length} frames… esto suele tardar 20-60 segundos.
+              </div>
+            )}
           </Card>
         )}
 
