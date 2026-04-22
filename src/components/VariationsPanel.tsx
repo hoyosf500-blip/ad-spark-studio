@@ -1121,31 +1121,23 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
         </div>
 
         {prompts && (
-          <Tabs defaultValue="nano_banana" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 h-8">
-              <TabsTrigger value="nano_banana" className="text-[10px] py-1">Nano Banana</TabsTrigger>
-              <TabsTrigger value="seedream" className="text-[10px] py-1">Seedream 4</TabsTrigger>
+          <Tabs defaultValue="image_prompt" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 h-8">
+              <TabsTrigger value="image_prompt" className="text-[10px] py-1">Imagen (Nano Banana / Seedream)</TabsTrigger>
               <TabsTrigger value="kling" className="text-[10px] py-1">Kling 2.5</TabsTrigger>
               <TabsTrigger value="seedance" className="text-[10px] py-1">Seedance 2.0</TabsTrigger>
             </TabsList>
-            <TabsContent value="nano_banana" className="mt-2">
+            <TabsContent value="image_prompt" className="mt-2">
               <HiggsPromptBlock
-                label="Imagen · conversacional"
-                hint="Pegalo en Nano Banana Pro (Higgsfield). Natural language, una sola toma."
-                text={prompts.nano_banana}
-              />
-            </TabsContent>
-            <TabsContent value="seedream" className="mt-2">
-              <HiggsPromptBlock
-                label="Imagen · structured photoreal"
-                hint="Pegalo en Seedream 4 (Higgsfield). Tags separados por coma."
-                text={prompts.seedream}
+                label="Prompt imagen (Nano Banana Pro / Seedream 4.5)"
+                hint="Pegalo igual en Nano Banana Pro o Seedream 4.5 dentro de Higgsfield."
+                text={prompts.image_prompt}
               />
             </TabsContent>
             <TabsContent value="kling" className="mt-2">
               <HiggsPromptBlock
                 label="Video · motion-from-reference"
-                hint="Adjuntá la imagen (Nano Banana o Seedream) como primer frame en Kling 2.5 Turbo. Este prompt describe sólo el movimiento."
+                hint="Adjuntá la imagen generada como primer frame en Kling 2.5 Turbo. Este prompt describe sólo el movimiento."
                 text={prompts.kling}
               />
             </TabsContent>
