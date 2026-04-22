@@ -156,35 +156,51 @@ export function UgcPanel({
       let buf = "";
       let full = "";
       let cost = 0;
-      for (;;) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buf += dec.decode(value, { stream: true });
-        let i;
-        while ((i = buf.indexOf("\n\n")) !== -1) {
-          const chunk = buf.slice(0, i);
-          buf = buf.slice(i + 2);
-          const dl = chunk.split("\n").find((l) => l.startsWith("data: "));
-          if (!dl) continue;
-          try {
-            const ev = JSON.parse(dl.slice(6).trim()) as
-              | { type: "text"; text: string }
-              | { type: "done"; costUsd: number; fullText: string }
-              | { type: "error"; error: string };
-            if (ev.type === "text") {
-              full += ev.text;
-              setStream({ active: style, text: full });
-            } else if (ev.type === "done") {
-              cost = ev.costUsd;
-            } else if (ev.type === "error") {
-              throw new Error(ev.error);
+      let streamCutEarly = false;
+      try {
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          let i;
+          while ((i = buf.indexOf("\n\n")) !== -1) {
+            const chunk = buf.slice(0, i);
+            buf = buf.slice(i + 2);
+            const dl = chunk.split("\n").find((l) => l.startsWith("data: "));
+            if (!dl) continue;
+            try {
+              const ev = JSON.parse(dl.slice(6).trim()) as
+                | { type: "text"; text: string }
+                | { type: "done"; costUsd: number; fullText: string }
+                | { type: "error"; error: string };
+              if (ev.type === "text") {
+                full += ev.text;
+                setStream({ active: style, text: full });
+              } else if (ev.type === "done") {
+                cost = ev.costUsd;
+              } else if (ev.type === "error") {
+                throw new Error(ev.error);
+              }
+            } catch {
+              /* skip */
             }
-          } catch {
-            /* skip */
           }
         }
+      } catch (streamErr) {
+        // Si ya tenemos texto sustancial, el backend probablemente persistió el UGC
+        // antes de perder la conexión. La suscripción Realtime lo muestra igual.
+        if (!full || full.length < 200) throw streamErr;
+        streamCutEarly = true;
+        console.warn(
+          `[UgcPanel:${style}] Stream cortado tras ${full.length} chars — UGC debe estar en DB:`,
+          streamErr,
+        );
       }
-      toast.success(`UGC ${style} listo · $${cost.toFixed(4)}`);
+      if (streamCutEarly) {
+        toast.warning(`UGC ${style}: conexión cortada, pero el UGC debería aparecer en la lista en unos segundos`);
+      } else {
+        toast.success(`UGC ${style} listo · $${cost.toFixed(4)}`);
+      }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Error generando UGC");
     } finally {

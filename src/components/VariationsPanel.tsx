@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -1147,10 +1147,15 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
   variationType: string;
   variationId?: string;
 }) {
-  const refFrameUrl = pickFrameAt(frames, s.timeStartSec);
   const [sceneDbId, setSceneDbId] = useState<string | null>(null);
+  const [assignedFrameTime, setAssignedFrameTime] = useState<number | null>(null);
   const [prompts, setPrompts] = useState<HiggsfieldPrompts | null>(null);
   const [loadingPrompts, setLoadingPrompts] = useState(false);
+
+  const refFrameUrl = useMemo(
+    () => pickFrameAt(frames, assignedFrameTime ?? s.timeStartSec),
+    [frames, assignedFrameTime, s.timeStartSec],
+  );
 
   // Resolve the scene DB id (created during persist) by variation_id + order_idx.
   // Row is inserted AFTER setVariations fires, so retry briefly until it shows up.
@@ -1161,13 +1166,17 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
       if (!variationId || cancelled) return;
       const { data } = await supabase
         .from("variation_scenes")
-        .select("id, prompt_nano_banana, prompt_seedream, prompt_kling, prompt_seedance")
+        .select("id, prompt_nano_banana, prompt_seedream, prompt_kling, prompt_seedance, reference_frame_time_sec")
         .eq("variation_id", variationId)
         .eq("order_idx", s.orderIdx)
         .maybeSingle();
       if (cancelled) return;
       if (data) {
         setSceneDbId(data.id);
+        // Prefer the unique-assigned frame time from DB over the script-parsed one
+        if (data.reference_frame_time_sec != null) {
+          setAssignedFrameTime(Number(data.reference_frame_time_sec));
+        }
         if (data.prompt_nano_banana && data.prompt_kling && data.prompt_seedance) {
           setPrompts({
             image_prompt: capImagePromptClient(data.prompt_nano_banana),
