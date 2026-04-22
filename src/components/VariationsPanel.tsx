@@ -139,9 +139,19 @@ export function VariationsPanel() {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState("");
   const [analysisCost, setAnalysisCost] = useState(0);
+  const [analysisStartedAt, setAnalysisStartedAt] = useState<number | null>(null);
+  const [analysisElapsed, setAnalysisElapsed] = useState(0);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [sourceVideoId, setSourceVideoId] = useState<string | null>(null);
   const [workspaceId, setWorkspaceId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (analysisStartedAt === null) return;
+    const id = setInterval(() => {
+      setAnalysisElapsed(Math.floor((Date.now() - analysisStartedAt) / 1000));
+    }, 500);
+    return () => clearInterval(id);
+  }, [analysisStartedAt]);
 
   const [variations, setVariations] = useState<VariationState[]>(
     VARIATIONS.map((v) => ({
