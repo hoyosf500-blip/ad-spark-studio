@@ -83,13 +83,24 @@ type VariationState = {
   status: "idle" | "running" | "done" | "error" | "truncated";
   text: string;
   scenes: ParsedScene[];
-  startMs: number | null;
-  elapsedSec: number | null;
   costUsd: number;
   error?: string;
   variationId?: string;
   validation?: ScriptValidation | null;
 };
+
+// Estimates % of a generation by counting scene markers in the streaming text.
+// 6 scenes is the typical target for a full variation.
+function progressPct(v: VariationState): number {
+  if (v.status === "done") return 100;
+  if (v.status === "error") return 0;
+  if (v.status !== "running" && v.status !== "truncated") return 0;
+  const matches = v.text.match(/═{3,}\s*(ESCENA|SCENE)\b/gi) ?? [];
+  const scenesDetected = matches.length;
+  const EXPECTED_SCENES = 6;
+  const pct = Math.round((scenesDetected / EXPECTED_SCENES) * 100);
+  return Math.max(1, Math.min(99, pct));
+}
 
 const DEFAULT_MODEL = "claude-sonnet-4-5-20250929";
 
@@ -131,7 +142,7 @@ export function VariationsPanel() {
   const [variations, setVariations] = useState<VariationState[]>(
     VARIATIONS.map((v) => ({
       type: v.type, label: v.label, emoji: v.emoji,
-      status: "idle", text: "", scenes: [], startMs: null, elapsedSec: null, costUsd: 0,
+      status: "idle", text: "", scenes: [], costUsd: 0,
     })),
   );
   const [running, setRunning] = useState(false);
@@ -146,22 +157,6 @@ export function VariationsPanel() {
       return next;
     });
   };
-  const tickRef = useRef<number | null>(null);
-
-  // Live timer ticker
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      setVariations((prev) =>
-        prev.map((v) =>
-          v.status === "running" && v.startMs
-            ? { ...v, elapsedSec: Math.round((Date.now() - v.startMs) / 1000) }
-            : v,
-        ),
-      );
-    }, 500);
-    tickRef.current = id;
-    return () => window.clearInterval(id);
-  }, []);
 
   // Resolve the workspace to use: prefer active from context, else create personal
   const ensureWorkspace = useCallback(async () => {
@@ -208,7 +203,7 @@ export function VariationsPanel() {
     setFile(f);
     setFrames([]); setAnalysis(""); setAnalysisCost(0); setProjectId(null);
     setSourceVideoId(null); setVideoUrl(null);
-    setVariations((prev) => prev.map((v) => ({ ...v, status: "idle", text: "", scenes: [], elapsedSec: null, costUsd: 0 })));
+    setVariations((prev) => prev.map((v) => ({ ...v, status: "idle", text: "", scenes: [], costUsd: 0 })));
 
     setExtracting(true); setExtractProgress({ done: 0, total: 0 });
     try {
@@ -410,10 +405,9 @@ export function VariationsPanel() {
 
   const runOneVariation = async (type: string, label: string) => {
     if (!projectId || !workspaceId) return;
-    const startMs = Date.now();
     setVariations((prev) =>
       prev.map((v) => v.type === type
-        ? { ...v, status: "running", text: "", scenes: [], startMs, elapsedSec: 0, error: undefined, costUsd: 0 }
+        ? { ...v, status: "running", text: "", scenes: [], error: undefined, costUsd: 0 }
         : v),
     );
 
@@ -497,11 +491,10 @@ export function VariationsPanel() {
       }
 
       const scenes = parseScenes(full);
-      const elapsed = Math.round((Date.now() - startMs) / 1000);
 
       setVariations((prev) =>
         prev.map((v) => v.type === type
-          ? { ...v, status: truncated ? "truncated" : "done", text: full, scenes, elapsedSec: elapsed, costUsd: cost, variationId, validation }
+          ? { ...v, status: truncated ? "truncated" : "done", text: full, scenes, costUsd: cost, variationId, validation }
           : v),
       );
 
@@ -511,7 +504,6 @@ export function VariationsPanel() {
           full_text: full,
           script: full.slice(0, 4000),
           is_truncated: truncated,
-          elapsed_seconds: elapsed,
         }).eq("id", variationId);
         if (scenes.length > 0) {
           await supabase.from("variation_scenes").insert(
