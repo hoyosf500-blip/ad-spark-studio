@@ -120,6 +120,7 @@ export function VariationsPanel() {
 
   const [productPhoto, setProductPhoto] = useState<string | null>(null);
   const [transcription, setTranscription] = useState("");
+  const [transcribing, setTranscribing] = useState(false);
 
   // Product data (B2) — fed as productInfo to /api/anthropic-analyze and /api/anthropic-generate
   const [productName, setProductName] = useState("");
@@ -379,17 +380,13 @@ export function VariationsPanel() {
 
       setAnalysis(full);
       setAnalysisCost(cost);
-      if (!transcription.trim()) {
-        const auto = extractAutoTranscription(full);
-        if (auto) setTranscription(auto);
-      }
       // persist project
       if (ws && user) {
         const { data: pr } = await supabase.from("projects").insert({
           workspace_id: ws,
           name: file?.name ?? "Untitled project",
           status: "analyzed",
-          transcription: transcription.trim() || extractAutoTranscription(full) || null,
+          transcription: transcription.trim() || null,
           analysis_text: full,
           frames_metadata: frames.map((f) => ({ time: f.time, w: f.width, h: f.height })),
         }).select("id").single();
@@ -397,7 +394,7 @@ export function VariationsPanel() {
         if (sourceVideoId) {
           await supabase.from("source_videos").update({
             analysis_text: full,
-            transcription: transcription.trim() || extractAutoTranscription(full) || null,
+            transcription: transcription.trim() || null,
           }).eq("id", sourceVideoId);
         }
       }
@@ -708,14 +705,17 @@ export function VariationsPanel() {
               </div>
             </div>
             <Textarea
-              placeholder='Ejemplo: "le duele aquí, podría ser una hernia discal..."'
+              placeholder={transcribing ? "Transcribiendo audio…" : "Se llena automáticamente al cargar el video. Puedes editarla."}
               value={transcription}
               onChange={(e) => setTranscription(e.target.value)}
               rows={3}
               className="text-sm bg-background/60"
+              disabled={transcribing}
             />
             <div className="text-[10px] text-muted-foreground">
-              Opcional — si la dejas vacía, Claude intenta transcribir de los frames.
+              {transcribing
+                ? "Whisper está extrayendo el audio exacto del video…"
+                : "Generada con Whisper a partir del audio real del video. Edítala si hay errores."}
             </div>
           </div>
 
