@@ -63,17 +63,19 @@ function StepperNav({ current }: { current: StepId }) {
   );
 }
 
-// Clon sends ALL frames (beat-by-beat replica); other variations get 5 distributed (first, 25%, 50%, 75%, last).
+// Send ALL extracted frames to Sonnet so each scene prompt anchors to its
+// matching reference frame. Frames are already capped to MAX_FRAMES=60 by the
+// extractor (1fps, 1024x1820), so input size stays bounded. Previously non-clon
+// variations only got 5 sampled frames (first, 25%, 50%, 75%, last), causing
+// scenes that fell between samples to be described from the text analysis alone
+// — this lost device/tool fidelity (e.g. metal Gua Sha massager + exploded
+// vertebra cutaway became "red marker pen + sparkles" because the matching
+// frame was not sampled).
 function pickReferenceFrames(
-  type: string,
+  _type: string,
   frames: ExtractedFrame[],
 ): Array<{ time: number; dataUrl: string }> {
-  if (type === "clon" || frames.length <= 5) {
-    return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
-  }
-  const last = frames.length - 1;
-  const idxs = Array.from(new Set([0, Math.round(last * 0.25), Math.round(last * 0.5), Math.round(last * 0.75), last]));
-  return idxs.map((i) => ({ time: frames[i].time, dataUrl: frames[i].dataUrl }));
+  return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
 }
 
 type VariationState = {
@@ -1052,6 +1054,10 @@ function SceneRow({ s, frames, workspaceId, variationId }: {
           sceneId: sceneDbId,
           workspaceId,
           referenceFrameDataUrl: refFrameUrl ?? null,
+          // If the user already has prompts loaded, clicking the button again
+          // means "regenerate" — bypass the server cache so stale compositions
+          // (e.g. a prompt that ignored the reference frame) get replaced.
+          forceRegenerate: !!prompts,
         }),
       });
       if (await handleCapResponse(res)) { setLoadingPrompts(false); return; }

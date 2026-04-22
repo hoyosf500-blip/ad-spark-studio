@@ -8,6 +8,9 @@ type Body = {
   sceneId: string;
   workspaceId?: string | null;
   referenceFrameDataUrl?: string | null;
+  // When true, skip the DB cache and force a fresh generation. Used by the
+  // "Regenerar prompts" button after a cached prompt is stale or over-length.
+  forceRegenerate?: boolean;
 };
 
 type Prompts = {
@@ -16,14 +19,26 @@ type Prompts = {
   seedance: string;
 };
 
-// Seedream 4.5 hard-rejects prompts >3000 chars. Leave margin.
+// Higgsfield's Seedream 4.5 UI rejects prompts >3000 chars. We cap at 2500
+// to leave margin — Higgsfield counts unicode/spaces differently than .length.
+// The same prompt is pasted into Nano Banana Pro AND Seedream 4.5, so the
+// cap applies to the unified image_prompt. Cut at sentence/comma boundary so
+// we never leave a half-clause dangling at the tail.
 const MAX_IMAGE_PROMPT = 2500;
+
 function capImagePrompt(s: string): string {
-  const t = s.trim();
-  return t.length > MAX_IMAGE_PROMPT ? t.slice(0, MAX_IMAGE_PROMPT) : t;
+  const trimmed = s.trim();
+  if (trimmed.length <= MAX_IMAGE_PROMPT) return trimmed;
+  const hard = trimmed.slice(0, MAX_IMAGE_PROMPT);
+  const lastPeriod = hard.lastIndexOf(".");
+  const lastComma = hard.lastIndexOf(",");
+  const cut = Math.max(lastPeriod, lastComma);
+  return (cut > MAX_IMAGE_PROMPT * 0.8 ? hard.slice(0, cut + 1) : hard).trim();
 }
 
 const SYS = `You translate a single ad-script SCENE into 3 production-ready prompts for Higgsfield.ai. CRITICAL: when a reference frame image is attached, your PRIMARY job is to describe THAT image — its exact composition, framing, subject, wardrobe, props, overlays, lighting, color palette. Do NOT invent a new scene. The variation tool exists so the generated image replicates the reference as closely as possible. Textual fields (scene beat, script) are secondary context; the attached image is the ground truth.
+
+TOOL/DEVICE FIDELITY (common failure mode): if the reference frame contains a physical tool, device, prop, or instrument — e.g. metal massager, Gua Sha scraper, electric massage gun, ultrasound probe, suction cup, foam roller, adjustable belt, medical diagram overlay on skin, red down-arrows, exploded vertebra cutaway, sparkle/product reveal — that exact object MUST appear in the prompt, by name, in the correct position in frame. Do NOT substitute it with a generic marker, pen, or hand gesture. A "metal comb massager pressing down on the lumbar with red arrows pointing at the tool" is NOT "a gloved hand holding a red marker next to a red arc". When in doubt, name the object literally as it appears in the reference.
 
 1) IMAGE PROMPT (one prompt for BOTH Nano Banana Pro AND Seedream 4.5)
    - The user pastes the SAME prompt into both tools, so it must work for both.
@@ -81,17 +96,32 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
         if (sceneErr || !scene) return new Response("Scene not found", { status: 404 });
 
         if (
+          !body.forceRegenerate &&
           scene.prompt_nano_banana &&
           scene.prompt_kling &&
           scene.prompt_seedance
         ) {
+          // Apply the 2500-char cap RETROACTIVELY: cached rows written before
+          // the cap existed can still return prompts >3000 chars, which
+          // Higgsfield rejects. Re-cap on return and, if we trimmed, write the
+          // shorter version back so future cache hits are clean.
+          const cappedImage = capImagePrompt(scene.prompt_nano_banana);
+          if (cappedImage !== scene.prompt_nano_banana) {
+            await sb
+              .from("variation_scenes")
+              .update({
+                prompt_nano_banana: cappedImage,
+                prompt_seedream: cappedImage,
+              } as never)
+              .eq("id", scene.id);
+          }
           return new Response(
             JSON.stringify({
               ok: true,
               cached: true,
               costUsd: 0,
               prompts: {
-                image_prompt: capImagePrompt(scene.prompt_nano_banana),
+                image_prompt: cappedImage,
                 kling: scene.prompt_kling,
                 seedance: scene.prompt_seedance,
               } satisfies Prompts,
@@ -120,15 +150,29 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           }
         }
 
+        // Two content layouts depending on whether a reference frame is attached:
+        //  - With frame: image is ground truth, text fields are demoted to
+        //    "non-binding hints" so Haiku doesn't blend a stale textual
+        //    composition into a description of the actual attached image.
+        //  - Without frame: text fields are the only source; treat them normally.
+        const hasFrame = !!body.referenceFrameDataUrl;
+        const textFieldsLabel = hasFrame
+          ? "NON-BINDING TEXTUAL HINTS (the attached image overrides any of these if they conflict; describe what you SEE in the image, not what the hints imply)"
+          : "TEXTUAL INPUTS (no reference frame available — these are your only source)";
+
         const userMsg = [
+          hasFrame
+            ? `=== GROUND TRUTH: ATTACHED IMAGE ===\nThe image attached above IS the composition to replicate. Describe its actual subject, tools/devices, overlays, arrows, anatomical diagrams, product reveals, color palette, and framing. Treat everything below as secondary hints only.`
+            : "",
           variation && `Variation: ${variation.variation_type} -- "${variation.title ?? ""}"`,
           `Scene order: ${scene.order_idx}${scene.title ? ` -- ${scene.title}` : ""}`,
           scene.reference_frame_time_sec != null &&
-            `Reference frame at: ${scene.reference_frame_time_sec}s of the source ad (attached as image when available — MATCH its exact composition, framing, subject, and lighting).`,
-          scene.scene_text && `=== SCENE BEAT ===\n${scene.scene_text}`,
-          scene.script_es && `=== SPOKEN LINE (Spanish) ===\n${scene.script_es}`,
-          scene.screen_text && `=== SCREEN TEXT ===\n${scene.screen_text}`,
-          scene.image_prompt_en && `=== ORIGINAL IMAGE PROMPT (rewrite/enrich) ===\n${scene.image_prompt_en}`,
+            `Reference frame timestamp: ${scene.reference_frame_time_sec}s of the source ad.`,
+          `=== ${textFieldsLabel} ===`,
+          scene.scene_text && `SCENE BEAT:\n${scene.scene_text}`,
+          scene.script_es && `SPOKEN LINE (Spanish):\n${scene.script_es}`,
+          scene.screen_text && `SCREEN TEXT:\n${scene.screen_text}`,
+          scene.image_prompt_en && `PRIOR IMAGE PROMPT (may be outdated):\n${scene.image_prompt_en}`,
           scene.animation_prompt_en &&
             `=== ORIGINAL ANIMATION PROMPT (rewrite/enrich) ===\n${scene.animation_prompt_en}`,
           productName && `=== PRODUCT NAME ===\n${productName}`,
