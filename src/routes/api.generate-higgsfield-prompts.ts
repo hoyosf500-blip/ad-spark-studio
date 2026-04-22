@@ -11,40 +11,40 @@ type Body = {
 };
 
 type Prompts = {
-  nano_banana: string;
-  seedream: string;
+  image_prompt: string;
   kling: string;
   seedance: string;
 };
 
-const SYS = `You translate a single ad-script SCENE into 4 production-ready prompts for Higgsfield.ai, one per model. CRITICAL: when a reference frame image is attached, your PRIMARY job is to describe THAT image — its exact composition, framing, subject, wardrobe, props, overlays, lighting, color palette. Do NOT invent a new scene. The variation tool exists so the generated image replicates the reference as closely as possible. Textual fields (scene beat, script) are secondary context; the attached image is the ground truth.
+// Seedream 4.5 hard-rejects prompts >3000 chars. Leave margin.
+const MAX_IMAGE_PROMPT = 2500;
+function capImagePrompt(s: string): string {
+  const t = s.trim();
+  return t.length > MAX_IMAGE_PROMPT ? t.slice(0, MAX_IMAGE_PROMPT) : t;
+}
 
-1) NANO BANANA PRO (image, conversational)
-   - Natural language, like describing the shot to a cinematographer.
-   - Include: subject + wardrobe/props, setting, framing (close-up / medium / wide), camera angle, lighting mood, color palette, photographic style ("shot on 50mm", "natural light", "documentary", etc).
-   - Mirror the exact composition of the reference frame if attached (anatomical overlay stays anatomical overlay; product close-up stays product close-up; do NOT convert it into a talking-head).
-   - 1 dense paragraph, English, <=80 words. No markdown, no lists.
+const SYS = `You translate a single ad-script SCENE into 3 production-ready prompts for Higgsfield.ai. CRITICAL: when a reference frame image is attached, your PRIMARY job is to describe THAT image — its exact composition, framing, subject, wardrobe, props, overlays, lighting, color palette. Do NOT invent a new scene. The variation tool exists so the generated image replicates the reference as closely as possible. Textual fields (scene beat, script) are secondary context; the attached image is the ground truth.
 
-2) SEEDREAM 4 (image, structured photoreal — STRICT TAG FORMAT)
-   - Comma-separated tags ONLY. NO full sentences. NO narrative. NO "a young male doctor turns to face the camera" — that is wrong.
-   - Each tag is a noun phrase or short descriptor, 1-5 words, separated by ", ".
-   - Required order: [subject], [subject state/pose], [wardrobe/props], [setting], [framing: close-up / medium / wide], [camera angle], [lens/focal length], [lighting descriptor], [color palette descriptors], [photo style], [quality tags].
-   - If the reference is an anatomical diagram, overlay, product macro, or text-on-screen composition: the tags must describe THAT, not a new actor scene.
-   - HARD LIMIT: <=2800 characters total (the 3000 char Seedream cap has margin). Prefer brevity — 40-80 comma tags is ideal.
-   - Example format: "anatomical spine close-up, lumbar vertebrae highlighted red, semi-transparent muscle overlay, dark clinical background, macro shot, studio softbox lighting, high contrast, deep reds, cool blues, medical illustration photorealism, 8k, ultra detailed"
-   - Example of WRONG format (narrative — reject internally and rewrite as tags): "A young male doctor turns to face the camera while holding a red marker..."
+1) IMAGE PROMPT (one prompt for BOTH Nano Banana Pro AND Seedream 4.5)
+   - The user pastes the SAME prompt into both tools, so it must work for both.
+   - MUST start verbatim with: "Real photograph taken with iPhone 15 Pro of"
+   - Continuous natural-language English description, single dense paragraph (no lists, no markdown, no comma-tag format).
+   - Include: subject + wardrobe/props, setting, framing (close-up / medium / wide), camera angle, lighting mood, color palette, photographic style.
+   - TOOL/DEVICE FIDELITY: when the reference shows a specific tool, device, product, package, overlay, or anatomical diagram, describe THAT exact object — do not substitute. Anatomical overlay stays anatomical overlay; product close-up stays product close-up; do NOT convert a non-talking-head reference into a talking-head shot.
+   - The attached reference frame PREVAILS over the textual scene beat whenever they conflict.
+   - HARD LIMIT: <=2500 characters total.
 
-3) KLING 2.5 TURBO (video, motion from reference image)
+2) KLING 2.5 TURBO (video, motion from reference image)
    - The reference image is the first frame. Describe ONLY the motion, camera move, timing, and emotional beat over 5s. Do NOT redescribe the static scene.
    - Include: camera move (dolly-in / pan-left / handheld / static), subject action, facial micro-expression change, pacing ("slow 2s build, then sudden reveal at 3s"), atmosphere shift.
    - 1 short paragraph, English, <=60 words. No lists.
 
-4) SEEDANCE 2.0 (video, motion arc + mood)
+3) SEEDANCE 2.0 (video, motion arc + mood)
    - Cinematic motion arc. Describe the emotional/visual trajectory across the clip.
    - Include: opening beat -> middle beat -> closing beat, camera language, rhythm of cuts or pushes, color/light evolution.
    - 1 paragraph, English, <=70 words.
 
-Return ONLY a raw JSON object with exactly these 4 keys: nano_banana, seedream, kling, seedance. No preamble, no markdown fences, no code block. Each value must be a non-empty string. All prompts in English -- Higgsfield performs better in English even for Spanish ads.`;
+Return ONLY a raw JSON object with exactly these 3 keys: image_prompt, kling, seedance. No preamble, no markdown fences, no code block. Each value must be a non-empty string. All prompts in English -- Higgsfield performs better in English even for Spanish ads.`;
 
 export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
   server: {
@@ -82,7 +82,6 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
 
         if (
           scene.prompt_nano_banana &&
-          scene.prompt_seedream &&
           scene.prompt_kling &&
           scene.prompt_seedance
         ) {
@@ -92,8 +91,7 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
               cached: true,
               costUsd: 0,
               prompts: {
-                nano_banana: scene.prompt_nano_banana,
-                seedream: scene.prompt_seedream,
+                image_prompt: capImagePrompt(scene.prompt_nano_banana),
                 kling: scene.prompt_kling,
                 seedance: scene.prompt_seedance,
               } satisfies Prompts,
@@ -135,15 +133,11 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
             `=== ORIGINAL ANIMATION PROMPT (rewrite/enrich) ===\n${scene.animation_prompt_en}`,
           productName && `=== PRODUCT NAME ===\n${productName}`,
           analysisExcerpt && `=== ANALYSIS EXCERPT ===\n${analysisExcerpt}`,
-          `Return ONLY the JSON with keys nano_banana, seedream, kling, seedance.`,
+          `Return ONLY the JSON with keys image_prompt, kling, seedance.`,
         ]
           .filter(Boolean)
           .join("\n\n");
 
-        // Multimodal: if the reference frame is provided, attach it so Haiku SEES
-        // the exact composition (subject, framing, lighting, overlays) instead of
-        // guessing from the textual scene beat. The variation tool's core purpose is
-        // that each generated image replicates/resembles the reference as closely as possible.
         const userContent: Array<
           | { type: "text"; text: string }
           | { type: "image"; source: { type: "base64"; media_type: string; data: string } }
@@ -190,22 +184,17 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
         try {
           const obj = JSON.parse(jsonMatch[0]) as Partial<Prompts>;
           if (
-            typeof obj.nano_banana !== "string" ||
-            typeof obj.seedream !== "string" ||
+            typeof obj.image_prompt !== "string" ||
             typeof obj.kling !== "string" ||
             typeof obj.seedance !== "string" ||
-            !obj.nano_banana.trim() ||
-            !obj.seedream.trim() ||
+            !obj.image_prompt.trim() ||
             !obj.kling.trim() ||
             !obj.seedance.trim()
           ) {
             return new Response("Incomplete prompts in response", { status: 502 });
           }
-          const seedreamTrim = obj.seedream.trim();
           prompts = {
-            nano_banana: obj.nano_banana.trim(),
-            // Seedream 4 has a 3000-char hard cap in Higgsfield UI. Leave margin.
-            seedream: seedreamTrim.length > 2800 ? seedreamTrim.slice(0, 2800) : seedreamTrim,
+            image_prompt: capImagePrompt(obj.image_prompt),
             kling: obj.kling.trim(),
             seedance: obj.seedance.trim(),
           };
@@ -213,11 +202,13 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           return new Response("Malformed JSON in response", { status: 502 });
         }
 
+        // Persist: store image_prompt in BOTH prompt_nano_banana and prompt_seedream
+        // (same value in both columns) to avoid breaking existing reads or requiring a migration.
         await sb
           .from("variation_scenes")
           .update({
-            prompt_nano_banana: prompts.nano_banana,
-            prompt_seedream: prompts.seedream,
+            prompt_nano_banana: prompts.image_prompt,
+            prompt_seedream: prompts.image_prompt,
             prompt_kling: prompts.kling,
             prompt_seedance: prompts.seedance,
           } as never)
