@@ -31,7 +31,7 @@ Este proyecto se construye 90% con Lovable. El rol de Claude Code aquí es:
 - **Router:** TanStack Router file-based (`src/routes/*.tsx`), `routeTree.gen.ts` auto-generado
 - **Deploy:** Cloudflare Workers via `@cloudflare/vite-plugin` + `wrangler.jsonc`
 - **Backend:** Supabase (Postgres + Auth + Storage + Realtime) — Lovable Cloud
-- **APIs externas:** Anthropic Claude (Sonnet 4.5, Opus 4.6), DashScope (Qwen-Image-Max, Wan 2.6-i2v, Kling 2.5-turbo, Veo 3.1)
+- **APIs externas:** Anthropic Claude (Sonnet 4.5, Haiku 4.5). La generación de imagen/video se externalizó a Higgsfield.ai — la app solo produce prompts optimizados (Nano Banana Pro, Seedream 4, Kling 2.5 Turbo, Seedance 2.0) que el usuario pega manualmente en Higgsfield.
 
 ## Constraints críticos
 
@@ -52,10 +52,10 @@ row.cost_usd?.toFixed(3)              // ❌ crash
 ```
 Ocurrencias históricas: `AppHeader.tsx:30`, `VariationsPanel.tsx:417,942,946`, `admin.tsx:122`.
 
-### 3. DashScope async + signed URLs
-URLs de DashScope expiran en **24h**. Siempre descargar → upload a Supabase Storage → `createSignedUrl(path, 60*60*24*7)`. Patrón centralizado en `src/lib/dashscope-async.ts` (`createDashscopeTask` + `pollDashscopeTask`).
+### 3. Higgsfield prompts — sin generación nativa
+La app **ya no genera imágenes/videos internamente**. [src/routes/api.generate-higgsfield-prompts.ts](src/routes/api.generate-higgsfield-prompts.ts) usa Haiku 4.5 multimodal (con el frame de referencia adjunto) para producir 4 prompts optimizados — `nano_banana`, `seedream` (tag format, cap 2800 chars), `kling`, `seedance` — que el usuario copia/pega en Higgsfield.ai. Los prompts se persisten en `variation_scenes.prompt_*`. No hay polling, no hay Storage upload, no hay signed URLs para assets generados.
 
-Buckets: `source-videos`, `generated-images`, `generated-videos`.
+Storage buckets remanentes (solo para fuentes del usuario): `source-videos`, `generated-images`, `generated-videos` (este último puede estar sin uso tras la migración — verificar antes de asumir).
 
 ### 4. File routes vs server functions
 - **File routes** (`createFileRoute`): reciben `request` directo, auth manual con `Authorization: Bearer <token>` + `supabase.auth.getClaims(token)`. **Usar esto para todo endpoint nuevo.**
@@ -75,16 +75,11 @@ src/
     library.tsx                 # biblioteca de assets generados (thumbnails + filtros)
     projects.tsx                # listado de proyectos/videos fuente
     admin.tsx                   # /admin, solo is_admin=true
-    api.anthropic-analyze.ts    # Claude SSE análisis frame-by-frame
-    api.anthropic-generate.ts   # Claude SSE 6 variaciones
-    api.ugc-generate.ts         # Claude SSE scripts UGC
-    api.qwen-generate-image.ts  # DashScope sync (10-30s)
-    api.wan-create-task.ts      # DashScope async submit
-    api.wan-poll-task.ts        # poll + download + signed URL
-    api.kling-create-task.ts    # delega a dashscope-async.ts
-    api.kling-poll-task.ts
-    api.veo3-create-task.ts
-    api.veo3-poll-task.ts
+    api.anthropic-analyze.ts          # Claude SSE análisis frame-by-frame
+    api.anthropic-generate.ts         # Claude SSE 6 variaciones
+    api.ugc-generate.ts               # Claude SSE scripts UGC (valida workspace-membership antes del stream)
+    api.detect-product.ts             # Claude multimodal sync — detecta producto/categoría del video
+    api.generate-higgsfield-prompts.ts # Haiku 4.5 multimodal — 4 prompts por escena
   components/
     AppShell.tsx                # sidebar estilo Guardian CRM (ámbar), colapsable, envuelve rutas privadas
     AppHeader.tsx               # cost pill + admin button + signout (dentro del shell)
@@ -95,9 +90,12 @@ src/
   lib/
     system-prompts.ts           # SYS_ANALYZE, SYS_GENERATE, SYS_UGC (VERBATIM del HTML)
     auth-context.tsx            # useAuth() — profile, user, signOut, refreshProfile
-    dashscope-async.ts          # createDashscopeTask + pollDashscopeTask + authenticateRequest
     signed-urls.ts              # batchSignedUrls con cache 55min + videoPosterUrl
-    scene-parser.ts             # parsing de escenas del output de Claude
+    spending-cap.ts             # checkSpendingCap server-side + capExceededResponse (429)
+    handle-cap.ts               # handleCapResponse cliente: intercepta 429 y muestra toast
+    winning-framework.ts        # WINNING_PREAMBLE + checkScript (blacklist AI-tells UGC)
+    scene-format.ts             # SCENE_FORMAT — formato de escenas con wrappers ═══
+    scene-parser.ts             # parseScenes — tolera prefijos emoji/arrow + parentheses
     variation-defs.ts           # definiciones de las 6 variaciones
     frame-extraction.ts         # extracción de frames del video fuente
   integrations/supabase/
@@ -151,13 +149,11 @@ Patrón: `supabase.channel(\`x-\${id}\`).on("postgres_changes", {...filter: \`wo
 
 Toda op que gaste llama `logUsage({userId, workspaceId, model, operation, inputTokens, outputTokens, metadata})` en `src/utils/anthropic.functions.ts`. Inserta en `api_usage` + trigger actualiza `profiles.total_cost_usd` acumulativo.
 
-Precios (ver `priceFor`):
-- Claude Sonnet 4.5: $3/M in, $15/M out
-- Claude Opus 4.6: $5/M in, $25/M out
-- Qwen-Image-Max: $0.04 fijo
-- Wan 2.6-i2v: $0.30 fijo
-- Kling 2.5-turbo: $0.40 fijo
-- Veo 3.1: $0.75 fijo
+Precios (ver `priceFor` en [src/utils/anthropic.functions.ts](src/utils/anthropic.functions.ts)):
+- Claude Sonnet 4.5 / 4.6: $3/M in, $15/M out
+- Claude Opus 4.5 / 4.6: $5/M in, $25/M out
+- Claude Haiku 4.5: $0.80/M in, $4/M out
+- Generación de imagen/video: no aplica — corre en Higgsfield.ai (fuera del sistema de cost tracking).
 
 ## Idioma
 
@@ -165,13 +161,13 @@ Usuario es colombiano, dueño de e-commerce COD. **Siempre responder en español
 
 ## Fases
 
-Roadmap en `../lovable-prompt-inicial.md` (fuera del repo, en `Desktop/`). Estado al 2026-04-18:
-- ✅ Fase 0: auth + admin + esquema
-- ✅ Fase 1: variaciones con Claude SSE
-- ✅ Fase 2: Qwen imagen
-- ✅ Fase 3: Wan video async + reanudación
-- ✅ Fase 4: UGC Generator (4 estilos × 3 modelos)
-- 🚧 Fase 5: `/library` y `WorkspaceSwitcher` ya existen (verificar completitud: ZIP + métricas `/admin`)
+Roadmap en `../lovable-prompt-inicial.md` (fuera del repo, en `Desktop/`). Estado al 2026-04-21:
+- ✅ Fase 0: auth + admin + esquema RLS
+- ✅ Fase 1: variaciones con Claude SSE (6 escenas, parseo tolerante de `═══`)
+- ⚠️ Fase 2: Qwen imagen — **removida**, migrada a prompts Higgsfield (commit f46dc70)
+- ⚠️ Fase 3: Wan/Kling/Veo video — **removidas**, migradas a prompts Higgsfield
+- ✅ Fase 4: UGC Generator (4 estilos, prompts para Kling 2.5 Turbo / Seedance 2.0 en Higgsfield)
+- 🚧 Fase 5: `/library` es **placeholder** ("Bloque B en construcción") — no implementado. `WorkspaceSwitcher` sí existe.
 - (opcional) Fase 6: Meta/TikTok Ads API auto-ingest
 
 ## Gotchas históricos
