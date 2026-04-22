@@ -231,6 +231,13 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           body: JSON.stringify({
             model,
             max_tokens: 3000,
+            // Low temperature (0.2) because this endpoint must REPLICATE a
+            // reference frame, not invent variations. At default 1.0 Haiku
+            // drifted between runs on the same frame: a lumbar-vertebrae 3D
+            // model became "pelvis and sacrum", and a metal comb-style
+            // massager became "nylon belt with silver buckle". 0.2 keeps
+            // the SYS fidelity warnings dominant over sampling noise.
+            temperature: 0.2,
             system: SYS,
             messages: [{ role: "user", content: userContent }],
           }),
