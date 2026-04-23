@@ -675,6 +675,15 @@ export function VariationsPanel() {
         toast.warning(`${label}: conexión cortada, pero ${scenes.length} escenas se guardaron`);
       }
 
+      // Avisa cuando una variación se sale del rango esperado (~$0.10–$0.30).
+      // Si pasa $0.50 algo raro paso (loop largo, retry costoso); muestralo.
+      if (Number(cost) > 0.5) {
+        toast.warning(
+          `${label}: $${Number(cost).toFixed(3)} USD — costo más alto de lo normal (esperado ~$0.10–$0.30). Avisá si se repite.`,
+          { duration: 8000 },
+        );
+      }
+
       // persist
       if (variationId) {
         await supabase.from("variations").update({

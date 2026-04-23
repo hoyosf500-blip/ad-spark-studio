@@ -167,8 +167,10 @@ export const Route = createFileRoute("/api/anthropic-generate")({
 
         const content: ContentBlock[] = [...sharedContent, ...variationContent];
 
-        const MAX_TOKENS = 32000;
-        const MAX_CONTINUATIONS = 2;
+        // Cap output to avoid the 60k-token runaway observed in prod
+        // ($1.17 / 20-min variation). Worst case now: 32k output × $15/M = $0.48.
+        const MAX_TOKENS = 16000;
+        const MAX_CONTINUATIONS = 1;
 
         let fullText = "", inputTokens = 0, outputTokens = 0;
         let cacheCreateTokens = 0, cacheReadTokens = 0;
