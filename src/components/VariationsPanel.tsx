@@ -81,12 +81,19 @@ function pickReferenceFrames(
   return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
 }
 
-// Fire all 6 Higgsfield prompt generations in parallel right after the scene
-// rows are inserted. Each call costs ~$0.005 (Haiku 4.5 multimodal w/ 1 frame),
-// so the 6 of them add ~$0.03 to the variation total — negligible vs the $1+
-// already spent on Sonnet for the variation. SceneRow's useEffect polls the
-// DB and renders the prompts as they land. Failures are non-fatal: the manual
-// "Generar prompts" button still works as a retry.
+// Auto-generate Higgsfield prompts after scene rows are inserted.
+//
+// Throttled to CONCURRENCY=2: firing all 6 in parallel was hitting Anthropic
+// Haiku rate limits (50 RPM tier-1, ~50k input TPM) — 6 multimodal calls with
+// ~150KB frames each = ~30k input tokens per call = 180k tokens in a 2s burst.
+// At 2 concurrent we stay under TPM and avoid Cloudflare Workers subrequest
+// pressure too. The user originally saw scenes 2/4/10 fall back to manual click
+// because of this exact issue.
+//
+// Retry-once-on-5xx with 2s backoff: 4xx (cap exceeded, auth) is permanent and
+// not retried. Each call costs ~$0.005 (Haiku 4.5 multimodal w/ 1 frame), so 6
+// scenes ≈ $0.03. SceneRow's useEffect polls the DB and renders prompts as
+// they land. Manual "Generar prompts" button still works as a final fallback.
 async function autoGenScenePrompts(args: {
   insertedScenes: Array<{ id: string; order_idx: number }>;
   framesByOrderIdx: Map<number, string | null>;
@@ -95,29 +102,52 @@ async function autoGenScenePrompts(args: {
   onCost: (c: number) => void;
 }) {
   const { insertedScenes, framesByOrderIdx, workspaceId, token, onCost } = args;
-  await Promise.allSettled(
-    insertedScenes.map(async (sc) => {
-      try {
-        const res = await fetch("/api/generate-higgsfield-prompts", {
-          method: "POST",
-          headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-          body: JSON.stringify({
-            sceneId: sc.id,
-            workspaceId,
-            referenceFrameDataUrl: framesByOrderIdx.get(sc.order_idx) ?? null,
-          }),
-        });
-        if (!res.ok) {
-          console.warn(`[autoGenScenePrompts] scene ${sc.id} HTTP ${res.status}`);
-          return;
+  const CONCURRENCY = 2;
+
+  const generateOne = async (sc: { id: string; order_idx: number }, attempt = 1): Promise<void> => {
+    try {
+      const res = await fetch("/api/generate-higgsfield-prompts", {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          sceneId: sc.id,
+          workspaceId,
+          referenceFrameDataUrl: framesByOrderIdx.get(sc.order_idx) ?? null,
+        }),
+      });
+      if (!res.ok) {
+        // Retry once on transient 5xx (Anthropic rate limit, Worker timeout,
+        // upstream 502). 4xx is permanent (auth, cap exceeded) — don't retry.
+        if (res.status >= 500 && attempt === 1) {
+          await new Promise((r) => setTimeout(r, 2000));
+          return generateOne(sc, 2);
         }
-        const j = (await res.json()) as { ok: true; cached: boolean; costUsd: number };
-        if (!j.cached && Number(j.costUsd) > 0) onCost(Number(j.costUsd));
-      } catch (e) {
-        console.warn(`[autoGenScenePrompts] scene ${sc.id} failed:`, e);
+        console.warn(`[autoGenScenePrompts] scene ${sc.id} HTTP ${res.status} (attempt ${attempt})`);
+        return;
       }
-    }),
-  );
+      const j = (await res.json()) as { ok: true; cached: boolean; costUsd: number };
+      if (!j.cached && Number(j.costUsd) > 0) onCost(Number(j.costUsd));
+    } catch (e) {
+      // Network/abort error — retry once.
+      if (attempt === 1) {
+        await new Promise((r) => setTimeout(r, 2000));
+        return generateOne(sc, 2);
+      }
+      console.warn(`[autoGenScenePrompts] scene ${sc.id} failed after retry:`, e);
+    }
+  };
+
+  // Sliding-window concurrency: pull next scene off the queue as each one
+  // resolves, so we always have CONCURRENCY in flight until the queue drains.
+  const queue = [...insertedScenes];
+  const workers = Array.from({ length: Math.min(CONCURRENCY, queue.length) }, async () => {
+    for (;;) {
+      const sc = queue.shift();
+      if (!sc) return;
+      await generateOne(sc);
+    }
+  });
+  await Promise.all(workers);
 }
 
 type VariationState = {
@@ -1321,7 +1351,12 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
     let cancelled = false;
     let tries = 0;
     const SCENE_FIND_BUDGET = 8;       // ~4s @ 500ms — find the inserted row
-    const PROMPTS_WAIT_BUDGET = 40;    // ~60s @ 1.5s — wait for Haiku to finish
+    // 120s @ 1.5s. With autoGenScenePrompts throttled to 2 concurrent, the
+    // last scene of a 6-scene run can wait ~20s for prior batches to drain
+    // before its own Haiku call (~10-15s) starts, plus possible retry (+12s).
+    // Worst-case observed end-to-end: ~60s. Budget 120s gives comfortable
+    // headroom before falling back to the manual "Generar prompts" button.
+    const PROMPTS_WAIT_BUDGET = 80;
     const tryFetch = async (): Promise<void> => {
       if (!variationId || cancelled) return;
       const { data } = await supabase
