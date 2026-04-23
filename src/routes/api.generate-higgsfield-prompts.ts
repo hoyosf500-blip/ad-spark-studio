@@ -118,10 +118,18 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
         const authHeader = request.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) return new Response("Unauthorized", { status: 401 });
         const token = authHeader.slice(7);
+        // Pass the user's JWT as Authorization header so PostgREST evaluates RLS
+        // with auth.uid() = the calling user. Without this, the client runs as
+        // anon and SELECTs against workspace-scoped tables silently return 0
+        // rows even for legitimate owners — surfacing as a misleading 404
+        // "Scene not found" after the user has already paid for the variation.
         const sb = createClient<Database>(
           process.env.SUPABASE_URL!,
           process.env.SUPABASE_PUBLISHABLE_KEY!,
-          { auth: { persistSession: false } },
+          {
+            auth: { persistSession: false },
+            global: { headers: { Authorization: `Bearer ${token}` } },
+          },
         );
         const { data: claims, error: claimsErr } = await sb.auth.getClaims(token);
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
@@ -140,7 +148,16 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           )
           .eq("id", body.sceneId)
           .maybeSingle();
-        if (sceneErr || !scene) return new Response("Scene not found", { status: 404 });
+        if (sceneErr || !scene) {
+          console.error("[higgsfield-prompts] scene lookup failed", {
+            sceneId: body.sceneId,
+            userId,
+            sceneErrCode: sceneErr?.code,
+            sceneErrMsg: sceneErr?.message,
+            found: !!scene,
+          });
+          return new Response("Scene not found", { status: 404 });
+        }
 
         if (
           !body.forceRegenerate &&
