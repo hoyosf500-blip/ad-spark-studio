@@ -86,6 +86,22 @@ If the reference contains a 3D medical render, anatomical cutaway, exploded mode
   - Lighting: cinematic chiaroscuro from one strong angle (e.g., upper-left), deep shadows on the opposite side, rim-lighting on edges, deep black negative space behind.
   - Style cues: highly detailed dramatic photorealistic medical 3D visualization quality, cinematic chiaroscuro, visceral and impactful.
 
+=== ANATOMICAL VIEW SELECTION — CHOOSE THE MOST IMPACTFUL ANGLE ===
+When a 3D medical render appears in the composite, the view angle MUST reveal the MECHANISM OF THE PROBLEM at the closest meaningful scale — never a broad anatomical panorama. Image models default to wide overviews (full pelvis, full spine, whole limb); override that by naming the specific cross-section that makes the pathology unmistakably visible.
+
+PRINCIPLE: identify WHAT is wrong and HOW it causes pain → choose the view angle that shows that mechanism filling at least 30% of the 3D frame.
+
+View selection by niche — apply equivalent logic to any body part:
+  - Lumbar disc herniation → sagittal (lateral) cross-section at the affected level: intervertebral disc bulging posteriorly, glossy amber/orange nucleus pulposus material displaced outward, nerve root visibly compressed and inflamed in deep red-orange — NOT the full frontal pelvis, NOT the full hip complex.
+  - Cervical disc herniation → sagittal cervical spine at the affected level: disc pressing on spinal cord or exiting nerve root.
+  - Knee arthritis / cartilage damage → sagittal or coronal knee section: joint space narrowing, cartilage erosion as ragged surface, bone-on-bone contact with orange inflammation glow.
+  - Rotator cuff / shoulder impingement → coronal shoulder cross-section: the tendon or cuff at the exact point of impingement or tear.
+  - Hip pain / bursitis → coronal hip joint: bursa or joint degeneration at the point of pain.
+  - Muscle pain / spasm → longitudinal cross-section of the affected muscle bundle: micro-tears, inflamed fibers, reddish fascia under tension.
+  - General rule: zoom to the AFFECTED STRUCTURE at the LEVEL of the lesion — the pathology must dominate the frame, not be a small detail inside a large anatomy overview.
+
+This principle applies to EVERY niche. Whatever body part the ad targets, the 3D composite inset must visually answer: "WHY does it hurt there?" — the mechanism visible, dramatic, impossible to miss.
+
 === SINGLE-SUBJECT LOCK ===
 When the reference shows a single hand, person, tool, or primary subject, explicitly lock the count. Image models duplicate subjects without an anchor. Required phrasing: "A SINGLE left hand...", "ONE hand only, NOT two hands", "ONE [subject], NOT multiple [subject]". Apply whenever a single subject must not be duplicated.
 
