@@ -23,13 +23,13 @@ export function parseScenes(text: string): ParsedScene[] {
   if (!text || !text.trim()) return [];
   // Split into sections by ═══-wrapped headers; keep only the ones that are scenes.
   const parts = text.split(/(?=^═{3,}\s*[A-ZÁÉÍÓÚÑ])/m);
-  const scenes: ParsedScene[] = [];
+  const raw: ParsedScene[] = [];
   let idx = 0;
   for (const block of parts) {
     if (!SCENE_HEADER.test(block)) continue;
     const title = extractTitle(block);
     const { start, end } = extractTimeRange(title);
-    scenes.push({
+    raw.push({
       orderIdx: idx++,
       title: title || `Escena ${idx}`,
       scriptEs: extractField(block, ["script"]),
@@ -42,7 +42,45 @@ export function parseScenes(text: string): ParsedScene[] {
       timeEndSec: end,
     });
   }
-  return scenes;
+  return collapseConsecutiveDuplicates(raw);
+}
+
+// Dedup pass: Claude a veces emite la misma beat como 2 escenas consecutivas
+// con rangos de tiempo adyacentes (e.g. "0-1s" y "1-2s" con SCRIPT idéntico).
+// Eso hacía que en la UI salieran escenas 1-2 y 3-4 como pares duplicados con
+// frames distintos pero prompts iguales (el input textual a Claude era idéntico
+// entre la pareja, y con temp=0.2 convergía). Colapsamos aquí: si dos escenas
+// consecutivas tienen scriptEs normalizado idéntico, conservamos la primera y
+// extendemos su timeEndSec al end de la última duplicada. Luego reindexamos
+// orderIdx 0..N-1.
+function collapseConsecutiveDuplicates(scenes: ParsedScene[]): ParsedScene[] {
+  if (scenes.length <= 1) return scenes;
+  const out: ParsedScene[] = [];
+  for (const s of scenes) {
+    const prev = out[out.length - 1];
+    const key = scriptKey(s.scriptEs);
+    // Solo dedupar cuando AMBAS tienen scriptEs no vacío — beats sin diálogo
+    // (B-roll, corte instrumental) pueden ser estructuralmente distintos pese
+    // a compartir script vacío.
+    if (prev && key !== "" && scriptKey(prev.scriptEs) === key) {
+      if (s.timeEndSec != null) prev.timeEndSec = s.timeEndSec;
+      continue;
+    }
+    out.push({ ...s });
+  }
+  return out.map((s, i) => ({
+    ...s,
+    orderIdx: i,
+    title: /^Escena \d+$/.test(s.title.trim()) ? `Escena ${i + 1}` : s.title,
+  }));
+}
+
+function scriptKey(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function extractTitle(block: string): string {
