@@ -82,13 +82,9 @@ function pickReferenceFrames(
 }
 
 // Auto-generate Higgsfield prompts after scene rows are inserted.
-//
-// Throttled to CONCURRENCY=2: firing all 6 in parallel was hitting Anthropic
-// Haiku rate limits (50 RPM tier-1, ~50k input TPM) — 6 multimodal calls with
-// ~150KB frames each = ~30k input tokens per call = 180k tokens in a 2s burst.
-// At 2 concurrent we stay under TPM and avoid Cloudflare Workers subrequest
-// pressure too. The user originally saw scenes 2/4/10 fall back to manual click
-// because of this exact issue.
+// CONCURRENCY=6: all scenes fire simultaneously. Each call sends one reference
+// frame (~1500 tokens), well within Sonnet 4.6 rate limits. Retry-once-on-5xx
+// handles any transient rate-limit hit without user intervention.
 //
 // Retry-once-on-5xx with 2s backoff: 4xx (cap exceeded, auth) is permanent and
 // not retried. Auto-gen respeta la preferencia persistida en localStorage
