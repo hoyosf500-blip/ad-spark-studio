@@ -45,14 +45,36 @@ Image generation models (Nano Banana Pro, Seedream 4.5) and video models (Kling,
   (c) Naming objects, drawings, overlays, and props LITERALLY as they appear — never substituting a generic equivalent.
 
 === TOOL / DEVICE / OVERLAY FIDELITY (the #1 failure mode) ===
-If the reference contains a physical tool, device, prop, instrument, hand-drawn marking, anatomical overlay, arrow, label, package, or product reveal, that exact element MUST appear in the prompt by literal name in its correct position in frame. Examples of substitutions you must NEVER make:
-  - A metal hair-comb-style massager with vertical steel teeth/bristles is NOT a Gua Sha scraper, NOT a flat paddle, NOT a generic massager.
-  - Hand-drawn purple/black marker linework on bare skin is NOT a digital anatomical overlay, NOT a 3D rendered diagram, NOT labeled "L3 L4 L5" unless those labels actually appear in the reference.
-  - A red permanent marker held in a gloved hand tracing lines on skin is NOT a red arrow graphic, NOT a digital effect.
-  - An exploded 3D anatomical cutaway with messy organic fluids (blood, synovial fluid, inflamed tissue) is NOT a clean sterile medical illustration.
-  - Raw vertical TikTok medical-demo footage is NOT editorial clinic photography.
+If the reference contains a physical tool, device, prop, instrument, hand-drawn marking, anatomical overlay, arrow, label, package, or product reveal, that exact element MUST appear in the prompt by literal name in its correct position in frame.
+
+RULE: for every ambiguous tool or object in the reference, emit 4-5 explicit NOT-substitute clauses listing the most likely confusions the image model would default to. Examples (apply this rule to whatever your reference actually shows):
+  - A metal fine-toothed lice / nit comb (stainless-steel rectangular frame, ~25-30 thin parallel vertical teeth, no handle, of the type used to remove lice from hair) -> "NOT a hair comb, NOT a styling comb, NOT a pocket comb, NOT a comb-with-handle, NOT a belt, NOT a cinturon, NOT a nylon strap, NOT a massager, NOT a chain".
+  - A red-and-blue plastic skin-marking stylus with rounded grip -> "NOT a Sharpie, NOT a branded marker, NOT a pen with logo, NOT a scalpel".
+  - Hand-drawn purple/black marker linework on bare skin -> "NOT a digital overlay, NOT a 3D rendered diagram, NOT a tattoo, NOT a printed decal" (and never invent labels like L3/L4/L5 unless those labels actually appear in the reference).
+  - A red permanent marker tracing lines on skin -> "NOT a red arrow graphic, NOT a digital effect".
+  - An exploded 3D anatomical cutaway with messy organic fluids (blood, synovial fluid, inflamed tissue) -> "NOT a clean sterile medical illustration, NOT a textbook diagram".
+  - Raw vertical TikTok medical-demo footage -> "NOT editorial clinic photography, NOT polished, NOT staged".
   - A talking-head shot is NOT a product close-up and vice versa.
-When in doubt, name the object literally and add a "NOT X, NOT Y" clarifier.
+When in doubt, name the object literally and add the "NOT X, NOT Y, NOT Z" clarifier at the end of that clause.
+
+=== VISUAL IMPACT RULES FOR 3D / ANATOMICAL / COMPOSITE INSETS ===
+If the reference contains a 3D medical render, anatomical cutaway, exploded model, or composite edit fusing a real photograph with a 3D render, the render portion MUST read dramatic and eye-catching, NOT textbook-clean. Image models default to sterile lab-book illustration; override that with these cues in the prompt (write them in lowercase narrative prose):
+  - Bones: porous trabecular surface, raw pink-red marrow visible through tiny pores, damp glossy sheen, micro-cracks along edges -- explicitly NOT clean white lab bones.
+  - Discs: glossy wet amber or yellow-orange gel; if ruptured, cracked open with visible internal torn fibers, leaking nucleus pulposus.
+  - Nerves / soft tissue: wraps and strangulates or compresses and pinches the inflamed spot; swollen, deformed, angry red irritation.
+  - Inflammation: pulsating crimson halo radiating 360 degrees outward, burning orange core fading to deep red, heat-map glow with volumetric light rays -- NOT a flat red circle.
+  - Lighting: cinematic chiaroscuro from one strong angle (e.g., upper-left), deep shadows on the opposite side, rim-lighting on edges, deep black negative space behind.
+  - Style cues: ultra-hyperreal, wet-looking, shocking medical 3D render quality, cinematic.
+
+=== SINGLE-SUBJECT LOCK ===
+When the reference shows a single hand, person, tool, or primary subject, explicitly lock the count. Image models duplicate subjects without an anchor. Required phrasing: "A SINGLE left hand...", "ONE hand only, NOT two hands", "ONE [subject], NOT multiple [subject]". Apply whenever a single subject must not be duplicated.
+
+=== COMPOSITE EDIT RULE ===
+If the reference fuses a real photograph with a 3D render or overlay in ONE frame, describe it explicitly as "seamless composite edit fused into a single frame, NOT split-screen, NOT side-by-side panel, NOT a grid, NOT a diptych". Repeat the NOT split-screen clarifier near the end of the prompt -- otherwise the image model defaults to a two-panel layout.
+
+=== TEXT RENDERED IN THE IMAGE ===
+The ONLY text allowed to appear as rendered text inside the generated image is text that literally appears in the reference: anatomical codes ("L3", "L4", "L5", "T12", "C7"), watermarks ("06-lj-hzj-23"), numeric labels, product names on packaging.
+Descriptive phrases you use to describe visual effects -- "pulsating crimson halo", "glossy wet nucleus pulposus", "red-orange nerve root" -- MUST be written LOWERCASE in the prompt as narrative prose, NEVER in uppercase and NEVER wrapped in quotes. Uppercase or quoted phrases in the prompt cause the image model to render those exact words as floating text labels in the output. Reserve uppercase-and-quoted strings exclusively for labels that MUST appear rendered (e.g., "L3", "L4", "L5", watermark "06-lj-hzj-23"). Close every image prompt with an explicit guard near the end: "no descriptive text labels in the image, no captions, no floating phrases -- only [list the actual labels allowed] as rendered text".
 
 === MANDATORY NEGATIONS ===
 Every IMAGE PROMPT must include at least one explicit negation when the reference has any of these traits:
@@ -197,7 +219,12 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           scene.scene_text && `SCENE BEAT:\n${scene.scene_text}`,
           scene.script_es && `SPOKEN LINE (Spanish):\n${scene.script_es}`,
           scene.screen_text && `SCREEN TEXT:\n${scene.screen_text}`,
-          scene.image_prompt_en && `PRIOR IMAGE PROMPT (may be outdated):\n${scene.image_prompt_en}`,
+          // Skip the prior image_prompt_en when we have a fresh reference
+          // frame attached. With a frame present, Haiku must describe what
+          // it SEES in the image, not blend in a stale textual composition
+          // from a previous generation — that was causing "drift back" to
+          // the first run's wording even after we fixed temperature.
+          !hasFrame && scene.image_prompt_en && `PRIOR IMAGE PROMPT (may be outdated):\n${scene.image_prompt_en}`,
           scene.animation_prompt_en &&
             `=== ORIGINAL ANIMATION PROMPT (rewrite/enrich) ===\n${scene.animation_prompt_en}`,
           productName && `=== PRODUCT NAME ===\n${productName}`,
