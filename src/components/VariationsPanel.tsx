@@ -81,6 +81,45 @@ function pickReferenceFrames(
   return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
 }
 
+// Fire all 6 Higgsfield prompt generations in parallel right after the scene
+// rows are inserted. Each call costs ~$0.005 (Haiku 4.5 multimodal w/ 1 frame),
+// so the 6 of them add ~$0.03 to the variation total — negligible vs the $1+
+// already spent on Sonnet for the variation. SceneRow's useEffect polls the
+// DB and renders the prompts as they land. Failures are non-fatal: the manual
+// "Generar prompts" button still works as a retry.
+async function autoGenScenePrompts(args: {
+  insertedScenes: Array<{ id: string; order_idx: number }>;
+  framesByOrderIdx: Map<number, string | null>;
+  workspaceId: string;
+  token: string;
+  onCost: (c: number) => void;
+}) {
+  const { insertedScenes, framesByOrderIdx, workspaceId, token, onCost } = args;
+  await Promise.allSettled(
+    insertedScenes.map(async (sc) => {
+      try {
+        const res = await fetch("/api/generate-higgsfield-prompts", {
+          method: "POST",
+          headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            sceneId: sc.id,
+            workspaceId,
+            referenceFrameDataUrl: framesByOrderIdx.get(sc.order_idx) ?? null,
+          }),
+        });
+        if (!res.ok) {
+          console.warn(`[autoGenScenePrompts] scene ${sc.id} HTTP ${res.status}`);
+          return;
+        }
+        const j = (await res.json()) as { ok: true; cached: boolean; costUsd: number };
+        if (!j.cached && Number(j.costUsd) > 0) onCost(Number(j.costUsd));
+      } catch (e) {
+        console.warn(`[autoGenScenePrompts] scene ${sc.id} failed:`, e);
+      }
+    }),
+  );
+}
+
 type VariationState = {
   type: string;
   label: string;
@@ -645,26 +684,50 @@ export function VariationsPanel() {
         }).eq("id", variationId);
         if (scenes.length > 0) {
           const frameAssignments = assignUniqueFrames(scenes, frames);
-          await supabase.from("variation_scenes").insert(
-            scenes.map((s, idx) => ({
-              workspace_id: workspaceId,
-              variation_id: variationId,
-              scene_index: s.orderIdx,
-              order_idx: s.orderIdx,
-              title: s.title,
-              scene_text: s.scriptEs,
-              script_es: s.scriptEs,
-              image_prompt: s.imagePromptEn,
-              image_prompt_en: s.imagePromptEn,
-              animation_prompt: s.animationPromptEn,
-              animation_prompt_en: s.animationPromptEn,
-              tool_recommended: s.toolRecommended,
-              attach_note: s.attachNote,
-              screen_text: s.screenText,
-              reference_frame_time_sec: frameAssignments[idx]?.time ?? s.timeStartSec,
-              reference_frame_url: frameAssignments[idx]?.dataUrl ?? null,
-            })),
-          );
+          // Capture inserted ids + order_idx so we can auto-fire Higgsfield
+          // prompt generation in parallel without making the user click
+          // "Generar prompts" on every scene.
+          const { data: insertedScenes } = await supabase
+            .from("variation_scenes")
+            .insert(
+              scenes.map((s, idx) => ({
+                workspace_id: workspaceId,
+                variation_id: variationId,
+                scene_index: s.orderIdx,
+                order_idx: s.orderIdx,
+                title: s.title,
+                scene_text: s.scriptEs,
+                script_es: s.scriptEs,
+                image_prompt: s.imagePromptEn,
+                image_prompt_en: s.imagePromptEn,
+                animation_prompt: s.animationPromptEn,
+                animation_prompt_en: s.animationPromptEn,
+                tool_recommended: s.toolRecommended,
+                attach_note: s.attachNote,
+                screen_text: s.screenText,
+                reference_frame_time_sec: frameAssignments[idx]?.time ?? s.timeStartSec,
+                reference_frame_url: frameAssignments[idx]?.dataUrl ?? null,
+              })),
+            )
+            .select("id, order_idx");
+
+          if (insertedScenes && insertedScenes.length > 0) {
+            // Fire-and-forget: auto-generate Higgsfield prompts (Haiku 4.5
+            // multimodal, ~$0.005/scene) in parallel for all 6 scenes so the
+            // user doesn't have to click "Generar prompts" on each one.
+            // SceneRow's useEffect polls the DB and picks them up as they land.
+            // Errors here are non-fatal — the manual button still works.
+            const framesByOrderIdx = new Map<number, string | null>(
+              scenes.map((s, idx) => [s.orderIdx, frameAssignments[idx]?.dataUrl ?? null]),
+            );
+            void autoGenScenePrompts({
+              insertedScenes,
+              framesByOrderIdx,
+              workspaceId,
+              token,
+              onCost: addPromptsCost,
+            });
+          }
         }
       }
     } catch (e) {
@@ -1242,9 +1305,14 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
 
   // Resolve the scene DB id (created during persist) by variation_id + order_idx.
   // Row is inserted AFTER setVariations fires, so retry briefly until it shows up.
+  // After the row exists, KEEP polling (with a longer interval and budget) so we
+  // pick up the auto-generated Higgsfield prompts as they land — those are
+  // written async by autoGenScenePrompts firing immediately after persist.
   useEffect(() => {
     let cancelled = false;
     let tries = 0;
+    const SCENE_FIND_BUDGET = 8;       // ~4s @ 500ms — find the inserted row
+    const PROMPTS_WAIT_BUDGET = 40;    // ~60s @ 1.5s — wait for Haiku to finish
     const tryFetch = async (): Promise<void> => {
       if (!variationId || cancelled) return;
       const { data } = await supabase
@@ -1260,14 +1328,21 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
         if (data.reference_frame_time_sec != null) {
           setAssignedFrameTime(Number(data.reference_frame_time_sec));
         }
-        if (data.prompt_nano_banana && data.prompt_kling && data.prompt_seedance) {
+        const hasPrompts = data.prompt_nano_banana && data.prompt_kling && data.prompt_seedance;
+        if (hasPrompts) {
           setPrompts({
-            image_prompt: capImagePromptClient(data.prompt_nano_banana),
+            image_prompt: capImagePromptClient(data.prompt_nano_banana!),
             kling: data.prompt_kling ?? "",
             seedance: data.prompt_seedance ?? "",
           });
+          return; // done — prompts present, no more polling needed
         }
-      } else if (tries++ < 8) {
+        // Row exists but auto-generated prompts haven't landed yet. Keep
+        // polling at a slower cadence within the prompts-wait budget.
+        if (tries++ < SCENE_FIND_BUDGET + PROMPTS_WAIT_BUDGET) {
+          setTimeout(() => { if (!cancelled) void tryFetch(); }, 1500);
+        }
+      } else if (tries++ < SCENE_FIND_BUDGET) {
         setTimeout(() => { if (!cancelled) void tryFetch(); }, 500);
       }
     };
