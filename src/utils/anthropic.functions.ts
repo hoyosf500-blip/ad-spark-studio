@@ -6,6 +6,7 @@ const PRICING: Record<string, { input: number; output: number }> = {
   "claude-sonnet-4-6": { input: 3, output: 15 },
   "claude-sonnet-4-5": { input: 3, output: 15 },
   "claude-sonnet-4-5-20250929": { input: 3, output: 15 },
+  "claude-opus-4-7": { input: 15, output: 75 },
   "claude-opus-4-6": { input: 5, output: 25 },
   "claude-opus-4-5": { input: 5, output: 25 },
   "claude-3-5-sonnet-20241022": { input: 3, output: 15 },

@@ -753,7 +753,14 @@ export function VariationsPanel() {
             )
             .select("id, order_idx");
 
-          if (insertedScenes && insertedScenes.length > 0) {
+          // Narrow the Supabase return type: order_idx en el schema es
+          // number|null, pero insertamos siempre con s.orderIdx (number), así
+          // que en la práctica viene no-null. Filtramos defensivamente para
+          // cerrar el type error sin cambiar semántica runtime.
+          const validInserted = (insertedScenes ?? []).filter(
+            (r): r is { id: string; order_idx: number } => r.order_idx != null,
+          );
+          if (validInserted.length > 0) {
             // Fire-and-forget: auto-generate Higgsfield prompts (default
             // Sonnet 4.6 multimodal, ~$0.015/scene) for all 6 scenes so the
             // user doesn't have to click "Generar prompts" on each one.
@@ -763,7 +770,7 @@ export function VariationsPanel() {
               scenes.map((s, idx) => [s.orderIdx, frameAssignments[idx]?.dataUrl ?? null]),
             );
             void autoGenScenePrompts({
-              insertedScenes,
+              insertedScenes: validInserted,
               framesByOrderIdx,
               workspaceId,
               token,
