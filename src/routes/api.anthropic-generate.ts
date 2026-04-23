@@ -29,10 +29,15 @@ export const Route = createFileRoute("/api/anthropic-generate")({
         const authHeader = request.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) return new Response("Unauthorized", { status: 401 });
         const token = authHeader.slice(7);
+        // Pass user JWT so checkSpendingCap can read profiles under RLS as the
+        // calling user (otherwise daily_cap_usd silently defaults to $20).
         const supabase = createClient<Database>(
           process.env.SUPABASE_URL!,
           process.env.SUPABASE_PUBLISHABLE_KEY!,
-          { auth: { persistSession: false } },
+          {
+            auth: { persistSession: false },
+            global: { headers: { Authorization: `Bearer ${token}` } },
+          },
         );
         const { data: claims, error: claimsErr } = await supabase.auth.getClaims(token);
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
