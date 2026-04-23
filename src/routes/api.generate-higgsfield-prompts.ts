@@ -102,6 +102,33 @@ View selection by niche — apply equivalent logic to any body part:
 
 This principle applies to EVERY niche. Whatever body part the ad targets, the 3D composite inset must visually answer: "WHY does it hurt there?" — the mechanism visible, dramatic, impossible to miss.
 
+=== NICHE-UNIVERSAL COMPOSITE QUALITY (beauty, home, technology, wellness — any category) ===
+The medical quality rules above define the standard. The SAME standard applies to every other niche. Regardless of product category, every composite or enhanced element must be:
+  (1) MECHANISM-REVEALING: show HOW the product solves the problem — not what it looks like sitting on a shelf.
+  (2) DRAMATICALLY LIT: cinematic chiaroscuro from one strong angle, deep shadows, rim lighting — applies to skin cross-sections, circuits, and bacteria equally.
+  (3) DETAIL-AUTHENTIC: hyper-realistic scientific-grade rendering, NOT stock illustration, NOT flat infographic, NOT cartoon.
+  (4) SEAMLESSLY COMPOSITED: the real-photo-to-render transition is gradual and cinematic — same dissolve technique as the medical composite.
+
+By niche — what the enhanced inset shows and the quality cues to use:
+
+BEAUTY / SKINCARE / HAIR:
+  - Show: skin layers cross-section (stratum corneum → epidermis → dermis) with the product actively penetrating; collagen fibers regenerating as glossy gold/ivory strands; plump hyaluronic acid-filled cells vs. depleted shriveled ones; active ingredient particles glowing as they bind to receptors.
+  - Style: warm amber-gold for healthy tissue, deep red for damage/inflammation, soft volumetric glow, NOT a flat anatomy diagram, NOT a generic stock skin cross-section.
+
+HOME / CLEANING / HOUSEHOLD:
+  - Show: surface at microscopic scale — bacteria/pathogens as organic translucent bioluminescent shapes; the product eliminating them (dissolving membranes, bursting cells); contaminated dark gritty surface transforming to crystalline clean surface.
+  - Style: dramatic dark-vs-light contrast, cinematic chiaroscuro, NOT cartoon germs, NOT flat infographic icons.
+
+TECHNOLOGY / DEVICES / GADGETS:
+  - Show: internal components at the mechanism level — battery cells, circuit traces glowing with current, heat pipes, speaker diaphragm vibrations, electromagnetic field lines; the key differentiating component, NOT a generic circuit board overview.
+  - Style: cool blues/cyans for electronics, warm amber for energy/power, deep black background, high-gloss metallic surfaces, volumetric light through circuitry.
+
+WELLNESS / SUPPLEMENTS / NUTRITION:
+  - Show: cellular mechanism — nutrient particles entering cells, mitochondrial energy production, gut microbiome as vivid colony, molecule being absorbed through a cell membrane shown as translucent sphere.
+  - Style: warm biological tones, glowing particles against dark background, scientific-cinematic quality, NOT a nutrition label graphic.
+
+RULE FOR ANY OTHER NICHE: identify the CORE MECHANISM that explains why the product works → render it at the scale where that mechanism is most visible → apply cinematic chiaroscuro → seamless composite. The visual question every inset must answer: "HOW does this product work?" — dramatic, specific, impossible to confuse with stock art.
+
 === SINGLE-SUBJECT LOCK ===
 When the reference shows a single hand, person, tool, or primary subject, explicitly lock the count. Image models duplicate subjects without an anchor. Required phrasing: "A SINGLE left hand...", "ONE hand only, NOT two hands", "ONE [subject], NOT multiple [subject]". Apply whenever a single subject must not be duplicated.
 
