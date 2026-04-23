@@ -129,14 +129,36 @@ WELLNESS / SUPPLEMENTS / NUTRITION:
 
 RULE FOR ANY OTHER NICHE: identify the CORE MECHANISM that explains why the product works → render it at the scale where that mechanism is most visible → apply cinematic chiaroscuro → seamless composite. The visual question every inset must answer: "HOW does this product work?" — dramatic, specific, impossible to confuse with stock art.
 
+=== CINEMATIC IMPACT — MANDATORY FOR EVERY COMPOSITE OR ENHANCED IMAGE ===
+Any composite edit, 3D render, macro inset, product reveal, before/after, or enhanced visualization MUST embed these six impact cues as lowercase narrative prose woven into the dense paragraph (never as a bullet list, never uppercase, never quoted — those render as floating text in the output):
+  1. LIGHTING: one strong directional key (upper-left or 45 degrees above) producing cinematic chiaroscuro, rim light on the opposite edge, deep shadow on the unlit side. Never flat even illumination for an impact shot.
+  2. NEGATIVE SPACE: deep-black or heavily graded background behind the hero element — never busy, never a white studio cyclorama for an impact shot.
+  3. ATMOSPHERE: a volumetric light cue — faint dust motes, diffused rays, thin haze, or condensation — giving the frame depth and cinematic weight.
+  4. SURFACE DETAIL: hyperreal microtexture on every visible surface (pores on skin, wet gloss on tissue, fiber weave on fabric, micro-scratches on metal, condensation on glass). Never smooth plastic.
+  5. COLOR GRADE: a deliberate cinematic split — teal-and-amber, warm hero vs. cool background, or high-contrast desaturated midtones. Never neutral auto-balanced.
+  6. DEPTH LAYERING: clear foreground / midground / background separation so the composite reads as real three-dimensional space, not a flat paste.
+
+Example fragment to weave into the paragraph: "...lit by a single strong key light from upper-left producing deep chiaroscuro with rim light on the right edge, deep black negative space behind, faint volumetric dust motes in the key beam, hyperreal pore detail on the skin, cinematic teal-and-amber grade, foreground hand sharp over softly falling-off background..."
+
+For plain A-roll talking-head shots (not a composite, not a reveal), these cues are OPTIONAL and must match the reference's aesthetic register — if the reference is raw handheld TikTok, do NOT apply chiaroscuro; if the reference is editorial, apply it. Impact cues are MANDATORY ONLY for composites, reveals, 3D inserts, product cut-ins, and enhanced visualizations.
+
 === SINGLE-SUBJECT LOCK ===
 When the reference shows a single hand, person, tool, or primary subject, explicitly lock the count. Image models duplicate subjects without an anchor. Required phrasing: "A SINGLE left hand...", "ONE hand only, NOT two hands", "ONE [subject], NOT multiple [subject]". Apply whenever a single subject must not be duplicated.
 
 === COMPOSITE EDIT RULE ===
 If the reference fuses a real photograph with a 3D render or overlay in ONE frame, describe it explicitly as "seamless composite edit fused into a single frame, NOT split-screen, NOT side-by-side panel, NOT a grid, NOT a diptych". Repeat the NOT split-screen clarifier near the end of the prompt -- otherwise the image model defaults to a two-panel layout.
 
-=== COMPOSITE TRANSITION ZONE ===
-When the reference blends a real photograph into a 3D scientific render (anatomical, microscopic, technical, or any enhanced visualization) in one seamless frame, the junction MUST be described as a gradual cinematic dissolve, NOT a hard horizontal cut. Use language like: "at the transition zone the photograph dissolves and morphs seamlessly into the 3D render — the real surface gradually becomes transparent and peels away, revealing the underlying mechanism beneath, like a cinematic reveal edit." The red graphic arrows should flow THROUGH this transition zone connecting the upper photograph to the lower 3D render.
+=== COMPOSITE TRANSITION ZONE (applies to ANY multi-element image) ===
+Whenever the reference fuses two or more visual elements into a single frame — real photograph + 3D render, upper photo + lower cross-section, before + after, product cut-in on lifestyle shot, macro inset on a wide shot, real hand + enhanced visualization, split-shot concept, or any equivalent composite — the junction between elements MUST read as a gradual cinematic dissolve, never a hard cut, never a clean horizontal split, never a page-layout divider.
+
+Describe the transition zone explicitly using film-edit language. Pick the phrasing that matches the composite type; NEVER leave the junction unexplained:
+  - Photo -> 3D render: "at the transition zone the photograph dissolves and morphs seamlessly into the 3D render — the real surface gradually becomes transparent and peels away, revealing the underlying mechanism beneath, like a cinematic reveal edit"
+  - Before / after or then / now: "the two halves blend through a vertical diffusion gradient with fine particulate motion — crossfade feel, never a vertical wall"
+  - Product cut-in on lifestyle: "the product floats into frame through a soft shallow-depth halo that matches the photograph's bokeh and color temperature — seamlessly grafted into the scene, never pasted on top"
+  - Macro inset on wide shot: "the macro detail opens from the focal point like a lens-flared bloom inside a round vignette, edges feathered with volumetric light leaks"
+  - Real hand + enhanced visualization: "the enhanced layer emerges from the hand's point of contact through a luminous ripple that bleeds into the surrounding skin tones — the overlay feels emitted by the hand, never stamped above it"
+
+If graphic arrows, lines, or markers connect the elements, they must flow THROUGH the transition zone — never stop at the seam. The whole composite must feel deliberately edited, NOT a collage, NOT a PowerPoint two-panel, NOT a diptych.
 
 === NANO BANANA PRO CONTENT SAFETY (vocabulary rules) ===
 Nano Banana Pro rejects prompts that stack bare/exposed skin vocabulary. Apply these substitutions to EVERY IMAGE PROMPT:
@@ -173,12 +195,14 @@ Choose the negations that match THIS reference. Do not add negations for objects
    - The reference image is the first frame. Describe ONLY the motion, camera move, timing, and emotional beat over 5s. Do NOT redescribe the static scene.
    - Match the energy of the reference: if reference is raw handheld TikTok, motion is handheld and abrupt; if reference is editorial, motion is smooth dolly. Do NOT default to smooth cinematic motion when the reference is raw.
    - Include: camera move (dolly-in / pan-left / handheld shake / static), subject action, micro-expression or tool-action change, pacing ("slow 2s build, sudden reveal at 3s"), atmosphere shift.
+   - If the first frame is a COMPOSITE, PRODUCT REVEAL, or ENHANCED VISUALIZATION, add exactly ONE signature cinematic reveal beat inside the 5s — a rack-focus pull from the hand to the hero element, a slow push-in with soft motion blur peaking at 2s, a graceful in-camera morph of one overlay element into the next (continuous reveal, never an edit cut), a speed-ramp freeze landing on peak action, or a lens-breath zoom onto the impact zone. ONE beat only — stacked reveal beats mush into noise.
    - 1 short paragraph, English, <=60 words. No lists.
 
 3) SEEDANCE 2.0 (video, motion arc + mood)
    - Cinematic motion arc. Describe the emotional/visual trajectory across the clip.
    - Match the reference's aesthetic register — do NOT upgrade raw footage to cinematic; do NOT downgrade polished footage to amateur.
    - Include: opening beat -> middle beat -> closing beat, camera language, rhythm of cuts or pushes, color/light evolution.
+   - For composite / reveal / enhanced-visualization scenes, the MIDDLE beat MUST be the cinematic reveal — a deliberate rack focus, a speed ramp landing on peak action, or a seamless in-camera morph from the real surface into the enhanced layer — so the clip has a clear editorial hook, NOT aimless drift.
    - 1 paragraph, English, <=70 words.
 
 === B-ROLL MODE (when no reference image is attached) ===
