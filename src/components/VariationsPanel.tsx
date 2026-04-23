@@ -91,19 +91,34 @@ function pickReferenceFrames(
 // because of this exact issue.
 //
 // Retry-once-on-5xx with 2s backoff: 4xx (cap exceeded, auth) is permanent and
-// not retried. Auto-gen runs sin model override → default del backend (Sonnet
-// 4.6 desde commit 173d075) ≈ $0.015/scene multimodal w/ 1 frame, 6 scenes ≈
-// $0.09. El usuario puede Regenerar con otro modelo per-scene (Opus/Haiku).
-// SceneRow's useEffect polls the DB and renders prompts as
-// they land. Manual "Generar prompts" button still works as a final fallback.
+// not retried. Auto-gen respeta la preferencia persistida en localStorage
+// (última elección del dropdown SceneRow). Sin preferencia → default backend
+// (Sonnet 4.6 desde commit 173d075) ≈ $0.015/scene multimodal w/ 1 frame,
+// 6 scenes ≈ $0.09. Opus 4.7 ≈ $0.12/scene, Haiku 4.5 ≈ $0.005/scene.
+
+type HiggsfieldModelChoice = "sonnet" | "opus" | "haiku";
+const HIGGSFIELD_MODEL_STORAGE_KEY = "ad-spark:higgsfield-model";
+
+function readStoredHiggsfieldModel(): HiggsfieldModelChoice | undefined {
+  if (typeof window === "undefined") return undefined;
+  const v = window.localStorage.getItem(HIGGSFIELD_MODEL_STORAGE_KEY);
+  return v === "opus" || v === "haiku" || v === "sonnet" ? v : undefined;
+}
+
+function writeStoredHiggsfieldModel(v: HiggsfieldModelChoice): void {
+  if (typeof window === "undefined") return;
+  try { window.localStorage.setItem(HIGGSFIELD_MODEL_STORAGE_KEY, v); } catch { /* quota / private mode — non-fatal */ }
+}
+
 async function autoGenScenePrompts(args: {
   insertedScenes: Array<{ id: string; order_idx: number }>;
   framesByOrderIdx: Map<number, string | null>;
   workspaceId: string;
   token: string;
   onCost: (c: number) => void;
+  model?: HiggsfieldModelChoice;
 }) {
-  const { insertedScenes, framesByOrderIdx, workspaceId, token, onCost } = args;
+  const { insertedScenes, framesByOrderIdx, workspaceId, token, onCost, model } = args;
   const CONCURRENCY = 2;
 
   const generateOne = async (sc: { id: string; order_idx: number }, attempt = 1): Promise<void> => {
@@ -115,6 +130,7 @@ async function autoGenScenePrompts(args: {
           sceneId: sc.id,
           workspaceId,
           referenceFrameDataUrl: framesByOrderIdx.get(sc.order_idx) ?? null,
+          ...(model ? { model } : {}),
         }),
       });
       if (!res.ok) {
@@ -775,6 +791,12 @@ export function VariationsPanel() {
               workspaceId,
               token,
               onCost: addPromptsCost,
+              // Respeta la última elección del dropdown SceneRow persistida
+              // en localStorage. Sin elección previa → backend usa su default
+              // (Sonnet 4.6). Esto resuelve el caso: user regenera escena 1 con
+              // Opus, luego crea una nueva variación → sus 6 escenas arrancan
+              // con Opus auto-gen (consistente con su preferencia reciente).
+              model: readStoredHiggsfieldModel(),
             });
           }
         }
@@ -1350,7 +1372,11 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   // mejor fidelidad multimodal que Haiku (Haiku se saltaba detalles críticos
   // tipo "liendrera" vs "peine" o vértebras dramáticas vs genéricas). Opus 4.7
   // queda como fallback cuando ni Sonnet acierta (composites anatómicos, 3D).
-  const [higgsfieldModel, setHiggsfieldModel] = useState<"sonnet" | "opus" | "haiku">("sonnet");
+  // Se inicializa desde localStorage para que la elección del user persista
+  // entre sesiones y aplique también al auto-gen de nuevas variaciones.
+  const [higgsfieldModel, setHiggsfieldModel] = useState<HiggsfieldModelChoice>(
+    () => readStoredHiggsfieldModel() ?? "sonnet",
+  );
 
   const refFrameUrl = useMemo(
     () => pickFrameAt(frames, assignedFrameTime ?? s.timeStartSec),
@@ -1506,10 +1532,15 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
           <div className="flex items-center gap-1.5">
             <select
               value={higgsfieldModel}
-              onChange={(e) => setHiggsfieldModel(e.target.value as "sonnet" | "opus" | "haiku")}
+              onChange={(e) => {
+                const v = e.target.value as HiggsfieldModelChoice;
+                setHiggsfieldModel(v);
+                writeStoredHiggsfieldModel(v);
+              }}
               disabled={loadingPrompts}
+              aria-label="Modelo Claude para generar prompts Higgsfield"
               className="h-7 rounded-md border border-border bg-background px-2 text-[10px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
-              title="Modelo Claude para generar los prompts de esta escena"
+              title="Modelo Claude para generar los prompts de esta escena. Se recuerda entre sesiones."
             >
               <option value="sonnet">Sonnet 4.6 · recomendado</option>
               <option value="opus">Opus 4.7 · máxima fidelidad</option>
