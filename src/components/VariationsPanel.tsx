@@ -763,7 +763,7 @@ export function VariationsPanel() {
                 tool_recommended: s.toolRecommended,
                 attach_note: s.attachNote,
                 screen_text: s.screenText,
-                reference_frame_time_sec: frameAssignments[idx]?.time ?? s.timeStartSec,
+                reference_frame_time_sec: frameAssignments[idx]?.time ?? null,
                 reference_frame_url: frameAssignments[idx]?.dataUrl ?? null,
               })),
             )
@@ -1160,7 +1160,8 @@ function pickFrameAt(frames: ExtractedFrame[], timeSec: number | null): string |
 
 // Greedy unique-frame assignment: for each scene (in order), pick the closest
 // unused frame to its timeStartSec. Guarantees no two scenes get the same frame
-// when frames.length >= scenes.length. When scenes outnumber frames, we wrap.
+// when frames.length >= scenes.length. When scenes outnumber frames, returns null
+// for overflow scenes so the Higgsfield endpoint switches to B-roll mode.
 function assignUniqueFrames(
   scenes: ParsedScene[],
   frames: ExtractedFrame[],
@@ -1178,7 +1179,7 @@ function assignUniqueFrames(
       if (d < bestDelta) { bestDelta = d; bestIdx = i; }
     }
     if (bestIdx === -1) {
-      out.push({ time: frames[0].time, dataUrl: frames[0].dataUrl });
+      out.push(null); // No unused frame — Higgsfield endpoint will use B-roll mode
     } else {
       used.add(bestIdx);
       out.push({ time: frames[bestIdx].time, dataUrl: frames[bestIdx].dataUrl });

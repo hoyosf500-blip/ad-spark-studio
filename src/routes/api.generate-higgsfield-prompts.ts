@@ -138,6 +138,28 @@ Choose the negations that match THIS reference. Do not add negations for objects
    - Include: opening beat -> middle beat -> closing beat, camera language, rhythm of cuts or pushes, color/light evolution.
    - 1 paragraph, English, <=70 words.
 
+=== B-ROLL MODE (when no reference image is attached) ===
+When the user message is tagged "B-ROLL MODE ACTIVE", the video had no unique visual moment at this scene's timestamp — all distinct frames were already assigned to earlier scenes. You must generate a creative SUPPORT SHOT that visually reinforces the spoken script. Do NOT describe a talking-head shot. Use the ANALYSIS EXCERPT and SPOKEN LINE to understand the narrative context.
+
+B-ROLL archetypes — choose the one that best matches the SPOKEN LINE:
+  (a) PRODUCT CLOSE-UP: macro/tight shot of the device, applicator, package, or hero product element in sharp focus
+  (b) APPLICATION SHOT: hands (gloved or bare) demonstrating technique on the affected anatomical area — describe the hands and contact point, never a face
+  (c) AFFECTED AREA: clinical close-up of the anatomical zone being treated (back, neck, knee, lumbar region) — no face visible
+  (d) ENVIRONMENT DETAIL: the clinical or domestic setting — clean surfaces, lighting atmosphere, relevant equipment
+  (e) TEXTURE / MATERIAL: macro of skin, the product's material/surface, or a relevant fabric/device detail
+
+B-ROLL IMAGE PROMPT rules:
+  - Still starts verbatim with: "Real photograph taken with iPhone 17 Pro of"
+  - Maintain visual continuity with A-roll: same lighting palette, color temperature, production aesthetic
+  - No face, no person looking at camera, no talking-head composition
+  - Apply NEGATION HAZARD, CONTENT SAFETY, and all other SYS rules as normal
+  - HARD LIMIT: <=2500 characters
+
+B-ROLL KLING / SEEDANCE rules:
+  - Slow, intentional cutaway motion: gentle zoom-in, lateral pan, or rack focus
+  - No dialogue cues — this is a visual-only support cut
+  - Match the energy of the ad: clinical and precise if medical, warm and intimate if wellness
+
 Return ONLY a raw JSON object with exactly these 3 keys: image_prompt, kling, seedance. No preamble, no markdown fences, no code block. Each value must be a non-empty string. All prompts in English -- Higgsfield performs better in English even for Spanish ads.`;
 
 export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
@@ -242,7 +264,7 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
             .maybeSingle();
           if (project) {
             productName = project.name ?? "";
-            if (project.analysis_text) analysisExcerpt = project.analysis_text.slice(0, 1500);
+            if (project.analysis_text) analysisExcerpt = project.analysis_text.slice(0, 3000);
           }
         }
 
@@ -254,7 +276,7 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
         const hasFrame = !!body.referenceFrameDataUrl;
         const textFieldsLabel = hasFrame
           ? "NON-BINDING TEXTUAL HINTS (the attached image overrides any of these if they conflict; describe what you SEE in the image, not what the hints imply)"
-          : "TEXTUAL INPUTS (no reference frame available — these are your only source)";
+          : "B-ROLL MODE ACTIVE — NO REFERENCE FRAME. Use the SPOKEN LINE and ANALYSIS EXCERPT below to generate a creative support shot (see B-ROLL MODE rules in SYS). Do NOT replicate an A-roll talking-head composition.";
 
         const userMsg = [
           hasFrame
@@ -307,13 +329,11 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           body: JSON.stringify({
             model,
             max_tokens: 3000,
-            // Low temperature (0.2) because this endpoint must REPLICATE a
-            // reference frame, not invent variations. At default 1.0 the model
-            // drifted between runs on the same frame: a lumbar-vertebrae 3D
-            // model became "pelvis and sacrum", an anatomical diagram became
-            // a generic back illustration. 0.2 keeps the SYS fidelity rules
-            // dominant over sampling noise.
-            temperature: 0.2,
+            // A-roll (with frame): 0.2 — must REPLICATE the reference literally,
+            // low temp keeps SYS fidelity rules dominant over sampling noise.
+            // B-roll (no frame): 0.5 — creative support shot, no reference to
+            // replicate, higher temp allows useful variation between scenes.
+            temperature: hasFrame ? 0.2 : 0.5,
             system: SYS,
             messages: [{ role: "user", content: userContent }],
           }),
