@@ -4,13 +4,19 @@
 
 export const SCENE_FORMAT = `Use EXACTLY this output format with "═══" separators. Every section header must be on its own line.
 
+TIME RANGE RULES — CRITICAL:
+- Every scene MUST have a unique, non-overlapping time range. No two scenes may share any second.
+- Ranges must be strictly sequential: if Scene N ends at Xs, Scene N+1 starts at X s or later.
+- If two consecutive beats share the same visual shot (no camera cut, same pose, same background), merge them into ONE scene with a combined time range instead of two scenes with duplicate frames.
+- Minimum scene duration: 1 second. If a beat is shorter, merge it with the adjacent scene.
+
 For each scene:
 
 ═══ ESCENA [N] — [NAME] ([start]s–[end]s) ═══
 📝 SCRIPT: "[text in Spanish, word-for-word, natural spoken tone]"
 
 🖼️ IMAGE PROMPT (copy to Nano Banana Pro):
-[200–300 words in ENGLISH. One dense paragraph. 3-layer structure: (1) subject — who/what, exact posture, emotion, clothing, skin, hair, hands; (2) context — location, props, light direction, color temperature, time of day; (3) camera — lens focal length, angle, framing, depth of field. Reference /image1 if the product must appear. iPhone 15 Pro photograph look, hyperrealistic skin texture, ZERO bokeh, sharp focus across the entire frame, 9:16 vertical.]
+[200–300 words in ENGLISH. One dense paragraph. 3-layer structure: (1) subject — who/what, exact posture, emotion, clothing, skin, hair, hands; (2) context — location, props, light direction, color temperature, time of day; (3) camera — lens focal length, angle, framing, depth of field. Reference /image1 if the product must appear. iPhone 17 Pro photograph look, hyperrealistic skin texture, ZERO bokeh, sharp focus across the entire frame, 9:16 vertical.]
 
 🎬 ANIMATION PROMPT (copy to Kling 2.5 Turbo / Seedance 2.0):
 [60+ words in ENGLISH. Cinematic director-level precision: subject motion, camera movement, timing beats, dialogue cues, lighting changes, emotional arc. Match the SCRIPT beats exactly — no lip-sync drift.]
