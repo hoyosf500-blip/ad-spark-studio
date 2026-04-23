@@ -4,11 +4,17 @@
 
 export const SCENE_FORMAT = `Use EXACTLY this output format with "═══" separators. Every section header must be on its own line.
 
+SCENE COUNT RULE — CRITICAL (read this before anything else):
+- Generate ONE scene per distinct NARRATIVE BEAT of the reference ad. A 15–20s COD ad typically has 15–25 beats. A 30s ad can have 25–35. Do NOT compress them — each hook fragment, each product mention, each visual punch, each transition, each CTA micro-moment is its own scene.
+- A "beat" is a new moment defined by ANY of: a script line change, a new piece of information spoken, a screen-text overlay change, an emotional shift, a camera cut, a zoom/pan, a graphic reveal, a product cut-in, or a pacing change. Visual similarity alone is NOT grounds for merging — different beats can share the same background.
+- DO NOT merge consecutive beats that happen against the same shot. If two script lines are spoken over the same camera angle, STILL emit them as TWO separate scenes. Downstream post-processing assigns distinct reference frames per scene and, where the source video has no new visual at a given timestamp, automatically switches that scene to B-ROLL MODE (product close-up, target-zone macro, application shot, environment detail). You never need to collapse to avoid duplication — the system handles it.
+- The B-ROLL fallback is a FEATURE, not a failure. Generate every beat; assume support shots will fill the visual gaps.
+
 TIME RANGE RULES — CRITICAL:
 - Every scene MUST have a unique, non-overlapping time range. No two scenes may share any second.
-- Ranges must be strictly sequential: if Scene N ends at Xs, Scene N+1 starts at X s or later.
-- If two consecutive beats share the same visual shot (no camera cut, same pose, same background), merge them into ONE scene with a combined time range instead of two scenes with duplicate frames.
-- Minimum scene duration: 1 second. If a beat is shorter, merge it with the adjacent scene.
+- Ranges must be strictly sequential: if Scene N ends at Xs, Scene N+1 starts at Xs or later.
+- Scene duration may be as short as 0.3s — rapid-cut beats (<1s) are VALID and MUST be preserved as separate scenes. They encode pacing the editor will rebuild in CapCut.
+- Do NOT merge consecutive beats to hit a minimum duration. Short is fine.
 
 For each scene:
 
