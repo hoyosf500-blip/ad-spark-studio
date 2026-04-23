@@ -419,7 +419,12 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
 
         // Persist: store image_prompt in BOTH prompt_nano_banana and prompt_seedream
         // (same value in both columns) to avoid breaking existing reads or requiring a migration.
-        await sb
+        // Check the Supabase error explicitly: an RLS rejection or transient DB failure here
+        // would otherwise silently swallow the write, leave the scene row with NULL prompts,
+        // and still return 200 to the client — SceneRow would poll forever until its budget
+        // expires, showing "Generar prompts" as if auto-gen never ran. Surface it as a 5xx
+        // so autoGenScenePrompts retries via its exponential-backoff path.
+        const { error: updateErr } = await sb
           .from("variation_scenes")
           .update({
             prompt_nano_banana: prompts.image_prompt,
@@ -428,6 +433,16 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
             prompt_seedance: prompts.seedance,
           } as never)
           .eq("id", scene.id);
+        if (updateErr) {
+          console.error(
+            `[higgsfield-prompts] DB update failed for scene ${scene.id}:`,
+            updateErr,
+          );
+          return new Response(
+            `DB update failed: ${updateErr.message ?? "unknown error"}`,
+            { status: 500 },
+          );
+        }
 
         const cost = await logUsage({
           userId,

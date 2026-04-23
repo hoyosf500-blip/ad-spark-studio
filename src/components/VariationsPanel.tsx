@@ -144,7 +144,16 @@ async function autoGenScenePrompts(args: {
           await new Promise((r) => setTimeout(r, backoffMs));
           return generateOne(sc, attempt + 1);
         }
-        console.warn(`[autoGenScenePrompts] scene ${sc.id} HTTP ${res.status} (attempt ${attempt}/${MAX_ATTEMPTS}) — giving up`);
+        // Surface the response body for non-transient failures (401 token expired,
+        // 403 RLS rejection, 400 malformed payload) so we know WHY the scene never
+        // got its prompts — previously these dropped silently and the user saw
+        // "Generar prompts" with no console signal to diagnose.
+        const errText = await res.text().catch(() => "");
+        console.error(
+          `[autoGenScenePrompts] scene ${sc.id} order=${sc.order_idx} HTTP ${res.status} ` +
+            `(attempt ${attempt}/${MAX_ATTEMPTS}, ${isTransient(res.status) ? "transient/exhausted" : "non-transient"}) — giving up:`,
+          errText.slice(0, 300),
+        );
         return;
       }
       const j = (await res.json()) as { ok: true; cached: boolean; costUsd: number };
@@ -577,7 +586,18 @@ export function VariationsPanel() {
     }
   };
 
-  // ─── generate all variations in series via SSE ────────────────────
+  // ─── generate all variations: warm-up + parallel fan-out ────────────
+  // Strategy: run the FIRST variation alone so Anthropic's prompt cache
+  // (frames + analysis + transcription + product info, ~150k tokens marked
+  // cache_control: ephemeral in api.anthropic-generate) is fully populated.
+  // Then fire the remaining variations in parallel — they all hit the cache
+  // as cache_read (0.10x input price) instead of each paying cache_creation
+  // (1.25x). This preserves the ~65% input-cost savings while collapsing the
+  // wall-clock time from N×T (serial) to ~2T (one warm + one parallel batch).
+  // cap_exceeded still aborts cleanly: if the warm-up hits the cap, we skip
+  // the fan-out; if a parallel call hits the cap, the rest of the batch has
+  // already been dispatched and either hits the cap too (no real work done
+  // on the server beyond the cap check) or completes harmlessly.
   const generateAll = async () => {
     if (!analysis) { toast.error("Genera el análisis primero"); return; }
     if (!projectId) { toast.error("Falta el proyecto"); return; }
@@ -588,18 +608,32 @@ export function VariationsPanel() {
     let failed = 0;
     let aborted = false;
     try {
-      for (const v of toRun) {
-        try {
-          await runOneVariation(v.type, v.label);
-          ok++;
-        } catch (e) {
-          failed++;
-          if (e instanceof Error && e.message === "cap_exceeded") {
-            aborted = true;
-            toast.error("Tope diario alcanzado — batch detenido");
-            break;
+      const [warmup, ...rest] = toRun;
+      try {
+        await runOneVariation(warmup.type, warmup.label);
+        ok++;
+      } catch (e) {
+        failed++;
+        if (e instanceof Error && e.message === "cap_exceeded") {
+          aborted = true;
+          toast.error("Tope diario alcanzado — batch detenido");
+        }
+      }
+      if (!aborted && rest.length > 0) {
+        const results = await Promise.allSettled(
+          rest.map((v) => runOneVariation(v.type, v.label)),
+        );
+        for (const r of results) {
+          if (r.status === "fulfilled") {
+            ok++;
+          } else {
+            failed++;
+            if (r.reason instanceof Error && r.reason.message === "cap_exceeded") {
+              aborted = true;
+            }
           }
         }
+        if (aborted) toast.error("Tope diario alcanzado durante el batch");
       }
       if (!aborted) {
         if (failed === 0) toast.success(`${ok} variaciones completadas`);
