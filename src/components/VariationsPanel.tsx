@@ -517,21 +517,28 @@ export function VariationsPanel() {
             const chunk = buf.slice(0, i); buf = buf.slice(i + 2);
             const dataLine = chunk.split("\n").find((l) => l.startsWith("data: "));
             if (!dataLine) continue;
+            // IMPORTANT: keep the try/catch tight around JSON.parse only.
+            // A wider catch silently swallows the intentional `throw` from the
+            // error branch below, which let empty `done` events from a failed
+            // upstream overwrite the error state ("done $0 sin escenas").
+            let ev:
+              | { type: "text"; text: string }
+              | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean }
+              | { type: "error"; error: string };
             try {
-              const ev = JSON.parse(dataLine.slice(6).trim()) as
-                | { type: "text"; text: string }
-                | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean }
-                | { type: "error"; error: string };
-              if (ev.type === "text") {
-                full += ev.text;
-                setAnalysis(full);
-              } else if (ev.type === "done") {
-                full = ev.fullText || full;
-                cost = ev.costUsd;
-              } else if (ev.type === "error") {
-                throw new Error(ev.error);
-              }
-            } catch { /* skip malformed event */ }
+              ev = JSON.parse(dataLine.slice(6).trim());
+            } catch {
+              continue;
+            }
+            if (ev.type === "text") {
+              full += ev.text;
+              setAnalysis(full);
+            } else if (ev.type === "done") {
+              full = ev.fullText || full;
+              cost = ev.costUsd;
+            } else if (ev.type === "error") {
+              throw new Error(ev.error);
+            }
           }
         }
       } catch (streamErr) {
@@ -721,23 +728,29 @@ export function VariationsPanel() {
             const chunk = buf.slice(0, i); buf = buf.slice(i + 2);
             const dataLine = chunk.split("\n").find((l) => l.startsWith("data: "));
             if (!dataLine) continue;
+            // Tight try/catch: only swallow JSON.parse failures. A wider
+            // catch silences the intentional `throw` on the error branch,
+            // which caused upstream 429s to surface as "done $0 sin escenas".
+            let ev:
+              | { type: "text"; text: string }
+              | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean; validation?: ScriptValidation | null }
+              | { type: "error"; error: string };
             try {
-              const ev = JSON.parse(dataLine.slice(6).trim()) as
-                | { type: "text"; text: string }
-                | { type: "done"; fullText: string; costUsd: number; isTruncated: boolean; validation?: ScriptValidation | null }
-                | { type: "error"; error: string };
-              if (ev.type === "text") {
-                full += ev.text;
-                setVariations((prev) =>
-                  prev.map((v) => v.type === type ? { ...v, text: full } : v),
-                );
-              } else if (ev.type === "done") {
-                full = ev.fullText || full; cost = ev.costUsd; truncated = ev.isTruncated;
-                validation = ev.validation ?? null;
-              } else if (ev.type === "error") {
-                throw new Error(ev.error);
-              }
-            } catch { /* skip malformed event */ }
+              ev = JSON.parse(dataLine.slice(6).trim());
+            } catch {
+              continue;
+            }
+            if (ev.type === "text") {
+              full += ev.text;
+              setVariations((prev) =>
+                prev.map((v) => v.type === type ? { ...v, text: full } : v),
+              );
+            } else if (ev.type === "done") {
+              full = ev.fullText || full; cost = ev.costUsd; truncated = ev.isTruncated;
+              validation = ev.validation ?? null;
+            } else if (ev.type === "error") {
+              throw new Error(ev.error);
+            }
           }
         }
       } catch (streamErr) {

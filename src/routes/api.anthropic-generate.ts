@@ -175,6 +175,11 @@ export const Route = createFileRoute("/api/anthropic-generate")({
         let fullText = "", inputTokens = 0, outputTokens = 0;
         let cacheCreateTokens = 0, cacheReadTokens = 0;
         let stopReason: string | null = null;
+        // When upstream Anthropic rejects (429/5xx) we emit a single `error`
+        // event and must NOT also emit `done` — otherwise the client races and
+        // the empty `done` overwrites the error (symptom: "done $0.0000 sin
+        // escenas parseadas").
+        let failed = false;
         const dec = new TextDecoder();
         const enc = new TextEncoder();
 
@@ -212,6 +217,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                   controller.enqueue(enc.encode(`data: ${JSON.stringify({
                     type: "error", error: `Anthropic ${upstream.status}: ${errText.slice(0, 300)}`,
                   })}\n\n`));
+                  failed = true;
                   break;
                 }
 
@@ -305,11 +311,17 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                 } catch { /* non-fatal */ }
               }
 
-              controller.enqueue(enc.encode(`data: ${JSON.stringify({
-                type: "done", fullText, inputTokens, outputTokens,
-                costUsd: cost, stopReason, isTruncated: stopReason === "max_tokens", model,
-                validation,
-              })}\n\n`));
+              // Don't emit `done` after an error — the client would race with
+              // the already-queued error event and overwrite the failure state
+              // with empty content. The error event alone is the terminal
+              // signal in that case.
+              if (!failed) {
+                controller.enqueue(enc.encode(`data: ${JSON.stringify({
+                  type: "done", fullText, inputTokens, outputTokens,
+                  costUsd: cost, stopReason, isTruncated: stopReason === "max_tokens", model,
+                  validation,
+                })}\n\n`));
+              }
             } catch (err) {
               controller.enqueue(enc.encode(`data: ${JSON.stringify({
                 type: "error", error: err instanceof Error ? err.message : String(err),
