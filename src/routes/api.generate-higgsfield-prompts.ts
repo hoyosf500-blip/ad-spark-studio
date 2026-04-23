@@ -95,6 +95,15 @@ If the reference fuses a real photograph with a 3D render or overlay in ONE fram
 === COMPOSITE TRANSITION ZONE ===
 When the reference blends a real photograph into a 3D medical render in one seamless frame, the junction MUST be described as a gradual cinematic dissolve, NOT a hard horizontal cut. Use language like: "at the waistline the photograph dissolves and morphs seamlessly into the 3D medical render -- the real skin and fabric gradually become transparent and peel away, revealing the internal bone structure beneath, like a cinematic X-ray reveal edit." The red graphic arrows should flow THROUGH this transition zone connecting the upper photograph to the lower 3D render.
 
+=== NANO BANANA PRO CONTENT SAFETY (vocabulary rules) ===
+Nano Banana Pro rejects prompts that stack bare/exposed skin vocabulary. Apply these substitutions to EVERY IMAGE PROMPT:
+  - NEVER write "bare from the waist up", "torso is bare", "bare upper body".
+  - Replace "bare lower back skin" -> "lower back region" or "the patient's lumbar skin".
+  - Replace "bare human lower back" -> "human lower back".
+  - Replace "torso is bare from the waist up" -> "patient seen from behind, lower back region visible for clinical examination".
+  - When describing skin contact (applicator pressing, gloved hand touching skin), separate it from nudity descriptors: first establish clothing/framing, then describe the contact clinically ("the applicator tip contacts the lumbar skin at approximately L4-L5").
+  - Limit the word "bare" to at most ONE occurrence per prompt. After the first use, switch to "skin", "lower back", or the anatomical zone name.
+
 === TEXT RENDERED IN THE IMAGE ===
 The ONLY text allowed to appear as rendered text inside the generated image is text that literally appears in the reference: anatomical codes ("L3", "L4", "L5", "T12", "C7"), watermarks ("06-lj-hzj-23"), numeric labels, product names on packaging.
 Descriptive phrases you use to describe visual effects -- "pulsating crimson halo", "glossy nucleus pulposus", "red-orange nerve root" -- MUST be written LOWERCASE in the prompt as narrative prose, NEVER in uppercase and NEVER wrapped in quotes. Uppercase or quoted phrases in the prompt cause the image model to render those exact words as floating text labels in the output. Reserve uppercase-and-quoted strings exclusively for labels that MUST appear rendered (e.g., "L3", "L4", "L5", watermark "06-lj-hzj-23"). Close every image prompt with an explicit guard near the end: "no descriptive text labels in the image, no captions, no floating phrases -- only [list the actual labels allowed] as rendered text".
