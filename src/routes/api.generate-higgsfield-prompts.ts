@@ -4,6 +4,8 @@ import { logUsage, dataUrlToBase64 } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
+type ModelChoice = "sonnet" | "opus" | "haiku";
+
 type Body = {
   sceneId: string;
   workspaceId?: string | null;
@@ -11,7 +13,20 @@ type Body = {
   // When true, skip the DB cache and force a fresh generation. Used by the
   // "Regenerar prompts" button after a cached prompt is stale or over-length.
   forceRegenerate?: boolean;
+  // Model selector for this endpoint specifically. Default is Sonnet 4.6:
+  // it has meaningfully better multimodal fidelity than Haiku 4.5 for the
+  // "describe literally what is in this frame" task, and the per-scene cost
+  // delta is cents. Opus 4.7 is exposed for scenes where the user wants
+  // maximum fidelity (composite edits, anatomical 3D). Haiku stays available
+  // for batch / cheap runs.
+  model?: ModelChoice;
 };
+
+function resolveModel(choice: ModelChoice | undefined): string {
+  if (choice === "opus") return "claude-opus-4-7";
+  if (choice === "haiku") return "claude-haiku-4-5-20251001";
+  return "claude-sonnet-4-6";
+}
 
 type Prompts = {
   image_prompt: string;
@@ -264,7 +279,7 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
         }
         userContent.push({ type: "text", text: userMsg });
 
-        const model = "claude-haiku-4-5-20251001";
+        const model = resolveModel(body.model);
         const upstream = await fetch("https://api.anthropic.com/v1/messages", {
           method: "POST",
           headers: {
