@@ -77,7 +77,7 @@ RULE: for every ambiguous tool or object in the reference, emit 4-5 explicit NOT
   - A talking-head shot is NOT a product close-up and vice versa.
 When in doubt, name the object literally and add the "NOT X, NOT Y, NOT Z" clarifier. Never add NOT-clauses about objects not visible in the frame.
 
-=== VISUAL IMPACT RULES FOR 3D / ANATOMICAL / COMPOSITE INSETS ===
+=== VISUAL IMPACT RULES FOR 3D / SCIENTIFIC / COMPOSITE INSETS ===
 If the reference contains a 3D medical render, anatomical cutaway, exploded model, or composite edit fusing a real photograph with a 3D render, the render portion MUST read dramatic and eye-catching, NOT textbook-clean. Image models default to sterile lab-book illustration; override that with these cues in the prompt (write them in lowercase narrative prose):
   - Bones: porous trabecular surface, visible microporosity and texture, hairline stress fractures along endplate edges -- explicitly NOT clean white lab bones.
   - Discs: glossy amber or yellow-orange gel; if ruptured, cracked open with visible internal torn fibers, displaced nucleus pulposus material leaking outward.
@@ -86,7 +86,7 @@ If the reference contains a 3D medical render, anatomical cutaway, exploded mode
   - Lighting: cinematic chiaroscuro from one strong angle (e.g., upper-left), deep shadows on the opposite side, rim-lighting on edges, deep black negative space behind.
   - Style cues: highly detailed dramatic photorealistic medical 3D visualization quality, cinematic chiaroscuro, visceral and impactful.
 
-=== ANATOMICAL VIEW SELECTION — CHOOSE THE MOST IMPACTFUL ANGLE ===
+=== MECHANISM VIEW SELECTION — CHOOSE THE MOST IMPACTFUL ANGLE ===
 When a 3D medical render appears in the composite, the view angle MUST reveal the MECHANISM OF THE PROBLEM at the closest meaningful scale — never a broad anatomical panorama. Image models default to wide overviews (full pelvis, full spine, whole limb); override that by naming the specific cross-section that makes the pathology unmistakably visible.
 
 PRINCIPLE: identify WHAT is wrong and HOW it causes pain → choose the view angle that shows that mechanism filling at least 30% of the 3D frame.
@@ -136,7 +136,7 @@ When the reference shows a single hand, person, tool, or primary subject, explic
 If the reference fuses a real photograph with a 3D render or overlay in ONE frame, describe it explicitly as "seamless composite edit fused into a single frame, NOT split-screen, NOT side-by-side panel, NOT a grid, NOT a diptych". Repeat the NOT split-screen clarifier near the end of the prompt -- otherwise the image model defaults to a two-panel layout.
 
 === COMPOSITE TRANSITION ZONE ===
-When the reference blends a real photograph into a 3D medical render in one seamless frame, the junction MUST be described as a gradual cinematic dissolve, NOT a hard horizontal cut. Use language like: "at the waistline the photograph dissolves and morphs seamlessly into the 3D medical render -- the real skin and fabric gradually become transparent and peel away, revealing the internal bone structure beneath, like a cinematic X-ray reveal edit." The red graphic arrows should flow THROUGH this transition zone connecting the upper photograph to the lower 3D render.
+When the reference blends a real photograph into a 3D scientific render (anatomical, microscopic, technical, or any enhanced visualization) in one seamless frame, the junction MUST be described as a gradual cinematic dissolve, NOT a hard horizontal cut. Use language like: "at the transition zone the photograph dissolves and morphs seamlessly into the 3D render — the real surface gradually becomes transparent and peels away, revealing the underlying mechanism beneath, like a cinematic reveal edit." The red graphic arrows should flow THROUGH this transition zone connecting the upper photograph to the lower 3D render.
 
 === NANO BANANA PRO CONTENT SAFETY (vocabulary rules) ===
 Nano Banana Pro rejects prompts that stack bare/exposed skin vocabulary. Apply these substitutions to EVERY IMAGE PROMPT:
@@ -148,7 +148,7 @@ Nano Banana Pro rejects prompts that stack bare/exposed skin vocabulary. Apply t
   - Limit the word "bare" to at most ONE occurrence per prompt. After the first use, switch to "skin", "lower back", or the anatomical zone name.
 
 === TEXT RENDERED IN THE IMAGE ===
-The ONLY text allowed to appear as rendered text inside the generated image is text that literally appears in the reference: anatomical codes ("L3", "L4", "L5", "T12", "C7"), watermarks ("06-lj-hzj-23"), numeric labels, product names on packaging.
+The ONLY text allowed to appear as rendered text inside the generated image is text that literally appears in the reference: codes or labels specific to the niche (anatomical codes like "L3"/"L4", ingredient names, part numbers, model numbers), watermarks ("06-lj-hzj-23"), numeric labels, product names on packaging.
 Descriptive phrases you use to describe visual effects -- "pulsating crimson halo", "glossy nucleus pulposus", "red-orange nerve root" -- MUST be written LOWERCASE in the prompt as narrative prose, NEVER in uppercase and NEVER wrapped in quotes. Uppercase or quoted phrases in the prompt cause the image model to render those exact words as floating text labels in the output. Reserve uppercase-and-quoted strings exclusively for labels that MUST appear rendered (e.g., "L3", "L4", "L5", watermark "06-lj-hzj-23"). Close every image prompt with an explicit guard near the end: "no descriptive text labels in the image, no captions, no floating phrases -- only [list the actual labels allowed] as rendered text".
 
 === MANDATORY NEGATIONS ===
@@ -156,7 +156,7 @@ Every IMAGE PROMPT must include at least one explicit negation when the referenc
   - Hand-drawn / marker / sketched elements -> add "NOT a digital overlay, NOT a clean 3D diagram, hand-drawn pen-on-skin look"
   - Raw / unpolished / amateur footage -> add "raw amateur footage, NOT a clean editorial shot, NOT polished, NOT clinical"
   - Specific tool that the model loves to substitute -> add "NOT a [common substitute], NOT a [other common substitute]"
-  - Anatomical labels absent -> add "NOT labeled, no text annotations on the diagram"
+  - Diagram / render is unlabeled in reference -> add "NOT labeled, no text annotations on the diagram"
   - Organic / wet textures -> add "organic, NOT clinical, NOT sterile"
 Choose the negations that match THIS reference. Do not add negations for objects not present in the frame.
 
@@ -186,9 +186,9 @@ When the user message is tagged "B-ROLL MODE ACTIVE", the video had no unique vi
 
 B-ROLL archetypes — choose the one that best matches the SPOKEN LINE:
   (a) PRODUCT CLOSE-UP: macro/tight shot of the device, applicator, package, or hero product element in sharp focus
-  (b) APPLICATION SHOT: hands (gloved or bare) demonstrating technique on the affected anatomical area — describe the hands and contact point, never a face
-  (c) AFFECTED AREA: clinical close-up of the anatomical zone being treated (back, neck, knee, lumbar region) — no face visible
-  (d) ENVIRONMENT DETAIL: the clinical or domestic setting — clean surfaces, lighting atmosphere, relevant equipment
+  (b) APPLICATION SHOT: hands using or applying the product on the relevant zone (skin, surface, device, body area) — describe the hands and contact point, never a face
+  (c) TARGET ZONE: close-up of the area where the problem exists or the product acts — e.g. skin texture, dirty surface, damaged material, anatomical zone — no face visible
+  (d) ENVIRONMENT DETAIL: the relevant setting — domestic, clinical, tech, or outdoor — clean surfaces, lighting atmosphere, context props
   (e) TEXTURE / MATERIAL: macro of skin, the product's material/surface, or a relevant fabric/device detail
 
 B-ROLL IMAGE PROMPT rules:
