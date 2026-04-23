@@ -91,8 +91,10 @@ function pickReferenceFrames(
 // because of this exact issue.
 //
 // Retry-once-on-5xx with 2s backoff: 4xx (cap exceeded, auth) is permanent and
-// not retried. Each call costs ~$0.005 (Haiku 4.5 multimodal w/ 1 frame), so 6
-// scenes ≈ $0.03. SceneRow's useEffect polls the DB and renders prompts as
+// not retried. Auto-gen runs sin model override → default del backend (Sonnet
+// 4.6 desde commit 173d075) ≈ $0.015/scene multimodal w/ 1 frame, 6 scenes ≈
+// $0.09. El usuario puede Regenerar con otro modelo per-scene (Opus/Haiku).
+// SceneRow's useEffect polls the DB and renders prompts as
 // they land. Manual "Generar prompts" button still works as a final fallback.
 async function autoGenScenePrompts(args: {
   insertedScenes: Array<{ id: string; order_idx: number }>;
@@ -212,7 +214,8 @@ export function VariationsPanel() {
   const [analysisCost, setAnalysisCost] = useState(0);
   const [analysisStartedAt, setAnalysisStartedAt] = useState<number | null>(null);
   const [analysisElapsed, setAnalysisElapsed] = useState(0);
-  // Acumulado de costo de prompts Higgsfield (Haiku 4.5) por escena.
+  // Acumulado de costo de prompts Higgsfield por escena (modelo variable:
+  // Sonnet 4.6 default, Opus 4.7 o Haiku 4.5 si el usuario lo elige).
   // Se incrementa solo cuando una llamada NO viene del cache servidor.
   const [promptsCost, setPromptsCost] = useState(0);
   const addPromptsCost = useCallback((c: number) => {
@@ -751,8 +754,8 @@ export function VariationsPanel() {
             .select("id, order_idx");
 
           if (insertedScenes && insertedScenes.length > 0) {
-            // Fire-and-forget: auto-generate Higgsfield prompts (Haiku 4.5
-            // multimodal, ~$0.005/scene) in parallel for all 6 scenes so the
+            // Fire-and-forget: auto-generate Higgsfield prompts (default
+            // Sonnet 4.6 multimodal, ~$0.015/scene) for all 6 scenes so the
             // user doesn't have to click "Generar prompts" on each one.
             // SceneRow's useEffect polls the DB and picks them up as they land.
             // Errors here are non-fatal — the manual button still works.
@@ -1336,6 +1339,11 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   const [assignedFrameTime, setAssignedFrameTime] = useState<number | null>(null);
   const [prompts, setPrompts] = useState<HiggsfieldPrompts | null>(null);
   const [loadingPrompts, setLoadingPrompts] = useState(false);
+  // Modelo Claude para regenerar prompts de esta escena. Default Sonnet 4.6:
+  // mejor fidelidad multimodal que Haiku (Haiku se saltaba detalles críticos
+  // tipo "liendrera" vs "peine" o vértebras dramáticas vs genéricas). Opus 4.7
+  // queda como fallback cuando ni Sonnet acierta (composites anatómicos, 3D).
+  const [higgsfieldModel, setHiggsfieldModel] = useState<"sonnet" | "opus" | "haiku">("sonnet");
 
   const refFrameUrl = useMemo(
     () => pickFrameAt(frames, assignedFrameTime ?? s.timeStartSec),
@@ -1353,7 +1361,7 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
     const SCENE_FIND_BUDGET = 8;       // ~4s @ 500ms — find the inserted row
     // 120s @ 1.5s. With autoGenScenePrompts throttled to 2 concurrent, the
     // last scene of a 6-scene run can wait ~20s for prior batches to drain
-    // before its own Haiku call (~10-15s) starts, plus possible retry (+12s).
+    // before its own Claude call (~10-15s) starts, plus possible retry (+12s).
     // Worst-case observed end-to-end: ~60s. Budget 120s gives comfortable
     // headroom before falling back to the manual "Generar prompts" button.
     const PROMPTS_WAIT_BUDGET = 80;
@@ -1413,6 +1421,7 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
           // means "regenerate" — bypass the server cache so stale compositions
           // (e.g. a prompt that ignored the reference frame) get replaced.
           forceRegenerate: !!prompts,
+          model: higgsfieldModel,
         }),
       });
       if (await handleCapResponse(res)) { setLoadingPrompts(false); return; }
@@ -1469,7 +1478,7 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
           {s.screenText && <PromptField label="Screen text" text={s.screenText} />}
           {s.attachNote && <PromptField label="Attach note" text={s.attachNote} />}
           {/* Los prompts RAW del script (image/animation en inglés) NO se
-              muestran: son input interno para el generador Haiku que produce
+              muestran: son input interno para el generador Claude que produce
               los prompts optimizados y capped en el bloque Higgsfield de abajo.
               Ver el prompt raw confundía al usuario — intentaba pegarlo en
               Seedream (que tiene cap de 3000 chars) y no funcionaba. */}
@@ -1487,15 +1496,28 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
               Prompts para Higgsfield (listos para pegar)
             </span>
           </div>
-          <Button
-            size="sm"
-            onClick={generatePrompts}
-            disabled={loadingPrompts || !sceneDbId}
-            className="h-7 gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[11px]"
-          >
-            {loadingPrompts ? <Loader2 className="h-3 w-3 animate-spin" /> : <Wand2 className="h-3 w-3" />}
-            {prompts ? "Regenerar prompts" : "Generar prompts (~$0.003)"}
-          </Button>
+          <div className="flex items-center gap-1.5">
+            <select
+              value={higgsfieldModel}
+              onChange={(e) => setHiggsfieldModel(e.target.value as "sonnet" | "opus" | "haiku")}
+              disabled={loadingPrompts}
+              className="h-7 rounded-md border border-border bg-background px-2 text-[10px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
+              title="Modelo Claude para generar los prompts de esta escena"
+            >
+              <option value="sonnet">Sonnet 4.6 · recomendado</option>
+              <option value="opus">Opus 4.7 · máxima fidelidad</option>
+              <option value="haiku">Haiku 4.5 · más barato</option>
+            </select>
+            <Button
+              size="sm"
+              onClick={generatePrompts}
+              disabled={loadingPrompts || !sceneDbId}
+              className="h-7 gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[11px]"
+            >
+              {loadingPrompts ? <Loader2 className="h-3 w-3 animate-spin" /> : <Wand2 className="h-3 w-3" />}
+              {prompts ? "Regenerar prompts" : "Generar prompts"}
+            </Button>
+          </div>
         </div>
         {!prompts && !loadingPrompts && (
           <div className="text-[11px] text-muted-foreground leading-relaxed">
