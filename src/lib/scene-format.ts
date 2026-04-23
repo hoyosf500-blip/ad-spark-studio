@@ -16,7 +16,7 @@ For each scene:
 📝 SCRIPT: "[text in Spanish, word-for-word, natural spoken tone]"
 
 🖼️ IMAGE PROMPT (copy to Nano Banana Pro):
-[200–300 words in ENGLISH. One dense paragraph. 3-layer structure: (1) subject — who/what, exact posture, emotion, clothing, skin, hair, hands; (2) context — location, props, light direction, color temperature, time of day; (3) camera — lens focal length, angle, framing, depth of field. Reference /image1 if the product must appear. iPhone 17 Pro photograph look, hyperrealistic skin texture, ZERO bokeh, sharp focus across the entire frame, 9:16 vertical.]
+[200–300 words in ENGLISH. MUST start verbatim with: "Real photograph taken with iPhone 17 Pro of" — then one dense paragraph. 3-layer structure: (1) subject — who/what, exact posture, emotion, clothing, skin, hair, hands; (2) context — location, props, light direction, color temperature, time of day; (3) camera — lens focal length, angle, framing, depth of field. Reference /image1 if the product must appear. Hyperrealistic skin texture, ZERO bokeh, sharp focus across the entire frame.]
 
 🎬 ANIMATION PROMPT (copy to Kling 2.5 Turbo / Seedance 2.0):
 [60+ words in ENGLISH. Cinematic director-level precision: subject motion, camera movement, timing beats, dialogue cues, lighting changes, emotional arc. Match the SCRIPT beats exactly — no lip-sync drift.]

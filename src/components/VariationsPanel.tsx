@@ -181,17 +181,17 @@ type VariationState = {
   validation?: ScriptValidation | null;
 };
 
-// Estimates % of a generation by counting scene markers in the streaming text.
-// 6 scenes is the typical target for a full variation.
+// Estimates % by counting scene markers (0→85%) then post-scene tail sections
+// (85→99%) so the bar keeps moving instead of freezing at 95% during the tail.
 function progressPct(v: VariationState): number {
   if (v.status === "done") return 100;
   if (v.status === "error") return 0;
   if (v.status !== "running" && v.status !== "truncated") return 0;
-  const matches = v.text.match(/═{3,}\s*(ESCENA|SCENE)\b/gi) ?? [];
-  const scenesDetected = matches.length;
-  const EXPECTED_SCENES = 6;
-  const pct = Math.round((scenesDetected / EXPECTED_SCENES) * 100);
-  return Math.max(1, Math.min(95, pct));
+  const scenes = (v.text.match(/═{3,}\s*(ESCENA|SCENE)\b/gi) ?? []).length;
+  const tail = (v.text.match(/═{3,}\s*(AVATAR|HOOKS|EFFECTS|ENERGY|TIMELINE|RECOMMENDATION)\b/gi) ?? []).length;
+  const scenePct = Math.min(scenes / 6, 1) * 85;
+  const tailPct = Math.min(tail / 6, 1) * 14;
+  return Math.max(1, Math.round(scenePct + tailPct + 1));
 }
 
 const DEFAULT_MODEL = "claude-sonnet-4-5-20250929";
