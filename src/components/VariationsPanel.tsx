@@ -117,7 +117,16 @@ async function autoGenScenePrompts(args: {
   const { insertedScenes, framesByOrderIdx, workspaceId, token, onCost, model } = args;
   const CONCURRENCY = 6; // Fire all scenes at once — each Claude call is independent
 
+  // Retry budget of 4 total attempts with exponential backoff (2s / 4s / 8s).
+  // Rationale: the endpoint wraps all Anthropic upstream errors (including 429
+  // rate limits) as HTTP 502, so we treat 5xx + 429 as transient and retry.
+  // With 6 concurrent multimodal calls against Sonnet 4.6, Anthropic tier
+  // rate-limits can cascade — a single retry was not enough and late scenes
+  // (e.g. 22, 23 in 23-scene variations) silently dropped. Exponential backoff
+  // de-correlates the retries so the 6 workers don't re-hit the limit in sync.
+  const MAX_ATTEMPTS = 4;
   const generateOne = async (sc: { id: string; order_idx: number }, attempt = 1): Promise<void> => {
+    const isTransient = (status: number) => status === 429 || status >= 500;
     try {
       const res = await fetch("/api/generate-higgsfield-prompts", {
         method: "POST",
@@ -130,24 +139,24 @@ async function autoGenScenePrompts(args: {
         }),
       });
       if (!res.ok) {
-        // Retry once on transient 5xx (Anthropic rate limit, Worker timeout,
-        // upstream 502). 4xx is permanent (auth, cap exceeded) — don't retry.
-        if (res.status >= 500 && attempt === 1) {
-          await new Promise((r) => setTimeout(r, 2000));
-          return generateOne(sc, 2);
+        if (isTransient(res.status) && attempt < MAX_ATTEMPTS) {
+          const backoffMs = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+          await new Promise((r) => setTimeout(r, backoffMs));
+          return generateOne(sc, attempt + 1);
         }
-        console.warn(`[autoGenScenePrompts] scene ${sc.id} HTTP ${res.status} (attempt ${attempt})`);
+        console.warn(`[autoGenScenePrompts] scene ${sc.id} HTTP ${res.status} (attempt ${attempt}/${MAX_ATTEMPTS}) — giving up`);
         return;
       }
       const j = (await res.json()) as { ok: true; cached: boolean; costUsd: number };
       if (!j.cached && Number(j.costUsd) > 0) onCost(Number(j.costUsd));
     } catch (e) {
-      // Network/abort error — retry once.
-      if (attempt === 1) {
-        await new Promise((r) => setTimeout(r, 2000));
-        return generateOne(sc, 2);
+      // Network/abort error — retry with exponential backoff.
+      if (attempt < MAX_ATTEMPTS) {
+        const backoffMs = Math.pow(2, attempt) * 1000;
+        await new Promise((r) => setTimeout(r, backoffMs));
+        return generateOne(sc, attempt + 1);
       }
-      console.warn(`[autoGenScenePrompts] scene ${sc.id} failed after retry:`, e);
+      console.warn(`[autoGenScenePrompts] scene ${sc.id} failed after ${MAX_ATTEMPTS} attempts:`, e);
     }
   };
 
@@ -1154,31 +1163,51 @@ function pickFrameAt(frames: ExtractedFrame[], timeSec: number | null): string |
   return best.dataUrl;
 }
 
-// Greedy unique-frame assignment: for each scene (in order), pick the closest
-// unused frame to its timeStartSec. Guarantees no two scenes get the same frame
-// when frames.length >= scenes.length. When scenes outnumber frames, returns null
-// for overflow scenes so the Higgsfield endpoint switches to B-roll mode.
+// Distinct-shot frame assignment: for each scene (in order), pick the closest
+// unused frame to its timeStartSec — BUT only if that frame's timestamp is at
+// least MIN_GAP_SEC away from any previously-assigned frame's timestamp. If the
+// closest unused frame is too close in time to a frame already used by an
+// earlier scene, the visual content is nearly identical (e.g. talking-head at
+// 1 FPS — adjacent frames look duplicated), so we return null and let the
+// Higgsfield endpoint switch to B-roll mode for that scene.
+// This prevents user-visible frame duplication where scenes 1 and 3 both get
+// A-roll frames one second apart of the same shot. Frames extracted at 1 FPS
+// make MIN_GAP_SEC = 2 a safe default — shots shorter than 2s are rare in COD
+// UGC ads and we prefer losing a marginal A-roll over a duplicated-looking one.
+const MIN_FRAME_GAP_SEC = 2;
 function assignUniqueFrames(
   scenes: ParsedScene[],
   frames: ExtractedFrame[],
 ): Array<{ time: number; dataUrl: string } | null> {
   if (frames.length === 0) return scenes.map(() => null);
-  const used = new Set<number>();
+  const usedIdx = new Set<number>();
+  const usedTimes: number[] = [];
   const out: Array<{ time: number; dataUrl: string } | null> = [];
   for (const s of scenes) {
     const target = s.timeStartSec ?? 0;
     let bestIdx = -1;
     let bestDelta = Infinity;
     for (let i = 0; i < frames.length; i++) {
-      if (used.has(i)) continue;
+      if (usedIdx.has(i)) continue;
       const d = Math.abs(frames[i].time - target);
       if (d < bestDelta) { bestDelta = d; bestIdx = i; }
     }
     if (bestIdx === -1) {
       out.push(null); // No unused frame — Higgsfield endpoint will use B-roll mode
+      continue;
+    }
+    const frameTime = frames[bestIdx].time;
+    // Visual-duplicate guard: if this frame sits within MIN_FRAME_GAP_SEC of
+    // any already-assigned frame, mark this scene as B-roll instead. The frame
+    // stays unused and remains available for a later scene whose target time
+    // actually needs it.
+    const tooClose = usedTimes.some((t) => Math.abs(t - frameTime) < MIN_FRAME_GAP_SEC);
+    if (tooClose) {
+      out.push(null);
     } else {
-      used.add(bestIdx);
-      out.push({ time: frames[bestIdx].time, dataUrl: frames[bestIdx].dataUrl });
+      usedIdx.add(bestIdx);
+      usedTimes.push(frameTime);
+      out.push({ time: frameTime, dataUrl: frames[bestIdx].dataUrl });
     }
   }
   return out;
@@ -1389,10 +1418,13 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
     let cancelled = false;
     let tries = 0;
     const SCENE_FIND_BUDGET = 8;       // ~4s @ 500ms — find the inserted row
-    // 120s @ 1.5s. All scenes fire in parallel (CONCURRENCY=6) so worst-case
-    // is one Claude call (~15s) + one retry (~15s) = ~30s. Budget 80 iterations
-    // (~120s) gives comfortable headroom before falling back to manual button.
-    const PROMPTS_WAIT_BUDGET = 80;
+    // 180s @ 1.5s. Worst-case single-scene latency with 4-attempt retry chain:
+    // ~15s Claude + 2s+4s+8s backoff + 3×15s retries ≈ 74s. Worker pickup for
+    // scene 22/23 in a 23-scene variation can start ~45s in (4th batch of 6),
+    // so completion may land at ~120s under sustained rate-limit pressure.
+    // Budget 120 iterations (~180s) gives cushion before the UI falls back to
+    // the manual "Generar prompts" button.
+    const PROMPTS_WAIT_BUDGET = 120;
     const tryFetch = async (): Promise<void> => {
       if (!variationId || cancelled) return;
       const { data } = await supabase
