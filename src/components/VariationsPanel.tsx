@@ -115,18 +115,25 @@ async function autoGenScenePrompts(args: {
   model?: HiggsfieldModelChoice;
 }) {
   const { insertedScenes, framesByOrderIdx, workspaceId, token, onCost, model } = args;
-  const CONCURRENCY = 6; // Fire all scenes at once — each Claude call is independent
 
-  // Retry budget of 4 total attempts with exponential backoff (2s / 4s / 8s).
-  // Rationale: the endpoint wraps all Anthropic upstream errors (including 429
-  // rate limits) as HTTP 502, so we treat 5xx + 429 as transient and retry.
-  // With 6 concurrent multimodal calls against Sonnet 4.6, Anthropic tier
-  // rate-limits can cascade — a single retry was not enough and late scenes
-  // (e.g. 22, 23 in 23-scene variations) silently dropped. Exponential backoff
-  // de-correlates the retries so the 6 workers don't re-hit the limit in sync.
-  const MAX_ATTEMPTS = 4;
+  // Model-aware concurrency + retry budget. Opus 4.7 has significantly lower
+  // tokens-per-minute limits on standard tiers than Sonnet/Haiku, so firing 6
+  // concurrent multimodal Opus calls — especially when the user runs the full
+  // 6-variation batch with the parallel fan-out — cascades into 429s across
+  // every worker. Lower concurrency + more attempts keeps Opus from painting
+  // every scene with the "Generar prompts" manual button.
+  const CONCURRENCY = model === "opus" ? 2 : 6;
+  const MAX_ATTEMPTS = model === "opus" ? 6 : 4;
   const generateOne = async (sc: { id: string; order_idx: number }, attempt = 1): Promise<void> => {
     const isTransient = (status: number) => status === 429 || status >= 500;
+    const backoffMs = () => {
+      // Exponential + jitter so N parallel workers that all hit the same 429
+      // don't re-sync on the retry and re-trigger the limit in lockstep.
+      // Opus: 2s, 4s, 8s, 16s, 32s (+ 0–1s jitter). Sonnet/Haiku: 2s, 4s, 8s.
+      const base = Math.pow(2, attempt) * 1000;
+      const jitter = Math.random() * 1000;
+      return base + jitter;
+    };
     try {
       const res = await fetch("/api/generate-higgsfield-prompts", {
         method: "POST",
@@ -140,8 +147,7 @@ async function autoGenScenePrompts(args: {
       });
       if (!res.ok) {
         if (isTransient(res.status) && attempt < MAX_ATTEMPTS) {
-          const backoffMs = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
-          await new Promise((r) => setTimeout(r, backoffMs));
+          await new Promise((r) => setTimeout(r, backoffMs()));
           return generateOne(sc, attempt + 1);
         }
         // Surface the response body for non-transient failures (401 token expired,
@@ -159,10 +165,8 @@ async function autoGenScenePrompts(args: {
       const j = (await res.json()) as { ok: true; cached: boolean; costUsd: number };
       if (!j.cached && Number(j.costUsd) > 0) onCost(Number(j.costUsd));
     } catch (e) {
-      // Network/abort error — retry with exponential backoff.
       if (attempt < MAX_ATTEMPTS) {
-        const backoffMs = Math.pow(2, attempt) * 1000;
-        await new Promise((r) => setTimeout(r, backoffMs));
+        await new Promise((r) => setTimeout(r, backoffMs()));
         return generateOne(sc, attempt + 1);
       }
       console.warn(`[autoGenScenePrompts] scene ${sc.id} failed after ${MAX_ATTEMPTS} attempts:`, e);
@@ -1441,6 +1445,13 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   const [assignedFrameTime, setAssignedFrameTime] = useState<number | null>(null);
   const [prompts, setPrompts] = useState<HiggsfieldPrompts | null>(null);
   const [loadingPrompts, setLoadingPrompts] = useState(false);
+  // Tracks whether the background auto-gen is still working so the UI can
+  // show a spinner ("Auto-generando...") instead of the static "tocá Generar
+  // prompts" CTA, which is indistinguishable from a silent failure.
+  // "waiting": row exists (or being found) and we're polling for prompts.
+  // "exhausted": polling budget ran out with no prompts — manual click needed.
+  // "ready" state is implicit when `prompts` is non-null.
+  const [autoGenPhase, setAutoGenPhase] = useState<"waiting" | "exhausted">("waiting");
   // Modelo Claude para regenerar prompts de esta escena. Default Sonnet 4.6:
   // mejor fidelidad multimodal que Haiku (Haiku se saltaba detalles críticos
   // tipo "liendrera" vs "peine" o vértebras dramáticas vs genéricas). Opus 4.7
@@ -1465,13 +1476,14 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
     let cancelled = false;
     let tries = 0;
     const SCENE_FIND_BUDGET = 8;       // ~4s @ 500ms — find the inserted row
-    // 180s @ 1.5s. Worst-case single-scene latency with 4-attempt retry chain:
-    // ~15s Claude + 2s+4s+8s backoff + 3×15s retries ≈ 74s. Worker pickup for
-    // scene 22/23 in a 23-scene variation can start ~45s in (4th batch of 6),
-    // so completion may land at ~120s under sustained rate-limit pressure.
-    // Budget 120 iterations (~180s) gives cushion before the UI falls back to
-    // the manual "Generar prompts" button.
-    const PROMPTS_WAIT_BUDGET = 120;
+    // 360s @ 1.5s. Opus 4.7 under rate-limit pressure with 6-attempt retry
+    // chain can push a single scene past 3 min (2+4+8+16+32s backoff ≈ 62s
+    // plus 5×~40s Opus latency ≈ 262s worst case). In parallel fan-out the
+    // tail scene starts even later. Budget 240 iterations (~360s / 6 min) so
+    // the UI keeps showing the "Auto-generando…" spinner while retries are
+    // still in flight, instead of flipping prematurely to the misleading
+    // manual "Generar prompts" CTA.
+    const PROMPTS_WAIT_BUDGET = 240;
     const tryFetch = async (): Promise<void> => {
       if (!variationId || cancelled) return;
       const { data } = await supabase
@@ -1500,9 +1512,18 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
         // polling at a slower cadence within the prompts-wait budget.
         if (tries++ < SCENE_FIND_BUDGET + PROMPTS_WAIT_BUDGET) {
           setTimeout(() => { if (!cancelled) void tryFetch(); }, 1500);
+        } else {
+          // Budget exhausted. Flip to "exhausted" so the UI swaps the
+          // "Auto-generando…" spinner for a visible fallback message
+          // pointing the user at the manual "Generar prompts" button.
+          setAutoGenPhase("exhausted");
         }
       } else if (tries++ < SCENE_FIND_BUDGET) {
         setTimeout(() => { if (!cancelled) void tryFetch(); }, 500);
+      } else {
+        // Scene row never appeared (insert failed or RLS mismatch). Surface
+        // the same fallback so the user can click Generar prompts manually.
+        setAutoGenPhase("exhausted");
       }
     };
     void tryFetch();
@@ -1631,9 +1652,17 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
             </Button>
           </div>
         </div>
-        {!prompts && !loadingPrompts && (
-          <div className="text-[11px] text-muted-foreground leading-relaxed">
-            Tocá <span className="text-primary font-bold">"Generar prompts"</span> para obtener las versiones optimizadas de Nano Banana Pro, Seedream 4, Kling 2.5 Turbo y Seedance 2.0 — ya vienen dentro del límite de 2500 caracteres de Higgsfield.
+        {!prompts && !loadingPrompts && autoGenPhase === "waiting" && (
+          <div className="text-[11px] text-muted-foreground leading-relaxed flex items-center gap-2">
+            <Loader2 className="h-3 w-3 animate-spin text-primary" />
+            <span>
+              Auto-generando prompts Higgsfield en segundo plano… aparecen acá cuando terminan (puede tardar unos minutos con Opus o bajo rate-limit).
+            </span>
+          </div>
+        )}
+        {!prompts && !loadingPrompts && autoGenPhase === "exhausted" && (
+          <div className="text-[11px] text-amber-600 leading-relaxed">
+            Auto-generación no completó (rate-limit o error transitorio). Tocá <span className="font-bold">"Generar prompts"</span> para generarlos manualmente.
           </div>
         )}
 
