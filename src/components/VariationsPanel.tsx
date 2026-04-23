@@ -119,7 +119,7 @@ async function autoGenScenePrompts(args: {
   model?: HiggsfieldModelChoice;
 }) {
   const { insertedScenes, framesByOrderIdx, workspaceId, token, onCost, model } = args;
-  const CONCURRENCY = 2;
+  const CONCURRENCY = 6; // Fire all scenes at once — each Claude call is independent
 
   const generateOne = async (sc: { id: string; order_idx: number }, attempt = 1): Promise<void> => {
     try {
@@ -1393,11 +1393,9 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
     let cancelled = false;
     let tries = 0;
     const SCENE_FIND_BUDGET = 8;       // ~4s @ 500ms — find the inserted row
-    // 120s @ 1.5s. With autoGenScenePrompts throttled to 2 concurrent, the
-    // last scene of a 6-scene run can wait ~20s for prior batches to drain
-    // before its own Claude call (~10-15s) starts, plus possible retry (+12s).
-    // Worst-case observed end-to-end: ~60s. Budget 120s gives comfortable
-    // headroom before falling back to the manual "Generar prompts" button.
+    // 120s @ 1.5s. All scenes fire in parallel (CONCURRENCY=6) so worst-case
+    // is one Claude call (~15s) + one retry (~15s) = ~30s. Budget 80 iterations
+    // (~120s) gives comfortable headroom before falling back to manual button.
     const PROMPTS_WAIT_BUDGET = 80;
     const tryFetch = async (): Promise<void> => {
       if (!variationId || cancelled) return;
