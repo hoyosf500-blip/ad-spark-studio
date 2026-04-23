@@ -2,17 +2,27 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
+// Public Supabase project credentials. The publishable key is a JWT with
+// role:"anon" — it is meant to be exposed in client bundles and is protected
+// by Row Level Security on the database side. Hardcoded as a fallback so the
+// preview build works even when VITE_* env vars are not present at build time
+// (e.g. Lovable preview after .env was untracked from git).
+const FALLBACK_SUPABASE_URL = "https://ahidhexuqmferrjolkog.supabase.co";
+const FALLBACK_SUPABASE_PUBLISHABLE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoaWRoZXh1cW1mZXJyam9sa29nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzQ2NzAsImV4cCI6MjA5MjA1MDY3MH0.lcX6nLG0kqKP192yIOEQJKewyGsE54ygIMyjR4z78og";
+
 function createSupabaseClient() {
   // Use import.meta.env for client-side (Vite build-time replacement)
   // Fall back to process.env for SSR (server-side rendering)
-  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
-
-  if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    throw new Error(
-      'Missing Supabase environment variables. Ensure SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY (or VITE_ prefixed versions) are set in your .env file.'
-    );
-  }
+  // Final fallback to hardcoded public values so the bundle always works
+  const SUPABASE_URL =
+    import.meta.env.VITE_SUPABASE_URL ||
+    process.env.SUPABASE_URL ||
+    FALLBACK_SUPABASE_URL;
+  const SUPABASE_PUBLISHABLE_KEY =
+    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.SUPABASE_PUBLISHABLE_KEY ||
+    FALLBACK_SUPABASE_PUBLISHABLE_KEY;
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: {
