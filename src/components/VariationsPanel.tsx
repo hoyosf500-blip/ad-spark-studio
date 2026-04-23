@@ -1380,8 +1380,8 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   );
 
   const refFrameUrl = useMemo(
-    () => pickFrameAt(frames, assignedFrameTime ?? s.timeStartSec),
-    [frames, assignedFrameTime, s.timeStartSec],
+    () => pickFrameAt(frames, assignedFrameTime),
+    [frames, assignedFrameTime],
   );
 
   // Resolve the scene DB id (created during persist) by variation_id + order_idx.
