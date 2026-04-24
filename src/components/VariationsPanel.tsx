@@ -1593,10 +1593,17 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
             }),
           });
           if (res.status === 402) {
+            // Drain body to release the connection before bailing.
+            await res.text().catch(() => "");
             console.warn("[self-heal] spending cap reached — abandoning scene", sceneDbId);
             return;
           }
-          if (!res.ok) continue;
+          if (!res.ok) {
+            // Drain body so the underlying connection is released back to the
+            // pool before we move on to the fallback model.
+            await res.text().catch(() => "");
+            continue;
+          }
           const j = (await res.json()) as {
             ok: true;
             cached: boolean;
