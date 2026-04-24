@@ -168,21 +168,25 @@ export function UgcPanel({
             buf = buf.slice(i + 2);
             const dl = chunk.split("\n").find((l) => l.startsWith("data: "));
             if (!dl) continue;
+            // Tight try/catch: only swallow JSON.parse failures. A wider catch
+            // silenced the intentional `throw new Error(ev.error)` below, which
+            // let upstream errors surface as silent toasts of success.
+            let ev:
+              | { type: "text"; text: string }
+              | { type: "done"; costUsd: number; fullText: string }
+              | { type: "error"; error: string };
             try {
-              const ev = JSON.parse(dl.slice(6).trim()) as
-                | { type: "text"; text: string }
-                | { type: "done"; costUsd: number; fullText: string }
-                | { type: "error"; error: string };
-              if (ev.type === "text") {
-                full += ev.text;
-                setStream({ active: style, text: full });
-              } else if (ev.type === "done") {
-                cost = ev.costUsd;
-              } else if (ev.type === "error") {
-                throw new Error(ev.error);
-              }
+              ev = JSON.parse(dl.slice(6).trim());
             } catch {
-              /* skip */
+              continue;
+            }
+            if (ev.type === "text") {
+              full += ev.text;
+              setStream({ active: style, text: full });
+            } else if (ev.type === "done") {
+              cost = ev.costUsd;
+            } else if (ev.type === "error") {
+              throw new Error(ev.error);
             }
           }
         }
