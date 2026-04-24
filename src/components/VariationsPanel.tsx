@@ -894,12 +894,17 @@ export function VariationsPanel() {
         }
       }
     } catch (e) {
+      const isAbort =
+        (e instanceof DOMException && e.name === "AbortError") ||
+        (e instanceof Error && e.name === "AbortError");
       setVariations((prev) =>
         prev.map((v) => v.type === type
-          ? { ...v, status: "error", error: e instanceof Error ? e.message : String(e) }
+          ? { ...v, status: "error", error: isAbort ? "Cancelado" : (e instanceof Error ? e.message : String(e)) }
           : v),
       );
       throw e;
+    } finally {
+      streamControllersRef.current.delete(controller);
     }
   };
 
