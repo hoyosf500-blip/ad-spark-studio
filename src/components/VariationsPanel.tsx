@@ -1593,6 +1593,10 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
       if (!token) return;
       const modelsToTry: HiggsfieldModelChoice[] =
         higgsfieldModel === "haiku" ? ["haiku"] : [higgsfieldModel, "haiku"];
+      // Track whether ANY attempt was a transient failure. If every failure was
+      // permanent (4xx other than 429), retrying later just burns the same 4xx
+      // again — abandon instead of scheduling another self-heal.
+      let sawTransient = false;
       for (const m of modelsToTry) {
         try {
           const res = await fetch("/api/generate-higgsfield-prompts", {
@@ -1605,7 +1609,7 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
               model: m,
             }),
           });
-          if (res.status === 402) {
+          if (res.status === 402 || res.status === 429) {
             // Drain body to release the connection before bailing.
             await res.text().catch(() => "");
             console.warn("[self-heal] spending cap reached — abandoning scene", sceneDbId);
@@ -1615,6 +1619,11 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
             // Drain body so the underlying connection is released back to the
             // pool before we move on to the fallback model.
             await res.text().catch(() => "");
+            // 5xx is transient; 4xx (other than 429 handled above) is permanent
+            // — malformed payload, RLS rejection, missing scene. Permanent
+            // errors won't fix themselves on the next backoff tick, so don't
+            // schedule another self-heal if every attempt was permanent.
+            if (res.status >= 500) sawTransient = true;
             continue;
           }
           const j = (await res.json()) as {
@@ -1628,8 +1637,17 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
           selfHealAttemptsRef.current = 0;
           return;
         } catch (e) {
+          // Network exception — treat as transient.
+          sawTransient = true;
           console.warn("[self-heal] model failed, trying next", m, e);
         }
+      }
+      if (!sawTransient) {
+        console.warn(
+          "[self-heal] all attempts returned permanent 4xx — abandoning scene",
+          sceneDbId,
+        );
+        return;
       }
       selfHealAttemptsRef.current += 1;
       const nextDelay = Math.min(
