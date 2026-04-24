@@ -500,14 +500,16 @@ export function VariationsPanel() {
     setAnalyzing(true); setAnalysis(""); setAnalysisCost(0);
     setAnalysisStartedAt(Date.now());
     setAnalysisElapsed(0);
+    // Hoisted so the catch/finally can clean it up even when the fetch itself
+    // throws (network error before the request is dispatched).
+    const controller = new AbortController();
+    streamControllersRef.current.add(controller);
     try {
       const ws = await ensureWorkspace();
       const session = (await supabase.auth.getSession()).data.session;
       const token = session?.access_token;
       if (!token) throw new Error("No auth session");
 
-      const controller = new AbortController();
-      streamControllersRef.current.add(controller);
       const res = await fetch("/api/anthropic-analyze", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
@@ -521,13 +523,8 @@ export function VariationsPanel() {
           workspaceId: ws,
         }),
       });
-      if (await handleCapResponse(res)) {
-        streamControllersRef.current.delete(controller);
-        setAnalyzing(false);
-        return;
-      }
+      if (await handleCapResponse(res)) { setAnalyzing(false); return; }
       if (!res.ok || !res.body) {
-        streamControllersRef.current.delete(controller);
         const txt = await res.text().catch(() => "");
         throw new Error(`HTTP ${res.status}: ${txt.slice(0, 200) || res.statusText}`);
       }
