@@ -269,7 +269,9 @@ export const Route = createFileRoute("/api/ugc-generate")({
               const validation = checkScript(fullText);
 
               // Persist row (admin client is shared with the membership check above).
-              const { data: row } = await admin
+              // Surface insert errors explicitly so the client can show a clear
+              // "saved but invisible" warning instead of a silent ugcId:null.
+              const { data: row, error: insertErr } = await admin
                 .from("ugc_generations")
                 .insert({
                   workspace_id: body.workspaceId,
@@ -288,10 +290,14 @@ export const Route = createFileRoute("/api/ugc-generate")({
                 } as never)
                 .select("id")
                 .single();
+              if (insertErr) {
+                console.error("[ugc-generate] insert failed:", insertErr);
+              }
 
               controller.enqueue(enc.encode(`data: ${JSON.stringify({
                 type: "done",
                 ugcId: row?.id ?? null,
+                persistError: insertErr?.message ?? null,
                 fullText,
                 imagePromptEn: parsed.imagePromptEn,
                 animationPromptEn: parsed.animationPromptEn,
