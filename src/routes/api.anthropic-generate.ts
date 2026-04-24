@@ -337,6 +337,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                   userId, workspaceId: body.workspaceId ?? null, model,
                   operation: "claude_variation_partial",
                   inputTokens, outputTokens,
+                  reservedUsd,
                   metadata: { variationType: body.variationType, partial: true },
                 }).catch(() => {});
               }
