@@ -63,7 +63,11 @@ export const Route = createFileRoute("/api/anthropic-generate")({
           return new Response("Missing fields", { status: 400 });
         }
 
-        const model = body.model || "claude-sonnet-4-5-20250929";
+        // Default aligned with the UI dropdown (Sonnet 4.6). Previously this
+        // fell back to "claude-sonnet-4-5-20250929" while priceFor() and the UI
+        // selector both use "claude-sonnet-4-6", causing cost-tracking
+        // mismatches when the client omitted `model` from the body.
+        const model = body.model || "claude-sonnet-4-6";
         const isClone = body.variationType === "clon";
 
         // === SHARED PREFIX ===
