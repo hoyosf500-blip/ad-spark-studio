@@ -713,6 +713,9 @@ export function VariationsPanel() {
     }).select("id").single();
     const variationId = variationRow?.id ?? undefined;
 
+    // Hoisted so catch/finally can clean up the controller registration.
+    const controller = new AbortController();
+    streamControllersRef.current.add(controller);
     try {
       const session = (await supabase.auth.getSession()).data.session;
       const token = session?.access_token;
@@ -721,6 +724,7 @@ export function VariationsPanel() {
       const res = await fetch("/api/anthropic-generate", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        signal: controller.signal,
         body: JSON.stringify({
           analysis,
           transcription: transcription || null,
