@@ -39,7 +39,7 @@ export const Route = createFileRoute("/api/transcribe-audio")({
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
 
-        const cap = await checkSpendingCap(supabase, userId);
+        const cap = await checkSpendingCap(supabase, userId, "api.generate-higgsfield-prompts");
         if (!cap.ok) return capExceededResponse(cap);
 
         // Parse multipart

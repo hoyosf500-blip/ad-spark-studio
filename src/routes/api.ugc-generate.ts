@@ -116,8 +116,9 @@ export const Route = createFileRoute("/api/ugc-generate")({
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
 
-        const cap = await checkSpendingCap(sb, userId);
+        const cap = await checkSpendingCap(sb, userId, "api.ugc-generate");
         if (!cap.ok) return capExceededResponse(cap);
+        const reservedUsd = cap.reservedUsd;
 
         const body = (await request.json()) as Body;
         // analysisText is required for every style EXCEPT ugc-viral (viral = fresh personal-brand content, no source needed).
@@ -265,6 +266,7 @@ export const Route = createFileRoute("/api/ugc-generate")({
                 operation: "claude_ugc_script",
                 inputTokens,
                 outputTokens,
+                reservedUsd,
                 metadata: { style: body.style, videoModel, isTruncated: stopReason === "max_tokens" },
               });
 

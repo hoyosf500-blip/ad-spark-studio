@@ -256,8 +256,9 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
 
-        const cap = await checkSpendingCap(sb, userId);
+        const cap = await checkSpendingCap(sb, userId, "api.generate-higgsfield-prompts");
         if (!cap.ok) return capExceededResponse(cap);
+        const reservedUsd = cap.reservedUsd;
 
         const body = (await request.json()) as Body;
         if (!body.sceneId) return new Response("sceneId required", { status: 400 });
@@ -475,6 +476,7 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           operation: "higgsfield_prompts",
           inputTokens: data.usage?.input_tokens ?? 0,
           outputTokens: data.usage?.output_tokens ?? 0,
+          reservedUsd,
           metadata: { sceneId: scene.id, variationId: scene.variation_id, orderIdx: scene.order_idx },
         });
 

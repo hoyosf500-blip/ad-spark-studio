@@ -43,8 +43,9 @@ export const Route = createFileRoute("/api/anthropic-generate")({
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
 
-        const cap = await checkSpendingCap(supabase, userId);
+        const cap = await checkSpendingCap(supabase, userId, "api.anthropic-generate");
         if (!cap.ok) return capExceededResponse(cap);
+        const reservedUsd = cap.reservedUsd;
 
         const body = (await request.json()) as {
           analysis: string;
@@ -295,6 +296,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                 model, operation: "claude_variation",
                 inputTokens, outputTokens,
                 cacheCreateTokens, cacheReadTokens,
+                reservedUsd,
                 metadata: {
                   variationType: body.variationType,
                   variationLabel: body.variationLabel,
@@ -335,6 +337,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                   userId, workspaceId: body.workspaceId ?? null, model,
                   operation: "claude_variation_partial",
                   inputTokens, outputTokens,
+                  reservedUsd,
                   metadata: { variationType: body.variationType, partial: true },
                 }).catch(() => {});
               }

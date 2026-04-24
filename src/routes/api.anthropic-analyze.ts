@@ -35,8 +35,9 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
 
-        const cap = await checkSpendingCap(supabase, userId);
+        const cap = await checkSpendingCap(supabase, userId, "api.anthropic-analyze");
         if (!cap.ok) return capExceededResponse(cap);
+        const reservedUsd = cap.reservedUsd;
 
         const body = (await request.json()) as {
           frames: FrameInput[];
@@ -217,6 +218,7 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
                   model, operation: failed ? "claude_analysis_partial" : "claude_analysis",
                   inputTokens, outputTokens,
                   cacheCreateTokens, cacheReadTokens,
+                  reservedUsd,
                   metadata: {
                     frames: body.frames.length,
                     hasProductPhoto: !!body.productPhoto,
