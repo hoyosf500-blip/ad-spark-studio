@@ -96,6 +96,10 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
         let fullText = "", inputTokens = 0, outputTokens = 0;
         let cacheCreateTokens = 0, cacheReadTokens = 0;
         let stopReason: string | null = null;
+        // When upstream Anthropic rejects (429/5xx) we emit a single `error`
+        // event and must NOT also emit `done` — otherwise the client races and
+        // the empty `done` overwrites the error state.
+        let failed = false;
         const dec = new TextDecoder();
         const enc = new TextEncoder();
 
@@ -132,6 +136,7 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
                   controller.enqueue(enc.encode(`data: ${JSON.stringify({
                     type: "error", error: `Anthropic ${upstream.status}: ${errText.slice(0, 300)}`,
                   })}\n\n`));
+                  failed = true;
                   break;
                 }
 
@@ -197,23 +202,34 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
                 });
               }
 
-              const cost = await logUsage({
-                userId,
-                workspaceId: body.workspaceId ?? null,
-                model, operation: "claude_analysis",
-                inputTokens, outputTokens,
-                cacheCreateTokens, cacheReadTokens,
-                metadata: {
-                  frames: body.frames.length,
-                  hasProductPhoto: !!body.productPhoto,
-                  isTruncated: stopReason === "max_tokens",
-                  maxTokens,
-                },
-              });
-              controller.enqueue(enc.encode(`data: ${JSON.stringify({
-                type: "done", fullText, inputTokens, outputTokens,
-                costUsd: cost, stopReason, isTruncated: stopReason === "max_tokens", model,
-              })}\n\n`));
+              // Always log usage (even on partial/failed runs) so input tokens
+              // already burned still count toward the daily cap. logUsage is
+              // wrapped so a DB write failure doesn't crash the stream.
+              let cost = 0;
+              try {
+                cost = await logUsage({
+                  userId,
+                  workspaceId: body.workspaceId ?? null,
+                  model, operation: failed ? "claude_analysis_partial" : "claude_analysis",
+                  inputTokens, outputTokens,
+                  cacheCreateTokens, cacheReadTokens,
+                  metadata: {
+                    frames: body.frames.length,
+                    hasProductPhoto: !!body.productPhoto,
+                    isTruncated: stopReason === "max_tokens",
+                    maxTokens,
+                    failed,
+                  },
+                });
+              } catch (logErr) {
+                console.error("[anthropic-analyze] logUsage failed:", logErr);
+              }
+              if (!failed) {
+                controller.enqueue(enc.encode(`data: ${JSON.stringify({
+                  type: "done", fullText, inputTokens, outputTokens,
+                  costUsd: cost, stopReason, isTruncated: stopReason === "max_tokens", model,
+                })}\n\n`));
+              }
             } catch (err) {
               controller.enqueue(enc.encode(`data: ${JSON.stringify({
                 type: "error", error: err instanceof Error ? err.message : String(err),
