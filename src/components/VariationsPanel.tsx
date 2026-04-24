@@ -1675,6 +1675,14 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   const generatePrompts = async () => {
     if (!sceneDbId) { toast.error("Escena no persistida aún"); return; }
     if (!workspaceId) { toast.error("Workspace no listo"); return; }
+    // Manual regenerate cancels any pending self-heal cycle and resets the
+    // backoff counter — otherwise a row that exhausted its retries stays
+    // "envenenada" and the next manual click does nothing visible until reload.
+    if (selfHealTimerRef.current !== null) {
+      window.clearTimeout(selfHealTimerRef.current);
+      selfHealTimerRef.current = null;
+    }
+    selfHealAttemptsRef.current = 0;
     setLoadingPrompts(true);
     try {
       const session = (await supabase.auth.getSession()).data.session;
