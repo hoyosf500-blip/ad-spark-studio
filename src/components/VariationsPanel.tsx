@@ -1493,6 +1493,16 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   useEffect(() => {
     let cancelled = false;
     let tries = 0;
+    // Reset the self-heal attempt counter whenever this row gets a new
+    // variation/order to track. Without this, navigating between variations or
+    // remounting after an error left the ref at its terminal value (e.g. 5),
+    // which made the next backoff schedule fire ~10min later instead of the
+    // 30s baseline — UI looked frozen even though the row was healthy.
+    selfHealAttemptsRef.current = 0;
+    if (selfHealTimerRef.current !== null) {
+      window.clearTimeout(selfHealTimerRef.current);
+      selfHealTimerRef.current = null;
+    }
     const SCENE_FIND_BUDGET = 8;       // ~4s @ 500ms — find the inserted row
     // 240s @ 1.5s = 360s grace window. Covers Opus worst case (~300s end-to-end
     // with 6-attempt retry chain). After this window, self-heal kicks in with
