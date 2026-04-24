@@ -1445,13 +1445,23 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   const [assignedFrameTime, setAssignedFrameTime] = useState<number | null>(null);
   const [prompts, setPrompts] = useState<HiggsfieldPrompts | null>(null);
   const [loadingPrompts, setLoadingPrompts] = useState(false);
-  // Tracks whether the background auto-gen is still working so the UI can
-  // show a spinner ("Auto-generando...") instead of the static "tocá Generar
-  // prompts" CTA, which is indistinguishable from a silent failure.
-  // "waiting": row exists (or being found) and we're polling for prompts.
-  // "exhausted": polling budget ran out with no prompts — manual click needed.
-  // "ready" state is implicit when `prompts` is non-null.
-  const [autoGenPhase, setAutoGenPhase] = useState<"waiting" | "exhausted">("waiting");
+  // Row never appeared in the DB after SCENE_FIND_BUDGET retries — an upstream
+  // persist failure the user can only fix by reloading. Differs from "prompts
+  // still auto-generating" which is handled silently by self-heal.
+  const [rowMissing, setRowMissing] = useState(false);
+  // Scene was assigned a B-roll slot by assignUniqueFrames (reference_frame_time_sec
+  // is null in DB because the video had no distinct visual moment for this beat).
+  // Rendered as a small badge next to the scene title so the user can see at a
+  // glance which scenes will be support / cutaway shots.
+  const [isBroll, setIsBroll] = useState(false);
+  // Self-heal state: when the initial worker-pool auto-gen fails (tab closed
+  // mid-run, permanent 4xx, DB update 500, page reload), SceneRow itself fires
+  // a recovery request — with Haiku fallback — so the user never has to click
+  // the "Generar prompts" button. Rotating infinite exponential backoff means
+  // we never give up silently.
+  const [selfHealInFlight, setSelfHealInFlight] = useState(false);
+  const selfHealAttemptsRef = useRef(0);
+  const selfHealTimerRef = useRef<number | null>(null);
   // Modelo Claude para regenerar prompts de esta escena. Default Sonnet 4.6:
   // mejor fidelidad multimodal que Haiku (Haiku se saltaba detalles críticos
   // tipo "liendrera" vs "peine" o vértebras dramáticas vs genéricas). Opus 4.7
@@ -1472,17 +1482,18 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   // After the row exists, KEEP polling (with a longer interval and budget) so we
   // pick up the auto-generated Higgsfield prompts as they land — those are
   // written async by autoGenScenePrompts firing immediately after persist.
+  // When the polling grace period elapses without prompts landing, we stop
+  // polling and trigger selfHealPrompts() instead of surfacing a manual CTA —
+  // SceneRow owns its own recovery so the user never sees a "Generar prompts"
+  // button for missing prompts (the button remains as a voluntary regenerate
+  // action for scenes that already succeeded).
   useEffect(() => {
     let cancelled = false;
     let tries = 0;
     const SCENE_FIND_BUDGET = 8;       // ~4s @ 500ms — find the inserted row
-    // 360s @ 1.5s. Opus 4.7 under rate-limit pressure with 6-attempt retry
-    // chain can push a single scene past 3 min (2+4+8+16+32s backoff ≈ 62s
-    // plus 5×~40s Opus latency ≈ 262s worst case). In parallel fan-out the
-    // tail scene starts even later. Budget 240 iterations (~360s / 6 min) so
-    // the UI keeps showing the "Auto-generando…" spinner while retries are
-    // still in flight, instead of flipping prematurely to the misleading
-    // manual "Generar prompts" CTA.
+    // 240s @ 1.5s = 360s grace window. Covers Opus worst case (~300s end-to-end
+    // with 6-attempt retry chain). After this window, self-heal kicks in with
+    // its own retry cascade and Haiku fallback — we never give up.
     const PROMPTS_WAIT_BUDGET = 240;
     const tryFetch = async (): Promise<void> => {
       if (!variationId || cancelled) return;
@@ -1498,6 +1509,12 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
         // Prefer the unique-assigned frame time from DB over the script-parsed one
         if (data.reference_frame_time_sec != null) {
           setAssignedFrameTime(Number(data.reference_frame_time_sec));
+          setIsBroll(false);
+        } else {
+          // assignUniqueFrames parked this scene in B-roll mode — no distinct
+          // frame was available at this beat. Flag it so the title can show a
+          // "B-ROLL" badge and the user knows this is a creative support shot.
+          setIsBroll(true);
         }
         const hasPrompts = data.prompt_nano_banana && data.prompt_kling && data.prompt_seedance;
         if (hasPrompts) {
@@ -1513,22 +1530,109 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
         if (tries++ < SCENE_FIND_BUDGET + PROMPTS_WAIT_BUDGET) {
           setTimeout(() => { if (!cancelled) void tryFetch(); }, 1500);
         } else {
-          // Budget exhausted. Flip to "exhausted" so the UI swaps the
-          // "Auto-generando…" spinner for a visible fallback message
-          // pointing the user at the manual "Generar prompts" button.
-          setAutoGenPhase("exhausted");
+          // Budget exhausted. The worker pool either failed, was killed by a
+          // tab close, or the user reopened a stale variation. Trigger the
+          // self-heal cascade instead of surfacing a manual CTA.
+          void selfHealPrompts();
         }
       } else if (tries++ < SCENE_FIND_BUDGET) {
         setTimeout(() => { if (!cancelled) void tryFetch(); }, 500);
       } else {
-        // Scene row never appeared (insert failed or RLS mismatch). Surface
-        // the same fallback so the user can click Generar prompts manually.
-        setAutoGenPhase("exhausted");
+        // Scene row never appeared (insert failed or RLS mismatch). This is a
+        // DB-level problem self-heal cannot fix — expose a reload hint.
+        setRowMissing(true);
       }
     };
     void tryFetch();
     return () => { cancelled = true; };
+    // selfHealPrompts is declared below with useCallback — TypeScript warns
+    // about the forward reference but the closure captures the stable ref via
+    // React's state model. Intentional: we want tryFetch to invoke the latest
+    // selfHealPrompts at call time, not bind it at effect setup.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [variationId, s.orderIdx]);
+
+  // Cleanup the self-heal retry timer on unmount to avoid leaked timers firing
+  // after the user navigates away from this variation.
+  useEffect(() => {
+    return () => {
+      if (selfHealTimerRef.current !== null) {
+        window.clearTimeout(selfHealTimerRef.current);
+        selfHealTimerRef.current = null;
+      }
+    };
+  }, []);
+
+  // Silent auto-recovery: invoked when the polling grace window elapses without
+  // prompts landing. Tries the user's selected model first, then falls back to
+  // Haiku (cheapest + most rate-limit-tolerant). On total failure, reschedules
+  // itself with exponential backoff (30s, 60s, 120s, 240s, 480s, cap 600s) so
+  // the scene eventually succeeds without the user clicking anything. A 402
+  // spending-cap response is the only terminal state — we log and abandon
+  // because retrying would just hit the cap again.
+  const selfHealPrompts = useCallback(async (): Promise<void> => {
+    if (prompts || loadingPrompts || selfHealInFlight) return;
+    if (!sceneDbId || !workspaceId) return;
+    setSelfHealInFlight(true);
+    try {
+      const session = (await supabase.auth.getSession()).data.session;
+      const token = session?.access_token;
+      if (!token) return;
+      const modelsToTry: HiggsfieldModelChoice[] =
+        higgsfieldModel === "haiku" ? ["haiku"] : [higgsfieldModel, "haiku"];
+      for (const m of modelsToTry) {
+        try {
+          const res = await fetch("/api/generate-higgsfield-prompts", {
+            method: "POST",
+            headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+            body: JSON.stringify({
+              sceneId: sceneDbId,
+              workspaceId,
+              referenceFrameDataUrl: refFrameUrl ?? null,
+              model: m,
+            }),
+          });
+          if (res.status === 402) {
+            console.warn("[self-heal] spending cap reached — abandoning scene", sceneDbId);
+            return;
+          }
+          if (!res.ok) continue;
+          const j = (await res.json()) as {
+            ok: true;
+            cached: boolean;
+            costUsd: number;
+            prompts: HiggsfieldPrompts;
+          };
+          setPrompts(j.prompts);
+          if (!j.cached && Number(j.costUsd) > 0) onPromptsCost?.(Number(j.costUsd));
+          selfHealAttemptsRef.current = 0;
+          return;
+        } catch (e) {
+          console.warn("[self-heal] model failed, trying next", m, e);
+        }
+      }
+      selfHealAttemptsRef.current += 1;
+      const nextDelay = Math.min(
+        30_000 * Math.pow(2, selfHealAttemptsRef.current - 1),
+        600_000,
+      );
+      selfHealTimerRef.current = window.setTimeout(() => {
+        selfHealTimerRef.current = null;
+        void selfHealPrompts();
+      }, nextDelay);
+    } finally {
+      setSelfHealInFlight(false);
+    }
+  }, [
+    prompts,
+    loadingPrompts,
+    selfHealInFlight,
+    sceneDbId,
+    workspaceId,
+    higgsfieldModel,
+    refFrameUrl,
+    onPromptsCost,
+  ]);
 
   const generatePrompts = async () => {
     if (!sceneDbId) { toast.error("Escena no persistida aún"); return; }
@@ -1583,10 +1687,21 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
 
   return (
     <div className="p-4 space-y-2">
-      <div className="flex items-center justify-between">
-        <h4 className="font-mono-display text-xs font-bold text-primary">{s.title}</h4>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <h4 className="font-mono-display text-xs font-bold text-primary truncate">{s.title}</h4>
+          {isBroll && (
+            <Badge
+              variant="secondary"
+              className="text-[9px] shrink-0 bg-accent/20 text-accent-foreground border-accent/40"
+              title="Esta escena no tenía un frame único en el video de referencia. El generador la trata como B-roll: un plano de apoyo creativo (producto, zona objetivo, aplicación o detalle ambiental)."
+            >
+              B-ROLL
+            </Badge>
+          )}
+        </div>
         {s.toolRecommended && (
-          <Badge variant="outline" className="text-[10px]">{s.toolRecommended}</Badge>
+          <Badge variant="outline" className="text-[10px] shrink-0">{s.toolRecommended}</Badge>
         )}
       </div>
       {/* Flex layout: frame fijo 80px a la izquierda si existe; si no, el
@@ -1652,17 +1767,21 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
             </Button>
           </div>
         </div>
-        {!prompts && !loadingPrompts && autoGenPhase === "waiting" && (
+        {!prompts && !loadingPrompts && !rowMissing && (
           <div className="text-[11px] text-muted-foreground leading-relaxed flex items-center gap-2">
             <Loader2 className="h-3 w-3 animate-spin text-primary" />
             <span>
-              Auto-generando prompts Higgsfield en segundo plano… aparecen acá cuando terminan (puede tardar unos minutos con Opus o bajo rate-limit).
+              {selfHealInFlight
+                ? "Recuperando prompts automáticamente (fallback Haiku si hace falta)…"
+                : selfHealAttemptsRef.current > 0
+                  ? `Reintentando auto-generación (intento ${selfHealAttemptsRef.current + 1})… aparecen acá cuando terminan.`
+                  : "Auto-generando prompts Higgsfield en segundo plano con reintentos automáticos… aparecen acá cuando terminan."}
             </span>
           </div>
         )}
-        {!prompts && !loadingPrompts && autoGenPhase === "exhausted" && (
-          <div className="text-[11px] text-amber-600 leading-relaxed">
-            Auto-generación no completó (rate-limit o error transitorio). Tocá <span className="font-bold">"Generar prompts"</span> para generarlos manualmente.
+        {!prompts && !loadingPrompts && rowMissing && (
+          <div className="text-[11px] text-red-500 leading-relaxed">
+            La escena no se guardó en la base de datos. Recargá la página para reintentar.
           </div>
         )}
 
