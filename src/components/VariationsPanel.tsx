@@ -506,9 +506,12 @@ export function VariationsPanel() {
       const token = session?.access_token;
       if (!token) throw new Error("No auth session");
 
+      const controller = new AbortController();
+      streamControllersRef.current.add(controller);
       const res = await fetch("/api/anthropic-analyze", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        signal: controller.signal,
         body: JSON.stringify({
           frames: frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl })),
           productPhoto,
@@ -518,8 +521,13 @@ export function VariationsPanel() {
           workspaceId: ws,
         }),
       });
-      if (await handleCapResponse(res)) { setAnalyzing(false); return; }
+      if (await handleCapResponse(res)) {
+        streamControllersRef.current.delete(controller);
+        setAnalyzing(false);
+        return;
+      }
       if (!res.ok || !res.body) {
+        streamControllersRef.current.delete(controller);
         const txt = await res.text().catch(() => "");
         throw new Error(`HTTP ${res.status}: ${txt.slice(0, 200) || res.statusText}`);
       }
