@@ -212,7 +212,10 @@ function progressPct(v: VariationState): number {
   return Math.max(1, Math.round(scenePct + tailPct + 1));
 }
 
-const DEFAULT_MODEL = "claude-sonnet-4-5-20250929";
+// Aligned with priceFor() table in src/utils/anthropic.functions.ts and the
+// backend default in api.anthropic-{analyze,generate}. Sending the same string
+// in the request body keeps cost tracking accurate end-to-end.
+const DEFAULT_MODEL = "claude-sonnet-4-6";
 
 export function VariationsPanel() {
   const { user, activeWorkspaceId, refreshWorkspaces, setActiveWorkspaceId } = useAuth();
