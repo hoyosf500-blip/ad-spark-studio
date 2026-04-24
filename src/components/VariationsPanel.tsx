@@ -276,6 +276,23 @@ export function VariationsPanel() {
     return () => clearInterval(id);
   }, [analysisStartedAt]);
 
+  // Track every in-flight SSE fetch so we can abort them when the user
+  // navigates away. Without this, a user who starts an analysis or variation
+  // and immediately navigates leaves the stream consuming memory until it
+  // ends, AND `logUsage` still runs on the server — charging the user for
+  // work they never see. AbortController.abort() unwinds the fetch and the
+  // reader.read() loop with an AbortError that we silently swallow.
+  const streamControllersRef = useRef<Set<AbortController>>(new Set());
+  useEffect(() => {
+    const controllers = streamControllersRef.current;
+    return () => {
+      for (const c of controllers) {
+        try { c.abort(); } catch { /* noop */ }
+      }
+      controllers.clear();
+    };
+  }, []);
+
   const [variations, setVariations] = useState<VariationState[]>(
     VARIATIONS.map((v) => ({
       type: v.type, label: v.label, emoji: v.emoji,
