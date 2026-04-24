@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -70,6 +70,20 @@ export function UgcPanel({
   const [stream, setStream] = useState<StreamState>({ active: null, text: "" });
   const [videoModel, setVideoModel] = useState<ModelKey>("wan2.6-i2v");
 
+  // Track in-flight SSE so unmount aborts the stream — otherwise navigating
+  // away leaves the reader consuming bytes and `logUsage` still charges the
+  // user for output they never see.
+  const streamControllersRef = useRef<Set<AbortController>>(new Set());
+  useEffect(() => {
+    const controllers = streamControllersRef.current;
+    return () => {
+      for (const c of controllers) {
+        try { c.abort(); } catch { /* noop */ }
+      }
+      controllers.clear();
+    };
+  }, []);
+
   // Load existing UGC for this project
   useEffect(() => {
     if (!workspaceId) return;
@@ -124,6 +138,8 @@ export function UgcPanel({
       return;
     }
     setStream({ active: style, text: "" });
+    const controller = new AbortController();
+    streamControllersRef.current.add(controller);
     try {
       const session = (await supabase.auth.getSession()).data.session;
       const token = session?.access_token;
@@ -131,6 +147,7 @@ export function UgcPanel({
       const res = await fetch("/api/ugc-generate", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        signal: controller.signal,
         body: JSON.stringify({
           workspaceId,
           projectId,

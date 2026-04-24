@@ -212,7 +212,10 @@ function progressPct(v: VariationState): number {
   return Math.max(1, Math.round(scenePct + tailPct + 1));
 }
 
-const DEFAULT_MODEL = "claude-sonnet-4-5-20250929";
+// Aligned with priceFor() table in src/utils/anthropic.functions.ts and the
+// backend default in api.anthropic-{analyze,generate}. Sending the same string
+// in the request body keeps cost tracking accurate end-to-end.
+const DEFAULT_MODEL = "claude-sonnet-4-6";
 
 export function VariationsPanel() {
   const { user, activeWorkspaceId, refreshWorkspaces, setActiveWorkspaceId } = useAuth();
@@ -272,6 +275,23 @@ export function VariationsPanel() {
     }, 500);
     return () => clearInterval(id);
   }, [analysisStartedAt]);
+
+  // Track every in-flight SSE fetch so we can abort them when the user
+  // navigates away. Without this, a user who starts an analysis or variation
+  // and immediately navigates leaves the stream consuming memory until it
+  // ends, AND `logUsage` still runs on the server — charging the user for
+  // work they never see. AbortController.abort() unwinds the fetch and the
+  // reader.read() loop with an AbortError that we silently swallow.
+  const streamControllersRef = useRef<Set<AbortController>>(new Set());
+  useEffect(() => {
+    const controllers = streamControllersRef.current;
+    return () => {
+      for (const c of controllers) {
+        try { c.abort(); } catch { /* noop */ }
+      }
+      controllers.clear();
+    };
+  }, []);
 
   const [variations, setVariations] = useState<VariationState[]>(
     VARIATIONS.map((v) => ({
@@ -480,6 +500,10 @@ export function VariationsPanel() {
     setAnalyzing(true); setAnalysis(""); setAnalysisCost(0);
     setAnalysisStartedAt(Date.now());
     setAnalysisElapsed(0);
+    // Hoisted so the catch/finally can clean it up even when the fetch itself
+    // throws (network error before the request is dispatched).
+    const controller = new AbortController();
+    streamControllersRef.current.add(controller);
     try {
       const ws = await ensureWorkspace();
       const session = (await supabase.auth.getSession()).data.session;
@@ -489,6 +513,7 @@ export function VariationsPanel() {
       const res = await fetch("/api/anthropic-analyze", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        signal: controller.signal,
         body: JSON.stringify({
           frames: frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl })),
           productPhoto,
@@ -590,8 +615,15 @@ export function VariationsPanel() {
         toast.success(`Análisis listo. Costo: $${Number(cost ?? 0).toFixed(4)}`);
       }
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Error en análisis");
+      // Aborts come from unmount cleanup — silent, expected.
+      const isAbort =
+        (e instanceof DOMException && e.name === "AbortError") ||
+        (e instanceof Error && e.name === "AbortError");
+      if (!isAbort) {
+        toast.error(e instanceof Error ? e.message : "Error en análisis");
+      }
     } finally {
+      streamControllersRef.current.delete(controller);
       setAnalyzing(false);
       setAnalysisStartedAt(null);
     }
@@ -681,6 +713,9 @@ export function VariationsPanel() {
     }).select("id").single();
     const variationId = variationRow?.id ?? undefined;
 
+    // Hoisted so catch/finally can clean up the controller registration.
+    const controller = new AbortController();
+    streamControllersRef.current.add(controller);
     try {
       const session = (await supabase.auth.getSession()).data.session;
       const token = session?.access_token;
@@ -689,6 +724,7 @@ export function VariationsPanel() {
       const res = await fetch("/api/anthropic-generate", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        signal: controller.signal,
         body: JSON.stringify({
           analysis,
           transcription: transcription || null,
@@ -858,12 +894,17 @@ export function VariationsPanel() {
         }
       }
     } catch (e) {
+      const isAbort =
+        (e instanceof DOMException && e.name === "AbortError") ||
+        (e instanceof Error && e.name === "AbortError");
       setVariations((prev) =>
         prev.map((v) => v.type === type
-          ? { ...v, status: "error", error: e instanceof Error ? e.message : String(e) }
+          ? { ...v, status: "error", error: isAbort ? "Cancelado" : (e instanceof Error ? e.message : String(e)) }
           : v),
       );
       throw e;
+    } finally {
+      streamControllersRef.current.delete(controller);
     }
   };
 
@@ -1226,37 +1267,48 @@ function pickFrameAt(frames: ExtractedFrame[], timeSec: number | null): string |
 // make MIN_GAP_SEC = 2 a safe default — shots shorter than 2s are rare in COD
 // UGC ads and we prefer losing a marginal A-roll over a duplicated-looking one.
 const MIN_FRAME_GAP_SEC = 2;
+// Allow a frame to be reused by a later scene if at least this many scenes
+// have passed since the last assignment. In short videos (10s, 5 frames) with
+// many scenes (8), the previous strict-uniqueness rule pushed the tail half of
+// the script into B-ROLL even when reusing frame 0 in scene 5 would be
+// visually safe (scenes far apart in narrative). 3 is conservative — adjacent
+// or near-adjacent reuse is still rejected.
+const MIN_SCENE_GAP_FOR_REUSE = 3;
 function assignUniqueFrames(
   scenes: ParsedScene[],
   frames: ExtractedFrame[],
 ): Array<{ time: number; dataUrl: string } | null> {
   if (frames.length === 0) return scenes.map(() => null);
-  const usedIdx = new Set<number>();
+  // Track the last sceneIdx that consumed each frame index so we can reuse it
+  // later if enough scenes have passed.
+  const lastSceneByFrameIdx = new Map<number, number>();
   const usedTimes: number[] = [];
   const out: Array<{ time: number; dataUrl: string } | null> = [];
-  for (const s of scenes) {
+  for (let sceneIdx = 0; sceneIdx < scenes.length; sceneIdx++) {
+    const s = scenes[sceneIdx];
     const target = s.timeStartSec ?? 0;
     let bestIdx = -1;
     let bestDelta = Infinity;
     for (let i = 0; i < frames.length; i++) {
-      if (usedIdx.has(i)) continue;
+      const lastUsed = lastSceneByFrameIdx.get(i);
+      // Skip frames used too recently (within the LRU gap). On first pass the
+      // map has no entry; subsequent reuse must respect MIN_SCENE_GAP_FOR_REUSE.
+      if (lastUsed != null && sceneIdx - lastUsed < MIN_SCENE_GAP_FOR_REUSE) continue;
       const d = Math.abs(frames[i].time - target);
       if (d < bestDelta) { bestDelta = d; bestIdx = i; }
     }
     if (bestIdx === -1) {
-      out.push(null); // No unused frame — Higgsfield endpoint will use B-roll mode
+      out.push(null); // No usable frame — Higgsfield endpoint will use B-roll mode
       continue;
     }
     const frameTime = frames[bestIdx].time;
     // Visual-duplicate guard: if this frame sits within MIN_FRAME_GAP_SEC of
-    // any already-assigned frame, mark this scene as B-roll instead. The frame
-    // stays unused and remains available for a later scene whose target time
-    // actually needs it.
+    // any frame assigned to a recent scene, mark this scene as B-roll instead.
     const tooClose = usedTimes.some((t) => Math.abs(t - frameTime) < MIN_FRAME_GAP_SEC);
     if (tooClose) {
       out.push(null);
     } else {
-      usedIdx.add(bestIdx);
+      lastSceneByFrameIdx.set(bestIdx, sceneIdx);
       usedTimes.push(frameTime);
       out.push({ time: frameTime, dataUrl: frames[bestIdx].dataUrl });
     }
@@ -1490,6 +1542,16 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   useEffect(() => {
     let cancelled = false;
     let tries = 0;
+    // Reset the self-heal attempt counter whenever this row gets a new
+    // variation/order to track. Without this, navigating between variations or
+    // remounting after an error left the ref at its terminal value (e.g. 5),
+    // which made the next backoff schedule fire ~10min later instead of the
+    // 30s baseline — UI looked frozen even though the row was healthy.
+    selfHealAttemptsRef.current = 0;
+    if (selfHealTimerRef.current !== null) {
+      window.clearTimeout(selfHealTimerRef.current);
+      selfHealTimerRef.current = null;
+    }
     const SCENE_FIND_BUDGET = 8;       // ~4s @ 500ms — find the inserted row
     // 240s @ 1.5s = 360s grace window. Covers Opus worst case (~300s end-to-end
     // with 6-attempt retry chain). After this window, self-heal kicks in with
@@ -1580,6 +1642,10 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
       if (!token) return;
       const modelsToTry: HiggsfieldModelChoice[] =
         higgsfieldModel === "haiku" ? ["haiku"] : [higgsfieldModel, "haiku"];
+      // Track whether ANY attempt was a transient failure. If every failure was
+      // permanent (4xx other than 429), retrying later just burns the same 4xx
+      // again — abandon instead of scheduling another self-heal.
+      let sawTransient = false;
       for (const m of modelsToTry) {
         try {
           const res = await fetch("/api/generate-higgsfield-prompts", {
@@ -1592,7 +1658,7 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
               model: m,
             }),
           });
-          if (res.status === 402) {
+          if (res.status === 402 || res.status === 429) {
             // Drain body to release the connection before bailing.
             await res.text().catch(() => "");
             console.warn("[self-heal] spending cap reached — abandoning scene", sceneDbId);
@@ -1602,6 +1668,11 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
             // Drain body so the underlying connection is released back to the
             // pool before we move on to the fallback model.
             await res.text().catch(() => "");
+            // 5xx is transient; 4xx (other than 429 handled above) is permanent
+            // — malformed payload, RLS rejection, missing scene. Permanent
+            // errors won't fix themselves on the next backoff tick, so don't
+            // schedule another self-heal if every attempt was permanent.
+            if (res.status >= 500) sawTransient = true;
             continue;
           }
           const j = (await res.json()) as {
@@ -1615,8 +1686,17 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
           selfHealAttemptsRef.current = 0;
           return;
         } catch (e) {
+          // Network exception — treat as transient.
+          sawTransient = true;
           console.warn("[self-heal] model failed, trying next", m, e);
         }
+      }
+      if (!sawTransient) {
+        console.warn(
+          "[self-heal] all attempts returned permanent 4xx — abandoning scene",
+          sceneDbId,
+        );
+        return;
       }
       selfHealAttemptsRef.current += 1;
       const nextDelay = Math.min(
@@ -1644,6 +1724,14 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   const generatePrompts = async () => {
     if (!sceneDbId) { toast.error("Escena no persistida aún"); return; }
     if (!workspaceId) { toast.error("Workspace no listo"); return; }
+    // Manual regenerate cancels any pending self-heal cycle and resets the
+    // backoff counter — otherwise a row that exhausted its retries stays
+    // "envenenada" and the next manual click does nothing visible until reload.
+    if (selfHealTimerRef.current !== null) {
+      window.clearTimeout(selfHealTimerRef.current);
+      selfHealTimerRef.current = null;
+    }
+    selfHealAttemptsRef.current = 0;
     setLoadingPrompts(true);
     try {
       const session = (await supabase.auth.getSession()).data.session;

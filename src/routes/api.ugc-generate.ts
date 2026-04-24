@@ -143,7 +143,11 @@ export const Route = createFileRoute("/api/ugc-generate")({
           .maybeSingle();
         if (!membership) return new Response("Forbidden: not a workspace member", { status: 403 });
 
-        const model = body.model || "claude-sonnet-4-5-20250929";
+        // Default aligned with the UI dropdown (Sonnet 4.6). Previously this
+        // fell back to "claude-sonnet-4-5-20250929" while priceFor() and the UI
+        // selector both use "claude-sonnet-4-6", causing cost-tracking
+        // mismatches when the client omitted `model` from the body.
+        const model = body.model || "claude-sonnet-4-6";
         const videoModel = body.videoModel || "wan2.6-i2v";
         const targetModelLabel =
           videoModel === "kling2.5-turbo" ? "Kling 2.5 Turbo" : "Seedance 2.0";
