@@ -43,8 +43,9 @@ export const Route = createFileRoute("/api/anthropic-generate")({
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
 
-        const cap = await checkSpendingCap(supabase, userId);
+        const cap = await checkSpendingCap(supabase, userId, "api.anthropic-generate");
         if (!cap.ok) return capExceededResponse(cap);
+        const reservedUsd = cap.reservedUsd;
 
         const body = (await request.json()) as {
           analysis: string;

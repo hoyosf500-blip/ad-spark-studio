@@ -52,7 +52,7 @@ export const Route = createFileRoute("/api/detect-product")({
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
 
-        const cap = await checkSpendingCap(sb, userId);
+        const cap = await checkSpendingCap(sb, userId, "api.generate-higgsfield-prompts");
         if (!cap.ok) return capExceededResponse(cap);
 
         const body = (await request.json()) as Body;

@@ -52,6 +52,11 @@ export async function logUsage(opts: {
   cacheCreateTokens?: number;
   cacheReadTokens?: number;
   metadata?: Record<string, unknown>;
+  // Tanda B.2: amount pre-reserved against the daily cap before the operation
+  // ran. logUsage now reconciles the difference (actual - reserved) against
+  // daily_spend so the cap reflects real cost. When omitted (legacy callers
+  // or fallback path), no reconciliation happens.
+  reservedUsd?: number;
 }) {
   const cacheCreate = opts.cacheCreateTokens ?? 0;
   const cacheRead = opts.cacheReadTokens ?? 0;
@@ -81,6 +86,25 @@ export async function logUsage(opts: {
     metadata: { ...(opts.metadata ?? {}), ...cacheMeta },
   };
   await sb.from("api_usage").insert(row as never);
+
+  // Reconcile the reservation diff (actual - reserved). Diff may be negative
+  // (refund). The RPC silently no-ops if the daily_spend row doesn't exist
+  // (migration pending) — code 42883 means the function itself is missing,
+  // both are non-fatal so we only log unexpected errors.
+  if (typeof opts.reservedUsd === "number") {
+    const diff = cost - opts.reservedUsd;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (sb.rpc as any)("reconcile_daily_spend", {
+      p_user_id: opts.userId,
+      p_diff_usd: diff,
+    });
+    if (error) {
+      const code = (error as { code?: string }).code;
+      if (code !== "42883" && code !== "PGRST202") {
+        console.error("[logUsage] reconcile_daily_spend failed:", error);
+      }
+    }
+  }
   return cost;
 }
 

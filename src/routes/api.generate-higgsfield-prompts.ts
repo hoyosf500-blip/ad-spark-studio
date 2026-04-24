@@ -256,8 +256,9 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
 
-        const cap = await checkSpendingCap(sb, userId);
+        const cap = await checkSpendingCap(sb, userId, "api.generate-higgsfield-prompts");
         if (!cap.ok) return capExceededResponse(cap);
+        const reservedUsd = cap.reservedUsd;
 
         const body = (await request.json()) as Body;
         if (!body.sceneId) return new Response("sceneId required", { status: 400 });
