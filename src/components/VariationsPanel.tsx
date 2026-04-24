@@ -615,8 +615,15 @@ export function VariationsPanel() {
         toast.success(`Análisis listo. Costo: $${Number(cost ?? 0).toFixed(4)}`);
       }
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Error en análisis");
+      // Aborts come from unmount cleanup — silent, expected.
+      const isAbort =
+        (e instanceof DOMException && e.name === "AbortError") ||
+        (e instanceof Error && e.name === "AbortError");
+      if (!isAbort) {
+        toast.error(e instanceof Error ? e.message : "Error en análisis");
+      }
     } finally {
+      streamControllersRef.current.delete(controller);
       setAnalyzing(false);
       setAnalysisStartedAt(null);
     }
