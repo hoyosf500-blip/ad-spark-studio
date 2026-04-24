@@ -1229,37 +1229,48 @@ function pickFrameAt(frames: ExtractedFrame[], timeSec: number | null): string |
 // make MIN_GAP_SEC = 2 a safe default — shots shorter than 2s are rare in COD
 // UGC ads and we prefer losing a marginal A-roll over a duplicated-looking one.
 const MIN_FRAME_GAP_SEC = 2;
+// Allow a frame to be reused by a later scene if at least this many scenes
+// have passed since the last assignment. In short videos (10s, 5 frames) with
+// many scenes (8), the previous strict-uniqueness rule pushed the tail half of
+// the script into B-ROLL even when reusing frame 0 in scene 5 would be
+// visually safe (scenes far apart in narrative). 3 is conservative — adjacent
+// or near-adjacent reuse is still rejected.
+const MIN_SCENE_GAP_FOR_REUSE = 3;
 function assignUniqueFrames(
   scenes: ParsedScene[],
   frames: ExtractedFrame[],
 ): Array<{ time: number; dataUrl: string } | null> {
   if (frames.length === 0) return scenes.map(() => null);
-  const usedIdx = new Set<number>();
+  // Track the last sceneIdx that consumed each frame index so we can reuse it
+  // later if enough scenes have passed.
+  const lastSceneByFrameIdx = new Map<number, number>();
   const usedTimes: number[] = [];
   const out: Array<{ time: number; dataUrl: string } | null> = [];
-  for (const s of scenes) {
+  for (let sceneIdx = 0; sceneIdx < scenes.length; sceneIdx++) {
+    const s = scenes[sceneIdx];
     const target = s.timeStartSec ?? 0;
     let bestIdx = -1;
     let bestDelta = Infinity;
     for (let i = 0; i < frames.length; i++) {
-      if (usedIdx.has(i)) continue;
+      const lastUsed = lastSceneByFrameIdx.get(i);
+      // Skip frames used too recently (within the LRU gap). On first pass the
+      // map has no entry; subsequent reuse must respect MIN_SCENE_GAP_FOR_REUSE.
+      if (lastUsed != null && sceneIdx - lastUsed < MIN_SCENE_GAP_FOR_REUSE) continue;
       const d = Math.abs(frames[i].time - target);
       if (d < bestDelta) { bestDelta = d; bestIdx = i; }
     }
     if (bestIdx === -1) {
-      out.push(null); // No unused frame — Higgsfield endpoint will use B-roll mode
+      out.push(null); // No usable frame — Higgsfield endpoint will use B-roll mode
       continue;
     }
     const frameTime = frames[bestIdx].time;
     // Visual-duplicate guard: if this frame sits within MIN_FRAME_GAP_SEC of
-    // any already-assigned frame, mark this scene as B-roll instead. The frame
-    // stays unused and remains available for a later scene whose target time
-    // actually needs it.
+    // any frame assigned to a recent scene, mark this scene as B-roll instead.
     const tooClose = usedTimes.some((t) => Math.abs(t - frameTime) < MIN_FRAME_GAP_SEC);
     if (tooClose) {
       out.push(null);
     } else {
-      usedIdx.add(bestIdx);
+      lastSceneByFrameIdx.set(bestIdx, sceneIdx);
       usedTimes.push(frameTime);
       out.push({ time: frameTime, dataUrl: frames[bestIdx].dataUrl });
     }
