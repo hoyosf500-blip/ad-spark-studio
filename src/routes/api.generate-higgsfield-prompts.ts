@@ -476,6 +476,7 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           operation: "higgsfield_prompts",
           inputTokens: data.usage?.input_tokens ?? 0,
           outputTokens: data.usage?.output_tokens ?? 0,
+          reservedUsd,
           metadata: { sceneId: scene.id, variationId: scene.variation_id, orderIdx: scene.order_idx },
         });
 

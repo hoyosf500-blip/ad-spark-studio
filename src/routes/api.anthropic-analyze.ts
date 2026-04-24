@@ -218,6 +218,7 @@ export const Route = createFileRoute("/api/anthropic-analyze")({
                   model, operation: failed ? "claude_analysis_partial" : "claude_analysis",
                   inputTokens, outputTokens,
                   cacheCreateTokens, cacheReadTokens,
+                  reservedUsd,
                   metadata: {
                     frames: body.frames.length,
                     hasProductPhoto: !!body.productPhoto,

@@ -296,6 +296,7 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                 model, operation: "claude_variation",
                 inputTokens, outputTokens,
                 cacheCreateTokens, cacheReadTokens,
+                reservedUsd,
                 metadata: {
                   variationType: body.variationType,
                   variationLabel: body.variationLabel,

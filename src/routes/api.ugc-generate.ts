@@ -266,6 +266,7 @@ export const Route = createFileRoute("/api/ugc-generate")({
                 operation: "claude_ugc_script",
                 inputTokens,
                 outputTokens,
+                reservedUsd,
                 metadata: { style: body.style, videoModel, isTruncated: stopReason === "max_tokens" },
               });
 
