@@ -21,8 +21,8 @@ import { Route as ApiUgcGenerateRouteImport } from './routes/api.ugc-generate'
 import { Route as ApiTranscribeAudioRouteImport } from './routes/api.transcribe-audio'
 import { Route as ApiGenerateHiggsfieldPromptsRouteImport } from './routes/api.generate-higgsfield-prompts'
 import { Route as ApiDetectProductRouteImport } from './routes/api.detect-product'
-import { Route as ApiAnthropicGenerateRouteImport } from './routes/api.anthropic-generate'
-import { Route as ApiAnthropicAnalyzeRouteImport } from './routes/api.anthropic-analyze'
+import { Route as ApiGenerateVariationsRouteImport } from './routes/api.generate-variations'
+import { Route as ApiAnalyzeFramesRouteImport } from './routes/api.analyze-frames'
 
 const VariationsRoute = VariationsRouteImport.update({
   id: '/variations',
@@ -85,14 +85,14 @@ const ApiDetectProductRoute = ApiDetectProductRouteImport.update({
   path: '/api/detect-product',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAnthropicGenerateRoute = ApiAnthropicGenerateRouteImport.update({
-  id: '/api/anthropic-generate',
-  path: '/api/anthropic-generate',
+const ApiGenerateVariationsRoute = ApiGenerateVariationsRouteImport.update({
+  id: '/api/generate-variations',
+  path: '/api/generate-variations',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAnthropicAnalyzeRoute = ApiAnthropicAnalyzeRouteImport.update({
-  id: '/api/anthropic-analyze',
-  path: '/api/anthropic-analyze',
+const ApiAnalyzeFramesRoute = ApiAnalyzeFramesRouteImport.update({
+  id: '/api/analyze-frames',
+  path: '/api/analyze-frames',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -105,8 +105,8 @@ export interface FileRoutesByFullPath {
   '/projects': typeof ProjectsRoute
   '/ugc': typeof UgcRoute
   '/variations': typeof VariationsRoute
-  '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
-  '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/analyze-frames': typeof ApiAnalyzeFramesRoute
+  '/api/generate-variations': typeof ApiGenerateVariationsRoute
   '/api/detect-product': typeof ApiDetectProductRoute
   '/api/generate-higgsfield-prompts': typeof ApiGenerateHiggsfieldPromptsRoute
   '/api/transcribe-audio': typeof ApiTranscribeAudioRoute
@@ -121,8 +121,8 @@ export interface FileRoutesByTo {
   '/projects': typeof ProjectsRoute
   '/ugc': typeof UgcRoute
   '/variations': typeof VariationsRoute
-  '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
-  '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/analyze-frames': typeof ApiAnalyzeFramesRoute
+  '/api/generate-variations': typeof ApiGenerateVariationsRoute
   '/api/detect-product': typeof ApiDetectProductRoute
   '/api/generate-higgsfield-prompts': typeof ApiGenerateHiggsfieldPromptsRoute
   '/api/transcribe-audio': typeof ApiTranscribeAudioRoute
@@ -138,8 +138,8 @@ export interface FileRoutesById {
   '/projects': typeof ProjectsRoute
   '/ugc': typeof UgcRoute
   '/variations': typeof VariationsRoute
-  '/api/anthropic-analyze': typeof ApiAnthropicAnalyzeRoute
-  '/api/anthropic-generate': typeof ApiAnthropicGenerateRoute
+  '/api/analyze-frames': typeof ApiAnalyzeFramesRoute
+  '/api/generate-variations': typeof ApiGenerateVariationsRoute
   '/api/detect-product': typeof ApiDetectProductRoute
   '/api/generate-higgsfield-prompts': typeof ApiGenerateHiggsfieldPromptsRoute
   '/api/transcribe-audio': typeof ApiTranscribeAudioRoute
@@ -156,8 +156,8 @@ export interface FileRouteTypes {
     | '/projects'
     | '/ugc'
     | '/variations'
-    | '/api/anthropic-analyze'
-    | '/api/anthropic-generate'
+    | '/api/analyze-frames'
+    | '/api/generate-variations'
     | '/api/detect-product'
     | '/api/generate-higgsfield-prompts'
     | '/api/transcribe-audio'
@@ -172,8 +172,8 @@ export interface FileRouteTypes {
     | '/projects'
     | '/ugc'
     | '/variations'
-    | '/api/anthropic-analyze'
-    | '/api/anthropic-generate'
+    | '/api/analyze-frames'
+    | '/api/generate-variations'
     | '/api/detect-product'
     | '/api/generate-higgsfield-prompts'
     | '/api/transcribe-audio'
@@ -188,8 +188,8 @@ export interface FileRouteTypes {
     | '/projects'
     | '/ugc'
     | '/variations'
-    | '/api/anthropic-analyze'
-    | '/api/anthropic-generate'
+    | '/api/analyze-frames'
+    | '/api/generate-variations'
     | '/api/detect-product'
     | '/api/generate-higgsfield-prompts'
     | '/api/transcribe-audio'
@@ -205,8 +205,8 @@ export interface RootRouteChildren {
   ProjectsRoute: typeof ProjectsRoute
   UgcRoute: typeof UgcRoute
   VariationsRoute: typeof VariationsRoute
-  ApiAnthropicAnalyzeRoute: typeof ApiAnthropicAnalyzeRoute
-  ApiAnthropicGenerateRoute: typeof ApiAnthropicGenerateRoute
+  ApiAnalyzeFramesRoute: typeof ApiAnalyzeFramesRoute
+  ApiGenerateVariationsRoute: typeof ApiGenerateVariationsRoute
   ApiDetectProductRoute: typeof ApiDetectProductRoute
   ApiGenerateHiggsfieldPromptsRoute: typeof ApiGenerateHiggsfieldPromptsRoute
   ApiTranscribeAudioRoute: typeof ApiTranscribeAudioRoute
@@ -299,18 +299,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiDetectProductRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/anthropic-generate': {
-      id: '/api/anthropic-generate'
-      path: '/api/anthropic-generate'
-      fullPath: '/api/anthropic-generate'
-      preLoaderRoute: typeof ApiAnthropicGenerateRouteImport
+    '/api/generate-variations': {
+      id: '/api/generate-variations'
+      path: '/api/generate-variations'
+      fullPath: '/api/generate-variations'
+      preLoaderRoute: typeof ApiGenerateVariationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/anthropic-analyze': {
-      id: '/api/anthropic-analyze'
-      path: '/api/anthropic-analyze'
-      fullPath: '/api/anthropic-analyze'
-      preLoaderRoute: typeof ApiAnthropicAnalyzeRouteImport
+    '/api/analyze-frames': {
+      id: '/api/analyze-frames'
+      path: '/api/analyze-frames'
+      fullPath: '/api/analyze-frames'
+      preLoaderRoute: typeof ApiAnalyzeFramesRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -325,8 +325,8 @@ const rootRouteChildren: RootRouteChildren = {
   ProjectsRoute: ProjectsRoute,
   UgcRoute: UgcRoute,
   VariationsRoute: VariationsRoute,
-  ApiAnthropicAnalyzeRoute: ApiAnthropicAnalyzeRoute,
-  ApiAnthropicGenerateRoute: ApiAnthropicGenerateRoute,
+  ApiAnalyzeFramesRoute: ApiAnalyzeFramesRoute,
+  ApiGenerateVariationsRoute: ApiGenerateVariationsRoute,
   ApiDetectProductRoute: ApiDetectProductRoute,
   ApiGenerateHiggsfieldPromptsRoute: ApiGenerateHiggsfieldPromptsRoute,
   ApiTranscribeAudioRoute: ApiTranscribeAudioRoute,

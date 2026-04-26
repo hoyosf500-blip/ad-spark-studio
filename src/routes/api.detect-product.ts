@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { dataUrlToBase64, logUsage } from "@/utils/anthropic.functions";
+import { logUsage } from "@/utils/openrouter.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -32,14 +32,12 @@ export const Route = createFileRoute("/api/detect-product")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env.ANTHROPIC_API_KEY;
-        if (!apiKey) return new Response("ANTHROPIC_API_KEY not configured", { status: 500 });
+        const apiKey = process.env.OPENROUTER_API_KEY;
+        if (!apiKey) return new Response("OPENROUTER_API_KEY not configured", { status: 500 });
 
         const authHeader = request.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) return new Response("Unauthorized", { status: 401 });
         const token = authHeader.slice(7);
-        // Pass user JWT so checkSpendingCap can read profiles under RLS as the
-        // calling user (otherwise daily_cap_usd silently defaults to $20).
         const sb = createClient<Database>(
           process.env.SUPABASE_URL!,
           process.env.SUPABASE_PUBLISHABLE_KEY!,
@@ -52,31 +50,33 @@ export const Route = createFileRoute("/api/detect-product")({
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
 
-        const cap = await checkSpendingCap(sb, userId, "api.generate-higgsfield-prompts");
+        const cap = await checkSpendingCap(sb, userId, "api.detect-product");
         if (!cap.ok) return capExceededResponse(cap);
 
         const body = (await request.json()) as Body;
         if (!body.productPhoto) return new Response("productPhoto required", { status: 400 });
 
-        const model = body.model || "claude-sonnet-4-5-20250929";
-        const { mediaType, b64 } = dataUrlToBase64(body.productPhoto);
+        const model = body.model || "google/gemini-2.5-flash";
 
-        const upstream = await fetch("https://api.anthropic.com/v1/messages", {
+        const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
           method: "POST",
           headers: {
             "content-type": "application/json",
-            "x-api-key": apiKey,
-            "anthropic-version": "2023-06-01",
+            authorization: `Bearer ${apiKey}`,
+            "HTTP-Referer": "https://adsparkstudio.com",
+            "X-Title": "Ad Spark Studio",
           },
           body: JSON.stringify({
             model,
-            max_tokens: 512,
-            system: SYS,
+            max_completion_tokens: 512,
+            temperature: 0.2,
+            response_format: { type: "json_object" },
             messages: [
+              { role: "system", content: SYS },
               {
                 role: "user",
                 content: [
-                  { type: "image", source: { type: "base64", media_type: mediaType, data: b64 } },
+                  { type: "image_url", image_url: { url: body.productPhoto, detail: "high" } },
                   { type: "text", text: "Detecta los 4 campos y devuelve solo el JSON." },
                 ],
               },
@@ -86,14 +86,14 @@ export const Route = createFileRoute("/api/detect-product")({
 
         if (!upstream.ok) {
           const errText = await upstream.text();
-          return new Response(`Anthropic ${upstream.status}: ${errText.slice(0, 500)}`, { status: 502 });
+          return new Response(`OpenRouter ${upstream.status}: ${errText.slice(0, 500)}`, { status: 502 });
         }
 
         const data = (await upstream.json()) as {
-          content: Array<{ type: string; text?: string }>;
-          usage?: { input_tokens?: number; output_tokens?: number };
+          choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         };
-        const raw = data.content.find((c) => c.type === "text")?.text?.trim() ?? "";
+        const raw = data.choices?.[0]?.message?.content?.trim() ?? "";
 
         const jsonMatch = raw.match(/\{[\s\S]*\}/);
         let parsed: DetectResult = { name: "", oneLiner: "", price: "", audience: "" };
@@ -115,9 +115,9 @@ export const Route = createFileRoute("/api/detect-product")({
           userId,
           workspaceId: body.workspaceId ?? null,
           model,
-          operation: "claude_detect_product",
-          inputTokens: data.usage?.input_tokens ?? 0,
-          outputTokens: data.usage?.output_tokens ?? 0,
+          operation: "openrouter_detect_product",
+          inputTokens: data.usage?.prompt_tokens ?? 0,
+          outputTokens: data.usage?.completion_tokens ?? 0,
           metadata: { hasPhoto: true },
         });
 

@@ -65,10 +65,10 @@ function StepperNav({ current }: { current: StepId }) {
   );
 }
 
-// Send ALL extracted frames to Sonnet so each scene prompt anchors to its
+// Send ALL extracted frames to GPT-4o so each scene prompt anchors to its
 // matching reference frame. Frames are already capped to MAX_FRAMES=60 by the
 // extractor (1fps, 1024x1820), so input size stays bounded. With prompt caching
-// active in api.anthropic-generate, the 6 variation calls share the frame
+// active in api.generate-variations, the 6 variation calls share the frame
 // payload (cache write on call 1 at 1.25x, cache read on calls 2-6 at 0.10x),
 // so full-fidelity sampling no longer costs ~$0.45 per variation in image
 // tokens — it costs ~$0.62 once and ~$0.05 per subsequent variation.
@@ -83,14 +83,14 @@ function pickReferenceFrames(
 
 // Auto-generate Higgsfield prompts after scene rows are inserted.
 // CONCURRENCY=6: all scenes fire simultaneously. Each call sends one reference
-// frame (~1500 tokens), well within Sonnet 4.6 rate limits. Retry-once-on-5xx
+// frame (~1500 tokens), well within GPT-4o rate limits. Retry-once-on-5xx
 // handles any transient rate-limit hit without user intervention.
 //
 // Retry-once-on-5xx with 2s backoff: 4xx (cap exceeded, auth) is permanent and
 // not retried. Auto-gen respeta la preferencia persistida en localStorage
 // (última elección del dropdown SceneRow). Sin preferencia → default backend
-// (Sonnet 4.6 desde commit 173d075) ≈ $0.015/scene multimodal w/ 1 frame,
-// 6 scenes ≈ $0.09. Opus 4.7 ≈ $0.12/scene, Haiku 4.5 ≈ $0.005/scene.
+// (GPT-4o desde commit 173d075) ≈ $0.015/scene multimodal w/ 1 frame,
+// 6 scenes ≈ $0.09. GPT-4o ≈ $0.12/scene, GPT-4o-mini ≈ $0.005/scene.
 
 type HiggsfieldModelChoice = "sonnet" | "opus" | "haiku";
 const HIGGSFIELD_MODEL_STORAGE_KEY = "ad-spark:higgsfield-model";
@@ -116,7 +116,7 @@ async function autoGenScenePrompts(args: {
 }) {
   const { insertedScenes, framesByOrderIdx, workspaceId, token, onCost, model } = args;
 
-  // Model-aware concurrency + retry budget. Opus 4.7 has significantly lower
+  // Model-aware concurrency + retry budget. GPT-4o has significantly lower
   // tokens-per-minute limits on standard tiers than Sonnet/Haiku, so firing 6
   // concurrent multimodal Opus calls — especially when the user runs the full
   // 6-variation batch with the parallel fan-out — cascades into 429s across
@@ -212,10 +212,10 @@ function progressPct(v: VariationState): number {
   return Math.max(1, Math.round(scenePct + tailPct + 1));
 }
 
-// Aligned with priceFor() table in src/utils/anthropic.functions.ts and the
+// Aligned with priceFor() table in src/utils/openrouter.functions.ts and the
 // backend default in api.anthropic-{analyze,generate}. Sending the same string
 // in the request body keeps cost tracking accurate end-to-end.
-const DEFAULT_MODEL = "claude-sonnet-4-6";
+const DEFAULT_MODEL = "anthropic/claude-sonnet-4.5";
 
 export function VariationsPanel() {
   const { user, activeWorkspaceId, refreshWorkspaces, setActiveWorkspaceId } = useAuth();
@@ -232,7 +232,7 @@ export function VariationsPanel() {
   const [transcription, setTranscription] = useState("");
   const [transcribing, setTranscribing] = useState(false);
 
-  // Product data (B2) — fed as productInfo to /api/anthropic-analyze and /api/anthropic-generate
+  // Product data (B2) — fed as productInfo to /api/analyze-frames and /api/generate-variations
   const [productName, setProductName] = useState("");
   const [productOneLiner, setProductOneLiner] = useState("");
   const [productPrice, setProductPrice] = useState("");
@@ -252,7 +252,7 @@ export function VariationsPanel() {
   const [analysisStartedAt, setAnalysisStartedAt] = useState<number | null>(null);
   const [analysisElapsed, setAnalysisElapsed] = useState(0);
   // Acumulado de costo de prompts Higgsfield por escena (modelo variable:
-  // Sonnet 4.6 default, Opus 4.7 o Haiku 4.5 si el usuario lo elige).
+  // GPT-4o default, GPT-4o o GPT-4o-mini si el usuario lo elige).
   // Se incrementa solo cuando una llamada NO viene del cache servidor.
   const [promptsCost, setPromptsCost] = useState(0);
   const addPromptsCost = useCallback((c: number) => {
@@ -510,7 +510,7 @@ export function VariationsPanel() {
       const token = session?.access_token;
       if (!token) throw new Error("No auth session");
 
-      const res = await fetch("/api/anthropic-analyze", {
+      const res = await fetch("/api/analyze-frames", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
         signal: controller.signal,
@@ -630,9 +630,9 @@ export function VariationsPanel() {
   };
 
   // ─── generate all variations: warm-up + parallel fan-out ────────────
-  // Strategy: run the FIRST variation alone so Anthropic's prompt cache
+  // Strategy: run the FIRST variation alone so OpenAI prompt caching
   // (frames + analysis + transcription + product info, ~150k tokens marked
-  // cache_control: ephemeral in api.anthropic-generate) is fully populated.
+  // cache_control: ephemeral in api.generate-variations) is fully populated.
   // Then fire the remaining variations in parallel — they all hit the cache
   // as cache_read (0.10x input price) instead of each paying cache_creation
   // (1.25x). This preserves the ~65% input-cost savings while collapsing the
@@ -721,7 +721,7 @@ export function VariationsPanel() {
       const token = session?.access_token;
       if (!token) throw new Error("No auth session");
 
-      const res = await fetch("/api/anthropic-generate", {
+      const res = await fetch("/api/generate-variations", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
         signal: controller.signal,
@@ -870,7 +870,7 @@ export function VariationsPanel() {
           );
           if (validInserted.length > 0) {
             // Fire-and-forget: auto-generate Higgsfield prompts (default
-            // Sonnet 4.6 multimodal, ~$0.015/scene) for all 6 scenes so the
+            // GPT-4o multimodal, ~$0.015/scene) for all 6 scenes so the
             // user doesn't have to click "Generar prompts" on each one.
             // SceneRow's useEffect polls the DB and picks them up as they land.
             // Errors here are non-fatal — the manual button still works.
@@ -885,7 +885,7 @@ export function VariationsPanel() {
               onCost: addPromptsCost,
               // Respeta la última elección del dropdown SceneRow persistida
               // en localStorage. Sin elección previa → backend usa su default
-              // (Sonnet 4.6). Esto resuelve el caso: user regenera escena 1 con
+              // (GPT-4o). Esto resuelve el caso: user regenera escena 1 con
               // Opus, luego crea una nueva variación → sus 6 escenas arrancan
               // con Opus auto-gen (consistente con su preferencia reciente).
               model: readStoredHiggsfieldModel(),
@@ -1514,9 +1514,9 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   const [selfHealInFlight, setSelfHealInFlight] = useState(false);
   const selfHealAttemptsRef = useRef(0);
   const selfHealTimerRef = useRef<number | null>(null);
-  // Modelo Claude para regenerar prompts de esta escena. Default Sonnet 4.6:
+  // Modelo Claude para regenerar prompts de esta escena. Default GPT-4o:
   // mejor fidelidad multimodal que Haiku (Haiku se saltaba detalles críticos
-  // tipo "liendrera" vs "peine" o vértebras dramáticas vs genéricas). Opus 4.7
+  // tipo "liendrera" vs "peine" o vértebras dramáticas vs genéricas). GPT-4o
   // queda como fallback cuando ni Sonnet acierta (composites anatómicos, 3D).
   // Se inicializa desde localStorage para que la elección del user persista
   // entre sesiones y aplique también al auto-gen de nuevas variaciones.
@@ -1847,9 +1847,9 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
               className="h-7 rounded-md border border-border bg-background px-2 text-[10px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
               title="Modelo Claude para generar los prompts de esta escena. Se recuerda entre sesiones."
             >
-              <option value="sonnet">Sonnet 4.6 · recomendado</option>
-              <option value="opus">Opus 4.7 · máxima fidelidad</option>
-              <option value="haiku">Haiku 4.5 · más barato</option>
+              <option value="sonnet">GPT-4o · recomendado</option>
+              <option value="opus">GPT-4o · máxima fidelidad</option>
+              <option value="haiku">GPT-4o-mini · más barato</option>
             </select>
             <Button
               size="sm"

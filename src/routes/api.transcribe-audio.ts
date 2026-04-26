@@ -19,7 +19,12 @@ export const Route = createFileRoute("/api/transcribe-audio")({
     handlers: {
       POST: async ({ request }) => {
         const apiKey = process.env.OPENAI_API_KEY;
-        if (!apiKey) return new Response("OPENAI_API_KEY not configured", { status: 500 });
+        if (!apiKey) {
+          return new Response(
+            "OPENAI_API_KEY not configured. Note: OpenRouter does not support audio transcription endpoints. You need a separate OpenAI API key for Whisper audio transcription, or configure an alternative STT provider (Google Speech, AssemblyAI, Deepgram).",
+            { status: 500 },
+          );
+        }
 
         // Auth
         const authHeader = request.headers.get("authorization");
@@ -39,7 +44,7 @@ export const Route = createFileRoute("/api/transcribe-audio")({
         if (claimsErr || !claims?.claims?.sub) return new Response("Unauthorized", { status: 401 });
         const userId = claims.claims.sub;
 
-        const cap = await checkSpendingCap(supabase, userId, "api.generate-higgsfield-prompts");
+        const cap = await checkSpendingCap(supabase, userId, "api.transcribe-audio");
         if (!cap.ok) return capExceededResponse(cap);
 
         // Parse multipart

@@ -2,22 +2,24 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
 // Conservative per-endpoint upfront reservation. Each endpoint reserves this
-// amount BEFORE calling Anthropic so two concurrent requests can't both pass
+// amount BEFORE calling OpenAI so two concurrent requests can't both pass
 // the cap check on the same dollar (race fix — see Tanda B.2).
 //
 // Sized at ~p95 of historical costs per operation so legitimate runs are
 // rarely over-reserved, while keeping the worst-case outlier bounded:
-//  - api.anthropic-analyze: multimodal Sonnet 4.6 with up to 60 frames + 8k
+//  - api.analyze-frames: multimodal GPT-4o with up to 60 frames + 8k
 //    output tokens → up to ~$5 in pathological runs (60 frames × ~1500 in
 //    tokens + 8k out at $3/$15 per M).
-//  - api.anthropic-generate: text-only Sonnet 4.6, ~25k in + ~12k out cap.
-//  - api.ugc-generate: text-only Sonnet 4.6, smaller scripts.
-//  - api.generate-higgsfield-prompts: single-frame Haiku 4.5, tiny.
+//  - api.generate-variations: text-only GPT-4o, ~25k in + ~12k out cap.
+//  - api.ugc-generate: text-only GPT-4o, smaller scripts.
+//  - api.generate-higgsfield-prompts: single-frame GPT-4o-mini, tiny.
 export const MAX_ESTIMATED_COST_USD: Record<string, number> = {
-  "api.anthropic-analyze": 5.0,
-  "api.anthropic-generate": 1.5,
+  "api.analyze-frames": 5.0,
+  "api.generate-variations": 1.5,
   "api.ugc-generate": 0.8,
   "api.generate-higgsfield-prompts": 0.1,
+  "api.detect-product": 0.05,
+  "api.transcribe-audio": 0.3,
 };
 
 export type CapCheck =
@@ -41,7 +43,7 @@ export async function checkSpendingCap(
   endpoint: string,
 ): Promise<CapCheck> {
   const estimated =
-    MAX_ESTIMATED_COST_USD[endpoint] ?? MAX_ESTIMATED_COST_USD["api.anthropic-generate"];
+    MAX_ESTIMATED_COST_USD[endpoint] ?? MAX_ESTIMATED_COST_USD["api.generate-variations"];
 
   // Try the atomic RPC first. If the function doesn't exist yet (migration
   // pending) Postgres returns code 42883 — fall through to the legacy path.

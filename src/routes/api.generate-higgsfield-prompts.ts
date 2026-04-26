@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { logUsage, dataUrlToBase64 } from "@/utils/anthropic.functions";
+import { logUsage, dataUrlToOpenAIImage } from "@/utils/openrouter.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -10,22 +10,18 @@ type Body = {
   sceneId: string;
   workspaceId?: string | null;
   referenceFrameDataUrl?: string | null;
-  // When true, skip the DB cache and force a fresh generation. Used by the
-  // "Regenerar prompts" button after a cached prompt is stale or over-length.
   forceRegenerate?: boolean;
-  // Model selector for this endpoint specifically. Default is Sonnet 4.6:
-  // it has meaningfully better multimodal fidelity than Haiku 4.5 for the
-  // "describe literally what is in this frame" task, and the per-scene cost
-  // delta is cents. Opus 4.7 is exposed for scenes where the user wants
-  // maximum fidelity (composite edits, anatomical 3D). Haiku stays available
-  // for batch / cheap runs.
   model?: ModelChoice;
 };
 
+type ContentPart =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };
+
 function resolveModel(choice: ModelChoice | undefined): string {
-  if (choice === "opus") return "claude-opus-4-7";
-  if (choice === "haiku") return "claude-haiku-4-5-20251001";
-  return "claude-sonnet-4-6";
+  if (choice === "opus") return "anthropic/claude-sonnet-4.5";
+  if (choice === "haiku") return "google/gemini-2.5-flash";
+  return "google/gemini-2.5-flash";
 }
 
 type Prompts = {
@@ -34,11 +30,6 @@ type Prompts = {
   seedance: string;
 };
 
-// Higgsfield's Seedream 4.5 UI rejects prompts >3000 chars. We cap at 2500
-// to leave margin — Higgsfield counts unicode/spaces differently than .length.
-// The same prompt is pasted into Nano Banana Pro AND Seedream 4.5, so the
-// cap applies to the unified image_prompt. Cut at sentence/comma boundary so
-// we never leave a half-clause dangling at the tail.
 const MAX_IMAGE_PROMPT = 2500;
 
 function capImagePrompt(s: string): string {
@@ -233,17 +224,12 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env.ANTHROPIC_API_KEY;
-        if (!apiKey) return new Response("ANTHROPIC_API_KEY not configured", { status: 500 });
+        const apiKey = process.env.OPENROUTER_API_KEY;
+        if (!apiKey) return new Response("OPENROUTER_API_KEY not configured", { status: 500 });
 
         const authHeader = request.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) return new Response("Unauthorized", { status: 401 });
         const token = authHeader.slice(7);
-        // Pass the user's JWT as Authorization header so PostgREST evaluates RLS
-        // with auth.uid() = the calling user. Without this, the client runs as
-        // anon and SELECTs against workspace-scoped tables silently return 0
-        // rows even for legitimate owners — surfacing as a misleading 404
-        // "Scene not found" after the user has already paid for the variation.
         const sb = createClient<Database>(
           process.env.SUPABASE_URL!,
           process.env.SUPABASE_PUBLISHABLE_KEY!,
@@ -287,10 +273,6 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           scene.prompt_kling &&
           scene.prompt_seedance
         ) {
-          // Apply the 2500-char cap RETROACTIVELY: cached rows written before
-          // the cap existed can still return prompts >3000 chars, which
-          // Higgsfield rejects. Re-cap on return and, if we trimmed, write the
-          // shorter version back so future cache hits are clean.
           const cappedImage = capImagePrompt(scene.prompt_nano_banana);
           if (cappedImage !== scene.prompt_nano_banana) {
             await sb
@@ -336,11 +318,6 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           }
         }
 
-        // Two content layouts depending on whether a reference frame is attached:
-        //  - With frame: image is ground truth, text fields are demoted to
-        //    "non-binding hints" so Haiku doesn't blend a stale textual
-        //    composition into a description of the actual attached image.
-        //  - Without frame: text fields are the only source; treat them normally.
         const hasFrame = !!body.referenceFrameDataUrl;
         const textFieldsLabel = hasFrame
           ? "NON-BINDING TEXTUAL HINTS (the attached image overrides any of these if they conflict; describe what you SEE in the image, not what the hints imply)"
@@ -358,11 +335,6 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           scene.scene_text && `SCENE BEAT:\n${scene.scene_text}`,
           scene.script_es && `SPOKEN LINE (Spanish):\n${scene.script_es}`,
           scene.screen_text && `SCREEN TEXT:\n${scene.screen_text}`,
-          // Skip the prior image_prompt_en when we have a fresh reference
-          // frame attached. With a frame present, Haiku must describe what
-          // it SEES in the image, not blend in a stale textual composition
-          // from a previous generation — that was causing "drift back" to
-          // the first run's wording even after we fixed temperature.
           !hasFrame && scene.image_prompt_en && `PRIOR IMAGE PROMPT (may be outdated):\n${scene.image_prompt_en}`,
           scene.animation_prompt_en &&
             `=== ORIGINAL ANIMATION PROMPT (rewrite/enrich) ===\n${scene.animation_prompt_en}`,
@@ -373,50 +345,43 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           .filter(Boolean)
           .join("\n\n");
 
-        const userContent: Array<
-          | { type: "text"; text: string }
-          | { type: "image"; source: { type: "base64"; media_type: string; data: string } }
-        > = [];
+        const userContent: ContentPart[] = [];
         if (body.referenceFrameDataUrl) {
-          const { mediaType, b64 } = dataUrlToBase64(body.referenceFrameDataUrl);
-          userContent.push({
-            type: "image",
-            source: { type: "base64", media_type: mediaType, data: b64 },
-          });
+          userContent.push(dataUrlToOpenAIImage(body.referenceFrameDataUrl));
         }
         userContent.push({ type: "text", text: userMsg });
 
         const model = resolveModel(body.model);
-        const upstream = await fetch("https://api.anthropic.com/v1/messages", {
+        const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
           method: "POST",
           headers: {
             "content-type": "application/json",
-            "x-api-key": apiKey,
-            "anthropic-version": "2023-06-01",
+            authorization: `Bearer ${apiKey}`,
+            "HTTP-Referer": "https://adsparkstudio.com",
+            "X-Title": "Ad Spark Studio",
           },
           body: JSON.stringify({
             model,
-            max_tokens: 3000,
-            // A-roll (with frame): 0.2 — must REPLICATE the reference literally,
-            // low temp keeps SYS fidelity rules dominant over sampling noise.
-            // B-roll (no frame): 0.5 — creative support shot, no reference to
-            // replicate, higher temp allows useful variation between scenes.
+            max_completion_tokens: 3000,
             temperature: hasFrame ? 0.2 : 0.5,
-            system: SYS,
-            messages: [{ role: "user", content: userContent }],
+            response_format: { type: "json_object" },
+            messages: [
+              { role: "system", content: SYS },
+              { role: "user", content: userContent },
+            ],
           }),
         });
 
         if (!upstream.ok) {
           const errText = await upstream.text().catch(() => "");
-          return new Response(`Anthropic ${upstream.status}: ${errText.slice(0, 400)}`, { status: 502 });
+          return new Response(`OpenRouter ${upstream.status}: ${errText.slice(0, 400)}`, { status: 502 });
         }
 
         const data = (await upstream.json()) as {
-          content: Array<{ type: string; text?: string }>;
-          usage?: { input_tokens?: number; output_tokens?: number };
+          choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         };
-        const raw = data.content.find((c) => c.type === "text")?.text?.trim() ?? "";
+        const raw = data.choices?.[0]?.message?.content?.trim() ?? "";
         const jsonMatch = raw.match(/\{[\s\S]*\}/);
         if (!jsonMatch) return new Response("No JSON in response", { status: 502 });
 
@@ -442,13 +407,6 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           return new Response("Malformed JSON in response", { status: 502 });
         }
 
-        // Persist: store image_prompt in BOTH prompt_nano_banana and prompt_seedream
-        // (same value in both columns) to avoid breaking existing reads or requiring a migration.
-        // Check the Supabase error explicitly: an RLS rejection or transient DB failure here
-        // would otherwise silently swallow the write, leave the scene row with NULL prompts,
-        // and still return 200 to the client — SceneRow would poll forever until its budget
-        // expires, showing "Generar prompts" as if auto-gen never ran. Surface it as a 5xx
-        // so autoGenScenePrompts retries via its exponential-backoff path.
         const { error: updateErr } = await sb
           .from("variation_scenes")
           .update({
@@ -473,9 +431,9 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           userId,
           workspaceId: body.workspaceId ?? null,
           model,
-          operation: "higgsfield_prompts",
-          inputTokens: data.usage?.input_tokens ?? 0,
-          outputTokens: data.usage?.output_tokens ?? 0,
+          operation: "openrouter_higgsfield_prompts",
+          inputTokens: data.usage?.prompt_tokens ?? 0,
+          outputTokens: data.usage?.completion_tokens ?? 0,
           reservedUsd,
           metadata: { sceneId: scene.id, variationId: scene.variation_id, orderIdx: scene.order_idx },
         });
