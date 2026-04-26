@@ -367,6 +367,22 @@ export function VariationsPanel() {
     }
   }, [activeWorkspaceId, workspaceId]);
 
+  // Cleanup del blob URL al desmontar el panel (navegación a otra ruta).
+  // Usamos ref para no re-disparar el efecto cuando videoUrl cambia — el
+  // revoke en cambio se maneja inline en onPickVideo.
+  const videoUrlRef = useRef<string | null>(null);
+  useEffect(() => {
+    videoUrlRef.current = videoUrl;
+  }, [videoUrl]);
+  useEffect(() => {
+    return () => {
+      const u = videoUrlRef.current;
+      if (u?.startsWith("blob:")) {
+        try { URL.revokeObjectURL(u); } catch { /* non-fatal */ }
+      }
+    };
+  }, []);
+
   // ─── upload + frame extraction ────────────────────────────────────
   const transcribeAudio = async (f: File, durationSec: number, ws: string | null) => {
     setTranscribing(true);
@@ -409,6 +425,12 @@ export function VariationsPanel() {
     if (!f.type.startsWith("video/")) {
       toast.error("Selecciona un archivo de video (.mp4)");
       return;
+    }
+    // Liberá el blob URL del video anterior antes de crear uno nuevo. Sin esto
+    // cada upload deja un blob colgando en memoria — usuarios que prueban 5+
+    // videos sin recargar acumulan cientos de MB de blobs huérfanos.
+    if (videoUrl?.startsWith("blob:")) {
+      try { URL.revokeObjectURL(videoUrl); } catch { /* non-fatal */ }
     }
     setFile(f);
     setFrames([]); setAnalysis(""); setAnalysisCost(0); setProjectId(null);
@@ -1542,6 +1564,7 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
   useEffect(() => {
     let cancelled = false;
     let tries = 0;
+    let pollTimer: ReturnType<typeof setTimeout> | null = null;
     // Reset the self-heal attempt counter whenever this row gets a new
     // variation/order to track. Without this, navigating between variations or
     // remounting after an error left the ref at its terminal value (e.g. 5),
@@ -1590,7 +1613,7 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
         // Row exists but auto-generated prompts haven't landed yet. Keep
         // polling at a slower cadence within the prompts-wait budget.
         if (tries++ < SCENE_FIND_BUDGET + PROMPTS_WAIT_BUDGET) {
-          setTimeout(() => { if (!cancelled) void tryFetch(); }, 1500);
+          pollTimer = setTimeout(() => { if (!cancelled) void tryFetch(); }, 1500);
         } else {
           // Budget exhausted. The worker pool either failed, was killed by a
           // tab close, or the user reopened a stale variation. Trigger the
@@ -1598,7 +1621,7 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
           void selfHealPrompts();
         }
       } else if (tries++ < SCENE_FIND_BUDGET) {
-        setTimeout(() => { if (!cancelled) void tryFetch(); }, 500);
+        pollTimer = setTimeout(() => { if (!cancelled) void tryFetch(); }, 500);
       } else {
         // Scene row never appeared (insert failed or RLS mismatch). This is a
         // DB-level problem self-heal cannot fix — expose a reload hint.
@@ -1606,7 +1629,13 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
       }
     };
     void tryFetch();
-    return () => { cancelled = true; };
+    // Cleanup: cancelar el flag Y matar el setTimeout pendiente. Sin clearTimeout
+    // los polls fantasma seguían pegándole a Supabase después de unmount —
+    // visible en la consola del browser al navegar entre variaciones rápido.
+    return () => {
+      cancelled = true;
+      if (pollTimer != null) clearTimeout(pollTimer);
+    };
     // selfHealPrompts is declared below with useCallback — TypeScript warns
     // about the forward reference but the closure captures the stable ref via
     // React's state model. Intentional: we want tryFetch to invoke the latest

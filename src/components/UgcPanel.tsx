@@ -280,11 +280,18 @@ export function UgcPanel({
       </div>
 
       {stream.active && stream.text && (() => {
-        // Estimate progress: count completed UGC script blocks in the stream vs 4 total styles.
-        const matches = stream.text.match(/═{3,}\s*(UGC|ESTILO|STYLE)\b/gi) ?? [];
-        const detected = matches.length;
-        const TOTAL_UGC_STYLES = 4;
-        const pct = Math.max(1, Math.min(99, Math.round((detected / TOTAL_UGC_STYLES) * 100)));
+        // Cada call genera UN solo UGC con dos secciones: PROMPT: (paragraph
+        // largo) y HOOKS: (5 líneas). Estimamos progreso por:
+        //   - PROMPT: emitido    → 50%
+        //   - HOOKS: emitido     → 90%
+        //   - Tamaño del cuerpo  → relleno fino entre los dos hitos
+        // Antes el regex buscaba `UGC|ESTILO|STYLE` que no aparecen nunca en
+        // el output → la barra se quedaba en 1% durante todo el stream.
+        const hasPrompt = /\bPROMPT:/i.test(stream.text);
+        const hasHooks = /\bHOOKS:/i.test(stream.text);
+        const lengthPct = Math.min(40, Math.round(stream.text.length / 50));
+        const milestonePct = (hasPrompt ? 50 : 0) + (hasHooks ? 40 : 0);
+        const pct = Math.max(1, Math.min(99, milestonePct + (hasPrompt ? 0 : lengthPct)));
         return (
           <div className="rounded-md border border-primary/30 bg-primary/5 p-3">
             <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-primary mb-1">

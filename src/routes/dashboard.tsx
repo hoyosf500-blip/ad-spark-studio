@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
-import { batchSignedUrls } from "@/lib/signed-urls";
+import { batchSignedUrls, videoPosterUrl } from "@/lib/signed-urls";
 import {
   Wand2, Sparkles, Library as LibraryIcon, FolderKanban, TrendingUp, DollarSign,
   Image as ImageIcon, Video, Plus,
@@ -208,7 +208,7 @@ function ProjectThumb({ url }: { url: string | null }) {
   }
   return (
     <video
-      src={`${url}#t=0.1`}
+      src={videoPosterUrl(url)}
       muted
       playsInline
       preload="auto"

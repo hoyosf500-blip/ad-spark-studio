@@ -95,11 +95,27 @@ export const Route = createFileRoute("/api/detect-product")({
         };
         const raw = data.choices?.[0]?.message?.content?.trim() ?? "";
 
-        const jsonMatch = raw.match(/\{[\s\S]*\}/);
+        // Buscar el JSON completo. El regex anterior `/\{[\s\S]*\}/` era greedy
+        // y, si Claude metía texto explicativo después del JSON con un `}` en
+        // medio, capturaba hasta el último `}` del texto y JSON.parse fallaba.
+        // Ahora cortamos del primer `{` al `}` que cierra ese bloque haciendo
+        // un brace-matching simple — robusto a texto trailing.
         let parsed: DetectResult = { name: "", oneLiner: "", price: "", audience: "" };
-        if (jsonMatch) {
+        const start = raw.indexOf("{");
+        let jsonText: string | null = null;
+        if (start >= 0) {
+          let depth = 0;
+          for (let i = start; i < raw.length; i++) {
+            if (raw[i] === "{") depth++;
+            else if (raw[i] === "}") {
+              depth--;
+              if (depth === 0) { jsonText = raw.slice(start, i + 1); break; }
+            }
+          }
+        }
+        if (jsonText) {
           try {
-            const obj = JSON.parse(jsonMatch[0]) as Partial<DetectResult>;
+            const obj = JSON.parse(jsonText) as Partial<DetectResult>;
             parsed = {
               name: typeof obj.name === "string" ? obj.name : "",
               oneLiner: typeof obj.oneLiner === "string" ? obj.oneLiner : "",

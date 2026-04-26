@@ -94,7 +94,7 @@ function AdminPage() {
     const [imgs, vids, ugc] = await Promise.all([
       supabase.from("image_generations").select("id", { count: "exact", head: true }).eq("user_id", row.id),
       supabase.from("video_generations").select("id", { count: "exact", head: true }).eq("user_id", row.id),
-      supabase.from("ugc_generations").select("id", { count: "exact", head: true }),
+      supabase.from("ugc_generations").select("id", { count: "exact", head: true }).eq("user_id", row.id),
     ]);
     setViewAssets({ images: imgs.count ?? 0, videos: vids.count ?? 0, ugc: ugc.count ?? 0 });
   };

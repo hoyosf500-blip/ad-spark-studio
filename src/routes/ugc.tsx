@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { fileToDataUrl } from "@/lib/frame-extraction";
 import { UgcPanel } from "@/components/UgcPanel";
+import { handleCapResponse } from "@/lib/handle-cap";
 
 export const Route = createFileRoute("/ugc")({
   component: UgcRoute,
@@ -102,6 +103,10 @@ function UgcRoute() {
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
         body: JSON.stringify({ productPhoto, workspaceId: activeWorkspaceId }),
       });
+      // Tope diario: el backend responde 429 con JSON estructurado. handleCapResponse
+      // muestra el toast "Tope diario alcanzado ($X / $Y)" y devuelve true para cortar.
+      // Sin esto el usuario veía un error crudo "HTTP 429" en lugar del aviso amigable.
+      if (await handleCapResponse(res)) { setDetecting(false); return; }
       if (!res.ok) throw new Error(await res.text());
       const data = (await res.json()) as {
         name?: string; oneLiner?: string; price?: string; audience?: string; costUsd?: number;
