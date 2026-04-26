@@ -1106,10 +1106,10 @@ export function VariationsPanel() {
                 {analyzing ? "Analizando…" : "🔍 Analizar video"}
               </Button>
               <Select value={model} onValueChange={setModel}>
-                <SelectTrigger className="w-44 h-11"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-52 h-11"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="claude-sonnet-4-5-20250929">Sonnet 4.5 ($3/$15)</SelectItem>
-                  <SelectItem value="claude-3-5-sonnet-20241022">Sonnet 3.5 ($3/$15)</SelectItem>
+                  <SelectItem value="anthropic/claude-sonnet-4.5">Sonnet 4.5 ($3/$15)</SelectItem>
+                  <SelectItem value="anthropic/claude-opus-4.5">Opus 4.5 ($5/$25) — Max calidad</SelectItem>
                 </SelectContent>
               </Select>
             </div>
