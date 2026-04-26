@@ -266,7 +266,7 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
         const { data: scene, error: sceneErr } = await sb
           .from("variation_scenes")
           .select(
-            "id, variation_id, order_idx, title, scene_text, script_es, screen_text, image_prompt_en, animation_prompt_en, reference_frame_time_sec, prompt_nano_banana, prompt_seedream, prompt_kling, prompt_seedance",
+            "id, variation_id, order_idx, title, scene_text, script_es, screen_text, image_prompt_en, animation_prompt_en, reference_frame_time_sec, prompt_nano_banana, prompt_seedream, prompt_kling, prompt_seedance, workspace_id",
           )
           .eq("id", body.sceneId)
           .maybeSingle();
@@ -279,6 +279,31 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
             found: !!scene,
           });
           return new Response("Scene not found", { status: 404 });
+        }
+
+        // Workspace membership check antes de gastar tokens. RLS sobre
+        // variation_scenes ya filtra por membership, pero hacemos doble check
+        // explícito con admin client en caso de que alguna policy se relaje
+        // accidentalmente o el endpoint se llame con sceneId de otro workspace
+        // que sí tenga lectura por algún share futuro. Si no hay membership,
+        // 403 antes de pegarle a Anthropic.
+        const sceneWorkspaceId = scene.workspace_id ?? body.workspaceId ?? null;
+        if (!sceneWorkspaceId) {
+          return new Response("Scene has no workspace", { status: 400 });
+        }
+        const admin = createClient<Database>(
+          process.env.SUPABASE_URL!,
+          process.env.SUPABASE_SERVICE_ROLE_KEY!,
+          { auth: { persistSession: false } },
+        );
+        const { data: membership } = await admin
+          .from("workspace_members")
+          .select("user_id")
+          .eq("user_id", userId)
+          .eq("workspace_id", sceneWorkspaceId)
+          .maybeSingle();
+        if (!membership) {
+          return new Response("Forbidden: not a workspace member", { status: 403 });
         }
 
         if (

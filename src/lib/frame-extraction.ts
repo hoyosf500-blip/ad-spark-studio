@@ -55,19 +55,29 @@ export async function extractFrames(
   }
   const totalSamples = times.length;
 
+  // Timeout de seguridad por frame. Si el video está corrupto o el codec no
+  // dispara `seeked`/`error`, la promesa se quedaba colgando indefinidamente
+  // y la UI mostraba "Extrayendo frames X/Y…" para siempre. 8s es generoso
+  // (un seek normal toma <100ms) pero suficiente para detectar el cuelgue.
+  const SEEK_TIMEOUT_MS = 8000;
+
   const frames: ExtractedFrame[] = [];
   for (const t of times) {
     await new Promise<void>((resolve, reject) => {
-      const onSeeked = () => {
+      let timer: ReturnType<typeof setTimeout> | null = null;
+      const cleanup = () => {
+        if (timer != null) clearTimeout(timer);
         video.removeEventListener("seeked", onSeeked);
-        resolve();
+        video.removeEventListener("error", onError);
       };
+      const onSeeked = () => { cleanup(); resolve(); };
+      const onError = () => { cleanup(); reject(new Error(`Seek error at ${t}s`)); };
       video.addEventListener("seeked", onSeeked, { once: true });
-      video.addEventListener(
-        "error",
-        () => reject(new Error(`Seek error at ${t}s`)),
-        { once: true },
-      );
+      video.addEventListener("error", onError, { once: true });
+      timer = setTimeout(() => {
+        cleanup();
+        reject(new Error(`Seek timeout at ${t}s — video puede estar corrupto o usar codec no soportado`));
+      }, SEEK_TIMEOUT_MS);
       video.currentTime = t;
     });
     ctx.drawImage(video, 0, 0, w, h);

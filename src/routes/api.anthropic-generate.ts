@@ -4,7 +4,7 @@ import { SYS_GENERATE } from "@/lib/system-prompts";
 import { SCENE_FORMAT } from "@/lib/scene-format";
 import { HOOK_PLAYBOOKS } from "@/lib/variation-defs";
 import { WINNING_PREAMBLE, checkScript } from "@/lib/winning-framework";
-import { dataUrlToBase64, calcCost, logUsage } from "@/utils/anthropic.functions";
+import { dataUrlToBase64, logUsage } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -341,7 +341,6 @@ export const Route = createFileRoute("/api/anthropic-generate")({
                   metadata: { variationType: body.variationType, partial: true },
                 }).catch(() => {});
               }
-              void calcCost;
             } finally {
               controller.close();
             }
