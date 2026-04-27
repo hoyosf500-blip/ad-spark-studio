@@ -19,9 +19,9 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiUgcGenerateRouteImport } from './routes/api.ugc-generate'
 import { Route as ApiTranscribeAudioRouteImport } from './routes/api.transcribe-audio'
+import { Route as ApiGenerateVariationsRouteImport } from './routes/api.generate-variations'
 import { Route as ApiGenerateHiggsfieldPromptsRouteImport } from './routes/api.generate-higgsfield-prompts'
 import { Route as ApiDetectProductRouteImport } from './routes/api.detect-product'
-import { Route as ApiGenerateVariationsRouteImport } from './routes/api.generate-variations'
 import { Route as ApiAnalyzeFramesRouteImport } from './routes/api.analyze-frames'
 
 const VariationsRoute = VariationsRouteImport.update({
@@ -74,6 +74,11 @@ const ApiTranscribeAudioRoute = ApiTranscribeAudioRouteImport.update({
   path: '/api/transcribe-audio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiGenerateVariationsRoute = ApiGenerateVariationsRouteImport.update({
+  id: '/api/generate-variations',
+  path: '/api/generate-variations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiGenerateHiggsfieldPromptsRoute =
   ApiGenerateHiggsfieldPromptsRouteImport.update({
     id: '/api/generate-higgsfield-prompts',
@@ -83,11 +88,6 @@ const ApiGenerateHiggsfieldPromptsRoute =
 const ApiDetectProductRoute = ApiDetectProductRouteImport.update({
   id: '/api/detect-product',
   path: '/api/detect-product',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiGenerateVariationsRoute = ApiGenerateVariationsRouteImport.update({
-  id: '/api/generate-variations',
-  path: '/api/generate-variations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAnalyzeFramesRoute = ApiAnalyzeFramesRouteImport.update({
@@ -106,9 +106,9 @@ export interface FileRoutesByFullPath {
   '/ugc': typeof UgcRoute
   '/variations': typeof VariationsRoute
   '/api/analyze-frames': typeof ApiAnalyzeFramesRoute
-  '/api/generate-variations': typeof ApiGenerateVariationsRoute
   '/api/detect-product': typeof ApiDetectProductRoute
   '/api/generate-higgsfield-prompts': typeof ApiGenerateHiggsfieldPromptsRoute
+  '/api/generate-variations': typeof ApiGenerateVariationsRoute
   '/api/transcribe-audio': typeof ApiTranscribeAudioRoute
   '/api/ugc-generate': typeof ApiUgcGenerateRoute
 }
@@ -122,9 +122,9 @@ export interface FileRoutesByTo {
   '/ugc': typeof UgcRoute
   '/variations': typeof VariationsRoute
   '/api/analyze-frames': typeof ApiAnalyzeFramesRoute
-  '/api/generate-variations': typeof ApiGenerateVariationsRoute
   '/api/detect-product': typeof ApiDetectProductRoute
   '/api/generate-higgsfield-prompts': typeof ApiGenerateHiggsfieldPromptsRoute
+  '/api/generate-variations': typeof ApiGenerateVariationsRoute
   '/api/transcribe-audio': typeof ApiTranscribeAudioRoute
   '/api/ugc-generate': typeof ApiUgcGenerateRoute
 }
@@ -139,9 +139,9 @@ export interface FileRoutesById {
   '/ugc': typeof UgcRoute
   '/variations': typeof VariationsRoute
   '/api/analyze-frames': typeof ApiAnalyzeFramesRoute
-  '/api/generate-variations': typeof ApiGenerateVariationsRoute
   '/api/detect-product': typeof ApiDetectProductRoute
   '/api/generate-higgsfield-prompts': typeof ApiGenerateHiggsfieldPromptsRoute
+  '/api/generate-variations': typeof ApiGenerateVariationsRoute
   '/api/transcribe-audio': typeof ApiTranscribeAudioRoute
   '/api/ugc-generate': typeof ApiUgcGenerateRoute
 }
@@ -157,9 +157,9 @@ export interface FileRouteTypes {
     | '/ugc'
     | '/variations'
     | '/api/analyze-frames'
-    | '/api/generate-variations'
     | '/api/detect-product'
     | '/api/generate-higgsfield-prompts'
+    | '/api/generate-variations'
     | '/api/transcribe-audio'
     | '/api/ugc-generate'
   fileRoutesByTo: FileRoutesByTo
@@ -173,9 +173,9 @@ export interface FileRouteTypes {
     | '/ugc'
     | '/variations'
     | '/api/analyze-frames'
-    | '/api/generate-variations'
     | '/api/detect-product'
     | '/api/generate-higgsfield-prompts'
+    | '/api/generate-variations'
     | '/api/transcribe-audio'
     | '/api/ugc-generate'
   id:
@@ -189,9 +189,9 @@ export interface FileRouteTypes {
     | '/ugc'
     | '/variations'
     | '/api/analyze-frames'
-    | '/api/generate-variations'
     | '/api/detect-product'
     | '/api/generate-higgsfield-prompts'
+    | '/api/generate-variations'
     | '/api/transcribe-audio'
     | '/api/ugc-generate'
   fileRoutesById: FileRoutesById
@@ -206,9 +206,9 @@ export interface RootRouteChildren {
   UgcRoute: typeof UgcRoute
   VariationsRoute: typeof VariationsRoute
   ApiAnalyzeFramesRoute: typeof ApiAnalyzeFramesRoute
-  ApiGenerateVariationsRoute: typeof ApiGenerateVariationsRoute
   ApiDetectProductRoute: typeof ApiDetectProductRoute
   ApiGenerateHiggsfieldPromptsRoute: typeof ApiGenerateHiggsfieldPromptsRoute
+  ApiGenerateVariationsRoute: typeof ApiGenerateVariationsRoute
   ApiTranscribeAudioRoute: typeof ApiTranscribeAudioRoute
   ApiUgcGenerateRoute: typeof ApiUgcGenerateRoute
 }
@@ -285,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTranscribeAudioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/generate-variations': {
+      id: '/api/generate-variations'
+      path: '/api/generate-variations'
+      fullPath: '/api/generate-variations'
+      preLoaderRoute: typeof ApiGenerateVariationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/generate-higgsfield-prompts': {
       id: '/api/generate-higgsfield-prompts'
       path: '/api/generate-higgsfield-prompts'
@@ -297,13 +304,6 @@ declare module '@tanstack/react-router' {
       path: '/api/detect-product'
       fullPath: '/api/detect-product'
       preLoaderRoute: typeof ApiDetectProductRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/generate-variations': {
-      id: '/api/generate-variations'
-      path: '/api/generate-variations'
-      fullPath: '/api/generate-variations'
-      preLoaderRoute: typeof ApiGenerateVariationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/analyze-frames': {
@@ -326,12 +326,21 @@ const rootRouteChildren: RootRouteChildren = {
   UgcRoute: UgcRoute,
   VariationsRoute: VariationsRoute,
   ApiAnalyzeFramesRoute: ApiAnalyzeFramesRoute,
-  ApiGenerateVariationsRoute: ApiGenerateVariationsRoute,
   ApiDetectProductRoute: ApiDetectProductRoute,
   ApiGenerateHiggsfieldPromptsRoute: ApiGenerateHiggsfieldPromptsRoute,
+  ApiGenerateVariationsRoute: ApiGenerateVariationsRoute,
   ApiTranscribeAudioRoute: ApiTranscribeAudioRoute,
   ApiUgcGenerateRoute: ApiUgcGenerateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
