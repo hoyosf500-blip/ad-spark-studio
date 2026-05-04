@@ -93,6 +93,10 @@ export const Route = createFileRoute("/api/analyze-frames")({
         content.push({
           type: "text",
           text: "\n\nProduce el análisis completo siguiendo EXACTAMENTE el formato definido en tu role. No omitas frames. Termina con la sección final de transcripción consolidada.",
+          // Cache breakpoint at the END of the content array. Re-runs of the
+          // analyze step on the same video (e.g. user edits productInfo and
+          // re-runs) hit the cached frames at 0.10x input price.
+          cache_control: { type: "ephemeral" },
         });
 
         const maxTokens = Math.min(16000, Math.max(4000, body.frames.length * 250 + 1000));
