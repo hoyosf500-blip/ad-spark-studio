@@ -294,6 +294,8 @@ export const Route = createFileRoute("/api/generate-variations")({
                 operation: "openrouter_variation",
                 inputTokens,
                 outputTokens,
+                cacheCreateTokens,
+                cacheReadTokens,
                 reservedUsd,
                 metadata: {
                   variationType: body.variationType,
@@ -303,6 +305,8 @@ export const Route = createFileRoute("/api/generate-variations")({
                   maxTokens: MAX_TOKENS,
                   validationPass: validation?.pass ?? null,
                   validationViolations: validation?.violations ?? null,
+                  cacheCreateTokens,
+                  cacheReadTokens,
                 },
               });
 
