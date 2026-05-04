@@ -1,21 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { SYS_ANALYZE } from "@/lib/system-prompts";
-import { dataUrlToOpenAIImage, logUsage } from "@/utils/openrouter.functions";
+import { dataUrlToAnthropicImage, logUsage } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
 type FrameInput = { time: number; dataUrl: string };
 
-// OpenAI message content parts (with optional Anthropic cache_control passed
-// through transparently by OpenRouter for Anthropic models).
+// Anthropic native content block types.
 type CacheControl = { type: "ephemeral" };
 type ContentPart =
   | { type: "text"; text: string; cache_control?: CacheControl }
-  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" }; cache_control?: CacheControl };
+  | {
+      type: "image";
+      source: { type: "base64"; media_type: string; data: string };
+      cache_control?: CacheControl;
+    };
 
-type OpenAIMessage = {
-  role: "system" | "user" | "assistant";
+type AnthropicMessage = {
+  role: "user" | "assistant";
   content: string | ContentPart[];
 };
 
@@ -23,8 +26,8 @@ export const Route = createFileRoute("/api/analyze-frames")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env.OPENROUTER_API_KEY;
-        if (!apiKey) return new Response("OPENROUTER_API_KEY not configured", { status: 500 });
+        const apiKey = process.env.ANTHROPIC_API_KEY;
+        if (!apiKey) return new Response("ANTHROPIC_API_KEY not configured", { status: 500 });
 
         const authHeader = request.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) return new Response("Unauthorized", { status: 401 });
@@ -60,7 +63,7 @@ export const Route = createFileRoute("/api/analyze-frames")({
           return new Response("max 60 frames", { status: 400 });
         }
 
-        const model = body.model || "anthropic/claude-sonnet-4.5";
+        const model = body.model || "claude-sonnet-4-5";
 
         const content: ContentPart[] = [];
         content.push({
@@ -72,11 +75,11 @@ export const Route = createFileRoute("/api/analyze-frames")({
             type: "text",
             text: `\nFRAME ${Math.round(f.time)}s (timestamp ${f.time.toFixed(2)}s):`,
           });
-          content.push(dataUrlToOpenAIImage(f.dataUrl));
+          content.push(dataUrlToAnthropicImage(f.dataUrl));
         }
         if (body.productPhoto) {
           content.push({ type: "text", text: "\n\nFOTO DEL PRODUCTO (referencia adicional, no es un frame del video):" });
-          content.push(dataUrlToOpenAIImage(body.productPhoto));
+          content.push(dataUrlToAnthropicImage(body.productPhoto));
         }
         if (body.productInfo?.trim()) {
           content.push({
@@ -99,9 +102,8 @@ export const Route = createFileRoute("/api/analyze-frames")({
           cache_control: { type: "ephemeral" },
         });
 
-        // 2026-05-04: fórmula relajada para evitar continuations.
-        // Antes: min(16000, frames*250+1000) → con 60 frames daba 16000 (pegado al cap).
-        // Ahora: min(32000, frames*400+2000) → con 60 frames da 26000, holgura suficiente.
+        // Fórmula relajada para evitar continuations: con 60 frames da 26000,
+        // holgura suficiente respecto al cap 32000.
         const maxTokens = Math.min(32000, Math.max(4000, body.frames.length * 400 + 2000));
         const MAX_CONTINUATIONS = 1;
 
@@ -112,15 +114,13 @@ export const Route = createFileRoute("/api/analyze-frames")({
         const dec = new TextDecoder();
         const enc = new TextEncoder();
 
-        const messages: OpenAIMessage[] = [];
+        const messages: AnthropicMessage[] = [];
 
         const stream = new ReadableStream<Uint8Array>({
           async start(controller) {
             try {
               for (let attempt = 0; attempt <= MAX_CONTINUATIONS; attempt++) {
-                const upstreamMessages: OpenAIMessage[] = [
-                  { role: "system", content: SYS_ANALYZE },
-                ];
+                const upstreamMessages: AnthropicMessage[] = [];
                 if (attempt === 0) {
                   upstreamMessages.push({ role: "user", content });
                 } else {
@@ -131,26 +131,26 @@ export const Route = createFileRoute("/api/analyze-frames")({
                   });
                 }
 
-                const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                const upstream = await fetch("https://api.anthropic.com/v1/messages", {
                   method: "POST",
                   headers: {
                     "content-type": "application/json",
-                    authorization: `Bearer ${apiKey}`,
-                    "HTTP-Referer": "https://adsparkstudio.com",
-                    "X-Title": "Ad Spark Studio",
+                    "x-api-key": apiKey,
+                    "anthropic-version": "2023-06-01",
                   },
                   body: JSON.stringify({
                     model,
-                    max_completion_tokens: maxTokens,
+                    max_tokens: maxTokens,
                     stream: true,
                     temperature: 0.4,
+                    system: SYS_ANALYZE,
                     messages: upstreamMessages,
                   }),
                 });
                 if (!upstream.ok || !upstream.body) {
                   const errText = await upstream.text().catch(() => "");
                   controller.enqueue(enc.encode(`data: ${JSON.stringify({
-                    type: "error", error: `OpenRouter ${upstream.status}: ${errText.slice(0, 300)}`,
+                    type: "error", error: `Anthropic ${upstream.status}: ${errText.slice(0, 300)}`,
                   })}
 \n`));
                   failed = true;
@@ -162,7 +162,7 @@ export const Route = createFileRoute("/api/analyze-frames")({
                 let attemptText = "";
                 let attemptIn = 0, attemptOut = 0;
                 let attemptCacheCreate = 0, attemptCacheRead = 0;
-                let attemptFinishReason: string | null = null;
+                let attemptStopReason: string | null = null;
 
                 for (;;) {
                   const { value, done } = await reader.read();
@@ -171,46 +171,48 @@ export const Route = createFileRoute("/api/analyze-frames")({
                   let idx;
                   while ((idx = buf.indexOf("\n\n")) !== -1) {
                     const chunk = buf.slice(0, idx); buf = buf.slice(idx + 2);
+                    // Anthropic SSE chunks tienen `event: <type>\ndata: <json>`.
+                    // Solo nos importa la línea data: — el event redundante con type interno.
                     const dl = chunk.split("\n").find((l) => l.startsWith("data: "));
                     if (!dl) continue;
                     const payload = dl.slice(6).trim();
-                    if (payload === "[DONE]") continue;
+                    if (!payload) continue;
                     try {
                       const evt = JSON.parse(payload) as {
-                        choices?: Array<{
-                          delta?: { content?: string };
-                          finish_reason?: string | null;
-                        }>;
-                        usage?: {
-                          prompt_tokens?: number;
-                          completion_tokens?: number;
-                          cache_creation_input_tokens?: number;
-                          cache_read_input_tokens?: number;
-                          prompt_tokens_details?: {
-                            cached_tokens?: number;
-                            cache_creation_tokens?: number;
-                            cache_read_tokens?: number;
+                        type?: string;
+                        message?: {
+                          usage?: {
+                            input_tokens?: number;
+                            output_tokens?: number;
+                            cache_creation_input_tokens?: number;
+                            cache_read_input_tokens?: number;
                           };
                         };
+                        delta?: {
+                          type?: string;
+                          text?: string;
+                          stop_reason?: string;
+                        };
+                        usage?: { output_tokens?: number };
                       };
-                      const deltaText = evt.choices?.[0]?.delta?.content;
-                      if (typeof deltaText === "string") {
-                        attemptText += deltaText;
-                        fullText += deltaText;
-                        controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: deltaText })}
+                      if (evt.type === "message_start" && evt.message?.usage) {
+                        attemptIn = evt.message.usage.input_tokens ?? 0;
+                        attemptCacheCreate = evt.message.usage.cache_creation_input_tokens ?? 0;
+                        attemptCacheRead = evt.message.usage.cache_read_input_tokens ?? 0;
+                      } else if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+                        const t = evt.delta.text;
+                        if (typeof t === "string" && t.length) {
+                          attemptText += t;
+                          fullText += t;
+                          controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: t })}
 \n`));
+                        }
+                      } else if (evt.type === "message_delta") {
+                        if (evt.delta?.stop_reason) attemptStopReason = evt.delta.stop_reason;
+                        if (typeof evt.usage?.output_tokens === "number") {
+                          attemptOut = evt.usage.output_tokens;
+                        }
                       }
-                      const finish = evt.choices?.[0]?.finish_reason;
-                      if (finish) attemptFinishReason = finish;
-                      if (evt.usage?.prompt_tokens) attemptIn = evt.usage.prompt_tokens;
-                      if (evt.usage?.completion_tokens) attemptOut = evt.usage.completion_tokens;
-                      const cc = evt.usage?.cache_creation_input_tokens
-                        ?? evt.usage?.prompt_tokens_details?.cache_creation_tokens;
-                      const cr = evt.usage?.cache_read_input_tokens
-                        ?? evt.usage?.prompt_tokens_details?.cache_read_tokens
-                        ?? evt.usage?.prompt_tokens_details?.cached_tokens;
-                      if (typeof cc === "number") attemptCacheCreate = cc;
-                      if (typeof cr === "number") attemptCacheRead = cr;
                     } catch { /* skip malformed */ }
                   }
                 }
@@ -218,9 +220,10 @@ export const Route = createFileRoute("/api/analyze-frames")({
                 outputTokens += attemptOut;
                 cacheCreateTokens += attemptCacheCreate;
                 cacheReadTokens += attemptCacheRead;
-                stopReason = attemptFinishReason;
+                stopReason = attemptStopReason;
 
-                if (attemptFinishReason !== "length" || attempt >= MAX_CONTINUATIONS || !attemptText) break;
+                // Anthropic: stop_reason === "max_tokens" equivale a "length" de OpenAI.
+                if (attemptStopReason !== "max_tokens" || attempt >= MAX_CONTINUATIONS || !attemptText) break;
                 messages.push({ role: "assistant", content: attemptText });
                 messages.push({
                   role: "user",
@@ -228,13 +231,14 @@ export const Route = createFileRoute("/api/analyze-frames")({
                 });
               }
 
+              const isTruncated = stopReason === "max_tokens";
               let cost = 0;
               try {
                 cost = await logUsage({
                   userId,
                   workspaceId: body.workspaceId ?? null,
                   model,
-                  operation: failed ? "openrouter_analysis_partial" : "openrouter_analysis",
+                  operation: failed ? "anthropic_analysis_partial" : "anthropic_analysis",
                   inputTokens,
                   outputTokens,
                   cacheCreateTokens,
@@ -243,7 +247,7 @@ export const Route = createFileRoute("/api/analyze-frames")({
                   metadata: {
                     frames: body.frames.length,
                     hasProductPhoto: !!body.productPhoto,
-                    isTruncated: stopReason === "length",
+                    isTruncated,
                     maxTokens,
                     failed,
                     cacheCreateTokens,
@@ -257,7 +261,7 @@ export const Route = createFileRoute("/api/analyze-frames")({
                 controller.enqueue(enc.encode(`data: ${JSON.stringify({
                   type: "done", fullText, inputTokens, outputTokens,
                   cacheCreateTokens, cacheReadTokens,
-                  costUsd: cost, stopReason, isTruncated: stopReason === "length", model,
+                  costUsd: cost, stopReason, isTruncated, model,
                 })}
 \n`));
               }

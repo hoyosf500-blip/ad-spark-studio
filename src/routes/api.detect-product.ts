@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { logUsage } from "@/utils/openrouter.functions";
+import { dataUrlToAnthropicImage, logUsage } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -32,8 +32,8 @@ export const Route = createFileRoute("/api/detect-product")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env.OPENROUTER_API_KEY;
-        if (!apiKey) return new Response("OPENROUTER_API_KEY not configured", { status: 500 });
+        const apiKey = process.env.ANTHROPIC_API_KEY;
+        if (!apiKey) return new Response("ANTHROPIC_API_KEY not configured", { status: 500 });
 
         const authHeader = request.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) return new Response("Unauthorized", { status: 401 });
@@ -57,27 +57,26 @@ export const Route = createFileRoute("/api/detect-product")({
         const body = (await request.json()) as Body;
         if (!body.productPhoto) return new Response("productPhoto required", { status: 400 });
 
-        const model = body.model || "google/gemini-2.5-flash";
+        // Default a Haiku 4.5 — tarea estructurada simple, no necesita Sonnet.
+        const model = body.model || "claude-haiku-4-5";
 
-        const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        const upstream = await fetch("https://api.anthropic.com/v1/messages", {
           method: "POST",
           headers: {
             "content-type": "application/json",
-            authorization: `Bearer ${apiKey}`,
-            "HTTP-Referer": "https://adsparkstudio.com",
-            "X-Title": "Ad Spark Studio",
+            "x-api-key": apiKey,
+            "anthropic-version": "2023-06-01",
           },
           body: JSON.stringify({
             model,
-            max_completion_tokens: 512,
+            max_tokens: 512,
             temperature: 0.2,
-            response_format: { type: "json_object" },
+            system: SYS,
             messages: [
-              { role: "system", content: SYS },
               {
                 role: "user",
                 content: [
-                  { type: "image_url", image_url: { url: body.productPhoto, detail: "high" } },
+                  dataUrlToAnthropicImage(body.productPhoto),
                   { type: "text", text: "Detecta los 4 campos y devuelve solo el JSON." },
                 ],
               },
@@ -93,26 +92,28 @@ export const Route = createFileRoute("/api/detect-product")({
             userId,
             workspaceId: body.workspaceId ?? null,
             model,
-            operation: "openrouter_detect_product_failed",
+            operation: "anthropic_detect_product_failed",
             inputTokens: 0,
             outputTokens: 0,
             reservedUsd,
             metadata: { upstreamStatus: upstream.status },
           }).catch((e) => console.warn("[detect-product] reconcile log failed:", e));
-          return new Response(`OpenRouter ${upstream.status}: ${errText.slice(0, 500)}`, { status: 502 });
+          return new Response(`Anthropic ${upstream.status}: ${errText.slice(0, 500)}`, { status: 502 });
         }
 
         const data = (await upstream.json()) as {
-          choices?: Array<{ message?: { content?: string } }>;
-          usage?: { prompt_tokens?: number; completion_tokens?: number };
+          content?: Array<{ type: string; text?: string }>;
+          usage?: {
+            input_tokens?: number;
+            output_tokens?: number;
+            cache_creation_input_tokens?: number;
+            cache_read_input_tokens?: number;
+          };
         };
-        const raw = data.choices?.[0]?.message?.content?.trim() ?? "";
+        const raw = data.content?.find((b) => b.type === "text")?.text?.trim() ?? "";
 
-        // Buscar el JSON completo. El regex anterior `/\{[\s\S]*\}/` era greedy
-        // y, si Claude metía texto explicativo después del JSON con un `}` en
-        // medio, capturaba hasta el último `}` del texto y JSON.parse fallaba.
-        // Ahora cortamos del primer `{` al `}` que cierra ese bloque haciendo
-        // un brace-matching simple — robusto a texto trailing.
+        // Brace-matching del primer `{` al `}` que cierra ese bloque — robusto
+        // a texto trailing (Claude a veces agrega "Aquí está el JSON:" antes).
         let parsed: DetectResult = { name: "", oneLiner: "", price: "", audience: "" };
         const start = raw.indexOf("{");
         let jsonText: string | null = null;
@@ -144,9 +145,11 @@ export const Route = createFileRoute("/api/detect-product")({
           userId,
           workspaceId: body.workspaceId ?? null,
           model,
-          operation: "openrouter_detect_product",
-          inputTokens: data.usage?.prompt_tokens ?? 0,
-          outputTokens: data.usage?.completion_tokens ?? 0,
+          operation: "anthropic_detect_product",
+          inputTokens: data.usage?.input_tokens ?? 0,
+          outputTokens: data.usage?.output_tokens ?? 0,
+          cacheCreateTokens: data.usage?.cache_creation_input_tokens ?? 0,
+          cacheReadTokens: data.usage?.cache_read_input_tokens ?? 0,
           reservedUsd,
           metadata: { hasPhoto: true },
         });

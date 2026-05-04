@@ -1,34 +1,28 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-// OpenRouter pricing tables (USD per 1M tokens, approximate provider rates)
-// OpenRouter adds ~5% markup, but these are close enough for cost tracking.
+// Anthropic API direct pricing (USD per 1M tokens, official rates).
 //
-// Anthropic prompt caching via OpenRouter (live since late 2025):
+// Prompt caching (Anthropic native, requires `cache_control: { type: "ephemeral" }`
+// on a content block):
 //   - cache_creation_input_tokens: 1.25x base input price (one-time write)
 //   - cache_read_input_tokens:    0.10x base input price (subsequent reads)
 //   - regular input_tokens:       1.00x base input price
 const PRICING: Record<string, { input: number; output: number }> = {
-  // Anthropic via OpenRouter
-  "anthropic/claude-sonnet-4": { input: 3.0, output: 15.0 },
-  "anthropic/claude-sonnet-4.5": { input: 3.0, output: 15.0 },
-  "anthropic/claude-opus-4.5": { input: 5.0, output: 25.0 },
-  "anthropic/claude-haiku-4.5": { input: 1.0, output: 5.0 },
-  // Google Gemini via OpenRouter
-  "google/gemini-2.5-pro": { input: 1.25, output: 10.0 },
-  "google/gemini-2.5-flash": { input: 0.30, output: 2.50 },
-  "google/gemini-2.5-flash-lite": { input: 0.10, output: 0.40 },
-  "google/gemini-3.1-pro": { input: 2.0, output: 12.0 },
-  "google/gemini-3.1-flash": { input: 0.50, output: 3.0 },
-  // OpenAI via OpenRouter (if ever used)
-  "openai/gpt-4o": { input: 2.5, output: 10.0 },
-  "openai/gpt-4o-mini": { input: 0.15, output: 0.6 },
+  // Sonnet family
+  "claude-sonnet-4": { input: 3.0, output: 15.0 },
+  "claude-sonnet-4-5": { input: 3.0, output: 15.0 },
+  // Opus family
+  "claude-opus-4-5": { input: 5.0, output: 25.0 },
+  "claude-opus-4-7": { input: 15.0, output: 75.0 },
+  // Haiku family
+  "claude-haiku-4-5": { input: 1.0, output: 5.0 },
 };
 
-// OpenRouter / Anthropic occasionally returns model IDs with a date suffix
-// (e.g. "anthropic/claude-haiku-4.5-20251001") in the SSE final chunk. Without
-// normalization, those fall back to Sonnet 4.5 pricing — sobrecostando 3x para
-// Haiku. Strip trailing -YYYYMMDD or -YYYY-MM-DD before lookup.
+// Anthropic returns model IDs with date suffixes (e.g.
+// "claude-sonnet-4-5-20250929", "claude-haiku-4-5-20251001"). Strip the
+// trailing -YYYYMMDD before lookup so we don't fall back blindly to Sonnet
+// pricing — that would 3x-overcharge Haiku.
 function stripDateSuffix(model: string): string {
   return model
     .replace(/-\d{4}-\d{2}-\d{2}$/, "")
@@ -39,16 +33,15 @@ export function priceFor(model: string) {
   return (
     PRICING[model] ??
     PRICING[stripDateSuffix(model)] ??
-    PRICING["anthropic/claude-sonnet-4.5"]
+    PRICING["claude-sonnet-4-5"]
   );
 }
 
-// `input` here is the count of NON-cached input tokens (regular billing).
+// `input` is the count of NON-cached input tokens (regular billing).
 // cacheCreate = tokens written to the ephemeral cache (1.25x).
 // cacheRead   = tokens read from the cache on subsequent calls (0.10x).
-// For Anthropic via OpenRouter, the upstream `usage.prompt_tokens` is the
-// total input; the cache buckets come as separate fields and prompt_tokens
-// already includes them, so we subtract before billing the regular slice.
+// Anthropic's `usage.input_tokens` already EXCLUDES cache buckets — they come
+// as separate fields. So we sum the three buckets at their multipliers.
 export function calcCost(
   model: string,
   input: number,
@@ -57,9 +50,8 @@ export function calcCost(
   cacheRead: number = 0,
 ) {
   const p = priceFor(model);
-  const regularInput = Math.max(0, input - cacheCreate - cacheRead);
   const inputCost =
-    regularInput * p.input +
+    input * p.input +
     cacheCreate * p.input * 1.25 +
     cacheRead * p.input * 0.10;
   return (inputCost + output * p.output) / 1_000_000;
@@ -100,7 +92,7 @@ export async function logUsage(opts: {
   const row = {
     user_id: opts.userId,
     workspace_id: opts.workspaceId ?? null,
-    provider: "openrouter",
+    provider: "anthropic",
     model: opts.model,
     operation: opts.operation,
     input_tokens: opts.inputTokens,
@@ -134,10 +126,13 @@ export function dataUrlToBase64(dataUrl: string): { mediaType: string; b64: stri
   return { mediaType: m[1], b64: m[2] };
 }
 
-// Convert a data URL to OpenAI's image_url format
-export function dataUrlToOpenAIImage(dataUrl: string): {
-  type: "image_url";
-  image_url: { url: string; detail?: "low" | "high" | "auto" };
+// Convert a data URL to Anthropic's native image content block format.
+// Anthropic uses `{type:"image", source:{type:"base64", media_type, data}}`,
+// distinct from OpenAI/OpenRouter's `{type:"image_url", image_url:{url}}`.
+export function dataUrlToAnthropicImage(dataUrl: string): {
+  type: "image";
+  source: { type: "base64"; media_type: string; data: string };
 } {
-  return { type: "image_url", image_url: { url: dataUrl, detail: "high" } };
+  const { mediaType, b64 } = dataUrlToBase64(dataUrl);
+  return { type: "image", source: { type: "base64", media_type: mediaType, data: b64 } };
 }

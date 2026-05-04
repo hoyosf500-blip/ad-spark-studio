@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { SYS_UGC } from "@/lib/system-prompts";
-import { logUsage, dataUrlToOpenAIImage } from "@/utils/openrouter.functions";
+import { logUsage, dataUrlToAnthropicImage } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import { WINNING_PREAMBLE, checkScript } from "@/lib/winning-framework";
 import type { Database } from "@/integrations/supabase/types";
@@ -21,10 +21,15 @@ type Body = {
   model?: string;
 };
 
+// Anthropic native content block types.
 type CacheControl = { type: "ephemeral" };
 type ContentPart =
   | { type: "text"; text: string; cache_control?: CacheControl }
-  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" }; cache_control?: CacheControl };
+  | {
+      type: "image";
+      source: { type: "base64"; media_type: string; data: string };
+      cache_control?: CacheControl;
+    };
 
 // Style descriptions — ugc-casual / ugc-testimonial / ugc-unboxing preserved verbatim from HTML standalone.
 // ugc-viral rewritten 2026-04-18 applying create-viral-content skill research:
@@ -96,8 +101,8 @@ export const Route = createFileRoute("/api/ugc-generate")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env.OPENROUTER_API_KEY;
-        if (!apiKey) return new Response("OPENROUTER_API_KEY not configured", { status: 500 });
+        const apiKey = process.env.ANTHROPIC_API_KEY;
+        if (!apiKey) return new Response("ANTHROPIC_API_KEY not configured", { status: 500 });
 
         const authHeader = request.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) return new Response("Unauthorized", { status: 401 });
@@ -145,11 +150,7 @@ export const Route = createFileRoute("/api/ugc-generate")({
           .maybeSingle();
         if (!membership) return new Response("Forbidden: not a workspace member", { status: 403 });
 
-        // Default aligned with the UI dropdown (Sonnet 4.6). Previously this
-        // fell back to "claude-sonnet-4-5-20250929" while priceFor() and the UI
-        // selector both use "claude-sonnet-4-6", causing cost-tracking
-        // mismatches when the client omitted `model` from the body.
-        const model = body.model || "anthropic/claude-sonnet-4.5";
+        const model = body.model || "claude-sonnet-4-5";
         const videoModel = body.videoModel || "wan2.6-i2v";
         const targetModelLabel =
           videoModel === "kling2.5-turbo" ? "Kling 2.5 Turbo" : "Seedance 2.0";
@@ -174,13 +175,13 @@ export const Route = createFileRoute("/api/ugc-generate")({
         const durationStr = body.duration ?? "12";
 
         // === SHARED PREFIX (cacheable across the 4 UGC styles for the same project) ===
-        // SYS_UGC + productPhoto + productInfo + transcription + analysisBlock no
-        // cambian entre estilos. Marcamos la última parte con cache_control para
-        // que las llamadas 2-N peguen al cache (~5 min TTL Anthropic) a 0.10x input.
+        // productPhoto + productInfo + transcription + analysisBlock no cambian
+        // entre estilos. Marcamos la última parte con cache_control para que las
+        // llamadas 2-N peguen al cache (~5 min TTL Anthropic) a 0.10x input.
         const sharedContent: ContentPart[] = [];
         if (body.productPhoto) {
           sharedContent.push({ type: "text", text: "=== PRODUCT PHOTO (reference) ===" });
-          sharedContent.push(dataUrlToOpenAIImage(body.productPhoto));
+          sharedContent.push(dataUrlToAnthropicImage(body.productPhoto));
         }
         const sharedTextParts = [
           body.productInfo ? `PRODUCT INFO:\n${body.productInfo}` : "",
@@ -215,29 +216,21 @@ export const Route = createFileRoute("/api/ugc-generate")({
           { type: "text", text: styleText },
         ];
 
-        const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        const upstream = await fetch("https://api.anthropic.com/v1/messages", {
           method: "POST",
           headers: {
             "content-type": "application/json",
-            authorization: `Bearer ${apiKey}`,
-            "HTTP-Referer": "https://adsparkstudio.com",
-            "X-Title": "Ad Spark Studio",
+            "x-api-key": apiKey,
+            "anthropic-version": "2023-06-01",
           },
           body: JSON.stringify({
             model,
-            // 2026-05-04: subido de 4096 a 8192. UGC scripts típicos (PROMPT +
-            // HOOKS) pesan 1500-3000 tokens, pero ugc-viral con HOOK + BODY +
-            // CLOSER + HOOKS EXTRA puede exceder 4096 → si trunca, parseUgcOutput
-            // falla y se persiste un row con script_text="" pero status="ready"
-            // (data corruption silenciosa). 8192 da margen 2x sin penalización
-            // (sólo se paga lo generado, no el cap).
-            max_completion_tokens: 8192,
+            // 8192 da margen 2x sobre el output típico de UGC sin penalización.
+            max_tokens: 8192,
             stream: true,
             temperature: 0.6,
-            messages: [
-              { role: "system", content: SYS_UGC },
-              { role: "user", content },
-            ],
+            system: SYS_UGC,
+            messages: [{ role: "user", content }],
           }),
         });
         if (!upstream.ok || !upstream.body) {
@@ -248,13 +241,13 @@ export const Route = createFileRoute("/api/ugc-generate")({
             userId,
             workspaceId: body.workspaceId,
             model,
-            operation: "openrouter_ugc_script_failed",
+            operation: "anthropic_ugc_script_failed",
             inputTokens: 0,
             outputTokens: 0,
             reservedUsd,
             metadata: { upstreamStatus: upstream.status, style: body.style },
           }).catch((e) => console.warn("[ugc-generate] reconcile log failed:", e));
-          return new Response(`OpenRouter ${upstream.status}: ${errText.slice(0, 500)}`, { status: 502 });
+          return new Response(`Anthropic ${upstream.status}: ${errText.slice(0, 500)}`, { status: 502 });
         }
 
         let fullText = "";
@@ -282,49 +275,51 @@ export const Route = createFileRoute("/api/ugc-generate")({
                   if (!dl) continue;
                   try {
                     const payload = dl.slice(6).trim();
-                    if (payload === "[DONE]") continue;
+                    if (!payload) continue;
                     const evt = JSON.parse(payload) as {
-                      choices?: Array<{
-                        delta?: { content?: string };
-                        finish_reason?: string | null;
-                      }>;
-                      usage?: {
-                        prompt_tokens?: number;
-                        completion_tokens?: number;
-                        cache_creation_input_tokens?: number;
-                        cache_read_input_tokens?: number;
-                        prompt_tokens_details?: {
-                          cached_tokens?: number;
-                          cache_creation_tokens?: number;
-                          cache_read_tokens?: number;
+                      type?: string;
+                      message?: {
+                        usage?: {
+                          input_tokens?: number;
+                          output_tokens?: number;
+                          cache_creation_input_tokens?: number;
+                          cache_read_input_tokens?: number;
                         };
                       };
+                      delta?: {
+                        type?: string;
+                        text?: string;
+                        stop_reason?: string;
+                      };
+                      usage?: { output_tokens?: number };
                     };
-                    const deltaText = evt.choices?.[0]?.delta?.content;
-                    if (typeof deltaText === "string") {
-                      fullText += deltaText;
-                      controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: deltaText })}\n\n`));
+                    if (evt.type === "message_start" && evt.message?.usage) {
+                      inputTokens = evt.message.usage.input_tokens ?? 0;
+                      cacheCreateTokens = evt.message.usage.cache_creation_input_tokens ?? 0;
+                      cacheReadTokens = evt.message.usage.cache_read_input_tokens ?? 0;
+                    } else if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+                      const t = evt.delta.text;
+                      if (typeof t === "string" && t.length) {
+                        fullText += t;
+                        controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: t })}\n\n`));
+                      }
+                    } else if (evt.type === "message_delta") {
+                      if (evt.delta?.stop_reason) stopReason = evt.delta.stop_reason;
+                      if (typeof evt.usage?.output_tokens === "number") {
+                        outputTokens = evt.usage.output_tokens;
+                      }
                     }
-                    const finish = evt.choices?.[0]?.finish_reason;
-                    if (finish) stopReason = finish;
-                    if (evt.usage?.prompt_tokens) inputTokens = evt.usage.prompt_tokens;
-                    if (evt.usage?.completion_tokens) outputTokens = evt.usage.completion_tokens;
-                    const cc = evt.usage?.cache_creation_input_tokens
-                      ?? evt.usage?.prompt_tokens_details?.cache_creation_tokens;
-                    const cr = evt.usage?.cache_read_input_tokens
-                      ?? evt.usage?.prompt_tokens_details?.cache_read_tokens
-                      ?? evt.usage?.prompt_tokens_details?.cached_tokens;
-                    if (typeof cc === "number") cacheCreateTokens = cc;
-                    if (typeof cr === "number") cacheReadTokens = cr;
                   } catch { /* skip */ }
                 }
               }
+
+              const isTruncated = stopReason === "max_tokens";
 
               const cost = await logUsage({
                 userId,
                 workspaceId: body.workspaceId,
                 model,
-                operation: "openrouter_ugc_script",
+                operation: "anthropic_ugc_script",
                 inputTokens,
                 outputTokens,
                 cacheCreateTokens,
@@ -333,7 +328,7 @@ export const Route = createFileRoute("/api/ugc-generate")({
                 metadata: {
                   style: body.style,
                   videoModel,
-                  isTruncated: stopReason === "length",
+                  isTruncated,
                   cacheCreateTokens,
                   cacheReadTokens,
                 },
@@ -384,7 +379,7 @@ export const Route = createFileRoute("/api/ugc-generate")({
                 cacheCreateTokens,
                 cacheReadTokens,
                 stopReason,
-                isTruncated: stopReason === "length",
+                isTruncated,
                 model,
                 validation,
               })}\n\n`));

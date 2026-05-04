@@ -4,23 +4,25 @@ import { SYS_GENERATE } from "@/lib/system-prompts";
 import { SCENE_FORMAT } from "@/lib/scene-format";
 import { HOOK_PLAYBOOKS } from "@/lib/variation-defs";
 import { WINNING_PREAMBLE, checkScript } from "@/lib/winning-framework";
-import { dataUrlToOpenAIImage, logUsage } from "@/utils/openrouter.functions";
+import { dataUrlToAnthropicImage, logUsage } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
 type FrameInput = { time: number; dataUrl: string };
 
-// Anthropic prompt caching via OpenRouter: pass `cache_control: { type: "ephemeral" }`
-// on the LAST part of the cacheable prefix. Anthropic caches everything up to and
-// including that part. OpenRouter passes the field through transparently for
-// Anthropic models since late 2025.
+// Anthropic native content block types. Cache_control on the LAST part of the
+// shared prefix marks everything before it as cacheable (5 min TTL ephemeral).
 type CacheControl = { type: "ephemeral" };
 type ContentPart =
   | { type: "text"; text: string; cache_control?: CacheControl }
-  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" }; cache_control?: CacheControl };
+  | {
+      type: "image";
+      source: { type: "base64"; media_type: string; data: string };
+      cache_control?: CacheControl;
+    };
 
-type OpenAIMessage = {
-  role: "system" | "user" | "assistant";
+type AnthropicMessage = {
+  role: "user" | "assistant";
   content: string | ContentPart[];
 };
 
@@ -28,8 +30,8 @@ export const Route = createFileRoute("/api/generate-variations")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env.OPENROUTER_API_KEY;
-        if (!apiKey) return new Response("OPENROUTER_API_KEY not configured", { status: 500 });
+        const apiKey = process.env.ANTHROPIC_API_KEY;
+        if (!apiKey) return new Response("ANTHROPIC_API_KEY not configured", { status: 500 });
 
         const authHeader = request.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) return new Response("Unauthorized", { status: 401 });
@@ -67,7 +69,7 @@ export const Route = createFileRoute("/api/generate-variations")({
           return new Response("Missing fields", { status: 400 });
         }
 
-        const model = body.model || "anthropic/claude-sonnet-4.5";
+        const model = body.model || "claude-sonnet-4-5";
         const isClone = body.variationType === "clon";
 
         // === SHARED PREFIX ===
@@ -88,7 +90,7 @@ export const Route = createFileRoute("/api/generate-variations")({
         }
         if (body.productPhoto) {
           sharedContent.push({ type: "text", text: "\n\n=== PRODUCT PHOTO ===" });
-          sharedContent.push(dataUrlToOpenAIImage(body.productPhoto));
+          sharedContent.push(dataUrlToAnthropicImage(body.productPhoto));
         }
         if (body.productInfo?.trim()) {
           sharedContent.push({
@@ -103,7 +105,7 @@ export const Route = createFileRoute("/api/generate-variations")({
           });
           for (const f of body.referenceFrames) {
             sharedContent.push({ type: "text", text: `\nframe @ ${f.time.toFixed(1)}s:` });
-            sharedContent.push(dataUrlToOpenAIImage(f.dataUrl));
+            sharedContent.push(dataUrlToAnthropicImage(f.dataUrl));
           }
         }
 
@@ -158,12 +160,9 @@ export const Route = createFileRoute("/api/generate-variations")({
 
         const content: ContentPart[] = [...sharedContent, ...variationContent];
 
-        // 2026-05-04: subido de 16000 a 32000. Audit mostró avg_output=24k vs
-        // cap 16k → la mayoría disparaba continuation, re-enviando ~16k de
-        // assistant message como input NO cacheado (~$0.29/proyecto desperdiciados).
-        // Sonnet 4.5 soporta hasta 64k output sin penalización (solo se paga
-        // por tokens generados, no por el cap). MAX_CONTINUATIONS=1 se mantiene
-        // como red de seguridad para casos extremos (>32k).
+        // Sonnet 4.5 soporta hasta 64k output sin penalización (solo se paga por
+        // tokens generados). avg_output ~24k, p95 ~51k → 32k cap evita continuations
+        // en el caso normal pero MAX_CONTINUATIONS=1 queda como red de seguridad.
         const MAX_TOKENS = 32000;
         const MAX_CONTINUATIONS = 1;
 
@@ -174,15 +173,13 @@ export const Route = createFileRoute("/api/generate-variations")({
         const dec = new TextDecoder();
         const enc = new TextEncoder();
 
-        const messages: OpenAIMessage[] = [];
+        const messages: AnthropicMessage[] = [];
 
         const stream = new ReadableStream<Uint8Array>({
           async start(controller) {
             try {
               for (let attempt = 0; attempt <= MAX_CONTINUATIONS; attempt++) {
-                const upstreamMessages: OpenAIMessage[] = [
-                  { role: "system", content: SYS_GENERATE },
-                ];
+                const upstreamMessages: AnthropicMessage[] = [];
                 if (attempt === 0) {
                   upstreamMessages.push({ role: "user", content });
                 } else {
@@ -193,26 +190,26 @@ export const Route = createFileRoute("/api/generate-variations")({
                   });
                 }
 
-                const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                const upstream = await fetch("https://api.anthropic.com/v1/messages", {
                   method: "POST",
                   headers: {
                     "content-type": "application/json",
-                    authorization: `Bearer ${apiKey}`,
-                    "HTTP-Referer": "https://adsparkstudio.com",
-                    "X-Title": "Ad Spark Studio",
+                    "x-api-key": apiKey,
+                    "anthropic-version": "2023-06-01",
                   },
                   body: JSON.stringify({
                     model,
-                    max_completion_tokens: MAX_TOKENS,
+                    max_tokens: MAX_TOKENS,
                     stream: true,
                     temperature: 0.5,
+                    system: SYS_GENERATE,
                     messages: upstreamMessages,
                   }),
                 });
                 if (!upstream.ok || !upstream.body) {
                   const errText = await upstream.text().catch(() => "");
                   controller.enqueue(enc.encode(`data: ${JSON.stringify({
-                    type: "error", error: `OpenRouter ${upstream.status}: ${errText.slice(0, 300)}`,
+                    type: "error", error: `Anthropic ${upstream.status}: ${errText.slice(0, 300)}`,
                   })}
 \n`));
                   failed = true;
@@ -224,7 +221,7 @@ export const Route = createFileRoute("/api/generate-variations")({
                 let attemptText = "";
                 let attemptIn = 0, attemptOut = 0;
                 let attemptCacheCreate = 0, attemptCacheRead = 0;
-                let attemptFinishReason: string | null = null;
+                let attemptStopReason: string | null = null;
                 for (;;) {
                   const { value, done } = await reader.read();
                   if (done) break;
@@ -235,45 +232,43 @@ export const Route = createFileRoute("/api/generate-variations")({
                     const dl = chunk.split("\n").find((l) => l.startsWith("data: "));
                     if (!dl) continue;
                     const payload = dl.slice(6).trim();
-                    if (payload === "[DONE]") continue;
+                    if (!payload) continue;
                     try {
                       const evt = JSON.parse(payload) as {
-                        choices?: Array<{
-                          delta?: { content?: string };
-                          finish_reason?: string | null;
-                        }>;
-                        usage?: {
-                          prompt_tokens?: number;
-                          completion_tokens?: number;
-                          cache_creation_input_tokens?: number;
-                          cache_read_input_tokens?: number;
-                          // OpenRouter sometimes nests Anthropic-specific cache
-                          // counters under prompt_tokens_details.
-                          prompt_tokens_details?: {
-                            cached_tokens?: number;
-                            cache_creation_tokens?: number;
-                            cache_read_tokens?: number;
+                        type?: string;
+                        message?: {
+                          usage?: {
+                            input_tokens?: number;
+                            output_tokens?: number;
+                            cache_creation_input_tokens?: number;
+                            cache_read_input_tokens?: number;
                           };
                         };
+                        delta?: {
+                          type?: string;
+                          text?: string;
+                          stop_reason?: string;
+                        };
+                        usage?: { output_tokens?: number };
                       };
-                      const deltaText = evt.choices?.[0]?.delta?.content;
-                      if (typeof deltaText === "string") {
-                        attemptText += deltaText;
-                        fullText += deltaText;
-                        controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: deltaText })}
+                      if (evt.type === "message_start" && evt.message?.usage) {
+                        attemptIn = evt.message.usage.input_tokens ?? 0;
+                        attemptCacheCreate = evt.message.usage.cache_creation_input_tokens ?? 0;
+                        attemptCacheRead = evt.message.usage.cache_read_input_tokens ?? 0;
+                      } else if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+                        const t = evt.delta.text;
+                        if (typeof t === "string" && t.length) {
+                          attemptText += t;
+                          fullText += t;
+                          controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: t })}
 \n`));
+                        }
+                      } else if (evt.type === "message_delta") {
+                        if (evt.delta?.stop_reason) attemptStopReason = evt.delta.stop_reason;
+                        if (typeof evt.usage?.output_tokens === "number") {
+                          attemptOut = evt.usage.output_tokens;
+                        }
                       }
-                      const finish = evt.choices?.[0]?.finish_reason;
-                      if (finish) attemptFinishReason = finish;
-                      if (evt.usage?.prompt_tokens) attemptIn = evt.usage.prompt_tokens;
-                      if (evt.usage?.completion_tokens) attemptOut = evt.usage.completion_tokens;
-                      const cc = evt.usage?.cache_creation_input_tokens
-                        ?? evt.usage?.prompt_tokens_details?.cache_creation_tokens;
-                      const cr = evt.usage?.cache_read_input_tokens
-                        ?? evt.usage?.prompt_tokens_details?.cache_read_tokens
-                        ?? evt.usage?.prompt_tokens_details?.cached_tokens;
-                      if (typeof cc === "number") attemptCacheCreate = cc;
-                      if (typeof cr === "number") attemptCacheRead = cr;
                     } catch { /* skip */ }
                   }
                 }
@@ -281,9 +276,9 @@ export const Route = createFileRoute("/api/generate-variations")({
                 outputTokens += attemptOut;
                 cacheCreateTokens += attemptCacheCreate;
                 cacheReadTokens += attemptCacheRead;
-                stopReason = attemptFinishReason;
+                stopReason = attemptStopReason;
 
-                if (attemptFinishReason !== "length" || attempt >= MAX_CONTINUATIONS || !attemptText) break;
+                if (attemptStopReason !== "max_tokens" || attempt >= MAX_CONTINUATIONS || !attemptText) break;
                 messages.push({ role: "assistant", content: attemptText });
                 messages.push({
                   role: "user",
@@ -291,13 +286,14 @@ export const Route = createFileRoute("/api/generate-variations")({
                 });
               }
 
+              const isTruncated = stopReason === "max_tokens";
               const validation = isClone ? null : checkScript(fullText);
 
               const cost = await logUsage({
                 userId,
                 workspaceId: body.workspaceId ?? null,
                 model,
-                operation: "openrouter_variation",
+                operation: "anthropic_variation",
                 inputTokens,
                 outputTokens,
                 cacheCreateTokens,
@@ -307,7 +303,7 @@ export const Route = createFileRoute("/api/generate-variations")({
                   variationType: body.variationType,
                   variationLabel: body.variationLabel,
                   variationId: body.variationId ?? null,
-                  isTruncated: stopReason === "length",
+                  isTruncated,
                   maxTokens: MAX_TOKENS,
                   validationPass: validation?.pass ?? null,
                   validationViolations: validation?.violations ?? null,
@@ -329,7 +325,7 @@ export const Route = createFileRoute("/api/generate-variations")({
                 controller.enqueue(enc.encode(`data: ${JSON.stringify({
                   type: "done", fullText, inputTokens, outputTokens,
                   cacheCreateTokens, cacheReadTokens,
-                  costUsd: cost, stopReason, isTruncated: stopReason === "length", model,
+                  costUsd: cost, stopReason, isTruncated, model,
                   validation,
                 })}
 \n`));
@@ -342,8 +338,9 @@ export const Route = createFileRoute("/api/generate-variations")({
               if (inputTokens || outputTokens) {
                 await logUsage({
                   userId, workspaceId: body.workspaceId ?? null, model,
-                  operation: "openrouter_variation_partial",
+                  operation: "anthropic_variation_partial",
                   inputTokens, outputTokens,
+                  cacheCreateTokens, cacheReadTokens,
                   reservedUsd,
                   metadata: { variationType: body.variationType, partial: true },
                 }).catch(() => {});

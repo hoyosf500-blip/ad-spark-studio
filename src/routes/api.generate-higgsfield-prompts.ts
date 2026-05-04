@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { logUsage, dataUrlToOpenAIImage } from "@/utils/openrouter.functions";
+import { logUsage, dataUrlToAnthropicImage } from "@/utils/anthropic.functions";
 import { checkSpendingCap, capExceededResponse } from "@/lib/spending-cap";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -14,14 +14,21 @@ type Body = {
   model?: ModelChoice;
 };
 
+// Anthropic native content block types.
+type CacheControl = { type: "ephemeral" };
 type ContentPart =
-  | { type: "text"; text: string }
-  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };
+  | { type: "text"; text: string; cache_control?: CacheControl }
+  | {
+      type: "image";
+      source: { type: "base64"; media_type: string; data: string };
+      cache_control?: CacheControl;
+    };
 
 function resolveModel(choice: ModelChoice | undefined): string {
-  if (choice === "opus") return "anthropic/claude-opus-4.5";
-  if (choice === "haiku") return "google/gemini-2.5-flash";
-  return "google/gemini-2.5-flash";
+  if (choice === "opus") return "claude-opus-4-5";
+  if (choice === "sonnet") return "claude-sonnet-4-5";
+  // Default Haiku — tarea estructurada (3 prompts JSON), no necesita Sonnet.
+  return "claude-haiku-4-5";
 }
 
 type Prompts = {
@@ -224,8 +231,8 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env.OPENROUTER_API_KEY;
-        if (!apiKey) return new Response("OPENROUTER_API_KEY not configured", { status: 500 });
+        const apiKey = process.env.ANTHROPIC_API_KEY;
+        if (!apiKey) return new Response("ANTHROPIC_API_KEY not configured", { status: 500 });
 
         const authHeader = request.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) return new Response("Unauthorized", { status: 401 });
@@ -372,26 +379,26 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
 
         const userContent: ContentPart[] = [];
         if (body.referenceFrameDataUrl) {
-          userContent.push(dataUrlToOpenAIImage(body.referenceFrameDataUrl));
+          userContent.push(dataUrlToAnthropicImage(body.referenceFrameDataUrl));
         }
         userContent.push({ type: "text", text: userMsg });
 
         const model = resolveModel(body.model);
-        const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        const upstream = await fetch("https://api.anthropic.com/v1/messages", {
           method: "POST",
           headers: {
             "content-type": "application/json",
-            authorization: `Bearer ${apiKey}`,
-            "HTTP-Referer": "https://adsparkstudio.com",
-            "X-Title": "Ad Spark Studio",
+            "x-api-key": apiKey,
+            "anthropic-version": "2023-06-01",
           },
           body: JSON.stringify({
             model,
-            max_completion_tokens: 3000,
+            max_tokens: 3000,
             temperature: hasFrame ? 0.2 : 0.5,
-            response_format: { type: "json_object" },
+            // Cache breakpoint en el system para que las 6 escenas del mismo
+            // proyecto reusen el SYS prompt (~9k chars) a 0.10x.
+            system: [{ type: "text", text: SYS, cache_control: { type: "ephemeral" } }],
             messages: [
-              { role: "system", content: SYS },
               { role: "user", content: userContent },
             ],
           }),
@@ -405,20 +412,25 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
             userId,
             workspaceId: body.workspaceId ?? null,
             model,
-            operation: "openrouter_higgsfield_prompts_failed",
+            operation: "anthropic_higgsfield_prompts_failed",
             inputTokens: 0,
             outputTokens: 0,
             reservedUsd,
             metadata: { upstreamStatus: upstream.status, sceneId: scene.id },
           }).catch((e) => console.warn("[higgsfield-prompts] reconcile log failed:", e));
-          return new Response(`OpenRouter ${upstream.status}: ${errText.slice(0, 400)}`, { status: 502 });
+          return new Response(`Anthropic ${upstream.status}: ${errText.slice(0, 400)}`, { status: 502 });
         }
 
         const data = (await upstream.json()) as {
-          choices?: Array<{ message?: { content?: string } }>;
-          usage?: { prompt_tokens?: number; completion_tokens?: number };
+          content?: Array<{ type: string; text?: string }>;
+          usage?: {
+            input_tokens?: number;
+            output_tokens?: number;
+            cache_creation_input_tokens?: number;
+            cache_read_input_tokens?: number;
+          };
         };
-        const raw = data.choices?.[0]?.message?.content?.trim() ?? "";
+        const raw = data.content?.find((b) => b.type === "text")?.text?.trim() ?? "";
         const jsonMatch = raw.match(/\{[\s\S]*\}/);
         if (!jsonMatch) return new Response("No JSON in response", { status: 502 });
 
@@ -468,9 +480,11 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
           userId,
           workspaceId: body.workspaceId ?? null,
           model,
-          operation: "openrouter_higgsfield_prompts",
-          inputTokens: data.usage?.prompt_tokens ?? 0,
-          outputTokens: data.usage?.completion_tokens ?? 0,
+          operation: "anthropic_higgsfield_prompts",
+          inputTokens: data.usage?.input_tokens ?? 0,
+          cacheCreateTokens: data.usage?.cache_creation_input_tokens ?? 0,
+          cacheReadTokens: data.usage?.cache_read_input_tokens ?? 0,
+          outputTokens: data.usage?.output_tokens ?? 0,
           reservedUsd,
           metadata: { sceneId: scene.id, variationId: scene.variation_id, orderIdx: scene.order_idx },
         });
