@@ -229,10 +229,12 @@ function progressPct(v: VariationState): number {
   return Math.max(1, Math.round(scenePct + tailPct + 1));
 }
 
-// Aligned with priceFor() table in src/utils/openrouter.functions.ts and the
-// backend default in api.anthropic-{analyze,generate}. Sending the same string
-// in the request body keeps cost tracking accurate end-to-end.
-const DEFAULT_MODEL = "anthropic/claude-sonnet-4.5";
+// Aligned with priceFor() table in src/utils/anthropic.functions.ts and the
+// backend default in api.analyze-frames / api.generate-variations. Native
+// Anthropic model IDs (no "anthropic/" prefix, hyphens not dots) — the API
+// rejects OpenRouter-style "anthropic/claude-sonnet-4.5" with a 404
+// not_found_error. 2026-05-04: corregido tras detectar 404 en producción.
+const DEFAULT_MODEL = "claude-sonnet-4-5";
 
 export function VariationsPanel() {
   const { user, activeWorkspaceId, refreshWorkspaces, setActiveWorkspaceId } = useAuth();
@@ -1125,8 +1127,8 @@ export function VariationsPanel() {
               <Select value={model} onValueChange={setModel}>
                 <SelectTrigger className="w-52 h-11"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="anthropic/claude-sonnet-4.5">Sonnet 4.5 ($3/$15)</SelectItem>
-                  <SelectItem value="anthropic/claude-opus-4.5">Opus 4.5 ($5/$25) — Max calidad</SelectItem>
+                  <SelectItem value="claude-sonnet-4-5">Sonnet 4.5 ($3/$15)</SelectItem>
+                  <SelectItem value="claude-opus-4-5">Opus 4.5 ($5/$25) — Max calidad</SelectItem>
                 </SelectContent>
               </Select>
             </div>
