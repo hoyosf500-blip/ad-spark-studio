@@ -225,7 +225,13 @@ export const Route = createFileRoute("/api/ugc-generate")({
           },
           body: JSON.stringify({
             model,
-            max_completion_tokens: 4096,
+            // 2026-05-04: subido de 4096 a 8192. UGC scripts típicos (PROMPT +
+            // HOOKS) pesan 1500-3000 tokens, pero ugc-viral con HOOK + BODY +
+            // CLOSER + HOOKS EXTRA puede exceder 4096 → si trunca, parseUgcOutput
+            // falla y se persiste un row con script_text="" pero status="ready"
+            // (data corruption silenciosa). 8192 da margen 2x sin penalización
+            // (sólo se paga lo generado, no el cap).
+            max_completion_tokens: 8192,
             stream: true,
             temperature: 0.6,
             messages: [
@@ -373,6 +379,10 @@ export const Route = createFileRoute("/api/ugc-generate")({
                 scriptEs: parsed.scriptEs,
                 hooks: parsed.hooks,
                 costUsd: cost,
+                inputTokens,
+                outputTokens,
+                cacheCreateTokens,
+                cacheReadTokens,
                 stopReason,
                 isTruncated: stopReason === "length",
                 model,

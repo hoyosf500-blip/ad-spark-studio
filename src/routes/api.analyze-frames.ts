@@ -256,6 +256,7 @@ export const Route = createFileRoute("/api/analyze-frames")({
               if (!failed) {
                 controller.enqueue(enc.encode(`data: ${JSON.stringify({
                   type: "done", fullText, inputTokens, outputTokens,
+                  cacheCreateTokens, cacheReadTokens,
                   costUsd: cost, stopReason, isTruncated: stopReason === "length", model,
                 })}
 \n`));

@@ -173,6 +173,7 @@ export function UgcPanel({
       let buf = "";
       let full = "";
       let cost = 0;
+      let isTruncated = false;
       let streamCutEarly = false;
       try {
         for (;;) {
@@ -190,7 +191,16 @@ export function UgcPanel({
             // let upstream errors surface as silent toasts of success.
             let ev:
               | { type: "text"; text: string }
-              | { type: "done"; costUsd: number; fullText: string }
+              | {
+                  type: "done";
+                  costUsd: number;
+                  fullText: string;
+                  isTruncated?: boolean;
+                  inputTokens?: number;
+                  outputTokens?: number;
+                  cacheCreateTokens?: number;
+                  cacheReadTokens?: number;
+                }
               | { type: "error"; error: string };
             try {
               ev = JSON.parse(dl.slice(6).trim());
@@ -202,6 +212,7 @@ export function UgcPanel({
               setStream({ active: style, text: full });
             } else if (ev.type === "done") {
               cost = ev.costUsd;
+              isTruncated = ev.isTruncated === true;
             } else if (ev.type === "error") {
               throw new Error(ev.error);
             }
@@ -219,6 +230,13 @@ export function UgcPanel({
       }
       if (streamCutEarly) {
         toast.warning(`UGC ${style}: conexión cortada, pero el UGC debería aparecer en la lista en unos segundos`);
+      } else if (isTruncated) {
+        // El modelo cortó por max_tokens — el output puede estar incompleto
+        // (PROMPT/HOOKS recortados). Surface al usuario en lugar de fingir éxito.
+        toast.warning(
+          `UGC ${style} truncado · $${cost.toFixed(4)} · revisar output, puede faltar contenido`,
+          { duration: 8000 },
+        );
       } else {
         toast.success(`UGC ${style} listo · $${cost.toFixed(4)}`);
       }
