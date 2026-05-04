@@ -217,6 +217,7 @@ export const Route = createFileRoute("/api/generate-variations")({
                 let buf = "";
                 let attemptText = "";
                 let attemptIn = 0, attemptOut = 0;
+                let attemptCacheCreate = 0, attemptCacheRead = 0;
                 let attemptFinishReason: string | null = null;
                 for (;;) {
                   const { value, done } = await reader.read();
@@ -235,7 +236,19 @@ export const Route = createFileRoute("/api/generate-variations")({
                           delta?: { content?: string };
                           finish_reason?: string | null;
                         }>;
-                        usage?: { prompt_tokens?: number; completion_tokens?: number };
+                        usage?: {
+                          prompt_tokens?: number;
+                          completion_tokens?: number;
+                          cache_creation_input_tokens?: number;
+                          cache_read_input_tokens?: number;
+                          // OpenRouter sometimes nests Anthropic-specific cache
+                          // counters under prompt_tokens_details.
+                          prompt_tokens_details?: {
+                            cached_tokens?: number;
+                            cache_creation_tokens?: number;
+                            cache_read_tokens?: number;
+                          };
+                        };
                       };
                       const deltaText = evt.choices?.[0]?.delta?.content;
                       if (typeof deltaText === "string") {
@@ -248,11 +261,20 @@ export const Route = createFileRoute("/api/generate-variations")({
                       if (finish) attemptFinishReason = finish;
                       if (evt.usage?.prompt_tokens) attemptIn = evt.usage.prompt_tokens;
                       if (evt.usage?.completion_tokens) attemptOut = evt.usage.completion_tokens;
+                      const cc = evt.usage?.cache_creation_input_tokens
+                        ?? evt.usage?.prompt_tokens_details?.cache_creation_tokens;
+                      const cr = evt.usage?.cache_read_input_tokens
+                        ?? evt.usage?.prompt_tokens_details?.cache_read_tokens
+                        ?? evt.usage?.prompt_tokens_details?.cached_tokens;
+                      if (typeof cc === "number") attemptCacheCreate = cc;
+                      if (typeof cr === "number") attemptCacheRead = cr;
                     } catch { /* skip */ }
                   }
                 }
                 inputTokens += attemptIn;
                 outputTokens += attemptOut;
+                cacheCreateTokens += attemptCacheCreate;
+                cacheReadTokens += attemptCacheRead;
                 stopReason = attemptFinishReason;
 
                 if (attemptFinishReason !== "length" || attempt >= MAX_CONTINUATIONS || !attemptText) break;
