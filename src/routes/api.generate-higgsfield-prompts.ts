@@ -26,9 +26,15 @@ type ContentPart =
 
 function resolveModel(choice: ModelChoice | undefined): string {
   if (choice === "opus") return "claude-opus-4-5";
-  if (choice === "sonnet") return "claude-sonnet-4-5";
-  // Default Haiku — tarea estructurada (3 prompts JSON), no necesita Sonnet.
-  return "claude-haiku-4-5";
+  if (choice === "haiku") return "claude-haiku-4-5";
+  // 2026-05-04: default cambiado a Sonnet 4.5 (antes Haiku 4.5).
+  // Endpoint produce los prompts paste-ready finales (nano_banana, seedream,
+  // kling, seedance) que el usuario pega en Higgsfield.ai. Calidad del prompt
+  // determina calidad del render ($0.30+/render), por lo que un mal prompt
+  // cuesta más que el upgrade de modelo. Cost delta vs Haiku ≈ +$0.10/proyecto.
+  // detect-product queda en Haiku (clasificación JSON estructural, no
+  // creatividad — ahí Sonnet es overkill).
+  return "claude-sonnet-4-5";
 }
 
 type Prompts = {
