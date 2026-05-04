@@ -242,6 +242,8 @@ export const Route = createFileRoute("/api/ugc-generate")({
         let fullText = "";
         let inputTokens = 0;
         let outputTokens = 0;
+        let cacheCreateTokens = 0;
+        let cacheReadTokens = 0;
         let stopReason: string | null = null;
         const dec = new TextDecoder();
         const enc = new TextEncoder();
@@ -268,7 +270,17 @@ export const Route = createFileRoute("/api/ugc-generate")({
                         delta?: { content?: string };
                         finish_reason?: string | null;
                       }>;
-                      usage?: { prompt_tokens?: number; completion_tokens?: number };
+                      usage?: {
+                        prompt_tokens?: number;
+                        completion_tokens?: number;
+                        cache_creation_input_tokens?: number;
+                        cache_read_input_tokens?: number;
+                        prompt_tokens_details?: {
+                          cached_tokens?: number;
+                          cache_creation_tokens?: number;
+                          cache_read_tokens?: number;
+                        };
+                      };
                     };
                     const deltaText = evt.choices?.[0]?.delta?.content;
                     if (typeof deltaText === "string") {
@@ -279,6 +291,13 @@ export const Route = createFileRoute("/api/ugc-generate")({
                     if (finish) stopReason = finish;
                     if (evt.usage?.prompt_tokens) inputTokens = evt.usage.prompt_tokens;
                     if (evt.usage?.completion_tokens) outputTokens = evt.usage.completion_tokens;
+                    const cc = evt.usage?.cache_creation_input_tokens
+                      ?? evt.usage?.prompt_tokens_details?.cache_creation_tokens;
+                    const cr = evt.usage?.cache_read_input_tokens
+                      ?? evt.usage?.prompt_tokens_details?.cache_read_tokens
+                      ?? evt.usage?.prompt_tokens_details?.cached_tokens;
+                    if (typeof cc === "number") cacheCreateTokens = cc;
+                    if (typeof cr === "number") cacheReadTokens = cr;
                   } catch { /* skip */ }
                 }
               }
@@ -290,8 +309,16 @@ export const Route = createFileRoute("/api/ugc-generate")({
                 operation: "openrouter_ugc_script",
                 inputTokens,
                 outputTokens,
+                cacheCreateTokens,
+                cacheReadTokens,
                 reservedUsd,
-                metadata: { style: body.style, videoModel, isTruncated: stopReason === "length" },
+                metadata: {
+                  style: body.style,
+                  videoModel,
+                  isTruncated: stopReason === "length",
+                  cacheCreateTokens,
+                  cacheReadTokens,
+                },
               });
 
               // Parse PROMPT and HOOKS sections + extract image/animation prompts
