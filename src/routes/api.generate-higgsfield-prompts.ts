@@ -186,18 +186,31 @@ WELLNESS / SUPPLEMENTS / NUTRITION:
 
 RULE FOR ANY OTHER NICHE: identify the CORE MECHANISM that explains why the product works → render it at the scale where that mechanism is most visible → apply cinematic chiaroscuro → seamless composite. The visual question every inset must answer: "HOW does this product work?" — dramatic, specific, impossible to confuse with stock art.
 
-=== CINEMATIC IMPACT — MANDATORY FOR EVERY COMPOSITE OR ENHANCED IMAGE ===
-Any composite edit, 3D render, macro inset, product reveal, before/after, or enhanced visualization MUST embed these six impact cues as lowercase narrative prose woven into the dense paragraph (never as a bullet list, never uppercase, never quoted — those render as floating text in the output):
-  1. LIGHTING: one strong directional key (upper-left or 45 degrees above) producing cinematic chiaroscuro, rim light on the opposite edge, deep shadow on the unlit side. Never flat even illumination for an impact shot.
-  2. NEGATIVE SPACE: deep-black or heavily graded background behind the hero element — never busy, never a white studio cyclorama for an impact shot.
-  3. ATMOSPHERE: a volumetric light cue — faint dust motes, diffused rays, thin haze, or condensation — giving the frame depth and cinematic weight.
-  4. SURFACE DETAIL: hyperreal microtexture on every visible surface (pores on skin, wet gloss on tissue, fiber weave on fabric, micro-scratches on metal, condensation on glass). Never smooth plastic.
-  5. COLOR GRADE: a deliberate cinematic split — teal-and-amber, warm hero vs. cool background, or high-contrast desaturated midtones. Never neutral auto-balanced.
-  6. DEPTH LAYERING: clear foreground / midground / background separation so the composite reads as real three-dimensional space, not a flat paste.
+=== CINEMATIC IMPACT — TWO-REGION RULE FOR COMPOSITES (READ CAREFULLY) ===
+A composite has TWO regions with DIFFERENT aesthetic rules. NEVER apply Region B rules to Region A — that's the failure mode where the doctor and the room get replaced by deep-black negative space.
 
-Example fragment to weave into the paragraph: "...lit by a single strong key light from upper-left producing deep chiaroscuro with rim light on the right edge, deep black negative space behind, faint volumetric dust motes in the key beam, hyperreal pore detail on the skin, cinematic teal-and-amber grade, foreground hand sharp over softly falling-off background..."
+REGION A — PHOTOGRAPH PORTION (upper/foreground real-world part of the composite):
+  - MUST match the reference frame's ACTUAL aesthetic verbatim. If the reference shows a doctor + patient + clinical room with framed pictures + warm window light + handheld TikTok feel, the photograph portion describes ALL of that — face, hair, scrubs, full body framing of every visible human, the wall, the props, the lighting, the clutter.
+  - DO NOT replace the photograph portion with deep-black negative space.
+  - DO NOT isolate the action subject (hand, tube, bottle, body part) on a clean studio background — that erases the doctor and the environment.
+  - DO NOT crop out visible humans. If the reference shows a face, the prompt describes the face. If the reference shows scrubs, the prompt describes the scrubs.
+  - DO NOT add chiaroscuro / rim light / studio cyclorama to the photograph if the reference is raw handheld TikTok — keep the raw amateur lighting that's actually in the frame.
+  - The photograph portion preserves reference fidelity ALWAYS, regardless of how dramatic the render portion is.
 
-For plain A-roll talking-head shots (not a composite, not a reveal), these cues are OPTIONAL and must match the reference's aesthetic register — if the reference is raw handheld TikTok, do NOT apply chiaroscuro; if the reference is editorial, apply it. Impact cues are MANDATORY ONLY for composites, reveals, 3D inserts, product cut-ins, and enhanced visualizations.
+REGION B — 3D RENDER / ENHANCED VISUALIZATION PORTION (inset/lower/cutaway part):
+  Six impact cues are MANDATORY for THIS portion only — the rendered area, not the photograph area:
+    1. LIGHTING: one strong directional key (upper-left or 45 degrees above) producing cinematic chiaroscuro on the rendered hero element, rim light on the opposite edge, deep shadow on the unlit side.
+    2. NEGATIVE SPACE: deep-black or heavily graded background behind the RENDERED hero element only — never busy, never a white studio cyclorama. (Applies BEHIND THE 3D RENDER, NEVER behind the photograph portion.)
+    3. ATMOSPHERE: a volumetric light cue (faint dust motes, diffused rays, thin haze) giving the render depth and cinematic weight.
+    4. SURFACE DETAIL: hyperreal microtexture on the rendered surfaces (pore detail on skin layers, wet gloss on tissue, fiber weave, micro-scratches on metal, condensation). Never smooth plastic.
+    5. COLOR GRADE: a deliberate cinematic split for the rendered portion — teal-and-amber, warm hero vs. cool background, or high-contrast desaturated midtones.
+    6. DEPTH LAYERING: clear foreground / midground / background separation in the 3D space.
+
+Example fragment for the RENDER portion only: "...the lower 3D inset is lit by a single strong key light from upper-left producing deep chiaroscuro with rim light on the right edge, deep black negative space behind the rendered hero element, faint volumetric dust motes in the key beam, hyperreal pore detail on the rendered skin layers, cinematic teal-and-amber grade..."
+
+For plain A-roll talking-head shots (not a composite), these cues are OPTIONAL and must match the reference's aesthetic register — if the reference is raw handheld TikTok, do NOT apply chiaroscuro; if the reference is editorial, apply it. Impact cues are MANDATORY ONLY for the RENDER portion of composites/reveals/3D inserts/product cut-ins.
+
+CRITICAL: when the reference is a composite that shows a real environment in the photograph portion (room, doctor, patient, clutter, warm light), the prompt MUST preserve that environment. Replacing the real environment with isolated black background is the most common failure mode and it erases the niche/scene context that the user actually shot.
 
 === SINGLE-SUBJECT LOCK ===
 When the reference shows a single hand, person, tool, or primary subject, explicitly lock the count. Image models duplicate subjects without an anchor. Required phrasing: "A SINGLE left hand...", "ONE hand only, NOT two hands", "ONE [subject], NOT multiple [subject]". Apply whenever a single subject must not be duplicated.
