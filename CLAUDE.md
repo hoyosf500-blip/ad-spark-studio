@@ -1,4 +1,8 @@
-# Ad Factory Studio — CLAUDE.md
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+# Ad Factory Studio
 
 App multi-tenant que convierte un video ganador en 6 variaciones de anuncio + 4 estilos UGC. Clon de un HTML standalone (1630 líneas) migrado a Lovable Cloud.
 
@@ -7,13 +11,6 @@ App multi-tenant que convierte un video ganador en 6 variaciones de anuncio + 4 
 - SIEMPRE verifica tu trabajo antes de darlo por terminado. Revisa que el código compila, que no hay errores de tipos, y que la lógica tiene sentido.
 - Antes de implementar cualquier cambio, investiga el código existente para entender cómo funciona. No asumas — lee el código primero.
 - NO implementes nada a menos que estés 100% seguro de que va a funcionar. Si tienes dudas, investiga más o pregúntame antes de proceder.
-
-## Sistema de memoria
-
-- Antes de terminar cualquier sesión de trabajo, guarda un resumen de lo que hiciste, lo que falta por hacer y cualquier decisión importante en un archivo .md dentro de la carpeta del proyecto (por ejemplo: `PROGRESS.md` o `SESSION_NOTES.md`).
-- Al iniciar una nueva sesión, busca y lee estos archivos de memoria para entender dónde te quedaste y qué sigue.
-- Organiza las notas por secciones: **Completado**, **En progreso**, **Pendiente** y **Decisiones tomadas**.
-- Actualiza estos archivos cada vez que completes un bloque significativo de trabajo.
 
 ## Workflow (NO implementar directo)
 
@@ -25,25 +22,28 @@ Este proyecto se construye 90% con Lovable. El rol de Claude Code aquí es:
 
 **NO implementes features completas directamente.** El usuario pega el prompt en Lovable, Lovable pushea a GitHub, tú pulleas y auditas.
 
+**Antes de editar cualquier archivo, re-Read.** Hay dos AIs pusheando en paralelo a este repo (Claude Code + Lovable). Lo que leíste hace 10 minutos puede haber cambiado. Corre `git log -5 --oneline` + re-Read antes de cada Edit para no pisar trabajo ajeno.
+
 ## Stack
 
 - **Frontend:** TanStack Start 1.167.14 (React 19 + Vite 7) + shadcn/ui + Tailwind v4
 - **Router:** TanStack Router file-based (`src/routes/*.tsx`), `routeTree.gen.ts` auto-generado
 - **Deploy:** Cloudflare Workers via `@cloudflare/vite-plugin` + `wrangler.jsonc`
 - **Backend:** Supabase (Postgres + Auth + Storage + Realtime) — Lovable Cloud
-- **APIs externas:** Anthropic Claude (Sonnet 4.5, Haiku 4.5). La generación de imagen/video se externalizó a Higgsfield.ai — la app solo produce prompts optimizados (Nano Banana Pro, Seedream 4, Kling 2.5 Turbo, Seedance 2.0) que el usuario pega manualmente en Higgsfield.
+- **APIs externas:** **OpenRouter** (`OPENROUTER_API_KEY`) como gateway unificado — los endpoints usan `https://openrouter.ai/api/v1/chat/completions` con modelos `anthropic/claude-sonnet-4.5`, `anthropic/claude-haiku-4.5`, `google/gemini-2.5-pro`, etc. Formato de mensajes es OpenAI-compatible. La generación de imagen/video se externalizó a Higgsfield.ai — la app solo produce prompts optimizados (Nano Banana Pro, Seedream 4, Kling 2.5 Turbo, Seedance 2.0) que el usuario pega manualmente en Higgsfield.
 - OpenAI Whisper (whisper-1): transcripción de audio del video fuente. Endpoint `api.transcribe-audio.ts`, costo $0.006/min, sin prompt sesgador para no inventar palabras.
 
 ## Constraints críticos
 
 ### 1. Cloudflare Workers ~30s timeout
-Toda llamada a Claude con max_tokens > 4096 o multimodal con >6 frames debe usar **SSE streaming**. Patrón en `src/routes/api.anthropic-analyze.ts` y `api.anthropic-generate.ts`:
-- `stream: true` al Anthropic API
-- `new ReadableStream` en la response
-- Parse `content_block_delta` → `data: {...}\n\n` al cliente
-- Cliente lee con `res.body.getReader()` + TextDecoder
+Toda llamada a Claude/Gemini vía OpenRouter debe usar **SSE streaming**. Patrón en `src/routes/api.analyze-frames.ts` y `api.generate-variations.ts`:
+- `stream: true` en el body del fetch a `https://openrouter.ai/api/v1/chat/completions`
+- `new ReadableStream` en la response de salida
+- Parse SSE de OpenRouter: buscar líneas `data: ...`, extraer `choices[0].delta.content`; ignorar `[DONE]`
+- Tokens de uso llegan en el chunk final con `usage.prompt_tokens` / `usage.completion_tokens`
+- Si el modelo corta por `finish_reason === "length"`, los endpoints hacen hasta 1 continuation automática
 
-**No introduzcas endpoints sync nuevos que llamen Claude** a menos que sean <3s.
+**No introduzcas endpoints sync nuevos que llamen Claude/Gemini** a menos que sean <3s.
 
 ### 2. PostgREST numeric → string
 Columnas `numeric` en Supabase vuelven como **string** via PostgREST. `?? 0` NO dispara en strings no-null. Siempre:
@@ -62,51 +62,24 @@ Storage buckets remanentes (solo para fuentes del usuario): `source-videos`, `ge
 - **File routes** (`createFileRoute`): reciben `request` directo, auth manual con `Authorization: Bearer <token>` + `supabase.auth.getClaims(token)`. **Usar esto para todo endpoint nuevo.**
 - **Server functions** (`createServerFn`): requieren `.client()` middleware que inyecte el Bearer. Si no, arroja `[object Response]` 401. Lovable tiende a romperlo; cuando pase, migrar a file route.
 
-## Estructura
+### 5. Prompt caching — NO activo en OpenRouter
+Tras la migración a OpenRouter, el prompt caching de Anthropic (`cache_control: { type: "ephemeral" }`) **no aplica**. Los endpoints `api.generate-variations.ts` y `api.analyze-frames.ts` ya no tienen lógica warm-up/fan-out. Si se necesita caching futuro, hay que evaluar si OpenRouter lo soporta o migrar esas llamadas de vuelta a Anthropic directo.
 
-```
-src/
-  routes/
-    __root.tsx                  # shell + AuthProvider + Toaster
-    index.tsx                   # landing pública
-    auth.tsx                    # sign up / sign in
-    dashboard.tsx               # home privada (stats + últimos proyectos con thumbnails)
-    variations.tsx              # página dedicada flujo A
-    ugc.tsx                     # página dedicada flujo B
-    library.tsx                 # biblioteca de assets generados (thumbnails + filtros)
-    projects.tsx                # listado de proyectos/videos fuente
-    admin.tsx                   # /admin, solo is_admin=true
-    api.anthropic-analyze.ts          # Claude SSE análisis frame-by-frame
-    api.anthropic-generate.ts         # Claude SSE 6 variaciones
-    api.ugc-generate.ts               # Claude SSE scripts UGC (valida workspace-membership antes del stream)
-    api.detect-product.ts             # Claude multimodal sync — detecta producto/categoría del video
-    api.generate-higgsfield-prompts.ts # Haiku 4.5 multimodal — 4 prompts por escena
-  components/
-    AppShell.tsx                # sidebar estilo Guardian CRM (ámbar), colapsable, envuelve rutas privadas
-    AppHeader.tsx               # cost pill + admin button + signout (dentro del shell)
-    WorkspaceSwitcher.tsx       # selector de workspace en el sidebar
-    VariationsPanel.tsx         # flujo A: video → 6 variaciones
-    UgcPanel.tsx                # flujo B: 4 estilos UGC
-    ui/                         # shadcn (incluye sidebar.tsx)
-  lib/
-    system-prompts.ts           # SYS_ANALYZE, SYS_GENERATE, SYS_UGC (VERBATIM del HTML)
-    auth-context.tsx            # useAuth() — profile, user, signOut, refreshProfile
-    signed-urls.ts              # batchSignedUrls con cache 55min + videoPosterUrl
-    spending-cap.ts             # checkSpendingCap server-side + capExceededResponse (429)
-    handle-cap.ts               # handleCapResponse cliente: intercepta 429 y muestra toast
-    winning-framework.ts        # WINNING_PREAMBLE + checkScript (blacklist AI-tells UGC)
-    scene-format.ts             # SCENE_FORMAT — formato de escenas con wrappers ═══
-    scene-parser.ts             # parseScenes — tolera prefijos emoji/arrow + parentheses
-    variation-defs.ts           # definiciones de las 6 variaciones
-    frame-extraction.ts         # extracción de frames del video fuente
-  integrations/supabase/
-    client.ts                   # browser client
-    types.ts                    # Database schema types (auto)
-    auth-middleware.ts          # requireSupabaseAuth (Lovable-generated)
-  utils/
-    anthropic.functions.ts      # dataUrlToBase64, logUsage, priceFor, calcCost
-supabase/migrations/*.sql       # schema + RLS
-```
+## Anclas no obvias en `src/`
+
+El árbol completo es discoverable con `Glob`. Puntos de entrada que no se autoexplican:
+
+- **`lib/system-prompts.ts`** — `SYS_ANALYZE`, `SYS_GENERATE`, `SYS_UGC` VERBATIM del HTML. No tocar.
+- **`lib/scene-format.ts` + `lib/scene-parser.ts`** — pareja: formato wrappers `═══` y parser tolerante (acepta prefijos emoji/arrow/parentheses).
+- **`lib/winning-framework.ts`** — `WINNING_PREAMBLE` + `checkScript` (blacklist de AI-tells para UGC).
+- **`lib/variation-defs.ts`** — definiciones de las 6 variaciones + hook playbooks.
+- **`lib/spending-cap.ts` ↔ `lib/handle-cap.ts`** — pareja server (`checkSpendingCap` → 429 estructurado) / cliente (`handleCapResponse` → toast).
+- **`lib/signed-urls.ts`** — `batchSignedUrls` con cache 55min + `videoPosterUrl`. Único punto válido para firmar.
+- **`lib/frame-extraction.ts`** — extracción client-side a 1fps, máx 1024×1820.
+- **`utils/openrouter.functions.ts`** — `logUsage`, `priceFor`, `calcCost`, `dataUrlToBase64`, `dataUrlToOpenAIImage`. Usado por todos los endpoints de IA. Pricing en PRICING tabla (OpenRouter rates). **Nota:** `src/utils/anthropic.functions.ts` sigue existiendo con funciones de mismo nombre pero para Anthropic API directo — los endpoints actuales NO lo importan.
+- **`components/AppShell.tsx`** — sidebar Guardian CRM ámbar; rutas privadas se renderizan dentro, no duplicar layout.
+- **`routes/api.*.ts`** — endpoints (file routes; ver constraint #4). Todos usan `OPENROUTER_API_KEY`.
+- **`supabase/migrations/*.sql`** — schema + RLS (patrón abajo).
 
 ## Shell de navegación
 
@@ -148,12 +121,14 @@ Patrón: `supabase.channel(\`x-\${id}\`).on("postgres_changes", {...filter: \`wo
 
 ## Cost tracking
 
-Toda op que gaste llama `logUsage({userId, workspaceId, model, operation, inputTokens, outputTokens, metadata})` en `src/utils/anthropic.functions.ts`. Inserta en `api_usage` + trigger actualiza `profiles.total_cost_usd` acumulativo.
+Toda op que gaste llama `logUsage({userId, workspaceId, model, operation, inputTokens, outputTokens, metadata})` en `src/utils/openrouter.functions.ts`. Inserta en `api_usage` (campo `provider = "openrouter"`) + trigger actualiza `profiles.total_cost_usd` acumulativo.
 
-Precios (ver `priceFor` en [src/utils/anthropic.functions.ts](src/utils/anthropic.functions.ts)):
-- Claude Sonnet 4.5 / 4.6: $3/M in, $15/M out
-- Claude Opus 4.5 / 4.6: $5/M in, $25/M out
-- Claude Haiku 4.5: $0.80/M in, $4/M out
+Precios OpenRouter (ver `priceFor` en [src/utils/openrouter.functions.ts](src/utils/openrouter.functions.ts)):
+- `anthropic/claude-sonnet-4` / `anthropic/claude-sonnet-4.5`: $3/M in, $15/M out
+- `anthropic/claude-opus-4.5`: $5/M in, $25/M out
+- `anthropic/claude-haiku-4.5`: $1/M in, $5/M out
+- `google/gemini-2.5-pro`: $1.25/M in, $10/M out
+- `google/gemini-2.5-flash`: $0.30/M in, $2.50/M out
 - Generación de imagen/video: no aplica — corre en Higgsfield.ai (fuera del sistema de cost tracking).
 
 ## Idioma
@@ -162,13 +137,13 @@ Usuario es colombiano, dueño de e-commerce COD. **Siempre responder en español
 
 ## Fases
 
-Roadmap en `../lovable-prompt-inicial.md` (fuera del repo, en `Desktop/`). Estado al 2026-04-21:
+Roadmap en `../lovable-prompt-inicial.md` (fuera del repo, en `Desktop/`). Estado al 2026-05-03:
 - ✅ Fase 0: auth + admin + esquema RLS
 - ✅ Fase 1: variaciones con Claude SSE (6 escenas, parseo tolerante de `═══`)
 - ⚠️ Fase 2: Qwen imagen — **removida**, migrada a prompts Higgsfield (commit f46dc70)
 - ⚠️ Fase 3: Wan/Kling/Veo video — **removidas**, migradas a prompts Higgsfield
 - ✅ Fase 4: UGC Generator (4 estilos, prompts para Kling 2.5 Turbo / Seedance 2.0 en Higgsfield)
-- 🚧 Fase 5: `/library` es **placeholder** ("Bloque B en construcción") — no implementado. `WorkspaceSwitcher` sí existe.
+- 🚧 Fase 5: `/library` sigue siendo **placeholder** ("Bloque B en construcción", verificado 2026-05-03 en [src/routes/library.tsx](src/routes/library.tsx)). `WorkspaceSwitcher` sí existe.
 - (opcional) Fase 6: Meta/TikTok Ads API auto-ingest
 
 ## Gotchas históricos
@@ -177,9 +152,11 @@ Roadmap en `../lovable-prompt-inicial.md` (fuera del repo, en `Desktop/`). Estad
 |---|---|---|
 | `Cannot read properties of undefined (reading 'toFixed')` | PostgREST numeric as string | `Number(x ?? 0).toFixed(n)` |
 | `[object Response]` 401 | serverFn sin `.client()` middleware | Migrar a file route con Bearer manual |
-| `504 upstream request timeout` | Claude sync >30s en Worker | SSE streaming |
+| `504 upstream request timeout` | Claude/Gemini sync >30s en Worker | SSE streaming |
 | TS2345 `/api/x not in FileRoutesByPath` | `routeTree.gen.ts` no regenerado | `bun run build` |
 | Push rechazado tras Lovable commit | remote divergente | `git pull --rebase origin main` |
+| `OPENROUTER_API_KEY not configured` | env var faltante en Worker | Agregar en `wrangler.jsonc` / Cloudflare dashboard |
+| `cache_create_tokens` sin efecto en costo | OpenRouter no soporta Anthropic caching | No marcar `cache_control` en llamadas vía OpenRouter |
 
 ## Build & dev
 
@@ -189,6 +166,26 @@ bun run build      # regenera routeTree.gen.ts + build SSR (production)
 bun run build:dev  # igual pero mode=development (source maps, sin minify)
 bun run lint       # eslint
 bun run format     # prettier --write .
+bun run preview    # preview del build de producción
 ```
 
-Git commits desde Claude Code: usar identity `-c user.email="hoyosf500@gmail.com" -c user.name="hoyosf500-blip"` (Lovable usa otra identidad).
+## Tests
+
+**No hay framework de tests configurado.** `package.json` no tiene script `test`, no hay Vitest/Jest/Playwright instalado. No intentes `bun test` ni inventes comandos. Verificación = `bun run lint` + `bun run build` (este último regenera `routeTree.gen.ts` y compila SSR — falla si hay errores TS).
+
+## Commits
+
+Convención: `tipo(scope): descripción imperativa`. Tipos: `feat`, `fix`, `perf`, `chore`, `docs`, `refactor`, `style`, `test`. Ejemplos del repo:
+
+```
+fix(audit): apply 12 findings from KIMI audit pass
+feat(scene-row): self-healing auto-gen + B-ROLL badge
+perf(variations): warm-up + parallel fan-out
+```
+
+Git commits desde Claude Code: usar identity `-c user.email="hoyosf500@gmail.com" -c user.name="hoyosf500-blip"` (Lovable usa otra identidad — mantener separadas las trazas).
+
+## Contexto adicional
+
+- [`KIMI.md`](./KIMI.md) — auditoría con findings clasificados (último pass: 2026-04-26). Léelo antes de tocar `admin.tsx`, `UgcPanel.tsx`, `ugc.tsx` (tienen findings abiertos documentados).
+- [`README.md`](./README.md) — overview público con stack, costos por proyecto y roadmap. ⚠️ **La sección de env vars del README está stale** (lista `ANTHROPIC_API_KEY` cuando el repo ya migró a `OPENROUTER_API_KEY` — ver Stack arriba). Usá CLAUDE.md como fuente de verdad para reglas operativas.
