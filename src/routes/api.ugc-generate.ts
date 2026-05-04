@@ -229,7 +229,12 @@ export const Route = createFileRoute("/api/ugc-generate")({
             max_tokens: 8192,
             stream: true,
             temperature: 0.6,
-            system: SYS_UGC,
+            // System con cache_control nativo. SYS_UGC (~10.9KB ≈ 2800 tokens) se
+            // manda 4 veces por proyecto (fan-out de estilos UGC). Cache_read en las
+            // 4 calls reduce el peso del system de ~$0.034 a ~$0.011 acumulado.
+            system: [
+              { type: "text", text: SYS_UGC, cache_control: { type: "ephemeral" } },
+            ],
             messages: [{ role: "user", content }],
           }),
         });

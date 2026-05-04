@@ -67,17 +67,35 @@ function StepperNav({ current }: { current: StepId }) {
 
 // Send ALL extracted frames to the model so each scene prompt anchors to its
 // matching reference frame. Frames are already capped to MAX_FRAMES=60 by the
-// extractor (1fps, 1024x1820), so input size stays bounded. Anthropic prompt
-// caching is now active in api.generate-variations (cache_control: ephemeral
-// on the last shared-prefix part), so the 6 variation calls share the frame
-// payload: cache write on call 1 at 1.25x input, cache read on calls 2-6 at
-// 0.10x input. Sampling down to 12 frames was tested but rejected: user
-// prefers full quality over the marginal savings.
+// extractor (1fps, 1024x1820). Decision actualizada 2026-05-04: bajamos a 12
+// keyframes uniformemente espaciados para `/api/generate-variations`.
+//
+// Por qué: analyze-frames recibe los 60 frames completos y produce el análisis
+// textual exhaustivo (`body.analysis`) que se manda a variations. Mandar otros
+// 60 frames como referencia visual al endpoint de variations es redundante —
+// las imágenes ya fueron leídas, su contenido vive en el análisis. El ahorro
+// estimado es $0.30-$0.60/proyecto (con caching activo se evita el pago 6x del
+// payload de imagen vs 1x antes pegado al cap). El análisis textual queda
+// intacto en analyze-frames, la calidad creativa de las variaciones no se
+// degrada — el modelo ya tiene el análisis estructurado como fuente primaria.
+//
+// Selección: cada N-ésimo frame para cubrir uniformemente el video. 12 es
+// suficiente para que el modelo identifique beats clave (hook, climax, CTA).
+const VARIATION_REFERENCE_FRAMES = 12;
 function pickReferenceFrames(
   _type: string,
   frames: ExtractedFrame[],
 ): Array<{ time: number; dataUrl: string }> {
-  return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
+  if (frames.length <= VARIATION_REFERENCE_FRAMES) {
+    return frames.map((f) => ({ time: f.time, dataUrl: f.dataUrl }));
+  }
+  const step = (frames.length - 1) / (VARIATION_REFERENCE_FRAMES - 1);
+  const picked: Array<{ time: number; dataUrl: string }> = [];
+  for (let i = 0; i < VARIATION_REFERENCE_FRAMES; i++) {
+    const f = frames[Math.round(i * step)];
+    picked.push({ time: f.time, dataUrl: f.dataUrl });
+  }
+  return picked;
 }
 
 // Auto-generate Higgsfield prompts after scene rows are inserted.

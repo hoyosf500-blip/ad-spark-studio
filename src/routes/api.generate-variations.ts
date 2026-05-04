@@ -202,7 +202,14 @@ export const Route = createFileRoute("/api/generate-variations")({
                     max_tokens: MAX_TOKENS,
                     stream: true,
                     temperature: 0.5,
-                    system: SYS_GENERATE,
+                    // System con cache_control nativo. SYS_GENERATE (~11.6KB ≈ 3000 tokens)
+                    // se manda 6 veces por proyecto (fan-out de variaciones). Marcarlo
+                    // explícito garantiza cache_read en las 6 calls aunque el user prefix
+                    // se invalide. Cubre uno de los 4 breakpoints permitidos; el segundo
+                    // está en el último ContentPart del shared prefix.
+                    system: [
+                      { type: "text", text: SYS_GENERATE, cache_control: { type: "ephemeral" } },
+                    ],
                     messages: upstreamMessages,
                   }),
                 });

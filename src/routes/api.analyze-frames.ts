@@ -143,7 +143,13 @@ export const Route = createFileRoute("/api/analyze-frames")({
                     max_tokens: maxTokens,
                     stream: true,
                     temperature: 0.4,
-                    system: SYS_ANALYZE,
+                    // System con cache_control nativo: garantiza el hit explícito
+                    // sobre SYS_ANALYZE (~3.5KB) aunque el user prefix cambie en
+                    // re-runs. Cubre uno de los 4 breakpoints permitidos por Anthropic;
+                    // el segundo está en el último ContentPart del user content.
+                    system: [
+                      { type: "text", text: SYS_ANALYZE, cache_control: { type: "ephemeral" } },
+                    ],
                     messages: upstreamMessages,
                   }),
                 });
