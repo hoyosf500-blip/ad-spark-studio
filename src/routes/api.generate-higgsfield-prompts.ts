@@ -49,6 +49,12 @@ function capImagePrompt(s: string): string {
   return (cut > MAX_IMAGE_PROMPT * 0.8 ? hard.slice(0, cut + 1) : hard).trim();
 }
 
+// 2026-05-04: SYS prompt ampliado a multi-nicho (auditoría PASS 2). El bloque
+// no importa nada de system-prompts.ts ni winning-framework.ts, es superficie
+// de bias 100% standalone. Anthropic multishot prompting: ejemplos paralelos
+// belleza/hogar/tech/salud para evitar default a anatómico/médico cuando el
+// producto del proyecto es de otro nicho. NO BORRAR ejemplos médicos: son
+// la baseline; agregar peers, no reemplazar.
 const SYS = `You translate a single ad-script SCENE into 3 production-ready prompts for Higgsfield.ai. The user's tool exists to REPLICATE a reference video as closely as possible — NOT to invent improved or polished versions. When a reference frame image is attached, your PRIMARY job is to describe THAT image literally, as it actually looks, including its imperfections, raw aesthetic, and unpolished elements. The textual fields (scene beat, script) are secondary context; the attached image is the ground truth and OVERRIDES any conflicting text.
 
 === CORE PRINCIPLE: REPLICATE, DO NOT PROFESSIONALIZE ===
