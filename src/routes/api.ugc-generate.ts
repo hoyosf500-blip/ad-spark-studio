@@ -21,9 +21,10 @@ type Body = {
   model?: string;
 };
 
+type CacheControl = { type: "ephemeral" };
 type ContentPart =
-  | { type: "text"; text: string }
-  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };
+  | { type: "text"; text: string; cache_control?: CacheControl }
+  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" }; cache_control?: CacheControl };
 
 // Style descriptions — ugc-casual / ugc-testimonial / ugc-unboxing preserved verbatim from HTML standalone.
 // ugc-viral rewritten 2026-04-18 applying create-viral-content skill research:
