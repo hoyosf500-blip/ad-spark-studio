@@ -10,9 +10,14 @@ import type { Database } from "@/integrations/supabase/types";
 
 type FrameInput = { time: number; dataUrl: string };
 
+// Anthropic prompt caching via OpenRouter: pass `cache_control: { type: "ephemeral" }`
+// on the LAST part of the cacheable prefix. Anthropic caches everything up to and
+// including that part. OpenRouter passes the field through transparently for
+// Anthropic models since late 2025.
+type CacheControl = { type: "ephemeral" };
 type ContentPart =
-  | { type: "text"; text: string }
-  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };
+  | { type: "text"; text: string; cache_control?: CacheControl }
+  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" }; cache_control?: CacheControl };
 
 type OpenAIMessage = {
   role: "system" | "user" | "assistant";
