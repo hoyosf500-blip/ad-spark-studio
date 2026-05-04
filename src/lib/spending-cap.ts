@@ -28,15 +28,14 @@ export type CapCheck =
 
 // Atomic reservation against today's spend.
 //
-// Implementation status (2026-04-24): the atomic RPCs `reserve_daily_spend`
-// and `reconcile_daily_spend` are defined in
-//   supabase/migrations/20260424051651_atomic_spending_cap.sql
-// but that migration is PENDING APPLY (Cloud balance paused until 2026-05-01).
-// Until applied, we transparently fall back to the legacy read-only check
-// using `get_day_cost_usd` so the endpoints keep working — the only loss is
-// the race protection, which already existed before this tanda.
+// The atomic RPCs `reserve_daily_spend` and `reconcile_daily_spend` live in
+//   supabase/migrations/20260501000000_atomic_spending_cap.sql
+// (moved from _pending_migrations on 2026-05-03 — cap balance reset on 2026-05-01).
 //
-// Once the migration ships, the RPC path takes over with no code change.
+// The legacy read-only path using `get_day_cost_usd` is kept as a defensive
+// fallback for the case where the migration hasn't been applied yet in some
+// environment (Postgres returns 42883 / PGRST202 → fall through). Once the
+// migration is verified live everywhere, the legacy branch can be deleted.
 export async function checkSpendingCap(
   supabase: SupabaseClient<Database>,
   userId: string,

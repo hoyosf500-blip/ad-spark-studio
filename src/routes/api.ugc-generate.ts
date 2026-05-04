@@ -236,6 +236,18 @@ export const Route = createFileRoute("/api/ugc-generate")({
         });
         if (!upstream.ok || !upstream.body) {
           const errText = await upstream.text();
+          // Reconcile the held reservation back to zero so the spending cap
+          // doesn't drift when the upstream fails before any tokens are spent.
+          await logUsage({
+            userId,
+            workspaceId: body.workspaceId,
+            model,
+            operation: "openrouter_ugc_script_failed",
+            inputTokens: 0,
+            outputTokens: 0,
+            reservedUsd,
+            metadata: { upstreamStatus: upstream.status, style: body.style },
+          }).catch((e) => console.warn("[ugc-generate] reconcile log failed:", e));
           return new Response(`OpenRouter ${upstream.status}: ${errText.slice(0, 500)}`, { status: 502 });
         }
 

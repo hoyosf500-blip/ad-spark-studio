@@ -46,12 +46,40 @@ export const Route = createFileRoute("/api/transcribe-audio")({
 
         const cap = await checkSpendingCap(supabase, userId, "api.transcribe-audio");
         if (!cap.ok) return capExceededResponse(cap);
+        const reservedUsd = cap.reservedUsd;
+
+        // Helper: reconcile the daily-spend reservation with the actual cost.
+        // Whisper bypasses logUsage (different pricing model — per-minute, not
+        // per-token), so we settle the cap manually via reconcile_daily_spend.
+        // diff = actualCost - reservedUsd; can be negative when actual < reserved
+        // (refund the slack), or = -reservedUsd to fully release on upstream
+        // failure. Errors 42883 / PGRST202 are silent (legacy DB w/o RPC).
+        const reconcileSpend = async (actualCost: number) => {
+          try {
+            const sb = adminClient();
+            const diff = actualCost - reservedUsd;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const { error } = await (sb.rpc as any)("reconcile_daily_spend", {
+              p_user_id: userId,
+              p_diff_usd: diff,
+            });
+            if (error) {
+              const code = (error as { code?: string }).code;
+              if (code !== "42883" && code !== "PGRST202") {
+                console.error("[transcribe-audio] reconcile_daily_spend failed:", error);
+              }
+            }
+          } catch (e) {
+            console.warn("[transcribe-audio] reconcile failed:", e instanceof Error ? e.message : e);
+          }
+        };
 
         // Parse multipart
         let form: FormData;
         try {
           form = await request.formData();
         } catch {
+          await reconcileSpend(0);
           return new Response("Invalid form data", { status: 400 });
         }
         const file = form.get("file");
@@ -63,13 +91,16 @@ export const Route = createFileRoute("/api/transcribe-audio")({
             : null;
 
         if (!(file instanceof File)) {
+          await reconcileSpend(0);
           return new Response("file required", { status: 400 });
         }
         const ftype = file.type || "";
         if (!ftype.startsWith("video/") && !ftype.startsWith("audio/")) {
+          await reconcileSpend(0);
           return new Response("file must be video/* or audio/*", { status: 400 });
         }
         if (file.size > MAX_BYTES) {
+          await reconcileSpend(0);
           return new Response(
             "Video supera 25 MB. Comprime o recorta antes de subir.",
             { status: 413 },
@@ -91,6 +122,7 @@ export const Route = createFileRoute("/api/transcribe-audio")({
         });
         if (!upstream.ok) {
           const t = await upstream.text().catch(() => "");
+          await reconcileSpend(0);
           return new Response(`OpenAI ${upstream.status}: ${t.slice(0, 300)}`, { status: 502 });
         }
         const json = (await upstream.json()) as { text?: string };
@@ -124,6 +156,10 @@ export const Route = createFileRoute("/api/transcribe-audio")({
         } catch (e) {
           console.warn("api_usage insert failed:", e instanceof Error ? e.message : e);
         }
+        // Reconcile the cap reservation with the actual Whisper cost (typically
+        // $0.006/min, well under the $0.30 reserved). Refunds the slack so the
+        // user's daily cap reflects real spend, not the over-conservative reserve.
+        await reconcileSpend(costUsd);
 
         return new Response(
           JSON.stringify({ text, costUsd, durationSec: durationSec ?? null }),

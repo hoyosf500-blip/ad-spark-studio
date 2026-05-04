@@ -52,6 +52,7 @@ export const Route = createFileRoute("/api/detect-product")({
 
         const cap = await checkSpendingCap(sb, userId, "api.detect-product");
         if (!cap.ok) return capExceededResponse(cap);
+        const reservedUsd = cap.reservedUsd;
 
         const body = (await request.json()) as Body;
         if (!body.productPhoto) return new Response("productPhoto required", { status: 400 });
@@ -86,6 +87,18 @@ export const Route = createFileRoute("/api/detect-product")({
 
         if (!upstream.ok) {
           const errText = await upstream.text();
+          // Reconcile the held reservation back to zero so the spending cap
+          // doesn't drift when the upstream fails before any tokens are spent.
+          await logUsage({
+            userId,
+            workspaceId: body.workspaceId ?? null,
+            model,
+            operation: "openrouter_detect_product_failed",
+            inputTokens: 0,
+            outputTokens: 0,
+            reservedUsd,
+            metadata: { upstreamStatus: upstream.status },
+          }).catch((e) => console.warn("[detect-product] reconcile log failed:", e));
           return new Response(`OpenRouter ${upstream.status}: ${errText.slice(0, 500)}`, { status: 502 });
         }
 
@@ -134,6 +147,7 @@ export const Route = createFileRoute("/api/detect-product")({
           operation: "openrouter_detect_product",
           inputTokens: data.usage?.prompt_tokens ?? 0,
           outputTokens: data.usage?.completion_tokens ?? 0,
+          reservedUsd,
           metadata: { hasPhoto: true },
         });
 

@@ -154,7 +154,7 @@ function AdminPage() {
                     <TableCell className="text-muted-foreground">
                       {new Date(r.created_at).toLocaleDateString()}
                     </TableCell>
-                    <TableCell className="font-mono-display text-xs">${Number(r.total_cost_usd).toFixed(3)}</TableCell>
+                    <TableCell className="font-mono-display text-xs">${Number(r.total_cost_usd ?? 0).toFixed(3)}</TableCell>
                     <TableCell>
                       <Input
                         type="number"

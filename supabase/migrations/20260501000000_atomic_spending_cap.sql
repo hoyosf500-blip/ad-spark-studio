@@ -1,14 +1,9 @@
--- PENDING APPLY — do not apply until Cloud balance reset 2026-05-01.
---
--- This file is intentionally NOT inside supabase/migrations/ because the
--- migration tooling auto-applies anything dropped there, and Cloud balance
--- is paused. Move/rename to
---   supabase/migrations/20260501000000_atomic_spending_cap.sql
--- (or apply via the supabase--migration tool) once the balance resets.
---
 -- Atomic spending cap (Tanda B.2, Opción A) — replaces the read-then-write
 -- race in checkSpendingCap with a single guarded INSERT..ON CONFLICT..WHERE
 -- so two concurrent requests can't both pass the cap check on the same dollar.
+--
+-- Activated 2026-05-03 (moved from _pending_migrations/ once the Cloud balance
+-- reset on 2026-05-01).
 --
 -- Flow:
 --   1. Endpoint calls reserve_daily_spend(p_user_id, p_estimated_usd).

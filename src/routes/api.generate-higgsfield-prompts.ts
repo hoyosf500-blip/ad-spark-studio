@@ -19,7 +19,7 @@ type ContentPart =
   | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };
 
 function resolveModel(choice: ModelChoice | undefined): string {
-  if (choice === "opus") return "anthropic/claude-sonnet-4.5";
+  if (choice === "opus") return "anthropic/claude-opus-4.5";
   if (choice === "haiku") return "google/gemini-2.5-flash";
   return "google/gemini-2.5-flash";
 }
@@ -399,6 +399,18 @@ export const Route = createFileRoute("/api/generate-higgsfield-prompts")({
 
         if (!upstream.ok) {
           const errText = await upstream.text().catch(() => "");
+          // Reconcile the held reservation back to zero so the spending cap
+          // doesn't drift when the upstream fails before any tokens are spent.
+          await logUsage({
+            userId,
+            workspaceId: body.workspaceId ?? null,
+            model,
+            operation: "openrouter_higgsfield_prompts_failed",
+            inputTokens: 0,
+            outputTokens: 0,
+            reservedUsd,
+            metadata: { upstreamStatus: upstream.status, sceneId: scene.id },
+          }).catch((e) => console.warn("[higgsfield-prompts] reconcile log failed:", e));
           return new Response(`OpenRouter ${upstream.status}: ${errText.slice(0, 400)}`, { status: 502 });
         }
 
