@@ -2,7 +2,12 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
 // OpenRouter pricing tables (USD per 1M tokens, approximate provider rates)
-// OpenRouter adds ~5% markup, but these are close enough for cost tracking
+// OpenRouter adds ~5% markup, but these are close enough for cost tracking.
+//
+// Anthropic prompt caching via OpenRouter (live since late 2025):
+//   - cache_creation_input_tokens: 1.25x base input price (one-time write)
+//   - cache_read_input_tokens:    0.10x base input price (subsequent reads)
+//   - regular input_tokens:       1.00x base input price
 const PRICING: Record<string, { input: number; output: number }> = {
   // Anthropic via OpenRouter
   "anthropic/claude-sonnet-4": { input: 3.0, output: 15.0 },
@@ -24,9 +29,26 @@ export function priceFor(model: string) {
   return PRICING[model] ?? PRICING["anthropic/claude-sonnet-4.5"];
 }
 
-export function calcCost(model: string, input: number, output: number) {
+// `input` here is the count of NON-cached input tokens (regular billing).
+// cacheCreate = tokens written to the ephemeral cache (1.25x).
+// cacheRead   = tokens read from the cache on subsequent calls (0.10x).
+// For Anthropic via OpenRouter, the upstream `usage.prompt_tokens` is the
+// total input; the cache buckets come as separate fields and prompt_tokens
+// already includes them, so we subtract before billing the regular slice.
+export function calcCost(
+  model: string,
+  input: number,
+  output: number,
+  cacheCreate: number = 0,
+  cacheRead: number = 0,
+) {
   const p = priceFor(model);
-  return (input * p.input + output * p.output) / 1_000_000;
+  const regularInput = Math.max(0, input - cacheCreate - cacheRead);
+  const inputCost =
+    regularInput * p.input +
+    cacheCreate * p.input * 1.25 +
+    cacheRead * p.input * 0.10;
+  return (inputCost + output * p.output) / 1_000_000;
 }
 
 function adminClient() {
@@ -42,11 +64,25 @@ export async function logUsage(opts: {
   operation: string;
   inputTokens: number;
   outputTokens: number;
+  cacheCreateTokens?: number;
+  cacheReadTokens?: number;
   metadata?: Record<string, unknown>;
   reservedUsd?: number;
 }) {
-  const cost = calcCost(opts.model, opts.inputTokens, opts.outputTokens);
+  const cacheCreate = opts.cacheCreateTokens ?? 0;
+  const cacheRead = opts.cacheReadTokens ?? 0;
+  const cost = calcCost(
+    opts.model,
+    opts.inputTokens,
+    opts.outputTokens,
+    cacheCreate,
+    cacheRead,
+  );
   const sb = adminClient();
+  const cacheMeta =
+    cacheCreate || cacheRead
+      ? { cache_create_tokens: cacheCreate, cache_read_tokens: cacheRead }
+      : {};
   const row = {
     user_id: opts.userId,
     workspace_id: opts.workspaceId ?? null,
@@ -56,7 +92,7 @@ export async function logUsage(opts: {
     input_tokens: opts.inputTokens,
     output_tokens: opts.outputTokens,
     cost_usd: cost,
-    metadata: opts.metadata ?? {},
+    metadata: { ...(opts.metadata ?? {}), ...cacheMeta },
   };
   await sb.from("api_usage").insert(row as never);
 
@@ -89,6 +125,5 @@ export function dataUrlToOpenAIImage(dataUrl: string): {
   type: "image_url";
   image_url: { url: string; detail?: "low" | "high" | "auto" };
 } {
-  // OpenAI accepts the full data: URL directly
   return { type: "image_url", image_url: { url: dataUrl, detail: "high" } };
 }
