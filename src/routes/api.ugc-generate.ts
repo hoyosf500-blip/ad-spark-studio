@@ -21,9 +21,10 @@ type Body = {
   model?: string;
 };
 
+type CacheControl = { type: "ephemeral" };
 type ContentPart =
-  | { type: "text"; text: string }
-  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };
+  | { type: "text"; text: string; cache_control?: CacheControl }
+  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" }; cache_control?: CacheControl };
 
 // Style descriptions — ugc-casual / ugc-testimonial / ugc-unboxing preserved verbatim from HTML standalone.
 // ugc-viral rewritten 2026-04-18 applying create-viral-content skill research:
@@ -171,29 +172,48 @@ export const Route = createFileRoute("/api/ugc-generate")({
 
         const isViral = body.style === "ugc-viral";
         const durationStr = body.duration ?? "12";
-        const userText = [
+
+        // === SHARED PREFIX (cacheable across the 4 UGC styles for the same project) ===
+        // SYS_UGC + productPhoto + productInfo + transcription + analysisBlock no
+        // cambian entre estilos. Marcamos la última parte con cache_control para
+        // que las llamadas 2-N peguen al cache (~5 min TTL Anthropic) a 0.10x input.
+        const sharedContent: ContentPart[] = [];
+        if (body.productPhoto) {
+          sharedContent.push({ type: "text", text: "=== PRODUCT PHOTO (reference) ===" });
+          sharedContent.push(dataUrlToOpenAIImage(body.productPhoto));
+        }
+        const sharedTextParts = [
+          body.productInfo ? `PRODUCT INFO:\n${body.productInfo}` : "",
+          body.transcription ? `USER TRANSCRIPTION (use word-for-word, split across shots naturally):\n${body.transcription}` : "",
+          analysisBlock,
+        ].filter(Boolean).join("\n\n");
+        if (sharedTextParts) {
+          sharedContent.push({ type: "text", text: sharedTextParts });
+        }
+        if (sharedContent.length > 0) {
+          sharedContent[sharedContent.length - 1] = {
+            ...sharedContent[sharedContent.length - 1],
+            cache_control: { type: "ephemeral" },
+          };
+        }
+
+        // === STYLE-SPECIFIC SUFFIX (cambia entre las 4 calls UGC) ===
+        const styleText = [
           !isViral ? WINNING_PREAMBLE : "",
           `STYLE: ${body.style} — ${STYLE_DESC[body.style]}`,
           `TARGET MODEL: ${targetModelLabel}`,
           `DURATION: ${durationStr} seconds`,
           klingRules,
-          body.productInfo ? `PRODUCT INFO:\n${body.productInfo}` : "",
-          body.transcription ? `USER TRANSCRIPTION (use word-for-word, split across shots naturally):\n${body.transcription}` : "",
-          analysisBlock,
           body.creativeBrief?.trim()
             ? `=== IDEA CREATIVA DEL USUARIO ===\n${body.creativeBrief.trim()}\n\nCONTRATO:\n- La IDEA dicta SOLO: tono, setting, personaje, emoción, ritmo.\n- La IDEA NO dicta: componente, dosis, precio, testimonios, claims médicos.\n- Si contradice PRODUCT INFO / TRANSCRIPTION / ANALYSIS, prevalecen los datos reales.\n- Si la IDEA menciona un dato concreto que no está en los inputs, IGNORALO.`
             : "",
           `\nProduce ONLY the PROMPT and HOOKS sections, exactly per the format. No preamble.`,
-        ]
-          .filter(Boolean)
-          .join("\n\n");
+        ].filter(Boolean).join("\n\n");
 
-        const content: ContentPart[] = [];
-        if (body.productPhoto) {
-          content.push({ type: "text", text: "=== PRODUCT PHOTO (reference) ===" });
-          content.push(dataUrlToOpenAIImage(body.productPhoto));
-        }
-        content.push({ type: "text", text: userText });
+        const content: ContentPart[] = [
+          ...sharedContent,
+          { type: "text", text: styleText },
+        ];
 
         const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
           method: "POST",
@@ -222,6 +242,8 @@ export const Route = createFileRoute("/api/ugc-generate")({
         let fullText = "";
         let inputTokens = 0;
         let outputTokens = 0;
+        let cacheCreateTokens = 0;
+        let cacheReadTokens = 0;
         let stopReason: string | null = null;
         const dec = new TextDecoder();
         const enc = new TextEncoder();
@@ -248,7 +270,17 @@ export const Route = createFileRoute("/api/ugc-generate")({
                         delta?: { content?: string };
                         finish_reason?: string | null;
                       }>;
-                      usage?: { prompt_tokens?: number; completion_tokens?: number };
+                      usage?: {
+                        prompt_tokens?: number;
+                        completion_tokens?: number;
+                        cache_creation_input_tokens?: number;
+                        cache_read_input_tokens?: number;
+                        prompt_tokens_details?: {
+                          cached_tokens?: number;
+                          cache_creation_tokens?: number;
+                          cache_read_tokens?: number;
+                        };
+                      };
                     };
                     const deltaText = evt.choices?.[0]?.delta?.content;
                     if (typeof deltaText === "string") {
@@ -259,6 +291,13 @@ export const Route = createFileRoute("/api/ugc-generate")({
                     if (finish) stopReason = finish;
                     if (evt.usage?.prompt_tokens) inputTokens = evt.usage.prompt_tokens;
                     if (evt.usage?.completion_tokens) outputTokens = evt.usage.completion_tokens;
+                    const cc = evt.usage?.cache_creation_input_tokens
+                      ?? evt.usage?.prompt_tokens_details?.cache_creation_tokens;
+                    const cr = evt.usage?.cache_read_input_tokens
+                      ?? evt.usage?.prompt_tokens_details?.cache_read_tokens
+                      ?? evt.usage?.prompt_tokens_details?.cached_tokens;
+                    if (typeof cc === "number") cacheCreateTokens = cc;
+                    if (typeof cr === "number") cacheReadTokens = cr;
                   } catch { /* skip */ }
                 }
               }
@@ -270,8 +309,16 @@ export const Route = createFileRoute("/api/ugc-generate")({
                 operation: "openrouter_ugc_script",
                 inputTokens,
                 outputTokens,
+                cacheCreateTokens,
+                cacheReadTokens,
                 reservedUsd,
-                metadata: { style: body.style, videoModel, isTruncated: stopReason === "length" },
+                metadata: {
+                  style: body.style,
+                  videoModel,
+                  isTruncated: stopReason === "length",
+                  cacheCreateTokens,
+                  cacheReadTokens,
+                },
               });
 
               // Parse PROMPT and HOOKS sections + extract image/animation prompts

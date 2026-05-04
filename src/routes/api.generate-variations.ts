@@ -158,7 +158,13 @@ export const Route = createFileRoute("/api/generate-variations")({
 
         const content: ContentPart[] = [...sharedContent, ...variationContent];
 
-        const MAX_TOKENS = 16000;
+        // 2026-05-04: subido de 16000 a 32000. Audit mostró avg_output=24k vs
+        // cap 16k → la mayoría disparaba continuation, re-enviando ~16k de
+        // assistant message como input NO cacheado (~$0.29/proyecto desperdiciados).
+        // Sonnet 4.5 soporta hasta 64k output sin penalización (solo se paga
+        // por tokens generados, no por el cap). MAX_CONTINUATIONS=1 se mantiene
+        // como red de seguridad para casos extremos (>32k).
+        const MAX_TOKENS = 32000;
         const MAX_CONTINUATIONS = 1;
 
         let fullText = "", inputTokens = 0, outputTokens = 0;
