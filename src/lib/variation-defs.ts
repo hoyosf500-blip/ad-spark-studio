@@ -42,8 +42,8 @@ Patrón maestro: abrir un loop que el cerebro NECESITA cerrar. El hook promete
 información que solo se revela viendo el ad completo. No es "mirá esto" — es
 "hay algo que no te están diciendo sobre X".
 
-ADAPTAR AL NICHO DEL PRODUCTO. Los ejemplos abajo cubren 5 nichos típicos
-(salud, belleza, hogar, tecnología, wellness). Si el producto del proyecto
+ADAPTAR AL NICHO DEL PRODUCTO. Los ejemplos abajo cubren 6 nichos típicos
+(salud, belleza, hogar, tecnología, wellness, baby). Si el producto del proyecto
 es de otro nicho, aplicá la MISMA ESTRUCTURA del patrón con un ejemplo de
 ese nicho — nunca copies un ejemplo verbatim si no es del nicho real.
 
@@ -55,6 +55,7 @@ A. "La razón #1 por la que..."
    - Hogar: "La razón #1 por la que tu cocina nunca queda bien limpia no es el detergente."
    - Tecnología: "La razón #1 por la que tu celular se descarga rápido no es la batería."
    - Wellness: "La razón #1 por la que no estás bajando de peso no es lo que comés."
+   - Baby: "La razón #1 por la que tu bebé se despierta cada 2 horas en la noche no es el hambre."
    → Promete causa oculta + niega la explicación obvia.
 
 B. "Lo que [grupo autoridad] no te cuenta sobre [problema]"
@@ -63,6 +64,7 @@ B. "Lo que [grupo autoridad] no te cuenta sobre [problema]"
    - Hogar: "Lo que las marcas de electrodomésticos no te cuentan sobre por qué se rayan tus ollas."
    - Tecnología: "Lo que los técnicos no te dicen cuando llevás el celular a reparar."
    - Wellness: "Lo que los nutricionistas no te dicen sobre las dietas detox."
+   - Baby: "Lo que los pediatras no te cuentan sobre por qué tu bebé llora después de comer."
    → Activa tribal split + secreto de industria.
 
 C. Pregunta con respuesta contraintuitiva prometida
@@ -71,6 +73,7 @@ C. Pregunta con respuesta contraintuitiva prometida
    - Hogar: "¿Por qué tu ropa nueva se ve vieja después de 3 lavadas?"
    - Tecnología: "¿Por qué tus auriculares con cancelación dan dolor de cabeza?"
    - Wellness: "¿Por qué tomás 8 vasos de agua al día y seguís deshidratada?"
+   - Baby: "¿Por qué tu bebé duerme PEOR después de un día activo?"
    → Pregunta específica que el espectador NO puede responder solo.
 
 D. Dato específico sin contexto
@@ -79,6 +82,7 @@ D. Dato específico sin contexto
    - Hogar: "El 81% de las cocinas tiene este problema y la gente lo confunde con humedad."
    - Tecnología: "9 de cada 10 celulares tiene este chip dañado de fábrica."
    - Wellness: "El 73% de las multivitaminas no se absorbe — pasa de largo."
+   - Baby: "El 67% de las mamás primerizas mete a su bebé al baño con agua a la temperatura equivocada."
    → Número impar + fracción concreta + "no lo sabe" crea tensión.
 
 PROHIBIDO:
@@ -232,6 +236,7 @@ A. Time anchor + descubrimiento (teaser)
    - Hogar: "Hace 9 días que la cocina está así y todavía no lo creo."
    - Tecnología: "Llevo 11 días con este celular y me están preguntando si es nuevo."
    - Wellness: "Llevo 13 días tomándolo y mi marido fue el primero en notarlo."
+   - Baby: "Llevo 9 noches usándolo con mi bebé y por fin estoy durmiendo."
    → Número impar específico + teaser que obliga a quedarse.
 
 B. Momento de escepticismo resuelto
@@ -240,6 +245,7 @@ B. Momento de escepticismo resuelto
    - Hogar: "Yo decía 'es publicidad'. Hasta que vi a mi mamá usándolo en su casa."
    - Tecnología: "Yo no era de comprar cosas por TikTok. Esto me lo recomendó mi sobrino y caí."
    - Wellness: "Yo había intentado de todo. Esto era el último intento antes de rendirme."
+   - Baby: "Yo decía que esas cosas no funcionan con mi bebé. Hasta que mi mamá insistió."
    → Admite objeción común + resolvé con social proof cercano.
 
 C. Integración a rutina concreta colombiana
@@ -248,6 +254,7 @@ C. Integración a rutina concreta colombiana
    - Hogar: "Lo paso mientras escucho el radio en la cocina. Termina cuando termina la canción."
    - Tecnología: "Lo dejo cargando mientras desayuno. Ya quedó como parte de la rutina."
    - Wellness: "Me la tomo con el jugo de naranja del desayuno. Ni se siente."
+   - Baby: "Se lo pongo después del baño de la noche. Ya quedó parte de la rutina antes de dormir."
    → Actividad cotidiana colombiana + beneficio de uso pasivo.
 
 D. Comparación con lo que probó antes
@@ -256,6 +263,7 @@ D. Comparación con lo que probó antes
    - Hogar: "Probé cloro, vinagre, productos importados. Esto fue lo único que sí lo dejó como nuevo."
    - Tecnología: "Cambié de cargador 3 veces. Esto fue lo único que me solucionó el problema."
    - Wellness: "Probé batidos, dietas, ayunos. Esto es lo único que no me dejó con hambre."
+   - Baby: "Probé cólicos drops, manzanilla, masajes en la barriguita. Esto fue lo único que sí lo calmó."
    → Lista concreta de intentos fallidos + "único que" diferencia.
 
 PROHIBIDO:

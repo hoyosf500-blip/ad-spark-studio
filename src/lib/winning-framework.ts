@@ -2,7 +2,11 @@
 // 12 principios CRO + validador determinista. Se inyecta en el user
 // message de api.anthropic-generate.ts y api.ugc-generate.ts antes
 // del hook playbook/style. SYS_GENERATE y SYS_UGC quedan intactos.
-
+//
+// 2026-05-04: ejemplos multinicho (salud + belleza + tech) en bloque [4],
+// C1, C4, C12 para evitar bias salud-only. Anthropic multishot prompting:
+// los ejemplos pesan más que la prosa. NO BORRAR ejemplos de salud — son
+// la baseline; los paralelos de belleza/tech se agregan al lado.
 export const WINNING_PREAMBLE = `═══ WINNING FRAMEWORK — 7 GATES + ANGLE + CRO ═══
 
 ROL INTERNO
@@ -43,7 +47,11 @@ Actuás como director creativo + experto CRO de COD latam. Aplicás estas gates 
     Declará internamente: "Ángulo: X porque el avatar está en Y awareness y probó Z". No lo escribas en el output.
 
 [4] COMPONENT → BENEFIT (cadena obligatoria de 4 eslabones, presente al menos una vez en el guion):
-    [Componente + dosis] → [Efecto biológico/mecánico] → [Sensación corporal/cotidiana] → [Resultado en vida diaria del avatar]
+    [Componente físico / ingrediente activo / mecanismo técnico] → [Efecto biológico, químico, mecánico o eléctrico] → [Sensación corporal o resultado observable] → [Resultado en vida diaria del avatar]
+    Ejemplos por nicho (elegí el del nicho real del producto y aplicá la misma cadena):
+    - Salud: psoas → libera tensión lumbar → lumbar respira → te agachás sin pensarlo
+    - Belleza: vitamina C 15% → neutraliza radical libre → mancha aclara → te ves al espejo sin base
+    - Tech: GaN 65W → menos calor en el chip → batería al 80% en 30min → llegás al trabajo con el cel lleno
     Saltar un eslabón = genérico. Puede fragmentarse entre escenas.
 
 [5] WINNING STRUCTURE — match awareness → estructura (hook 0-3s · cuerpo · CTA):
@@ -55,13 +63,17 @@ Actuás como director creativo + experto CRO de COD latam. Aplicás estas gates 
 
 ═══ CRO EXPERT — 12 PRINCIPIOS QUE MUEVEN CR EN COD LATAM ═══
 
-C1. HOOK STRENGTH 0-3s — decide CTR/thumbstop. Sustantivo específico (hernia, psoas, estrato 3), no abstracción (bienestar, calidad de vida). Primera frase ≤10 palabras.
+C1. HOOK STRENGTH 0-3s — decide CTR/thumbstop. Sustantivo específico (hernia, mancha solar, batería 5%, estrato 3), no abstracción (bienestar, calidad de vida). Primera frase ≤10 palabras.
 
 C2. AWARENESS-HOOK MATCH — decide VTR (retention). Hook product-aware sobre avatar unaware = scroll-off en 2s. Nunca asumir más awareness del que tiene.
 
 C3. PRICE ANCHORING — "de 129.900 a 79.900 pesos" convierte mejor que "79.900 en oferta". Ancla alta primero, siempre. Ancla creíble, no fabricada.
 
-C4. LOSS AVERSION > GAIN FRAMING — +40% CR en tests replicados. "Dejá de perder X" > "ganá Y". "No sigas pagando kinesiólogo" > "ahorrá en fisio". Usar mínimo 1 frase en framing de pérdida.
+C4. LOSS AVERSION > GAIN FRAMING — +40% CR en tests replicados. "Dejá de perder X" > "ganá Y". Ejemplos por nicho:
+    - "No sigas pagando kinesiólogo" > "ahorrá en fisio"
+    - "Dejá de gastar $200k en sérums que no funcionan" > "ahorrá en cosméticos"
+    - "Dejá de cargar el celular tres veces al día" > "mejor batería"
+    Usar mínimo 1 frase en framing de pérdida.
 
 C5. SOCIAL PROOF ESPECÍFICO con número IMPAR — "847 mujeres en Medellín" > "cientos". Impares (3, 7, 14, 21, 73%) > pares. Ciudad/tiempo/demografía concreta > genérica.
 
@@ -77,7 +89,11 @@ C10. FRICCIÓN COGNITIVA MÍNIMA — cada palabra innecesaria en el CTA baja CR.
 
 C11. PATTERN INTERRUPT 0-2s — cambio visual brusco, cara expresiva, o afirmación contra-intuitiva. Necesario para parar el scroll en FB/TikTok. No abrir con logo ni con producto en mano quieto.
 
-C12. MARCADOR OBSERVABLE > PROMESA ABSTRACTA — "espalda de mariposa" > "mejor postura". "Lumbar respira" > "menos dolor". El avatar debe poder ver o sentir el resultado en su cuerpo, no interpretarlo.
+C12. MARCADOR OBSERVABLE > PROMESA ABSTRACTA — el avatar debe poder ver o sentir el resultado, no interpretarlo. Ejemplos por nicho:
+    - "espalda de mariposa" > "mejor postura"
+    - "lumbar respira" > "menos dolor"
+    - "piel sin halo amarillo" > "piel uniforme"
+    - "celular frío al tacto" > "batería duradera"
 
 ═══ [6] ANTI-GENERIC — PROHIBIDO en cualquier SCRIPT ES ═══
 

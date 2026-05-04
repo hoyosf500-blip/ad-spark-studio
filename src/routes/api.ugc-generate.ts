@@ -39,7 +39,10 @@ const STYLE_DESC: Record<Body["style"], string> = {
   "ugc-casual":
     "Casual problema — she HAS the problem (CUALQUIER nicho: dolor físico, problema de piel, mancha en la cocina, celular que se descarga, batidos que no satisfacen, etc.), discovers the product for the first time. Tone: vulnerable, relatable, hopeful. Structure: problem (Shot 1-2) → discovery of product (Shot 2-3, NOT Shot 1) → first reaction → CTA. She SHOWS where está el problema con indicadores físicos del nicho real (tocando la zona del dolor, mostrando la mancha en el azulejo, mostrando el porcentaje de batería bajo, frotando la piel sin resultado). Adapt the visual indicator to the actual niche from PRODUCT INFO. Product appears mid-video, never at the start. Hook: el momento de frustración del nicho (dolor + mueca, mancha + suspiro, batería 5% + cara de pánico, piel grasa + reflexión en espejo). Ejemplos por nicho: SALUD = wincing al levantarse; BELLEZA = mira el espejo y se toca la mejilla con frustración; HOGAR = restriega la mancha y suspira; TECNOLOGÍA = ve el ícono de batería y resopla; WELLNESS = bostezo + ojos cansados a las 3pm.",
   "ugc-testimonial":
-    "Testimonial — she ALREADY used the product, shares her result. Tone: confident, grateful, recommending to a friend. Structure: before context with time anchor (\"llevo 2 semanas\", \"desde el mes pasado\") → product use → result with before/after verbal contrast (\"antes no podía ni agacharme, ahora...\") → recommendation. Product appears early. Hook: transformation statement or before/after contrast.",
+    "Testimonial — she ALREADY used the product, shares her result. Tone: confident, grateful, recommending to a friend. Structure: before context with time anchor (\"llevo 2 semanas\", \"desde el mes pasado\") → product use → result with before/after verbal contrast (elegí el del nicho real: \"antes no podía ni agacharme, ahora...\" / \"antes mi piel se veía apagada en cualquier foto, ahora...\" / \"antes el celular no me llegaba a la tarde, ahora...\") → recommendation. Product appears early. Hook: transformation statement or before/after contrast.",
+  // 2026-05-04: rotación de hooks B/D + closer + voice por nicho (salud | belleza | tech)
+  // — bias salud-only detectado en CHECK 5 de auditoría multinicho. HOOK A y C quedan
+  // intactos (A es wellness genérico, C es estructural sin ejemplo de nicho).
   "ugc-viral":
     `Hook viral — personal-brand UGC. The Avatar IS the product. Product NEVER appears in frame. Do NOT reference /image1.
 
@@ -49,12 +52,18 @@ A. CONTRARIAN + STAKES (highest CTR):
    ej: "Nadie te va a decir que esa cena de las 10pm te está robando el sueño profundo."
 B. TRIBAL SPLIT (ego trigger):
    "Esto separa [quien quieres ser] de [quien nunca quieres volver a ser]."
-   ej: "Esto separa a la que se recupera del dolor lumbar de la que vive 10 años con él."
+   ej (elegí el del nicho real):
+     salud:   "Esto separa a la que se recupera del dolor lumbar de la que vive 10 años con él."
+     belleza: "Esto separa a la que recupera glow después de los 35 de la que vive 10 años con base pesada."
+     tech:    "Esto separa al que llega a las 8pm con 40% de batería del que carga 3 veces al día."
 C. NEGATIVE SUPERLATIVE (+63% vs positivo — research Outbrain):
    "Los [N impar] errores que [destruyen / arruinan / sabotean] tu [outcome]."
    N debe ser 3, 5 o 7 — números impares rinden mejor que pares.
 D. PATTERN INTERRUPT: acción inesperada + corte + frase de impacto.
-   ej: se tira al piso, "así duerme una lumbalgia de 40 años."
+   ej (elegí el del nicho real):
+     salud:   se tira al piso, "así duerme una lumbalgia de 40 años."
+     belleza: se mira al espejo en luz natural, "así se ve la piel después de 3 noches sin sérum."
+     tech:    muestra el cel al 8% a las 4pm, "así llegás a la tarde con cualquier cargador chino."
 
 ════ BODY (2–22s) — 4-beat build OBLIGATORIO ════
 1. WHAT    (2–5s):  concepto en 1 frase corta. Sin hedging.
@@ -64,7 +73,10 @@ D. PATTERN INTERRUPT: acción inesperada + corte + frase de impacto.
 
 ════ CLOSER (22–30s) — COMMAND, never a request ════
 Patrón obligatorio: "Tu próximo [acción cotidiana] no debería [forma vieja]. Debería [forma nueva específica]."
-ej: "Tu próximo levantamiento no debería venir de la espalda. Debería empezar en la cadera."
+ej (elegí el del nicho real):
+  salud:   "Tu próximo levantamiento no debería venir de la espalda. Debería empezar en la cadera."
+  belleza: "Tu próximo glow no debería venir de filtros. Debería empezar en la barrera de tu piel."
+  tech:    "Tu próxima carga no debería tomar 2 horas. Debería empezar antes del primer café."
 
 ❌ PROHIBIDO en el closer:
 - "dale like", "suscríbete", "sígueme"
@@ -85,7 +97,7 @@ ej: "Tu próximo levantamiento no debería venir de la espalda. Debería empezar
 ════ VOICE (obligatorio) ════
 • Variación de longitud de oración: mezclar frases de 3 palabras con frases de 14. Nunca 5 frases seguidas de la misma duración.
 • Ratio 1:1 — 1 ejemplo concreto con número por cada claim abstracto.
-• Cero "beneficios" genéricos. Siempre: "vas a sentir X en Y minutos" o "tu Z deja de doler el día N".
+• Cero "beneficios" genéricos. Siempre: "vas a sentir/ver/notar X en Y [minutos/días/usos]". Ej por nicho: "lumbar respira el 4to día" (salud) | "mancha aclara en 2 semanas" (belleza) | "celular llega a la tarde con 40%" (tech).
 • Contracciones naturales colombianas: "pa' que", "ni de broma", "eso sí", "en serio".
 
 ════ SETTING ════
