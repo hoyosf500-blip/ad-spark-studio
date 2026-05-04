@@ -7,10 +7,12 @@ import type { Database } from "@/integrations/supabase/types";
 
 type FrameInput = { time: number; dataUrl: string };
 
-// OpenAI message content parts
+// OpenAI message content parts (with optional Anthropic cache_control passed
+// through transparently by OpenRouter for Anthropic models).
+type CacheControl = { type: "ephemeral" };
 type ContentPart =
-  | { type: "text"; text: string }
-  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };
+  | { type: "text"; text: string; cache_control?: CacheControl }
+  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" }; cache_control?: CacheControl };
 
 type OpenAIMessage = {
   role: "system" | "user" | "assistant";
@@ -91,12 +93,17 @@ export const Route = createFileRoute("/api/analyze-frames")({
         content.push({
           type: "text",
           text: "\n\nProduce el análisis completo siguiendo EXACTAMENTE el formato definido en tu role. No omitas frames. Termina con la sección final de transcripción consolidada.",
+          // Cache breakpoint at the END of the content array. Re-runs of the
+          // analyze step on the same video (e.g. user edits productInfo and
+          // re-runs) hit the cached frames at 0.10x input price.
+          cache_control: { type: "ephemeral" },
         });
 
         const maxTokens = Math.min(16000, Math.max(4000, body.frames.length * 250 + 1000));
         const MAX_CONTINUATIONS = 1;
 
         let fullText = "", inputTokens = 0, outputTokens = 0;
+        let cacheCreateTokens = 0, cacheReadTokens = 0;
         let stopReason: string | null = null;
         let failed = false;
         const dec = new TextDecoder();
@@ -151,6 +158,7 @@ export const Route = createFileRoute("/api/analyze-frames")({
                 let buf = "";
                 let attemptText = "";
                 let attemptIn = 0, attemptOut = 0;
+                let attemptCacheCreate = 0, attemptCacheRead = 0;
                 let attemptFinishReason: string | null = null;
 
                 for (;;) {
@@ -170,7 +178,17 @@ export const Route = createFileRoute("/api/analyze-frames")({
                           delta?: { content?: string };
                           finish_reason?: string | null;
                         }>;
-                        usage?: { prompt_tokens?: number; completion_tokens?: number };
+                        usage?: {
+                          prompt_tokens?: number;
+                          completion_tokens?: number;
+                          cache_creation_input_tokens?: number;
+                          cache_read_input_tokens?: number;
+                          prompt_tokens_details?: {
+                            cached_tokens?: number;
+                            cache_creation_tokens?: number;
+                            cache_read_tokens?: number;
+                          };
+                        };
                       };
                       const deltaText = evt.choices?.[0]?.delta?.content;
                       if (typeof deltaText === "string") {
@@ -183,11 +201,20 @@ export const Route = createFileRoute("/api/analyze-frames")({
                       if (finish) attemptFinishReason = finish;
                       if (evt.usage?.prompt_tokens) attemptIn = evt.usage.prompt_tokens;
                       if (evt.usage?.completion_tokens) attemptOut = evt.usage.completion_tokens;
+                      const cc = evt.usage?.cache_creation_input_tokens
+                        ?? evt.usage?.prompt_tokens_details?.cache_creation_tokens;
+                      const cr = evt.usage?.cache_read_input_tokens
+                        ?? evt.usage?.prompt_tokens_details?.cache_read_tokens
+                        ?? evt.usage?.prompt_tokens_details?.cached_tokens;
+                      if (typeof cc === "number") attemptCacheCreate = cc;
+                      if (typeof cr === "number") attemptCacheRead = cr;
                     } catch { /* skip malformed */ }
                   }
                 }
                 inputTokens += attemptIn;
                 outputTokens += attemptOut;
+                cacheCreateTokens += attemptCacheCreate;
+                cacheReadTokens += attemptCacheRead;
                 stopReason = attemptFinishReason;
 
                 if (attemptFinishReason !== "length" || attempt >= MAX_CONTINUATIONS || !attemptText) break;
@@ -207,6 +234,8 @@ export const Route = createFileRoute("/api/analyze-frames")({
                   operation: failed ? "openrouter_analysis_partial" : "openrouter_analysis",
                   inputTokens,
                   outputTokens,
+                  cacheCreateTokens,
+                  cacheReadTokens,
                   reservedUsd,
                   metadata: {
                     frames: body.frames.length,
@@ -214,6 +243,8 @@ export const Route = createFileRoute("/api/analyze-frames")({
                     isTruncated: stopReason === "length",
                     maxTokens,
                     failed,
+                    cacheCreateTokens,
+                    cacheReadTokens,
                   },
                 });
               } catch (logErr) {

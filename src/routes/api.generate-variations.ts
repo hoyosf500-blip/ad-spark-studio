@@ -10,9 +10,14 @@ import type { Database } from "@/integrations/supabase/types";
 
 type FrameInput = { time: number; dataUrl: string };
 
+// Anthropic prompt caching via OpenRouter: pass `cache_control: { type: "ephemeral" }`
+// on the LAST part of the cacheable prefix. Anthropic caches everything up to and
+// including that part. OpenRouter passes the field through transparently for
+// Anthropic models since late 2025.
+type CacheControl = { type: "ephemeral" };
 type ContentPart =
-  | { type: "text"; text: string }
-  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };
+  | { type: "text"; text: string; cache_control?: CacheControl }
+  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" }; cache_control?: CacheControl };
 
 type OpenAIMessage = {
   role: "system" | "user" | "assistant";
@@ -102,6 +107,18 @@ export const Route = createFileRoute("/api/generate-variations")({
           }
         }
 
+        // Mark the LAST part of the shared prefix as the cache breakpoint.
+        // Everything pushed above (SCENE FORMAT + ANALYSIS + TRANSCRIPTION +
+        // PRODUCT PHOTO + PRODUCT INFO + REFERENCE FRAMES) becomes a cacheable
+        // ephemeral block (~5 min TTL). Calls 2-N for the same project hit it
+        // as cache_read at 0.10x input price instead of paying full freight.
+        if (sharedContent.length > 0) {
+          sharedContent[sharedContent.length - 1] = {
+            ...sharedContent[sharedContent.length - 1],
+            cache_control: { type: "ephemeral" },
+          };
+        }
+
         // === VARIATION-SPECIFIC SUFFIX ===
         const variationContent: ContentPart[] = [];
         const transcriptionDirective = body.transcription?.trim()
@@ -145,6 +162,7 @@ export const Route = createFileRoute("/api/generate-variations")({
         const MAX_CONTINUATIONS = 1;
 
         let fullText = "", inputTokens = 0, outputTokens = 0;
+        let cacheCreateTokens = 0, cacheReadTokens = 0;
         let stopReason: string | null = null;
         let failed = false;
         const dec = new TextDecoder();
@@ -199,6 +217,7 @@ export const Route = createFileRoute("/api/generate-variations")({
                 let buf = "";
                 let attemptText = "";
                 let attemptIn = 0, attemptOut = 0;
+                let attemptCacheCreate = 0, attemptCacheRead = 0;
                 let attemptFinishReason: string | null = null;
                 for (;;) {
                   const { value, done } = await reader.read();
@@ -217,7 +236,19 @@ export const Route = createFileRoute("/api/generate-variations")({
                           delta?: { content?: string };
                           finish_reason?: string | null;
                         }>;
-                        usage?: { prompt_tokens?: number; completion_tokens?: number };
+                        usage?: {
+                          prompt_tokens?: number;
+                          completion_tokens?: number;
+                          cache_creation_input_tokens?: number;
+                          cache_read_input_tokens?: number;
+                          // OpenRouter sometimes nests Anthropic-specific cache
+                          // counters under prompt_tokens_details.
+                          prompt_tokens_details?: {
+                            cached_tokens?: number;
+                            cache_creation_tokens?: number;
+                            cache_read_tokens?: number;
+                          };
+                        };
                       };
                       const deltaText = evt.choices?.[0]?.delta?.content;
                       if (typeof deltaText === "string") {
@@ -230,11 +261,20 @@ export const Route = createFileRoute("/api/generate-variations")({
                       if (finish) attemptFinishReason = finish;
                       if (evt.usage?.prompt_tokens) attemptIn = evt.usage.prompt_tokens;
                       if (evt.usage?.completion_tokens) attemptOut = evt.usage.completion_tokens;
+                      const cc = evt.usage?.cache_creation_input_tokens
+                        ?? evt.usage?.prompt_tokens_details?.cache_creation_tokens;
+                      const cr = evt.usage?.cache_read_input_tokens
+                        ?? evt.usage?.prompt_tokens_details?.cache_read_tokens
+                        ?? evt.usage?.prompt_tokens_details?.cached_tokens;
+                      if (typeof cc === "number") attemptCacheCreate = cc;
+                      if (typeof cr === "number") attemptCacheRead = cr;
                     } catch { /* skip */ }
                   }
                 }
                 inputTokens += attemptIn;
                 outputTokens += attemptOut;
+                cacheCreateTokens += attemptCacheCreate;
+                cacheReadTokens += attemptCacheRead;
                 stopReason = attemptFinishReason;
 
                 if (attemptFinishReason !== "length" || attempt >= MAX_CONTINUATIONS || !attemptText) break;
@@ -254,6 +294,8 @@ export const Route = createFileRoute("/api/generate-variations")({
                 operation: "openrouter_variation",
                 inputTokens,
                 outputTokens,
+                cacheCreateTokens,
+                cacheReadTokens,
                 reservedUsd,
                 metadata: {
                   variationType: body.variationType,
@@ -263,6 +305,8 @@ export const Route = createFileRoute("/api/generate-variations")({
                   maxTokens: MAX_TOKENS,
                   validationPass: validation?.pass ?? null,
                   validationViolations: validation?.violations ?? null,
+                  cacheCreateTokens,
+                  cacheReadTokens,
                 },
               });
 

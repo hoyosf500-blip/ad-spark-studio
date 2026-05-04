@@ -65,15 +65,14 @@ function StepperNav({ current }: { current: StepId }) {
   );
 }
 
-// Send ALL extracted frames to GPT-4o so each scene prompt anchors to its
+// Send ALL extracted frames to the model so each scene prompt anchors to its
 // matching reference frame. Frames are already capped to MAX_FRAMES=60 by the
-// extractor (1fps, 1024x1820), so input size stays bounded. With prompt caching
-// active in api.generate-variations, the 6 variation calls share the frame
-// payload (cache write on call 1 at 1.25x, cache read on calls 2-6 at 0.10x),
-// so full-fidelity sampling no longer costs ~$0.45 per variation in image
-// tokens — it costs ~$0.62 once and ~$0.05 per subsequent variation.
-// Sampling down to 12 frames was tested but rejected: user prefers quality over
-// the marginal $0.15/project savings.
+// extractor (1fps, 1024x1820), so input size stays bounded. Anthropic prompt
+// caching is now active in api.generate-variations (cache_control: ephemeral
+// on the last shared-prefix part), so the 6 variation calls share the frame
+// payload: cache write on call 1 at 1.25x input, cache read on calls 2-6 at
+// 0.10x input. Sampling down to 12 frames was tested but rejected: user
+// prefers full quality over the marginal savings.
 function pickReferenceFrames(
   _type: string,
   frames: ExtractedFrame[],
