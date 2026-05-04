@@ -7,10 +7,12 @@ import type { Database } from "@/integrations/supabase/types";
 
 type FrameInput = { time: number; dataUrl: string };
 
-// OpenAI message content parts
+// OpenAI message content parts (with optional Anthropic cache_control passed
+// through transparently by OpenRouter for Anthropic models).
+type CacheControl = { type: "ephemeral" };
 type ContentPart =
-  | { type: "text"; text: string }
-  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };
+  | { type: "text"; text: string; cache_control?: CacheControl }
+  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" }; cache_control?: CacheControl };
 
 type OpenAIMessage = {
   role: "system" | "user" | "assistant";
