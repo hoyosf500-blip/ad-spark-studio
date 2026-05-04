@@ -99,7 +99,10 @@ export const Route = createFileRoute("/api/analyze-frames")({
           cache_control: { type: "ephemeral" },
         });
 
-        const maxTokens = Math.min(16000, Math.max(4000, body.frames.length * 250 + 1000));
+        // 2026-05-04: fórmula relajada para evitar continuations.
+        // Antes: min(16000, frames*250+1000) → con 60 frames daba 16000 (pegado al cap).
+        // Ahora: min(32000, frames*400+2000) → con 60 frames da 26000, holgura suficiente.
+        const maxTokens = Math.min(32000, Math.max(4000, body.frames.length * 400 + 2000));
         const MAX_CONTINUATIONS = 1;
 
         let fullText = "", inputTokens = 0, outputTokens = 0;
