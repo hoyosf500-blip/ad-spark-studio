@@ -74,10 +74,10 @@ If the reference contains a physical tool, device, prop, instrument, hand-drawn 
 
 RULE: for every ambiguous tool or object in the reference, emit 4-5 explicit NOT-substitute clauses listing the most likely confusions the image model would default to. Examples (apply this rule to whatever your reference actually shows):
   - A red-and-blue plastic skin-marking stylus with rounded grip -> "NOT a Sharpie, NOT a branded marker, NOT a pen with logo, NOT a scalpel".
-  - Hand-drawn purple/black marker linework on bare skin -> "NOT a digital overlay, NOT a 3D rendered diagram, NOT a tattoo, NOT a printed decal" (and never invent labels like L3/L4/L5 unless those labels actually appear in the reference).
-  - A red permanent marker tracing lines on skin -> "NOT a red arrow graphic, NOT a digital effect".
-  - An exploded 3D anatomical cutaway with organic fluids (blood, synovial fluid, inflamed tissue) -> "NOT a clean sterile medical illustration, NOT a textbook diagram".
-  - Raw TikTok medical-demo footage -> "NOT editorial clinic photography, NOT polished, NOT staged".
+  - A glass dropper bottle with amber serum and a black rubber bulb -> "NOT a generic perfume bottle, NOT a syringe, NOT a chemistry flask, NOT a stock cosmetic mockup".
+  - A hand-drawn arrow in black marker on a bathroom tile next to a stain -> "NOT a digital overlay arrow, NOT a printed sticker, NOT a graphic editor annotation".
+  - A frayed phone-charging cable with exposed copper at the connector -> "NOT a clean new cable, NOT a stock product photo, NOT a render, NOT an Apple-style hero shot".
+  - A microfiber cloth wiping a greasy stovetop with visible streak marks -> "NOT a generic kitchen cloth, NOT a sponge, NOT a paper towel, NOT a sponsored cleaning ad still".
   - A talking-head shot is NOT a product close-up and vice versa.
 When in doubt, name the object literally and add the "NOT X, NOT Y, NOT Z" clarifier. Never add NOT-clauses about objects not visible in the frame.
 
