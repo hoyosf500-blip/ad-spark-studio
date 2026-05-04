@@ -69,11 +69,7 @@ export const Route = createFileRoute("/api/generate-variations")({
           return new Response("Missing fields", { status: 400 });
         }
 
-        // Default Haiku 4.5 — la app produce prompts paste-ready para Higgsfield,
-        // no contenido final que se publique tal cual. Haiku basta para los 6
-        // scripts de variaciones; el usuario refina/regenera en Higgsfield.
-        // Override a Sonnet desde body.model si se necesita prosa más pulida.
-        const model = body.model || "claude-haiku-4-5";
+        const model = body.model || "claude-sonnet-4-5";
         const isClone = body.variationType === "clon";
 
         // === SHARED PREFIX ===

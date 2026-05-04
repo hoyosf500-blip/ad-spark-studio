@@ -63,10 +63,7 @@ export const Route = createFileRoute("/api/analyze-frames")({
           return new Response("max 60 frames", { status: 400 });
         }
 
-        // Default Haiku 4.5 — la app produce prompts, no contenido final. El
-        // análisis frame-by-frame sigue formato verbatim de SYS_ANALYZE, Haiku
-        // basta. Override a Sonnet desde body.model si se necesita más calidad.
-        const model = body.model || "claude-haiku-4-5";
+        const model = body.model || "claude-sonnet-4-5";
 
         const content: ContentPart[] = [];
         content.push({
