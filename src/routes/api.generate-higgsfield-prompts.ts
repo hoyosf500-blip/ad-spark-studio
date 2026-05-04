@@ -238,6 +238,16 @@ Nano Banana Pro rejects prompts that stack bare/exposed skin vocabulary. Apply t
   - Replace "torso is bare from the waist up" -> "patient seen from behind, lower back region visible for clinical examination".
   - When describing skin contact (applicator pressing, gloved hand touching skin), separate it from nudity descriptors: first establish clothing/framing, then describe the contact clinically ("the applicator tip contacts the lumbar skin at approximately L4-L5").
   - Limit the word "bare" to at most ONE occurrence per prompt. After the first use, switch to "skin", "lower back", or the anatomical zone name.
+  - COMPOUND NUDITY TRIGGER (the #1 rejection cause): NEVER combine "bare [body part]" with "wearing [pants/jeans/skirt/shorts] only" or "partial torso visible". Saying "patient with bare arm wearing dark blue jeans" implies the torso is uncovered between the arm and the jeans — Nano Banana Pro flags this as nudity. Whenever you describe a patient with LOWER-body clothing, you MUST ALSO describe UPPER-body clothing in the same descriptor.
+  - PATTERN TO FOLLOW: establish clothing FIRST, then describe any exposed region as a SUBSET of the clothed body.
+      - WORKS: "patient wearing a gray cotton t-shirt and dark blue jeans, the right arm visible below the short sleeve"
+      - WORKS: "patient wearing a white tank top, the right shoulder and upper back visible above the strap"
+      - WORKS: "patient wearing a hospital gown with the lower back zone exposed for examination"
+      - WORKS: "patient wearing a sports bra and athletic shorts, the abdominal zone visible between"
+      - REJECTED: "patient with bare arm wearing dark blue jeans" (no upper-body clothing specified)
+      - REJECTED: "bare upper back and shoulder visible, the patient seen from the side wearing dark pants" (mismatched coverage)
+      - REJECTED: "the patient's bare torso visible, wearing only jeans" (explicit nudity vocabulary)
+  - WHEN THE REFERENCE TRULY SHOWS BARE SKIN BEING TREATED: describe the exposed area as a clothed-body subset. If reference shows a patient with an exposed shoulder, choose the clothing that would naturally leave that area visible (tank top, off-shoulder shirt, hospital gown). Never describe the exposed area in isolation without upper-body clothing context.
 
 === TEXT RENDERED IN THE IMAGE ===
 The ONLY text allowed to appear as rendered text inside the generated image is text that literally appears in the reference: codes or labels specific to the niche (anatomical codes like "L3"/"L4", ingredient names, part numbers, model numbers), watermarks ("06-lj-hzj-23"), numeric labels, product names on packaging.
