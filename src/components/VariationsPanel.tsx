@@ -1895,9 +1895,9 @@ function SceneRow({ s, frames, workspaceId, variationId, onPromptsCost }: {
               className="h-7 rounded-md border border-border bg-background px-2 text-[10px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
               title="Modelo Claude para generar los prompts de esta escena. Se recuerda entre sesiones."
             >
-              <option value="sonnet">GPT-4o · recomendado</option>
-              <option value="opus">GPT-4o · máxima fidelidad</option>
-              <option value="haiku">GPT-4o-mini · más barato</option>
+              <option value="sonnet">Sonnet 4.5 · recomendado</option>
+              <option value="opus">Opus 4.5 · máxima fidelidad</option>
+              <option value="haiku">Haiku 4.5 · más barato</option>
             </select>
             <Button
               size="sm"
