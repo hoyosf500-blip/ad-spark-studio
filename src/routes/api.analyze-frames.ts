@@ -234,6 +234,8 @@ export const Route = createFileRoute("/api/analyze-frames")({
                   operation: failed ? "openrouter_analysis_partial" : "openrouter_analysis",
                   inputTokens,
                   outputTokens,
+                  cacheCreateTokens,
+                  cacheReadTokens,
                   reservedUsd,
                   metadata: {
                     frames: body.frames.length,
@@ -241,6 +243,8 @@ export const Route = createFileRoute("/api/analyze-frames")({
                     isTruncated: stopReason === "length",
                     maxTokens,
                     failed,
+                    cacheCreateTokens,
+                    cacheReadTokens,
                   },
                 });
               } catch (logErr) {
