@@ -172,29 +172,48 @@ export const Route = createFileRoute("/api/ugc-generate")({
 
         const isViral = body.style === "ugc-viral";
         const durationStr = body.duration ?? "12";
-        const userText = [
+
+        // === SHARED PREFIX (cacheable across the 4 UGC styles for the same project) ===
+        // SYS_UGC + productPhoto + productInfo + transcription + analysisBlock no
+        // cambian entre estilos. Marcamos la última parte con cache_control para
+        // que las llamadas 2-N peguen al cache (~5 min TTL Anthropic) a 0.10x input.
+        const sharedContent: ContentPart[] = [];
+        if (body.productPhoto) {
+          sharedContent.push({ type: "text", text: "=== PRODUCT PHOTO (reference) ===" });
+          sharedContent.push(dataUrlToOpenAIImage(body.productPhoto));
+        }
+        const sharedTextParts = [
+          body.productInfo ? `PRODUCT INFO:\n${body.productInfo}` : "",
+          body.transcription ? `USER TRANSCRIPTION (use word-for-word, split across shots naturally):\n${body.transcription}` : "",
+          analysisBlock,
+        ].filter(Boolean).join("\n\n");
+        if (sharedTextParts) {
+          sharedContent.push({ type: "text", text: sharedTextParts });
+        }
+        if (sharedContent.length > 0) {
+          sharedContent[sharedContent.length - 1] = {
+            ...sharedContent[sharedContent.length - 1],
+            cache_control: { type: "ephemeral" },
+          };
+        }
+
+        // === STYLE-SPECIFIC SUFFIX (cambia entre las 4 calls UGC) ===
+        const styleText = [
           !isViral ? WINNING_PREAMBLE : "",
           `STYLE: ${body.style} — ${STYLE_DESC[body.style]}`,
           `TARGET MODEL: ${targetModelLabel}`,
           `DURATION: ${durationStr} seconds`,
           klingRules,
-          body.productInfo ? `PRODUCT INFO:\n${body.productInfo}` : "",
-          body.transcription ? `USER TRANSCRIPTION (use word-for-word, split across shots naturally):\n${body.transcription}` : "",
-          analysisBlock,
           body.creativeBrief?.trim()
             ? `=== IDEA CREATIVA DEL USUARIO ===\n${body.creativeBrief.trim()}\n\nCONTRATO:\n- La IDEA dicta SOLO: tono, setting, personaje, emoción, ritmo.\n- La IDEA NO dicta: componente, dosis, precio, testimonios, claims médicos.\n- Si contradice PRODUCT INFO / TRANSCRIPTION / ANALYSIS, prevalecen los datos reales.\n- Si la IDEA menciona un dato concreto que no está en los inputs, IGNORALO.`
             : "",
           `\nProduce ONLY the PROMPT and HOOKS sections, exactly per the format. No preamble.`,
-        ]
-          .filter(Boolean)
-          .join("\n\n");
+        ].filter(Boolean).join("\n\n");
 
-        const content: ContentPart[] = [];
-        if (body.productPhoto) {
-          content.push({ type: "text", text: "=== PRODUCT PHOTO (reference) ===" });
-          content.push(dataUrlToOpenAIImage(body.productPhoto));
-        }
-        content.push({ type: "text", text: userText });
+        const content: ContentPart[] = [
+          ...sharedContent,
+          { type: "text", text: styleText },
+        ];
 
         const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
           method: "POST",
