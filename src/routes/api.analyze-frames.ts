@@ -103,6 +103,7 @@ export const Route = createFileRoute("/api/analyze-frames")({
         const MAX_CONTINUATIONS = 1;
 
         let fullText = "", inputTokens = 0, outputTokens = 0;
+        let cacheCreateTokens = 0, cacheReadTokens = 0;
         let stopReason: string | null = null;
         let failed = false;
         const dec = new TextDecoder();
