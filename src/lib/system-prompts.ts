@@ -159,6 +159,13 @@ Every scene prompt must be self-contained and complete — never reference "simi
 </output_format>
 
 <examples>
+<!-- 2026-05-04: 3 ejemplos paralelos (salud, belleza, tech) para evitar
+     que Claude defaultee a léxico clínico/anatómico cuando el producto
+     es de otro nicho. Cada ejemplo muestra el shape completo de Layer 1/2
+     con el vocabulario visual característico de su nicho. NO BORRAR ninguno
+     ni reordenar — Claude pondera examples > instrucciones en prosa
+     (Anthropic multishot prompting docs). Layer 1 ~95-115 palabras en los 3
+     para evitar que Claude infiera "más detalle = shape correcto". -->
 <example>
 <input>Clone variation of a 15-second back pain ad</input>
 <output>
@@ -171,6 +178,34 @@ The gloved index finger presses down firmly on the lumbar L4-L5 region with visi
 🔧 TOOL: Cinema Studio 2.5 + Kling Motion Control
 📎 ATTACH: Reference Frame 1 (0s) + Soul ID
 → SCREEN TEXT: "¿Le duele AQUÍ?"
+</output>
+</example>
+<example>
+<input>Clone variation of a 15-second vitamin C serum ad targeting sun spots</input>
+<output>
+═══ ESCENA 1 — Hook mancha (0-3s) ═══
+📝 SCRIPT: "¿Esta mancha te apareció después de los 35? No es solo el sol."
+🖼️ IMAGE PROMPT (copy to Nano Banana Pro):
+Real photograph taken with iPhone 15 Pro of an extreme close-up shot of a Latina woman's right cheekbone in natural morning light. Warm caramel-olive skin with real visible texture — open pores, fine peach fuzz catching the side light, two small freckles below the eye. Bare cheek fills upper 70% of the 9:16 frame. A pigmented brown spot approximately 8mm wide, irregular oval shape, sits on the cheekbone two centimeters below the eye. No makeup, no foundation. Eye partially visible at the top edge, gaze directed downward toward a hand-held mirror just outside frame. Soft diffused window light from camera-left at 60 degrees, 5600K daylight, gentle shadow on the cheek that emphasizes the spot's edges. Background: blurred warm-beige bathroom tile at the right edge. 9:16 vertical, ZERO bokeh, ZERO depth of field, sharp focus across ENTIRE frame. POST-PRODUCTION GRAPHIC OVERLAYS: A thin coral-pink circle approximately 120px diameter drawn around the sun spot in flat vector style, 3px stroke, no fill. A single thin curved arrow in the same coral-pink color, approximately 90px long, points from the upper-right toward the spot. Soft gradient halo overlay in warm gold tone surrounds the circled zone, 30% opacity, simulating a subtle "highlighted" glow that draws the eye without obscuring the skin texture. Small white sans-serif text "MANCHA · 35+" at the top-right of the frame, no background box.
+🎬 ANIMATION PROMPT (copy to Veo 3):
+The woman tilts her head 8 degrees toward camera-left over 1.2 seconds, bringing the sun spot into the brightest section of the window light. Camera holds in a locked extreme close-up with micro handheld sway of 2-3 pixels. Speed: 100% real-time for the first second, then decelerates to 50% speed during the head tilt to emphasize the moment the spot becomes fully lit. The coral circle overlay fades in at 0.8 seconds with a 0.3-second ease-in, then pulses once with a 4% scale increase at the 2-second mark and returns. The gold halo overlay drifts subtly with a 5px lateral float, simulating a living highlight effect. Exit transition: smooth dissolve over 4 frames into the next scene. Environment remains stable. Total duration: 3 seconds.
+🔧 TOOL: Cinema Studio 2.5 + Skin Enhancer (preserve texture, do NOT smooth)
+📎 ATTACH: Reference Frame 1 (0s) + Soul ID
+→ SCREEN TEXT: "¿Te apareció DESPUÉS de los 35?"
+</output>
+</example>
+<example>
+<input>Clone variation of a 15-second 65W GaN fast charger ad</input>
+<output>
+═══ ESCENA 1 — Hook batería 5% (0-3s) ═══
+📝 SCRIPT: "¿Ves este 5%? Tu cargador viejo necesita 2 horas. Este, 18 minutos."
+🖼️ IMAGE PROMPT (copy to Nano Banana Pro):
+Real photograph taken with iPhone 15 Pro of a medium close-up shot of a Latino man's right hand holding a black smartphone vertical on a dark walnut wood desk. Hand fills lower 40% of the 9:16 frame, phone screen fills upper 55%. Skin tone: warm tan with visible knuckle creases, short trimmed nails, a faint scar across the index finger second knuckle. The phone screen is on, displaying a battery icon at 5% with the iOS-style red battery indicator clearly visible at the top-right, time reading 2:47 PM in white. A USB-C cable in matte black braided nylon enters from the bottom-right, plugged into the phone's bottom port. Background: blurred home-office shelf at the top edge. Warm desk lamp from camera-right at 35 degrees, 3200K tungsten, soft daylight fill from behind camera. 9:16 vertical, ZERO bokeh, ZERO depth of field, sharp focus across ENTIRE frame. POST-PRODUCTION GRAPHIC OVERLAYS: A bright cyan UI-style overlay box approximately 200px wide and 60px tall sits at the top-right corner of the frame, displaying "5%" in bold white sans-serif with a red horizontal battery bar below it (2px high, 180px long, filled 5% from the left in red, 95% empty in dark gray). A single thin red downward-pointing arrow in flat vector style, 70px tall, 3px stroke, points from the cyan box toward the phone screen battery icon. Small white text "2:47 PM — TODAVÍA NO SON LAS 3" at the bottom of the frame in a thin black-bordered band.
+🎬 ANIMATION PROMPT (copy to Veo 3):
+The man's thumb taps the lock button once at the 0.8-second mark, the phone screen briefly brightens by 15% then settles. Camera holds in a locked medium close-up with micro handheld sway of 2-3 pixels. Speed: 100% real-time for the first 1.5 seconds, then decelerates to 40% speed on the moment the cyan "5%" overlay box pulses, emphasizing the urgency. The cyan UI box scales up by 6% at the 2-second mark and returns over 0.4 seconds. The red battery bar inside the box flickers once between 5% and 4% fill at the 2.4-second mark, then locks at 5%. The red arrow pulses with a 5% scale increase synchronized to the battery flicker. Exit transition: hard cut to next scene with a 1-frame digital glitch (RGB split of 4px) over the phone screen. Environment remains stable. Total duration: 3 seconds.
+🔧 TOOL: Cinema Studio 2.5 + Kling Motion Control
+📎 ATTACH: Reference Frame 1 (0s) + Soul ID
+→ SCREEN TEXT: "¿2 HORAS O 18 MINUTOS?"
 </output>
 </example>
 </examples>
