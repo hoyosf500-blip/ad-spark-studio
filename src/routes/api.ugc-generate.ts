@@ -150,7 +150,10 @@ export const Route = createFileRoute("/api/ugc-generate")({
           .maybeSingle();
         if (!membership) return new Response("Forbidden: not a workspace member", { status: 403 });
 
-        const model = body.model || "claude-sonnet-4-5";
+        // Default Haiku 4.5 — la app produce scripts UGC paste-ready, no contenido
+        // final. Haiku basta para PROMPT + HOOKS de los 4 estilos. Override a
+        // Sonnet desde body.model si se quiere voice más pulido.
+        const model = body.model || "claude-haiku-4-5";
         const videoModel = body.videoModel || "wan2.6-i2v";
         const targetModelLabel =
           videoModel === "kling2.5-turbo" ? "Kling 2.5 Turbo" : "Seedance 2.0";
