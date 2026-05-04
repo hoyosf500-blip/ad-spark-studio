@@ -25,8 +25,22 @@ const PRICING: Record<string, { input: number; output: number }> = {
   "openai/gpt-4o-mini": { input: 0.15, output: 0.6 },
 };
 
+// OpenRouter / Anthropic occasionally returns model IDs with a date suffix
+// (e.g. "anthropic/claude-haiku-4.5-20251001") in the SSE final chunk. Without
+// normalization, those fall back to Sonnet 4.5 pricing — sobrecostando 3x para
+// Haiku. Strip trailing -YYYYMMDD or -YYYY-MM-DD before lookup.
+function stripDateSuffix(model: string): string {
+  return model
+    .replace(/-\d{4}-\d{2}-\d{2}$/, "")
+    .replace(/-\d{8}$/, "");
+}
+
 export function priceFor(model: string) {
-  return PRICING[model] ?? PRICING["anthropic/claude-sonnet-4.5"];
+  return (
+    PRICING[model] ??
+    PRICING[stripDateSuffix(model)] ??
+    PRICING["anthropic/claude-sonnet-4.5"]
+  );
 }
 
 // `input` here is the count of NON-cached input tokens (regular billing).

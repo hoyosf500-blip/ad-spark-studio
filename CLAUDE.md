@@ -62,8 +62,8 @@ Storage buckets remanentes (solo para fuentes del usuario): `source-videos`, `ge
 - **File routes** (`createFileRoute`): reciben `request` directo, auth manual con `Authorization: Bearer <token>` + `supabase.auth.getClaims(token)`. **Usar esto para todo endpoint nuevo.**
 - **Server functions** (`createServerFn`): requieren `.client()` middleware que inyecte el Bearer. Si no, arroja `[object Response]` 401. Lovable tiende a romperlo; cuando pase, migrar a file route.
 
-### 5. Prompt caching — NO activo en OpenRouter
-Tras la migración a OpenRouter, el prompt caching de Anthropic (`cache_control: { type: "ephemeral" }`) **no aplica**. Los endpoints `api.generate-variations.ts` y `api.analyze-frames.ts` ya no tienen lógica warm-up/fan-out. Si se necesita caching futuro, hay que evaluar si OpenRouter lo soporta o migrar esas llamadas de vuelta a Anthropic directo.
+### 5. Prompt caching — ACTIVO vía OpenRouter
+Desde 2026-05-04 (commit `099360a`) los endpoints `api.generate-variations.ts`, `api.analyze-frames.ts` y `api.ugc-generate.ts` usan `cache_control: { type: "ephemeral" }` en el último ContentPart del shared prefix. OpenRouter pasa transparentemente el bloque a Anthropic. TTL ~5 min, surcharge de write 1.25x, read 0.10x — ahorro neto ~70% en fan-out (variations 6×, UGC 4×). El parser SSE captura `usage.cache_creation_input_tokens` y `usage.cache_read_input_tokens` (con fallback a `usage.prompt_tokens_details.*`); `calcCost` los descuenta del input regular. Verificable con `api_usage.metadata.cache_create_tokens` / `cache_read_tokens`. Si OpenRouter dropea los `cache_control` blocks en el futuro, fallback = migrar ese endpoint específico a `api.anthropic.com/v1/messages` directo.
 
 ## Anclas no obvias en `src/`
 
@@ -73,10 +73,10 @@ El árbol completo es discoverable con `Glob`. Puntos de entrada que no se autoe
 - **`lib/scene-format.ts` + `lib/scene-parser.ts`** — pareja: formato wrappers `═══` y parser tolerante (acepta prefijos emoji/arrow/parentheses).
 - **`lib/winning-framework.ts`** — `WINNING_PREAMBLE` + `checkScript` (blacklist de AI-tells para UGC).
 - **`lib/variation-defs.ts`** — definiciones de las 6 variaciones + hook playbooks.
-- **`lib/spending-cap.ts` ↔ `lib/handle-cap.ts`** — pareja server (`checkSpendingCap` → 429 estructurado) / cliente (`handleCapResponse` → toast).
+- **`lib/spending-cap.ts` ↔ `lib/handle-cap.ts`** — pareja server (`checkSpendingCap` + `capExceededResponse` → 402 Payment Required estructurado con `{error, cap, spent}`) / cliente (`handleCapResponse` → toast; acepta 402 y 429). RPCs atómicas `reserve_daily_spend` / `reconcile_daily_spend` activas desde la migración `20260501000000_atomic_spending_cap.sql`.
 - **`lib/signed-urls.ts`** — `batchSignedUrls` con cache 55min + `videoPosterUrl`. Único punto válido para firmar.
 - **`lib/frame-extraction.ts`** — extracción client-side a 1fps, máx 1024×1820.
-- **`utils/openrouter.functions.ts`** — `logUsage`, `priceFor`, `calcCost`, `dataUrlToBase64`, `dataUrlToOpenAIImage`. Usado por todos los endpoints de IA. Pricing en PRICING tabla (OpenRouter rates). **Nota:** `src/utils/anthropic.functions.ts` sigue existiendo con funciones de mismo nombre pero para Anthropic API directo — los endpoints actuales NO lo importan.
+- **`utils/openrouter.functions.ts`** — `logUsage`, `priceFor` (con strip de sufijo de fecha en model id para evitar fallback ciego a Sonnet), `calcCost` (descuenta cache buckets 1.25x write / 0.10x read), `dataUrlToBase64`, `dataUrlToOpenAIImage`. Usado por todos los endpoints de IA. Pricing en PRICING tabla (OpenRouter rates).
 - **`components/AppShell.tsx`** — sidebar Guardian CRM ámbar; rutas privadas se renderizan dentro, no duplicar layout.
 - **`routes/api.*.ts`** — endpoints (file routes; ver constraint #4). Todos usan `OPENROUTER_API_KEY`.
 - **`supabase/migrations/*.sql`** — schema + RLS (patrón abajo).
@@ -156,7 +156,7 @@ Roadmap en `../lovable-prompt-inicial.md` (fuera del repo, en `Desktop/`). Estad
 | TS2345 `/api/x not in FileRoutesByPath` | `routeTree.gen.ts` no regenerado | `bun run build` |
 | Push rechazado tras Lovable commit | remote divergente | `git pull --rebase origin main` |
 | `OPENROUTER_API_KEY not configured` | env var faltante en Worker | Agregar en `wrangler.jsonc` / Cloudflare dashboard |
-| `cache_create_tokens` sin efecto en costo | OpenRouter no soporta Anthropic caching | No marcar `cache_control` en llamadas vía OpenRouter |
+| Cobro 3x para Haiku | Model id con sufijo de fecha cae al fallback Sonnet en `priceFor` | Resuelto desde 2026-05-04: `priceFor` hace strip de `-YYYYMMDD` antes del lookup |
 
 ## Build & dev
 

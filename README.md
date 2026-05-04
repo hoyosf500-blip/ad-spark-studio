@@ -25,7 +25,7 @@ App **multi-tenant** para e-commerce COD latam. Subís un video que te funcionó
 
 ## ⚡ Quick start
 
-Prerequisitos: [Bun](https://bun.sh) instalado, una cuenta de Supabase (Lovable Cloud), una API key de Anthropic Claude y otra de OpenAI Whisper.
+Prerequisitos: [Bun](https://bun.sh) instalado, una cuenta de Supabase (Lovable Cloud), una API key de [OpenRouter](https://openrouter.ai) (gateway unificado para Claude + Gemini) y otra de OpenAI para Whisper (transcripción de audio).
 
 ```bash
 # 1. Clonar
@@ -46,8 +46,8 @@ Variables requeridas:
 | `SUPABASE_URL` | Cliente Supabase |
 | `SUPABASE_PUBLISHABLE_KEY` | Cliente browser + RLS |
 | `SUPABASE_SERVICE_ROLE_KEY` | Inserts admin (api_usage, ugc_generations) |
-| `ANTHROPIC_API_KEY` | Claude Sonnet 4.5/4.6, Haiku 4.5, Opus 4.7 |
-| `OPENAI_API_KEY` | Whisper-1 transcripción de audio |
+| `OPENROUTER_API_KEY` | Gateway unificado para Claude (Sonnet/Haiku/Opus 4.5) y Gemini (2.5 Flash/Pro) |
+| `OPENAI_API_KEY` | Whisper-1 transcripción de audio (OpenRouter no soporta endpoints de audio) |
 
 ```bash
 # 4. Dev server (HMR)
@@ -68,7 +68,7 @@ bun run build
 | **UI** | shadcn/ui + Tailwind CSS v4 | 4.2.1 |
 | **Deploy** | Cloudflare Workers via `@cloudflare/vite-plugin` | 1.25.5 |
 | **Backend** | Supabase (Postgres + Auth + Storage + Realtime) | 2.103.3 |
-| **LLM** | Anthropic Claude (Sonnet 4.5/4.6 · Haiku 4.5 · Opus 4.7) | API 2023-06-01 |
+| **LLM** | OpenRouter (Claude Sonnet/Haiku/Opus 4.5 · Gemini 2.5 Flash/Pro) | OpenAI-compat |
 | **STT** | OpenAI Whisper-1 ($0.006/min) | — |
 | **Generación visual** | Higgsfield.ai (manual paste) | externo |
 
@@ -88,12 +88,12 @@ src/
 │   ├── library.tsx                  # 🚧 Asset library (placeholder)
 │   ├── projects.tsx                 # Listado de proyectos
 │   ├── admin.tsx                    # Admin panel (is_admin=true)
-│   ├── api.anthropic-analyze.ts     # SSE Claude — análisis frame-by-frame
-│   ├── api.anthropic-generate.ts    # SSE Claude — 6 variaciones
-│   ├── api.ugc-generate.ts          # SSE Claude — scripts UGC
-│   ├── api.detect-product.ts        # Sync — detección producto desde foto
-│   ├── api.transcribe-audio.ts      # Whisper STT del audio fuente
-│   └── api.generate-higgsfield-prompts.ts  # Haiku/Sonnet/Opus — 4 prompts/escena
+│   ├── api.analyze-frames.ts        # SSE OpenRouter (Sonnet 4.5) — análisis frame-by-frame
+│   ├── api.generate-variations.ts   # SSE OpenRouter (Sonnet 4.5) — 6 variaciones, fan-out con cache
+│   ├── api.ugc-generate.ts          # SSE OpenRouter (Sonnet 4.5) — 4 estilos UGC, fan-out con cache
+│   ├── api.detect-product.ts        # Sync OpenRouter (Gemini Flash) — detección producto desde foto
+│   ├── api.transcribe-audio.ts      # OpenAI Whisper STT del audio fuente
+│   └── api.generate-higgsfield-prompts.ts  # OpenRouter (Gemini Flash default) — 3 prompts/escena
 ├── components/
 │   ├── AppShell.tsx                 # Sidebar Guardian CRM ámbar, colapsable
 │   ├── VariationsPanel.tsx          # Flujo A completo
@@ -109,13 +109,13 @@ src/
 │   ├── winning-framework.ts         # 7 gates + 12 principios CRO + checkScript
 │   ├── frame-extraction.ts          # Extracción 1fps client-side, máx 1024×1820
 │   ├── signed-urls.ts               # batchSignedUrls cache 55min
-│   ├── spending-cap.ts              # checkSpendingCap server-side + 429
-│   └── handle-cap.ts                # handleCapResponse cliente
+│   ├── spending-cap.ts              # checkSpendingCap server-side + 402 Payment Required (RPC atómica)
+│   └── handle-cap.ts                # handleCapResponse cliente (acepta 402/429)
 ├── integrations/supabase/
 │   ├── client.ts                    # Browser client
 │   └── types.ts                     # Schema types (auto-generados)
 └── utils/
-    └── anthropic.functions.ts       # logUsage, calcCost, dataUrlToBase64
+    └── openrouter.functions.ts      # logUsage, priceFor, calcCost (cache buckets), dataUrlToOpenAIImage
 
 supabase/migrations/*.sql            # Schema + RLS + trigger profiles
 ```
@@ -130,16 +130,16 @@ supabase/migrations/*.sql            # Schema + RLS + trigger profiles
   USING (is_admin(auth.uid()) OR is_ws_member(auth.uid(), workspace_id))
   ```
 - File routes (`createFileRoute`) hacen auth manual con `Authorization: Bearer <token>` + `supabase.auth.getClaims(token)` — sin server functions de TanStack (rompen con `[object Response]` 401).
-- Spending cap diario configurable por usuario (`profiles.daily_cap_usd`, default $20). Endpoints retornan 429 con JSON estructurado cuando se alcanza.
+- Spending cap diario configurable por usuario (`profiles.daily_cap_usd`, default $20). Endpoints retornan 402 Payment Required con JSON estructurado `{error, cap, spent}` cuando se alcanza. Reservación atómica vía RPC `reserve_daily_spend` + reconciliación `reconcile_daily_spend` (race-safe entre requests concurrentes).
 
 ---
 
 ## ⚙️ Constraints técnicos
 
 ### Cloudflare Workers ~30s timeout
-Toda llamada a Claude con `max_tokens > 4096` o multimodal con frames usa **SSE streaming** (`stream: true`, `ReadableStream`, parse `content_block_delta` en cliente). Patrón en:
-- `api.anthropic-analyze.ts`
-- `api.anthropic-generate.ts`
+Toda llamada a Claude/Gemini vía OpenRouter usa **SSE streaming** (`stream: true`, `ReadableStream`, parse `choices[0].delta.content` formato OpenAI-compat en cliente). Patrón en:
+- `api.analyze-frames.ts`
+- `api.generate-variations.ts`
 - `api.ugc-generate.ts`
 
 ### PostgREST `numeric` → string
@@ -150,8 +150,8 @@ Number(row.cost_usd ?? 0).toFixed(3)  // ✅
 row.cost_usd?.toFixed(3)              // ❌ crash en runtime
 ```
 
-### Prompt caching de Claude
-`api.anthropic-generate.ts` marca el prefijo compartido (frames + análisis + transcripción + product info, ~150k tokens) con `cache_control: ephemeral`. La primera variación paga cache_creation (1.25× input price), las 5 siguientes pagan cache_read (0.10×). Estrategia: warm-up serial → fan-out paralelo en `Promise.allSettled`.
+### Prompt caching vía OpenRouter
+`api.generate-variations.ts`, `api.analyze-frames.ts` y `api.ugc-generate.ts` marcan el último ContentPart del prefijo compartido (frames + análisis + transcripción + product info) con `cache_control: { type: "ephemeral" }`. OpenRouter pasa el bloque transparentemente a Anthropic. La primera llamada del fan-out paga cache_creation (1.25× input), las siguientes pagan cache_read (0.10×) — ahorro ~70% en variations 6× y UGC 4×. El parser SSE captura `usage.cache_creation_input_tokens` / `cache_read_input_tokens` (con fallback a `prompt_tokens_details.*`). Verificable con `api_usage.metadata.cache_create_tokens` / `cache_read_tokens`.
 
 ### Higgsfield prompts — sin generación nativa
 La app produce 4 prompts optimizados por escena (image_prompt, kling, seedance) que el usuario copia/pega en Higgsfield.ai. Cap de 2500 chars por prompt (Higgsfield rechaza >3000). Cache en DB para evitar re-generaciones.
@@ -165,16 +165,20 @@ Operación típica de un video de 15s con 6 variaciones:
 | Etapa | Modelo | Costo aprox |
 |---|---|---|
 | Whisper transcripción | whisper-1 | $0.0015 |
-| Detect producto (foto) | Sonnet 4.5 | $0.005 |
-| Análisis frame-by-frame | Sonnet 4.5 | $0.10–0.30 |
-| 6 variaciones (con cache) | Sonnet 4.5 | $0.60–1.20 |
-| 36 prompts Higgsfield (6 escenas × 6 vars) | Sonnet 4.6 | $0.55 |
-| **Total proyecto** | | **~$1.30–2.10 USD** |
+| Detect producto (foto) | Gemini 2.5 Flash | $0.0007 |
+| Análisis frame-by-frame | Sonnet 4.5 (con cache en re-runs) | $0.30–0.45 |
+| 6 variaciones (con cache fan-out) | Sonnet 4.5 | $0.55 + 5×$0.07 = ~$0.90 |
+| 4 estilos UGC (con cache fan-out) | Sonnet 4.5 | $0.20 + 3×$0.04 = ~$0.32 |
+| 36 prompts Higgsfield (6 escenas × 6 vars) | Gemini 2.5 Flash | $0.011 |
+| **Total proyecto** | | **~$1.55 USD** (vs $3.08 pre-caching) |
 
-Precios Claude (USD por 1M tokens):
-- Sonnet 4.5/4.6: $3 input / $15 output
-- Haiku 4.5: $0.80 input / $4 output
-- Opus 4.7: $15 input / $75 output (uso opcional, máxima fidelidad multimodal)
+Precios OpenRouter (USD por 1M tokens, ver `priceFor` en `src/utils/openrouter.functions.ts`):
+- `anthropic/claude-sonnet-4.5`: $3 input / $15 output
+- `anthropic/claude-haiku-4.5`: $1 input / $5 output
+- `anthropic/claude-opus-4.5`: $5 input / $25 output
+- `google/gemini-2.5-pro`: $1.25 input / $10 output
+- `google/gemini-2.5-flash`: $0.30 input / $2.50 output
+- Cache via Anthropic: write 1.25× input, read 0.10× input (5 min TTL)
 
 ---
 
