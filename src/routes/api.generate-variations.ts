@@ -107,6 +107,18 @@ export const Route = createFileRoute("/api/generate-variations")({
           }
         }
 
+        // Mark the LAST part of the shared prefix as the cache breakpoint.
+        // Everything pushed above (SCENE FORMAT + ANALYSIS + TRANSCRIPTION +
+        // PRODUCT PHOTO + PRODUCT INFO + REFERENCE FRAMES) becomes a cacheable
+        // ephemeral block (~5 min TTL). Calls 2-N for the same project hit it
+        // as cache_read at 0.10x input price instead of paying full freight.
+        if (sharedContent.length > 0) {
+          sharedContent[sharedContent.length - 1] = {
+            ...sharedContent[sharedContent.length - 1],
+            cache_control: { type: "ephemeral" },
+          };
+        }
+
         // === VARIATION-SPECIFIC SUFFIX ===
         const variationContent: ContentPart[] = [];
         const transcriptionDirective = body.transcription?.trim()
