@@ -200,6 +200,12 @@ export function UgcPanel({
                   outputTokens?: number;
                   cacheCreateTokens?: number;
                   cacheReadTokens?: number;
+                  ugcId?: string | null;
+                  persistError?: string | null;
+                  scriptEs?: string | null;
+                  imagePromptEn?: string | null;
+                  animationPromptEn?: string | null;
+                  hooks?: string[];
                 }
               | { type: "error"; error: string };
             try {
@@ -213,6 +219,35 @@ export function UgcPanel({
             } else if (ev.type === "done") {
               cost = ev.costUsd;
               isTruncated = ev.isTruncated === true;
+              // 2026-05-04: render the UGC from the done payload directly instead of
+              // waiting for Supabase Realtime to push the INSERT. If the DB insert
+              // fails (RLS, schema mismatch) or Realtime is not propagating, the
+              // user previously saw an empty list after a successful generation —
+              // charged credits, no visible output. The Realtime channel still
+              // upserts on INSERT events; dedupe by id below avoids duplicates.
+              if (ev.ugcId || ev.fullText) {
+                const newRow: UgcRow = {
+                  id: ev.ugcId ?? `local-${Date.now()}-${style}`,
+                  style,
+                  status: ev.persistError ? "ready_unsaved" : "ready",
+                  script_text: ev.scriptEs ?? null,
+                  image_prompt_en: ev.imagePromptEn ?? null,
+                  animation_prompt_en: ev.animationPromptEn ?? null,
+                  video_model: videoModel,
+                  cost_usd: ev.costUsd,
+                  data: { fullText: ev.fullText, hooks: ev.hooks ?? [] },
+                };
+                setGenerations((prev) => {
+                  const filtered = prev.filter((r) => r.id !== newRow.id);
+                  return [newRow, ...filtered];
+                });
+                if (ev.persistError) {
+                  toast.warning(
+                    `UGC ${style} generado pero no se guardó en la base: ${ev.persistError}`,
+                    { duration: 8000 },
+                  );
+                }
+              }
             } else if (ev.type === "error") {
               throw new Error(ev.error);
             }
