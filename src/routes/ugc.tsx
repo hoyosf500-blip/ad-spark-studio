@@ -354,7 +354,7 @@ function UgcRoute() {
           creativeBrief={creativeBrief.trim() || null}
           productPhoto={productPhoto}
           duration={duration}
-          model="claude-sonnet-4-5-20250929"
+          model="claude-sonnet-4-5"
         />
       </div>
     </AppShell>
