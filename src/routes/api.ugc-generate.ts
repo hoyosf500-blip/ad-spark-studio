@@ -106,7 +106,7 @@ Gym con pesas de fondo · carro en parqueadero · caminando calle de barrio · e
 ════ HOOKS EXTRA (las 3 alternativas del final) ════
 Deben venir de patrones DISTINTOS (una A, una B, una C). No variaciones de la misma frase.`,
   "ugc-unboxing":
-    "Unboxing COD — she opens the package ON CAMERA. Tone: excited, genuine surprise, show-and-tell. Structure: package arrives (doorbell or package in hands) → anticipation beats (reads label, feels weight, shows security seal) → opens and reveals product — this reveal moment is the hero visual → first impression reaction → CTA with \"paga al recibir\". Reference product as \"pictured in /image1\" at the reveal moment. Hook: package in hands or doorbell.",
+    "Unboxing COD — she opens the package ON CAMERA. Tone: excited, genuine surprise, show-and-tell. Structure: package arrives (doorbell or package in hands) → anticipation beats by niche (SALUD = reads dosage on label, checks expiry, smells the formula | BELLEZA = checks ingredient list, holds bottle to light, reads texture description | TECNOLOGÍA = feels weight, peels protective film, checks model number on box | HOGAR = reads instructions sticker, smells the formula, checks fill volume | WELLNESS = examines packaging quality, reads serving size, checks third-party seal) → opens and reveals product — this reveal moment is the hero visual → first impression reaction (per niche: SALUD = relief on face | BELLEZA = excitement at packaging quality | TECNOLOGÍA = approval at build feel | HOGAR = surprised by smell or weight | WELLNESS = trust signal in label) → CTA with \"paga al recibir\". Reference product as \"pictured in /image1\" at the reveal moment. Hook: package in hands or doorbell.",
 };
 
 export const Route = createFileRoute("/api/ugc-generate")({
@@ -441,9 +441,14 @@ function parseUgcOutput(text: string): {
     .filter(Boolean)
     .slice(0, 5);
 
-  // Image prompt: photographic Shot 1 description (use full paragraph as Qwen reference)
+  // Image prompt: photographic Shot 1 description (use full paragraph as image-model reference).
+  // 2026-05-04: removed hardcoded "light catching on collarbones and jewelry" — that
+  // beauty/wellness-niched every UGC wrapper, contaminating tech/home outputs (charger,
+  // faucet, etc.). Now generic: just photographic anchor + sharpness + aspect ratio.
+  // Niche-specific visual cues come from the LLM-generated paragraph itself, which
+  // already adapts based on STYLE_DESC niche rotations.
   const imagePromptEn = promptParagraph
-    ? `Real photograph taken with iPhone 15 Pro of ${promptParagraph} ZERO bokeh, sharp focus across entire frame, 9:16 vertical, hyperrealistic skin texture, light catching on collarbones and jewelry.`
+    ? `Real photograph taken with iPhone 15 Pro of ${promptParagraph} ZERO bokeh, sharp focus across entire frame, 9:16 vertical, hyperrealistic surface texture matching the niche of the scene.`
     : "";
 
   // Animation prompt for video models = the full paragraph
